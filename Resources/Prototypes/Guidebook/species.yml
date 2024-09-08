@@ -11,6 +11,8 @@
     - Reptilian
     - SlimePerson
     - Vox
+    # DeltaV additions
+    - Rodentia
 
 - type: guideEntry
   id: Arachnid
