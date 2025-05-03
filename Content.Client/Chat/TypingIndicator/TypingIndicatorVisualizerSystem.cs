@@ -27,7 +27,14 @@ public sealed class TypingIndicatorVisualizerSystem : VisualizerSystem<TypingInd
         if (overrideIndicator != null)
             currentTypingIndicator = overrideIndicator.Value;
 
-        if (!_prototypeManager.Resolve(currentTypingIndicator, out var proto))
+        // Begin DeltaV Additions - AAC TypingIndicator Override
+        if (component.TypingIndicatorOverridePrototype != null)
+        {
+            currentTypingIndicator = component.TypingIndicatorOverridePrototype.Value;
+        }
+        // End DeltaV Additions
+
+        if (!_prototypeManager.TryIndex(currentTypingIndicator, out var proto))
         {
             Log.Error($"Unknown typing indicator id: {component.TypingIndicatorPrototype}");
             return;

@@ -1,3 +1,5 @@
+using Content.Client.Chat.TypingIndicator;
+using Content.Shared.Chat.TypingIndicator;
 using Content.Shared.DeltaV.AACTablet;
 using Robust.Shared.Prototypes;
 
@@ -9,6 +11,10 @@ public sealed class AACBoundUserInterface : BoundUserInterface
 
     [ViewVariables]
     private AACWindow? _window;
+
+    private static readonly ProtoId<TypingIndicatorPrototype> AACTypingIndicator = "aac";
+
+    private TypingIndicatorSystem? _typing;
 
     public AACBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -35,4 +41,17 @@ public sealed class AACBoundUserInterface : BoundUserInterface
         base.Dispose(disposing);
         _window?.Dispose();
     }
+
+    // TODO: Add the AAC Tablet Updates
+    // private void OnTyping()
+    // {
+    //     _typing ??= EntMan.System<TypingIndicatorSystem>();
+    //     _typing?.ClientAlternateTyping(AACTypingIndicator);
+    // }
+    //
+    // private void OnSubmit()
+    // {
+    //     _typing ??= EntMan.System<TypingIndicatorSystem>();
+    //     _typing?.ClientSubmittedChatText();
+    // }
 }
