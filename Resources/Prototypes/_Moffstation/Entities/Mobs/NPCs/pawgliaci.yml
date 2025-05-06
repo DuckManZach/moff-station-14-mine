@@ -25,7 +25,6 @@
   - type: Tag
     tags:
     - CannotSuicide
-    - VimPilot
   - type: InteractionPopup
     successChance: 0.5
     interactSuccessString: petting-success-dog
@@ -33,3 +32,21 @@
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
       path: /Audio/Animals/fox_squeak.ogg
+  - type: Instrument
+    allowPercussion: false
+    handheld: false
+    bank: 1
+    program: 5
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    name: ghost-role-information-pawgliaci-name
+    description: ghost-role-information-pawgliaci-description
+    rules: ghost-role-information-nonantagonist-rules
+    raffle:
+      settings: short
+  - type: Speech
+    speechVerb: SmallMob
+    speechSounds: Squeak
+    allowedEmotes: [ 'Squeak' ]
