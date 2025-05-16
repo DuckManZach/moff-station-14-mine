@@ -1,11 +1,10 @@
-using Content.Server.Nutrition;
 using Content.Server.Speech;
 using Content.Server.Speech.EntitySystems;
-using Content.Shared.DeltaV.Storage.Components;
-using Content.Shared.DeltaV.Storage.EntitySystems;
+using Content.Shared._DeltaV.Storage.EntitySystems;
+using Content.Shared.Nutrition;
 using Content.Shared.Storage;
 
-namespace Content.Server.DeltaV.Storage.EntitySystems;
+namespace Content.Server._DeltaV.Storage.EntitySystems;
 
 public sealed class MouthStorageSystem : SharedMouthStorageSystem
 {
@@ -14,19 +13,19 @@ public sealed class MouthStorageSystem : SharedMouthStorageSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<MouthStorageComponent, AccentGetEvent>(OnAccent);
-        SubscribeLocalEvent<MouthStorageComponent, IngestionAttemptEvent>(OnIngestAttempt);
+        SubscribeLocalEvent<Shared._DeltaV.Storage.Components.MouthStorageComponent, AccentGetEvent>(OnAccent);
+        SubscribeLocalEvent<Shared._DeltaV.Storage.Components.MouthStorageComponent, IngestionAttemptEvent>(OnIngestAttempt);
     }
 
     // Force you to mumble if you have items in your mouth
-    private void OnAccent(EntityUid uid, MouthStorageComponent component, AccentGetEvent args)
+    private void OnAccent(EntityUid uid, Shared._DeltaV.Storage.Components.MouthStorageComponent component, AccentGetEvent args)
     {
         if (IsMouthBlocked(component))
             args.Message = _replacement.ApplyReplacements(args.Message, "mumble");
     }
 
     // Attempting to eat or drink anything with items in your mouth won't work
-    private void OnIngestAttempt(EntityUid uid, MouthStorageComponent component, IngestionAttemptEvent args)
+    private void OnIngestAttempt(EntityUid uid, Shared._DeltaV.Storage.Components.MouthStorageComponent component, IngestionAttemptEvent args)
     {
         if (!IsMouthBlocked(component))
             return;

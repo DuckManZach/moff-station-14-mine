@@ -9,11 +9,13 @@
     species: Rodentia
   - type: Hunger
     baseDecayRate: 0.0467 # 33% faster than usual
-  - type: Carriable # Carrying system from nyanotrasen.
+    # Moffstation - we don't have carriable, maybe implement it later.
+    # TODO: Implement carrying system
+#  - type: Carriable # Carrying system from nyanotrasen.
   - type: Inventory
     speciesId: rodentia
   - type: Icon
-    sprite: DeltaV/Mobs/Species/Rodentia/parts.rsi
+    sprite: _DeltaV/Mobs/Species/Rodentia/parts.rsi
     state: full
   - type: Body
     prototype: Rodentia
@@ -73,7 +75,7 @@
       - map: [ "pocket1" ]
       - map: [ "pocket2" ]
       - map: [ "clownedon" ] # Dynamically generated
-        sprite: "DeltaV/Effects/creampie.rsi"
+        sprite: "_DeltaV/Effects/creampie.rsi"
         state: "creampie_rodentia"
         visible: false
   - type: MeleeWeapon
@@ -100,11 +102,13 @@
       Unsexed: MaleRodentia
   - type: Rummager
   - type: AlwaysTriggerMousetrap
-  - type: PseudoItem
-    storedOffset: -10,0
-    shape:
-      - 0, 0, 3, 2
-      - 0, 2, 5, 4
+#    Moffstation - Start - Related to carrying, we also dont have this.
+#  - type: PseudoItem
+#    storedOffset: -10,0
+#    shape:
+#      - 0, 0, 3, 2
+#      - 0, 2, 5, 4
+#   Moffstation - End
   - type: MouthStorage
     mouthProto: CheekStorage
     openStorageAction: ActionOpenMouthStorage
@@ -118,6 +122,7 @@
   parent: MobHumanDummy
   id: MobRodentiaDummy
   noSpawn: true
+  suffix: [ HideSpawnMenu ]
   description: A dummy rodentia meant to be used in character setup.
   components:
   - type: HumanoidAppearance

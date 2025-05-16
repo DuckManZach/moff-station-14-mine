@@ -1,7 +1,6 @@
-
 using Content.Shared.Popups;
 
-namespace Content.Shared.DeltaV.Abilities;
+namespace Content.Shared._DeltaV.Abilities;
 public abstract class SharedCrawlUnderObjectsSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -10,11 +9,11 @@ public abstract class SharedCrawlUnderObjectsSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CrawlUnderObjectsComponent, CrawlingUpdatedEvent>(OnCrawlingUpdated);
+        SubscribeLocalEvent<_DeltaV.Abilities.CrawlUnderObjectsComponent, CrawlingUpdatedEvent>(OnCrawlingUpdated);
     }
 
     private void OnCrawlingUpdated(EntityUid uid,
-        CrawlUnderObjectsComponent component,
+        _DeltaV.Abilities.CrawlUnderObjectsComponent component,
         CrawlingUpdatedEvent args)
     {
         if (args.Enabled)

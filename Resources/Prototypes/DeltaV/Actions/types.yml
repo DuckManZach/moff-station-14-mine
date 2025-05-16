@@ -7,7 +7,7 @@
   - type: InstantAction
     itemIconStyle: BigAction
     priority: -10
-    icon: DeltaV/Interface/Actions/mouthStorageOpen.png
+    icon: _DeltaV/Interface/Actions/mouthStorageOpen.png
     event: !type:OpenStorageImplantEvent
 
 - type: entity

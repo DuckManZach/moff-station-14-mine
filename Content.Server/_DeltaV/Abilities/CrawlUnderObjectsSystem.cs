@@ -1,7 +1,7 @@
+using Content.Shared._DeltaV.Abilities;
 using Content.Shared.Actions;
 using Content.Shared.Climbing.Components;
 using Content.Shared.Climbing.Events;
-using Content.Shared.DeltaV.Abilities;
 using Content.Shared.Maps;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
@@ -9,7 +9,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.Server.DeltaV.Abilities;
+namespace Content.Server._DeltaV.Abilities;
 
 public sealed partial class CrawlUnderObjectsSystem : SharedCrawlUnderObjectsSystem
 {
@@ -23,10 +23,10 @@ public sealed partial class CrawlUnderObjectsSystem : SharedCrawlUnderObjectsSys
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CrawlUnderObjectsComponent, ComponentInit>(OnInit);
-        SubscribeLocalEvent<CrawlUnderObjectsComponent, ToggleCrawlingStateEvent>(OnAbilityToggle);
-        SubscribeLocalEvent<CrawlUnderObjectsComponent, AttemptClimbEvent>(OnAttemptClimb);
-        SubscribeLocalEvent<CrawlUnderObjectsComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovespeed);
+        SubscribeLocalEvent<Shared._DeltaV.Abilities.CrawlUnderObjectsComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<Shared._DeltaV.Abilities.CrawlUnderObjectsComponent, Shared._DeltaV.Abilities.ToggleCrawlingStateEvent>(OnAbilityToggle);
+        SubscribeLocalEvent<Shared._DeltaV.Abilities.CrawlUnderObjectsComponent, AttemptClimbEvent>(OnAttemptClimb);
+        SubscribeLocalEvent<Shared._DeltaV.Abilities.CrawlUnderObjectsComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovespeed);
     }
 
     private bool IsOnCollidingTile(EntityUid uid)
@@ -39,7 +39,7 @@ public sealed partial class CrawlUnderObjectsSystem : SharedCrawlUnderObjectsSys
         return _turf.IsTileBlocked(tile.Value, CollisionGroup.MobMask);
     }
 
-    private void OnInit(EntityUid uid, CrawlUnderObjectsComponent component, ComponentInit args)
+    private void OnInit(EntityUid uid, Shared._DeltaV.Abilities.CrawlUnderObjectsComponent component, ComponentInit args)
     {
         if (component.ToggleHideAction != null)
             return;
@@ -47,7 +47,7 @@ public sealed partial class CrawlUnderObjectsSystem : SharedCrawlUnderObjectsSys
         _actionsSystem.AddAction(uid, ref component.ToggleHideAction, component.ActionProto);
     }
 
-    private bool EnableSneakMode(EntityUid uid, CrawlUnderObjectsComponent component)
+    private bool EnableSneakMode(EntityUid uid, Shared._DeltaV.Abilities.CrawlUnderObjectsComponent component)
     {
         if (component.Enabled
             || (TryComp<ClimbingComponent>(uid, out var climbing)
@@ -80,7 +80,7 @@ public sealed partial class CrawlUnderObjectsSystem : SharedCrawlUnderObjectsSys
         return true;
     }
 
-    private bool DisableSneakMode(EntityUid uid, CrawlUnderObjectsComponent component)
+    private bool DisableSneakMode(EntityUid uid, Shared._DeltaV.Abilities.CrawlUnderObjectsComponent component)
     {
         if (!component.Enabled
             || IsOnCollidingTile(uid)
@@ -103,8 +103,8 @@ public sealed partial class CrawlUnderObjectsSystem : SharedCrawlUnderObjectsSys
     }
 
     private void OnAbilityToggle(EntityUid uid,
-        CrawlUnderObjectsComponent component,
-        ToggleCrawlingStateEvent args)
+        Shared._DeltaV.Abilities.CrawlUnderObjectsComponent component,
+        Shared._DeltaV.Abilities.ToggleCrawlingStateEvent args)
     {
         if (args.Handled)
             return;
@@ -125,14 +125,14 @@ public sealed partial class CrawlUnderObjectsSystem : SharedCrawlUnderObjectsSys
     }
 
     private void OnAttemptClimb(EntityUid uid,
-        CrawlUnderObjectsComponent component,
+        Shared._DeltaV.Abilities.CrawlUnderObjectsComponent component,
         AttemptClimbEvent args)
     {
         if (component.Enabled == true)
             args.Cancelled = true;
     }
 
-    private void OnRefreshMovespeed(EntityUid uid, CrawlUnderObjectsComponent component, RefreshMovementSpeedModifiersEvent args)
+    private void OnRefreshMovespeed(EntityUid uid, Shared._DeltaV.Abilities.CrawlUnderObjectsComponent component, RefreshMovementSpeedModifiersEvent args)
     {
         if (component.Enabled)
             args.ModifySpeed(component.SneakSpeedModifier, component.SneakSpeedModifier);

@@ -108,7 +108,7 @@ public abstract class SharedRatKingSystem : EntitySystem
 
     private void OnGetVerb(EntityUid uid, RatKingRummageableComponent component, GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!HasComp<RummagerComponent>(args.User)
+        if (!HasComp<_DeltaV.Abilities.RummagerComponent>(args.User)
             || component.Looted
             || _gameTiming.CurTime < component.LastLooted + component.RummageCooldown)
             // DeltaV - Use RummagerComponent instead of RatKingComponent

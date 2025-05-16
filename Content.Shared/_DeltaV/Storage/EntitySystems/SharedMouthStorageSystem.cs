@@ -10,7 +10,7 @@ using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
-namespace Content.Shared.DeltaV.Storage.EntitySystems;
+namespace Content.Shared._DeltaV.Storage.EntitySystems;
 
 public abstract class SharedMouthStorageSystem : EntitySystem
 {
@@ -22,14 +22,14 @@ public abstract class SharedMouthStorageSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<MouthStorageComponent, MapInitEvent>(OnMouthStorageInit);
-        SubscribeLocalEvent<MouthStorageComponent, DownedEvent>(DropAllContents);
-        SubscribeLocalEvent<MouthStorageComponent, DisarmedEvent>(DropAllContents);
-        SubscribeLocalEvent<MouthStorageComponent, DamageChangedEvent>(OnDamageModified);
-        SubscribeLocalEvent<MouthStorageComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<Components.MouthStorageComponent, MapInitEvent>(OnMouthStorageInit);
+        SubscribeLocalEvent<Components.MouthStorageComponent, DownedEvent>(OnDowned);
+        SubscribeLocalEvent<Components.MouthStorageComponent, DisarmedEvent>(OnDisarmed);
+        SubscribeLocalEvent<Components.MouthStorageComponent, DamageChangedEvent>(OnDamageModified);
+        SubscribeLocalEvent<Components.MouthStorageComponent, ExaminedEvent>(OnExamined);
     }
 
-    protected bool IsMouthBlocked(MouthStorageComponent component)
+    protected bool IsMouthBlocked(Components.MouthStorageComponent component)
     {
         if (!TryComp<StorageComponent>(component.MouthId, out var storage))
             return false;
@@ -37,12 +37,12 @@ public abstract class SharedMouthStorageSystem : EntitySystem
         return storage.Container.ContainedEntities.Count > 0;
     }
 
-    private void OnMouthStorageInit(EntityUid uid, MouthStorageComponent component, MapInitEvent args)
+    private void OnMouthStorageInit(EntityUid uid, Components.MouthStorageComponent component, MapInitEvent args)
     {
         if (string.IsNullOrWhiteSpace(component.MouthProto))
             return;
 
-        component.Mouth = _containerSystem.EnsureContainer<Container>(uid, MouthStorageComponent.MouthContainerId);
+        component.Mouth = _containerSystem.EnsureContainer<Container>(uid, Components.MouthStorageComponent.MouthContainerId);
         component.Mouth.ShowContents = false;
         component.Mouth.OccludesLight = false;
 
@@ -54,7 +54,7 @@ public abstract class SharedMouthStorageSystem : EntitySystem
             _actionsSystem.AddAction(uid, ref component.Action, component.OpenStorageAction, mouth);
     }
 
-    private void DropAllContents(EntityUid uid, MouthStorageComponent component, EntityEventArgs args)
+    private void DropAllContents(EntityUid uid, Components.MouthStorageComponent component)
     {
         if (component.MouthId == null)
             return;
@@ -62,18 +62,28 @@ public abstract class SharedMouthStorageSystem : EntitySystem
         _dumpableSystem.DumpContents(component.MouthId.Value, uid, uid);
     }
 
-    private void OnDamageModified(EntityUid uid, MouthStorageComponent component, DamageChangedEvent args)
+    private void OnDowned(EntityUid uid, Components.MouthStorageComponent component, DownedEvent args)
+    {
+        DropAllContents(uid, component);
+    }
+
+    private void OnDisarmed(EntityUid uid, Components.MouthStorageComponent component, DisarmedEvent args)
+    {
+        DropAllContents(uid, component);
+    }
+
+    private void OnDamageModified(EntityUid uid, Components.MouthStorageComponent component, DamageChangedEvent args)
     {
         if (args.DamageDelta == null
             || !args.DamageIncreased
             || args.DamageDelta.GetTotal() < component.SpitDamageThreshold)
             return;
 
-        DropAllContents(uid, component, args);
+        DropAllContents(uid, component);
     }
 
     // Other people can see if this person has items in their mouth.
-    private void OnExamined(EntityUid uid, MouthStorageComponent component, ExaminedEvent args)
+    private void OnExamined(EntityUid uid, Components.MouthStorageComponent component, ExaminedEvent args)
     {
         if (IsMouthBlocked(component))
         {

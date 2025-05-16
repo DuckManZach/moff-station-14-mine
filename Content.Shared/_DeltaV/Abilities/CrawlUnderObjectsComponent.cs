@@ -1,10 +1,9 @@
 using Content.Shared.Actions;
-using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.DeltaV.Abilities;
+namespace Content.Shared._DeltaV.Abilities;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CrawlUnderObjectsComponent : Component
