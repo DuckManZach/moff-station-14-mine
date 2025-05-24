@@ -1,9 +1,0 @@
-- type: entity
-  id: ClothingBeltMilitaryWebbingNukeOpsFilled
-  parent: ClothingBeltMilitaryWebbing
-  suffix: Filled
-  components:
-  - type: StorageFill
-    contents:
-    - id: DeathRattleImplanter
-
