@@ -1,9 +1,11 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading;
+using Content.Server._Moffstation.Shuttles.Components;
 using Content.Server.Access.Systems;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Communications;
 using Content.Server.DeviceNetwork.Systems;
@@ -19,6 +21,7 @@ using Content.Server.Station.Events;
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
+using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.GameTicking;
@@ -37,6 +40,8 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.DeviceNetwork.Components;
+using Content.Shared.Mobs.Components;
+using Robust.Shared.Map;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -68,6 +73,12 @@ public sealed partial class EmergencyShuttleSystem : EntitySystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly ActorSystem _actor = default!;   // Moffstation
+    [Dependency] private readonly IChatManager _chat = default!;    // Moffstation
+
+
+    private EntityQuery<EvacBlacklistComponent> _blacklistQuery;
+    private EntityQuery<HandcuffComponent> _cuffedQuery;
 
     private const float ShuttleSpawnBuffer = 1f;
 
@@ -92,6 +103,9 @@ public sealed partial class EmergencyShuttleSystem : EntitySystem
         SubscribeLocalEvent<EmergencyShuttleComponent, FTLCompletedEvent>(OnEmergencyFTLComplete);
         SubscribeNetworkEvent<EmergencyShuttleRequestPositionMessage>(OnShuttleRequestPosition);
         InitializeEmergencyConsole();
+
+        _blacklistQuery = GetEntityQuery<EvacBlacklistComponent>();
+        _cuffedQuery = GetEntityQuery<HandcuffComponent>();
     }
 
     private void OnRoundStart(RoundStartingEvent ev)
@@ -218,6 +232,45 @@ public sealed partial class EmergencyShuttleSystem : EntitySystem
                 [ShuttleTimerMasks.DestTime] = ftlTime
             };
             _deviceNetworkSystem.QueuePacket(uid, null, payload, netComp.TransmitFrequency);
+        }
+
+        // Moffstation - Start - Yeet antags off evac
+        if (!_configManager.GetCVar(CCVars.ArrivalsReturns))
+            DumpChildren(uid, ref args);
+    }
+
+    private void DumpChildren(EntityUid uid, ref FTLStartedEvent args)
+    {
+        var toDump = new List<Entity<TransformComponent>>();
+        FindDumpChildren(uid, toDump);
+        foreach (var (ent, xform) in toDump)
+        {
+            var rotation = xform.LocalRotation;
+            _transformSystem.SetCoordinates(ent, new EntityCoordinates(args.FromMapUid!.Value, Vector2.Transform(xform.LocalPosition, args.FTLFrom)));
+            _transformSystem.SetWorldRotation(ent, args.FromRotation + rotation);
+            if (_actor.TryGetSession(ent, out var session))
+            {
+                _chat.DispatchServerMessage(session!, Loc.GetString("evac-blacklist-dumped-from-shuttle"));
+            }
+        }
+    }
+
+    private void FindDumpChildren(EntityUid uid, List<Entity<TransformComponent>> toDump)
+    {
+        var xform = Transform(uid);
+
+        //If they have the component, dump em
+        if (_blacklistQuery.HasComponent(uid) && HasComp(uid, ))
+        {
+            toDump.Add((uid, xform));
+            return;
+        }
+
+        //Check the inside of things like crates to make sure they aren't hiding
+        var children = xform.ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            FindDumpChildren(child, toDump);
         }
     }
 

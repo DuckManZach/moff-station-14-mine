@@ -288,4 +288,11 @@ public sealed partial class CCVars
         CVarDef.Create("shuttle.impact.inertia_scaling", 0.5f, CVar.SERVERONLY);
 
     #endregion
+
+
+    /// <summary>
+    /// Whether antags marked with EvacDumpComponent should be dumped (execption given if they are restrained or mindshielded)
+    /// </summary>
+    public static readonly CVarDef<bool> EvacDumpAntags =
+        CVarDef.Create("shuttle.evac_dump_antags", true, CVar.SERVERONLY);
 }
