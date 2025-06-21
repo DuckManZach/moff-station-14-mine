@@ -1,5 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Shared._DV.CustomObjectiveSummary;
+using Content.Shared._Moffstation.Shuttles;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
@@ -19,6 +20,7 @@ public sealed class CustomObjectiveSummarySystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<EvacShuttleLeftEvent>(OnEvacShuttleLeft);
+        SubscribeLocalEvent<EvacShuttleArrivedEvent>(OnEvacShuttleArrived);
 
         _net.RegisterNetMessage<CustomObjectiveClientSetObjective>(OnCustomObjectiveFeedback);
     }
@@ -54,6 +56,18 @@ public sealed class CustomObjectiveSummarySystem : EntitySystem
                 continue;
 
             RaiseNetworkEvent(new CustomObjectiveSummaryOpenMessage(), session);
+        }
+    }
+
+    private void OnEvacShuttleArrived(EvacShuttleArrivedEvent args)
+    {
+        var query = EntityQueryEnumerator<CustomObjectiveSummaryComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            if (!_playerManager.TryGetSessionByEntity(uid, out var session))
+                continue;
+
+            RaiseNetworkEvent(new CustomObjectiveSummaryCloseMessage(), session);
         }
     }
 }

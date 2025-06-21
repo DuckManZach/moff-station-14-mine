@@ -14,6 +14,7 @@ public sealed class CustomObjectiveSummaryUIController : UIController
     {
         base.Initialize();
         SubscribeNetworkEvent<CustomObjectiveSummaryOpenMessage>(OnCustomObjectiveSummaryOpen);
+        SubscribeNetworkEvent<CustomObjectiveSummaryCloseMessage>(OnCustomObjectiveSummaryClose);
     }
 
     private void OnCustomObjectiveSummaryOpen(CustomObjectiveSummaryOpenMessage msg, EntitySessionEventArgs args)
@@ -30,6 +31,17 @@ public sealed class CustomObjectiveSummaryUIController : UIController
         _window.OpenCentered();
         _window.OnClose += () => _window = null;
         _window.OnSubmitted += OnFeedbackSubmitted;
+    }
+
+    private void OnCustomObjectiveSummaryClose(CustomObjectiveSummaryCloseMessage msg, EntitySessionEventArgs args)
+    {
+        SaveCloseWindow();
+    }
+
+    public void SaveCloseWindow()
+    {
+        OnFeedbackSubmitted(_window?.GetSummary() == null ? "" : _window.GetSummary());
+        _window = null;
     }
 
     private void OnFeedbackSubmitted(string args)

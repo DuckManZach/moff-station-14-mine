@@ -36,6 +36,12 @@ public sealed class CustomObjectiveClientSetObjective : NetMessage
 public sealed class CustomObjectiveSummaryOpenMessage : EntityEventArgs;
 
 /// <summary>
+///     When clients get this event, their summary window gets closed and the text autosubmitted.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CustomObjectiveSummaryCloseMessage : EntityEventArgs;
+
+/// <summary>
 ///     DeltaV event for when the evac shuttle leaves.
 /// </summary>
 [Serializable, NetSerializable]
