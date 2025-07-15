@@ -9,7 +9,10 @@ namespace Content.Shared._Harmony.BloodBrothers.Components;
 public sealed partial class BloodBrotherComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public EntityUid? Brother;
+    public HashSet<EntityUid> Brotherhood;
+
+    [DataField, AutoNetworkedField]
+    public float ExtraConversionChance = 0.1f;
 
     [DataField]
     public ProtoId<FactionIconPrototype> BloodBrotherIcon = "BloodBrotherFaction";

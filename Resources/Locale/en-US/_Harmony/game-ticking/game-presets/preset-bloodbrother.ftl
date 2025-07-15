@@ -3,7 +3,7 @@ blood-brothers-round-end-agent-name = blood brother
 objective-issuer-blood-brother = [color=mediumvioletred]The Brotherhood[/color]
 
 blood-brother-round-end-no-mind = [color=white]{CAPITALIZE($name)}[/color] ([color=gray]{$username}[/color]) was oath-bound with [color=white]{$brotherName}[/color].
-blood-brother-round-end = [color=white]{CAPITALIZE($name)}[/color] ([color=gray]{$username}[/color]) was oath-bound with [color=white]{$brotherName}[/color] ([color=gray]{$brotherUsername}[/color]).
+blood-brother-round-end = [color=white]{CAPITALIZE($brotherName)}[/color] ([color=gray]{$brotherUsername}[/color]) was oath-bound with [color=white]{name}[/color] ([color=gray]{$username}[/color]).
 
 blood-brother-initial-role-greeting =
     You are a blood brother.

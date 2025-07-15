@@ -9,5 +9,5 @@ namespace Content.Server._Harmony.Roles;
 public sealed partial class BloodBrotherRoleComponent : BaseMindRoleComponent
 {
     [DataField]
-    public EntityUid? Brother;
+    public HashSet<EntityUid> Brotherhood;
 }

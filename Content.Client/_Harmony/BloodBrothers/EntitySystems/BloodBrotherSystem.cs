@@ -25,7 +25,7 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
         {
             if (!HasComp<ShowAntagIconsComponent>(playerEntity) &&
                 entity.Owner != playerEntity &&
-                entity.Comp.Brother != playerEntity)
+                !entity.Comp.Brotherhood.Contains(playerEntity))
                 return;
         }
 

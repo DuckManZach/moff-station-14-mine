@@ -24,6 +24,7 @@ using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Zombies;
 using Robust.Server.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
 namespace Content.Server._Harmony.GameTicking.Rules;
@@ -43,6 +44,8 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
     [Dependency] private readonly RoleSystem _roleSystem = default!;
     [Dependency] private readonly StunSystem _stunSystem = default!;
     [Dependency] private readonly TargetObjectiveSystem _targetObjectiveSystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+
 
     public override void Initialize()
     {
@@ -64,27 +67,30 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
 
             var brotherRole = role.Value.Comp2;
 
-            if (brotherRole.Brother == null)
+            if (brotherRole.Brotherhood.Count == 0)
                 continue;
 
-            if (!_mindSystem.TryGetMind(brotherRole.Brother.Value, out _, out var brotherMind)
-                || brotherMind.UserId == null)
+            foreach (var brother in brotherRole.Brotherhood)
             {
-                args.Text += "\n" + Loc.GetString("blood-brother-round-end-no-mind",
+                if (!_mindSystem.TryGetMind(brother, out _, out var brotherMind)
+                    || brotherMind.UserId == null)
+                {
+                    args.Text += "\n" + Loc.GetString("blood-brother-round-end-no-mind",
+                        ("name", name),
+                        ("username", sessionData.UserName),
+                        ("brotherName", MetaData(role.Value).EntityName));
+
+                    continue;
+                }
+
+                var brotherUsername = _playerManager.GetPlayerData(brotherMind.UserId.Value).UserName;
+
+                args.Text += "\n" + Loc.GetString("blood-brother-round-end",
+                    ("brotherName", MetaData(brother).EntityName),
+                    ("brotherUsername", (brotherUsername)),
                     ("name", name),
-                    ("username", sessionData.UserName),
-                    ("brotherName", MetaData(role.Value).EntityName));
-
-                continue;
+                    ("username", sessionData.UserName));
             }
-
-            var brotherUsername = _playerManager.GetPlayerData(brotherMind.UserId.Value).UserName;
-
-            args.Text += "\n" + Loc.GetString("blood-brother-round-end",
-                ("name", name),
-                ("username", sessionData.UserName),
-                ("brotherName", MetaData(brotherRole.Brother.Value).EntityName),
-                ("brotherUsername", (brotherUsername)));
         }
     }
 
@@ -122,9 +128,10 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
             LogImpact.Medium,
             $"{ToPrettyString(entity)} converted {ToPrettyString(args.Target)} into their Blood Brother");
 
-        originalComponent.Brother = args.Target;
+        originalComponent.Brotherhood.Add(args.Target);
         if (_roleSystem.MindHasRole<BloodBrotherRoleComponent>(mindId, out var role))
-            role.Value.Comp2.Brother = args.Target;
+            role.Value.Comp2.Brotherhood.Add(args.Target);
+
 
         if (!_roleSystem.MindHasRole(targetMindId, out Entity<MindRoleComponent, BloodBrotherRoleComponent>? targetRole))
         {
@@ -134,8 +141,15 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
 
         DebugTools.AssertNotNull(targetRole, "Blood brother role was null after assigning it.");
 
-        convertedComp.Brother = entity;
-        targetRole!.Value.Comp2.Brother = entity;
+        convertedComp.Brotherhood.Add(entity);
+        targetRole!.Value.Comp2.Brotherhood.Add(entity);
+        foreach (var brother in originalComponent.Brotherhood)
+        {
+            if (brother == args.Target)
+                continue;
+            convertedComp.Brotherhood.Add(brother);
+            targetRole!.Value.Comp2.Brotherhood.Add(brother);
+        }
 
         if (!_objectivesSystem.TryCreateObjective((targetMindId, targetMind),
                 entity.Comp.ConvertedBrotherObjective,
@@ -166,7 +180,8 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
             _stunSystem.TryParalyze(args.Target, entity.Comp.ConvertStunTime.Value, true);
 
         // Cleanup the data
-        RemCompDeferred<InitialBloodBrotherComponent>(entity);
+        if (_random.NextFloat() > originalComponent.ExtraConversionChance)
+            RemCompDeferred<InitialBloodBrotherComponent>(entity);
 
         Dirty(entity, originalComponent);
         Dirty(args.Target, convertedComp);
