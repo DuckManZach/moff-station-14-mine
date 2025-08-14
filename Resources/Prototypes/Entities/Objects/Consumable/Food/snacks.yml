@@ -18,7 +18,7 @@
         maxVol: 30 # Room for extra condiments
         reagents:
         - ReagentId: Nutriment
-          Quantity: 10
+          Quantity: 2 # Moffstation - Snack nerf
   - type: Item
     sprite: Objects/Consumable/Food/snacks.rsi
     heldPrefix: packet
@@ -144,7 +144,7 @@
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
-          Quantity: 10
+          Quantity: 2 # Moffstation - Snack nerf
         - ReagentId: Theobromine
           Quantity: 3
         - ReagentId: CocoaPowder
@@ -363,7 +363,7 @@
         maxVol: 30 # Room for extra condiments
         reagents:
         - ReagentId: Nutriment
-          Quantity: 10
+          Quantity: 5 # Moffstation - snack nerf
         - ReagentId: Soysauce
           Quantity: 2
   - type: Food
@@ -391,7 +391,7 @@
         maxVol: 30 # Room for extra condiments
         reagents:
         - ReagentId: Nutriment
-          Quantity: 10
+          Quantity: 5 # Moffstation - Snack nerf
         - ReagentId: CapsaicinOil
           Quantity: 2
         - ReagentId: Soysauce
