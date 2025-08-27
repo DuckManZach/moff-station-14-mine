@@ -42,6 +42,10 @@
 - type: Tag
   id: WeaponShotgunPepperbox
 
+# Pirate scrap blacklist
+- type: Tag
+  id: PirateSaleBlacklist
+
 #Revert machine parts
 - type: Tag
   id: CapacitorStockPart

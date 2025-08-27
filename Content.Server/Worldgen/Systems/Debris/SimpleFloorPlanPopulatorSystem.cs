@@ -1,7 +1,10 @@
-﻿using Content.Server.Worldgen.Components.Debris;
+﻿using System.Linq;
+using Content.Server.Worldgen.Components.Debris;
 using Content.Shared.Maps;
+using Content.Shared.Tag;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.Worldgen.Systems.Debris;
@@ -14,6 +17,9 @@ public sealed class SimpleFloorPlanPopulatorSystem : BaseWorldSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly TagSystem _tagSystem = default!;
+
+    private static readonly ProtoId<TagPrototype> PirateBlacklistTag = "PirateSaleBlacklist";
 
     /// <inheritdoc />
     public override void Initialize()
@@ -42,7 +48,8 @@ public sealed class SimpleFloorPlanPopulatorSystem : BaseWorldSystem
                 if (proto is null)
                     continue;
 
-                Spawn(proto, coords);
+                var ent = Spawn(proto, coords);
+                _tagSystem.AddTag(ent, PirateBlacklistTag);
             }
         }
     }
