@@ -49,7 +49,9 @@ public sealed class SimpleFloorPlanPopulatorSystem : BaseWorldSystem
                     continue;
 
                 var ent = Spawn(proto, coords);
+                EnsureComp<TagComponent>(ent);
                 _tagSystem.AddTag(ent, PirateBlacklistTag);
+                DirtyEntity(ent);
             }
         }
     }
