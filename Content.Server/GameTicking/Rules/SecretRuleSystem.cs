@@ -71,6 +71,7 @@ public sealed class SecretRuleSystem : GameRuleSystem<SecretRuleComponent>
         }
     }
 
+    /* Moffstation - Reworked function to not fail when playercount is too low to pick something - upsteam updates should be accepted
     private bool TryPickPreset(ProtoId<WeightedRandomPrototype> weights, [NotNullWhen(true)] out GamePresetPrototype? preset)
     {
         var options = _prototypeManager.Index(weights).Weights.ShallowClone();
@@ -108,7 +109,52 @@ public sealed class SecretRuleSystem : GameRuleSystem<SecretRuleComponent>
 
         preset = null;
         return false;
+    }*/
+
+    // Moffstation - Start - Our version which doesn't fail when player count is too low
+    private bool TryPickPreset(ProtoId<WeightedRandomPrototype> weights, [NotNullWhen(true)] out GamePresetPrototype? preset)
+    {
+        var players = GameTicker.DynamicPlayerCount();
+
+        // Build options but filter invalid upfront
+        var allOptions = _prototypeManager.Index(weights).Weights;
+        var options = new Dictionary<GamePresetPrototype, float>();
+
+        // Filter out options that can't be picked
+        foreach (var (key, weight) in allOptions)
+        {
+            if (!_prototypeManager.TryIndex(key, out GamePresetPrototype? proto))
+                continue;
+            if (!CanPick(proto, players))
+                continue;
+            options[proto] = weight;
+        }
+
+        if (options.Count == 0)
+        {
+            preset = null;
+            return false;
+        }
+
+        // Weighted pick
+        var sum = options.Values.Sum();
+        var rand = _random.NextFloat(sum);
+
+        var accumulated = 0f;
+        foreach (var (key, weight) in options)
+        {
+            accumulated += weight;
+            if (accumulated >= rand)
+            {
+                preset = key;
+                return true;
+            }
+        }
+
+        preset = null;
+        return false;
     }
+    // Moffstation - End
 
     public bool CanPickAny()
     {

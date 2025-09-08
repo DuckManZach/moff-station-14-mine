@@ -38,13 +38,14 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
         while (query.MoveNext(out var uid, out _, out var gameRule))
         {
             var minPlayers = gameRule.MinPlayers;
-            if (GameTicker.DynamicPlayerCount() >= minPlayers)  // Moffstation - total player count for rules
+            var playerCount = GameTicker.DynamicPlayerCount(); // Moffstation - total player count
+            if (playerCount >= minPlayers)  // Moffstation - total player count for rules
                 continue;
 
             if (gameRule.CancelPresetOnTooFewPlayers)
             {
                 ChatManager.SendAdminAnnouncement(Loc.GetString("preset-not-enough-ready-players",
-                    ("readyPlayersCount", args.Players.Length),
+                    ("readyPlayersCount", playerCount), // Moffstation - based on total player count
                     ("minimumPlayers", minPlayers),
                     ("presetName", ToPrettyString(uid))));
                 args.Cancel();
