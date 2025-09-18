@@ -59,6 +59,7 @@ public sealed partial class NoteEdit : FancyWindow
         TypeOption.AddItem(Loc.GetString("admin-note-editor-type-note"), (int) NoteType.Note);
         TypeOption.AddItem(Loc.GetString("admin-note-editor-type-message"), (int) NoteType.Message);
         TypeOption.AddItem(Loc.GetString("admin-note-editor-type-watchlist"), (int) NoteType.Watchlist);
+        TypeOption.AddItem(Loc.GetString("admin-note-editor-type-trial"), (int) NoteType.Trial);
         TypeOption.OnItemSelected += OnTypeChanged;
 
 
@@ -182,6 +183,16 @@ public sealed partial class NoteEdit : FancyWindow
                 PermanentCheckBox.Pressed = false;
                 UpdatePermanentCheckboxFields();
                 break;
+            case (int) NoteType.Trial:
+                NoteType = NoteType.Trial;
+                SecretCheckBox.Disabled = true;
+                SecretCheckBox.Pressed = true;
+                SeverityOption.Disabled = true;
+                SeverityOption.SelectId((int) Shared.Database.NoteSeverity.None);
+                NoteSeverity = null;
+                PermanentCheckBox.Pressed = false;
+                UpdatePermanentCheckboxFields();
+                break;
             default: // Wuh oh
                 throw new ArgumentOutOfRangeException(nameof(args.Id), args.Id, "Unknown note type");
         }
@@ -276,7 +287,7 @@ public sealed partial class NoteEdit : FancyWindow
             return;
         }
 
-        SubmitButton.Disabled = (NoteType != NoteType.Watchlist && NoteType != NoteType.Message) && NoteSeverity == null;
+        SubmitButton.Disabled = (NoteType != NoteType.Watchlist && NoteType != NoteType.Message && NoteType != NoteType.Trial) && NoteSeverity == null; // Moffstation - Added Trial note
     }
 
     private void ResetSubmitButton()

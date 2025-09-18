@@ -43,6 +43,10 @@ public static class AdminNotesExtensions
                 unbannedTime = roleBan.UnbanTime;
                 unbannedByName = roleBan.UnbanningAdmin?.LastSeenUserName ?? Loc.GetString("system-user");
                 break;
+            case AdminTrialRecord:
+                type = NoteType.Trial;
+                secret = true;
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), note.GetType(), "Unknown note type");
         }

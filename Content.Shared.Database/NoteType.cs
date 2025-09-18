@@ -35,4 +35,12 @@ public enum NoteType
     ///     A role ban, converted to a shared note
     /// </summary>
     RoleBan = 4,
+
+    // Moffstation - Start - Trial WatchLists
+    /// <summary>
+    ///     A trial watchlist, automatically given to trial members of the server
+    ///     Number is way higher in case upstream adds more note types
+    /// </summary>
+    Trial = 100,
+    // Moffstation - End
 }

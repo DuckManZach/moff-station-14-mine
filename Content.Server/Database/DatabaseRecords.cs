@@ -96,6 +96,22 @@ public sealed record AdminWatchlistRecord(
     PlayerRecord? DeletedBy,
     DateTimeOffset? DeletedAt) : IAdminRemarksRecord;
 
+
+public sealed record AdminTrialRecord(
+    int Id,
+    RoundRecord? Round,
+    PlayerRecord? Player,
+    TimeSpan PlaytimeAtNote,
+    string Message,
+    PlayerRecord? CreatedBy,
+    DateTimeOffset CreatedAt,
+    PlayerRecord? LastEditedBy,
+    DateTimeOffset? LastEditedAt,
+    DateTimeOffset? ExpirationTime,
+    bool Deleted,
+    PlayerRecord? DeletedBy,
+    DateTimeOffset? DeletedAt) : IAdminRemarksRecord;
+
 public sealed record AdminMessageRecord(
     int Id,
     RoundRecord? Round,
