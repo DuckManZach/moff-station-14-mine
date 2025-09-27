@@ -69,3 +69,12 @@
     path: /Audio/_Moffstation/Voice/Talk/avali_2_ask.ogg
   exclaimSound:
     path: /Audio/_Moffstation/Voice/Talk/avali_2_exclaim.ogg
+
+- type: speechSounds
+  id: Moth
+  saySound:
+    path: /Audio/_Moffstation/Voice/Talk/moth_1.ogg
+  askSound:
+    path: /Audio/_Moffstation/Voice/Talk/avali_2_ask.ogg
+  exclaimSound:
+    path: /Audio/_Moffstation/Voice/Talk/avali_2_exclaim.ogg

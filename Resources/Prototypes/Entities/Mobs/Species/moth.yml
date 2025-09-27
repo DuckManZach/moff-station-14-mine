@@ -23,6 +23,7 @@
   - type: ZombieAccentOverride
     accent: zombieMoth
   - type: Speech
+    speechSounds: Moth # Moffstation - Custom moff sounds
     speechVerb: Moth
     allowedEmotes: ['Chitter', 'Squeak']
   - type: TypingIndicator
