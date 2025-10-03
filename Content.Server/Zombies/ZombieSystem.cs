@@ -137,6 +137,11 @@ namespace Content.Server.Zombies
                     ? comp.CritDamageMultiplier
                     : 1f;
 
+                // Moffstation - Start - Zombie improvements
+                if (HasComp<InitialInfectedComponent>(uid))
+                    multiplier *= 0.5f;
+                // Moffstation - End
+
                 _damageable.TryChangeDamage(uid, comp.Damage * multiplier, true, false, damage);
             }
 
@@ -251,9 +256,18 @@ namespace Content.Server.Zombies
                 if (!TryComp<MobStateComponent>(entity, out var mobState))
                     continue;
 
+                // Moffstation - Start - Zombie improvements
+                if (HasComp<InitialInfectedComponent>(entity))
+                {
+                    args.BonusDamage = -args.BaseDamage;
+                    _popup.PopupCursor(Loc.GetString("zombie-friendly-fire"), uid, PopupType.LargeCaution);
+                }
+                // Moffstation - End
+
                 if (HasComp<ZombieComponent>(entity))
                 {
                     args.BonusDamage = -args.BaseDamage;
+                    _popup.PopupCursor(Loc.GetString("zombie-friendly-fire"), uid, PopupType.LargeCaution); // Moffstation - Zombie improvements
                 }
                 else
                 {
