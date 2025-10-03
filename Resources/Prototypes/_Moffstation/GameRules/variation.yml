@@ -1,0 +1,10 @@
+- type: entity
+  id: NukeCodesVariationPass
+  parent: BaseVariationPass
+  components:
+  - type: SolarPanelReplaceVariationPass
+  - type: EntityReplaceVariationPass
+    entitiesPerReplacementAverage: 30
+    entitiesPerReplacementStdDev: 5
+    replacements:
+    - id: SolarAssembly
