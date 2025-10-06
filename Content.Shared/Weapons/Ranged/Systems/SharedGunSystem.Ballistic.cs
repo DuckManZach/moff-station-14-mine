@@ -74,6 +74,7 @@ public abstract partial class SharedGunSystem
         Audio.PlayPredicted(component.SoundInsert, uid, args.User);
         args.Handled = true;
         UpdateBallisticAppearance(uid, component);
+        UpdateAmmoCount(args.Target);
         DirtyField(uid, component, nameof(BallisticAmmoProviderComponent.Entities));
         */
         if (TryBallisticInsert((uid, component), args.Used, args.User))
@@ -100,7 +101,7 @@ public abstract partial class SharedGunSystem
         // Continuous loading
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, component.FillDelay, new AmmoFillDoAfterEvent(), used: uid, target: args.Target, eventTarget: uid)
         {
-            BreakOnMove = true,
+            BreakOnMove = false, // Moffstation - Reloading shotguns on the move
             BreakOnDamage = false,
             NeedHand = true,
         });
@@ -178,7 +179,9 @@ public abstract partial class SharedGunSystem
                 Del(ent.Value);
         }
 
-        // repeat if there is more space in the target and more ammo to fill it
+        UpdateBallisticAppearance(args.Target.Value, component);
+        UpdateAmmoCount(args.Target.Value);
+        // repeat if there is more space in the target and more ammo to fill
         var moreSpace = target.Entities.Count + target.UnspawnedCount < target.Capacity;
         var moreAmmo = component.Entities.Count + component.UnspawnedCount > 0;
         args.Repeat = moreSpace && moreAmmo;

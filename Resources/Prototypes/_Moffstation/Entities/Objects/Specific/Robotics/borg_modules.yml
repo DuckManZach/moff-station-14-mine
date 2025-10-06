@@ -2,7 +2,7 @@
 - type: entity
   id: BorgModuleBureaucracy
   parent: [ BaseBorgModule, BaseProviderBorgModule ]
-  name: Bureaucracy cyborg module
+  name: bureaucracy cyborg module
   components:
   - type: Sprite
     layers:
@@ -27,8 +27,95 @@
     - item: HandLabeler
     - item: RubberStampApproved
     - item: RubberStampDenied
+    - item: RubberStampSilicon
   - type: BorgModuleIcon
     icon: { sprite: _Moffstation/Interface/Actions/actions_borg.rsi, state: bureau-module }
+
+- type: entity
+  id: BorgModuleCardboard
+  parent: [ BaseBorgModule, BaseProviderBorgModule ]
+  name: cardborg module
+  description: A piece of trash that gives cyborgs new abilities.
+  components:
+  - type: Sprite
+    layers:
+    - sprite: _Moffstation/Objects/Specific/Robotics/borgmodule.rsi
+      state: card
+    - sprite: _Moffstation/Objects/Specific/Robotics/borgmodule.rsi
+      state: icon-card
+  - type: ItemBorgModule
+    hands:
+    - item: CardSwordBorg
+    - hand:
+        emptyRepresentative: MaterialCardboard
+        emptyLabel: borg-slot-cardboard-empty
+        whitelist:
+          tags:
+          - Cardboard
+  - type: Construction
+    graph: BorgModuleCardboard
+    node: BorgModuleCardboard
+  - type: BorgModuleIcon
+    icon: { sprite: _Moffstation/Interface/Actions/actions_borg.rsi, state: card-module }
+
+- type: entity
+  id: BorgModulePainting
+  parent: [ BaseBorgModule, BaseProviderBorgModule ]
+  name: painting cyborg module
+  components:
+  - type: Sprite
+    layers:
+    - state: generic
+    - state: icon-pen
+  - type: ItemBorgModule
+    hands:
+    - hand:
+        emptyLabel: borg-slot-crayon-empty
+        emptyRepresentative: CrayonRainbow
+        whitelist:
+          components: #Lets us hold just crayons
+          - Crayon
+    - item: CrayonBox
+      hand:
+        emptyLabel: borg-slot-crayon-box-empty
+        emptyRepresentative: CrayonBox
+        whitelist:
+          tags: #Lets us hold both crayons AND the crayon box
+          - Crayon
+    - item: SprayPainterBorg
+    - hand:
+        emptyLabel: borg-slot-paint-empty
+        emptyRepresentative: SprayPainterAmmo
+        whitelist:
+          components:
+          - SprayPainterAmmo
+  - type: BorgModuleIcon
+    icon: { sprite: _Moffstation/Interface/Actions/actions_borg.rsi, state: paint-module }
+
+# Science Modules
+- type: entity
+  id: BorgModuleAdvancedAnomaly
+  parent: [ BaseBorgModuleScience, BaseProviderBorgModule ]
+  name: advanced anomaly cyborg module
+  components:
+  - type: Sprite
+    layers:
+    - state: science
+    - sprite: _Moffstation/Objects/Specific/Robotics/borgmodule.rsi
+      state: icon-anomalies-adv
+  - type: ItemBorgModule
+    hands:
+    - item: AnomalyScanner
+    - item: WeaponPistolCHIMPBorg
+    - item: WeaponGauntletGorilla
+    - hand:
+        emptyRepresentative: AnomalyCoreBluespaceInert
+        emptyLabel: borg-slot-anomaly-core
+        whitelist:
+          components:
+          - AnomalyCore
+  - type: BorgModuleIcon
+    icon: { sprite: _Moffstation/Interface/Actions/actions_borg.rsi, state: adv-anomaly-module }
 
 # Pirate Modules
 - type: entity
