@@ -39,6 +39,7 @@ using Direction = Robust.Shared.Maths.Direction;
 // CD: Records editor imports
 using Content.Client._CD.Records.UI;
 using Content.Shared._CD.Records;
+using Content.Shared._Moffstation.Roles;
 
 namespace Content.Client.Lobby.UI
 {
@@ -699,7 +700,60 @@ namespace Content.Client.Lobby.UI
                 ("humanoid-profile-editor-antag-preference-no-button", 1)
             };
 
-            foreach (var antag in _prototypeManager.EnumeratePrototypes<AntagPrototype>().OrderBy(a => Loc.GetString(a.Name)))
+            var totalAntags = _prototypeManager.EnumeratePrototypes<AntagPrototype>().ToList();
+
+            var categories = new List<AntagCategoryPrototype>();
+            foreach (var antagCategory in _prototypeManager.EnumeratePrototypes<AntagCategoryPrototype>().Where(a => !a.Default).OrderBy(a => a.Weight))
+            {
+                if (antagCategory.Default)
+                    continue;
+
+                if (antagCategory.EditorHidden)
+                    continue;
+
+                categories.Add(antagCategory);
+            }
+
+            foreach (var department in categories)
+            {
+                var departmentName = Loc.GetString(department.Name);
+
+                if (!_jobCategories.TryGetValue(department.ID, out var category))
+                {
+                    category = new BoxContainer
+                    {
+                        Orientation = LayoutOrientation.Vertical,
+                        Name = department.ID,
+                        ToolTip = Loc.GetString("humanoid-profile-editor-jobs-amount-in-department-tooltip",
+                            ("departmentName", departmentName))
+                    };
+
+                    category.AddChild(new PanelContainer
+                    {
+                        PanelOverride = new StyleBoxFlat
+                            { BackgroundColor = department.Color }, // Moffstation - Colored job list
+                        Children =
+                        {
+                            new RichTextLabel // Moffstation
+                            {
+                                Text = Loc.GetString(
+                                    "humanoid-profile-editor-antag-label-moffstation", // Moffstation - Colored job list
+                                    ("departmentName", departmentName)),
+                                Margin = new Thickness(5f, 2f, 0, 2f) // Moffstation - Colored job list
+                            }
+                        }
+                    });
+
+                    _jobCategories[department.ID] = category;
+                    AntagList.AddChild(category);
+                }
+
+                totalAntags = totalAntags.Where(antag => !department.Roles.Contains(_prototypeManager.Index<AntagPrototype>(antag))).ToList();
+            }
+
+            var antags = _prototypeManager.EnumeratePrototypes<AntagPrototype>().Where(antag => antag.SetPreference);
+
+            foreach (var antag in antags)
             {
                 if (!antag.SetPreference)
                     continue;
@@ -781,6 +835,13 @@ namespace Content.Client.Lobby.UI
                 }
                 // Moffstation - End
 
+                if (!totalAntags.Contains(antag))
+                {
+                    foreach (var category in categories.Where(c => c.Default))
+                    {
+
+                    }
+                }
                 AntagList.AddChild(antagContainer);
             }
         }
