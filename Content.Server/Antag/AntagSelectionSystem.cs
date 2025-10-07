@@ -105,6 +105,8 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             if (comp.AssignmentComplete)
                 continue;
 
+
+
             ChooseAntags((uid, comp), pool); // We choose the antags here...
 
             if (comp.SelectionTime == AntagSelectionTime.PrePlayerSpawn)
