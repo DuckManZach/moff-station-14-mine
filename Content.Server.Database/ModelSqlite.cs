@@ -87,6 +87,12 @@ namespace Content.Server.Database
                 .Property(log => log.CharacterRecords)
                 .HasConversion(jsonByteArrayConverter);
 
+            // Moffstation - Start - Antag weights
+            modelBuilder.Entity<MoffModel.MoffAntagWeights>()
+                .Property(log => log.UserId)
+                .HasConversion(jsonStringConverter);
+            // Moffstation - End
+
             // EF core can make this automatically unique on sqlite but not psql.
             modelBuilder.Entity<IPIntelCache>()
                 .HasIndex(p => p.Address)

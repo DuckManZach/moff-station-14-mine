@@ -118,6 +118,12 @@ namespace Content.Server.Database
                 .HasIndex(p => p.UserId)
                 .IsUnique();
 
+            // Moffstation - Start - Antag weights
+            modelBuilder.Entity<MoffModel.MoffAntagWeights>()
+                .HasIndex(a => a.UserId)
+                .IsUnique();
+            // Moffstation - End
+
             modelBuilder.Entity<Admin>()
                 .HasOne(p => p.AdminRank)
                 .WithMany(p => p!.Admins)
