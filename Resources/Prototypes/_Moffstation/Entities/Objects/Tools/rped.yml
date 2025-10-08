@@ -1,0 +1,17 @@
+- type: entity
+  id: RPED
+  parent: [ BaseItem, BaseEngineeringContraband ]
+  name: RPED
+  description: Your handy-dandy all-in-one upgrading tool.
+  components:
+  - type: MachineUpgrader
+  - type: Sprite
+    sprite: Objects/Tools/rcd.rsi
+    state: icon
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: Objects/Tools/rcd.rsi
+    quickEquip: false
+    slots:
+    - Belt

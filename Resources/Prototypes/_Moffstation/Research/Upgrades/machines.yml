@@ -1,0 +1,8 @@
+- type: machineUpgrade
+  id: RechargerUpgrades
+  name: recharger upgrades
+  baseMachines:
+  - PowerCellRecharger
+  - WeaponCapacitorRecharger
+  upgradedMachines:
+  - TurboItemRecharger
