@@ -12,16 +12,22 @@ public sealed partial class MachineUpgraderComponent : Component
 
     [DataField]
     public Dictionary<ProtoId<MaterialPrototype>, float> BaseUpgradeCost = new();
+
+    [DataField]
+    public HashSet<EntProtoId> AvailableUpgrades = new();
+
+    [DataField]
+    public EntityUid? CurrentTarget;
 }
 
 [Serializable, NetSerializable]
-public sealed class RPEDSystemMessage(EntProtoId protoId) : BoundUserInterfaceMessage
+public sealed class RPEDConstructionMessage(EntProtoId protoId) : BoundUserInterfaceMessage
 {
     public EntProtoId ProtoId = protoId;
 }
 
 [Serializable, NetSerializable]
-public sealed class RPEDUpdateUpgrades(HashSet<EntProtoId> protos) : BoundUserInterfaceMessage
+public enum RpedUiKey : byte
 {
-    public HashSet<EntProtoId> Protos = protos;
+    Key
 }

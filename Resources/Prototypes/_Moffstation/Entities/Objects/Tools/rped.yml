@@ -15,3 +15,7 @@
     quickEquip: false
     slots:
     - Belt
+  - type: UserInterface
+    interfaces:
+      enum.RpedUiKey.Key:
+        type: RPEDMenuBoundUserInterface

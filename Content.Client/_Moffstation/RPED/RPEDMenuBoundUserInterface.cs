@@ -1,6 +1,7 @@
 using Content.Client.Popups;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._Moffstation.Research.Components;
+using Robust.Client.GameStates;
 using Robust.Client.UserInterface;
 using Robust.Shared.Collections;
 using Robust.Shared.Player;
@@ -13,8 +14,6 @@ public sealed class RPEDMenuBoundUserInterface : BoundUserInterface
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
 
-    private IEnumerable<RadialMenuOptionBase> Options = null!;
-
     private SimpleRadialMenu? _menu;
 
     public RPEDMenuBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
@@ -26,14 +25,25 @@ public sealed class RPEDMenuBoundUserInterface : BoundUserInterface
     {
         base.Open();
 
-        if (!EntMan.TryGetComponent<MachineUpgraderComponent>(Owner, out var rcd))
+        if (!EntMan.TryGetComponent<MachineUpgraderComponent>(Owner, out var rped))
             return;
 
         _menu = this.CreateWindow<SimpleRadialMenu>();
         _menu.Track(Owner);
-        _menu.SetButtons(Options);
+        _menu.SetButtons(ConvertToButtons(rped.AvailableUpgrades));
 
         _menu.OpenOverMouseScreenPosition();
+
+        _menu.OnClose += ClearUpgrades;
+    }
+
+    private void ClearUpgrades()
+    {
+        if (!EntMan.TryGetComponent<MachineUpgraderComponent>(Owner, out var rped))
+            return;
+
+        rped.CurrentTarget = null;
+        rped.AvailableUpgrades.Clear();
     }
 
     private IEnumerable<RadialMenuOptionBase> ConvertToButtons(HashSet<EntProtoId> prototypes)
@@ -82,7 +92,7 @@ public sealed class RPEDMenuBoundUserInterface : BoundUserInterface
     {
         // A predicted message cannot be used here as the RCD UI is closed immediately
         // after this message is sent, which will stop the server from receiving it
-        SendMessage(new RPEDSystemMessage(proto));
+        SendMessage(new RPEDConstructionMessage(proto));
 
 
         if (_playerManager.LocalSession?.AttachedEntity == null)
