@@ -1,8 +1,10 @@
 using System.Linq;
 using Content.Shared._Moffstation.Research.Components;
 using Content.Shared._Moffstation.Research.Prototypes;
+using Content.Shared.Construction;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
+using Content.Shared.Materials;
 using Content.Shared.Popups;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -19,6 +21,7 @@ public sealed class MachineUpgraderSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedFlatpackSystem _flatpack = default!;
 
     public override void Initialize()
     {
@@ -148,5 +151,10 @@ public sealed class MachineUpgraderSystem : EntitySystem
         // Play audio and consume charges
         _audio.PlayPredicted(component.SuccessSound, uid, args.User);
         _sharedCharges.AddCharges(uid, -args.Cost);
+    }
+
+    private Dictionary<ProtoId<MaterialPrototype>, float> GetCost(EntProtoId upgrade, EntProtoId original)
+    {
+        _flatpack.GetFlatpackCreationCost()
     }
 }
