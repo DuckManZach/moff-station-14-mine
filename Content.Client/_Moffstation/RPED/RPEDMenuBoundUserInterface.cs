@@ -34,10 +34,10 @@ public sealed class RPEDMenuBoundUserInterface : BoundUserInterface
 
         _menu.OpenOverMouseScreenPosition();
 
-        _menu.OnClose += ClearUpgrades;
+        _menu.OnClose += OnClose;
     }
 
-    private void ClearUpgrades()
+    private void OnClose()
     {
         if (!EntMan.TryGetComponent<MachineUpgraderComponent>(Owner, out var rped))
             return;
@@ -93,7 +93,6 @@ public sealed class RPEDMenuBoundUserInterface : BoundUserInterface
         // A predicted message cannot be used here as the RCD UI is closed immediately
         // after this message is sent, which will stop the server from receiving it
         SendMessage(new RPEDConstructionMessage(proto));
-
 
         if (_playerManager.LocalSession?.AttachedEntity == null)
             return;
