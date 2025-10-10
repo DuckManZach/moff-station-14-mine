@@ -1,7 +1,7 @@
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Utility;
+using Robust.Shared.Utility;    // Moffstation
 
 namespace Content.Shared._Offbrand.Surgery;
 
@@ -21,13 +21,12 @@ public abstract class SharedSurgeryGuideTargetSystem : EntitySystem
                 {
                     sub.Event<SurgeryGuideStartSurgeryMessage>(OnStartSurgery);
                     sub.Event<SurgeryGuideStartCleanupMessage>(OnStartCleanup);
-                    sub.Event<BoundUIClosedEvent>(OnClose);
                 });
     }
 
     private void OnGetVerbs(Entity<SurgeryToolComponent> ent, ref GetVerbsEvent<UtilityVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract || !TryComp<SurgeryGuideTargetComponent>(args.Target, out var surgeryGuide))   // Moffstation - Fix double surgery glitch
+        if (!args.CanAccess || !args.CanInteract || !HasComp<SurgeryGuideTargetComponent>(args.Target))
             return;
 
         var @event = args;
@@ -35,21 +34,10 @@ public abstract class SharedSurgeryGuideTargetSystem : EntitySystem
         {
             Act = () =>
             {
-                if (surgeryGuide.SelectionOccupied)
-                {
-                    _popup.PopupPredictedCursor(Loc.GetString("popup-surgery-occupied"), @event.User);
-                }
-                else
-                {
-                    _userInterface.OpenUi(@event.Target, SurgeryGuideUiKey.Key, @event.User);
-                    surgeryGuide.SelectionOccupied = true;  // Moffstation - Fix double surgery glitch
-                }
+                _userInterface.OpenUi(@event.Target, SurgeryGuideUiKey.Key, @event.User);
             },
+            Text = Loc.GetString("verb-perform-surgery"),
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png")), // Moffstation - Give surgery verb an icon
-            // Moffstation - Start - Fix double surgery glitch
-            Text = Loc.GetString(surgeryGuide.SelectionOccupied ? "verb-surgery-occupied" : "verb-perform-surgery"),
-            Disabled = surgeryGuide.SelectionOccupied
-            // Moffstation - End
         });
     }
 
@@ -63,11 +51,5 @@ public abstract class SharedSurgeryGuideTargetSystem : EntitySystem
     {
         _userInterface.CloseUi(ent.Owner, SurgeryGuideUiKey.Key, args.Actor);
         _popup.PopupPredictedCursor(Loc.GetString("surgery-examine-for-instructions"), args.Actor);
-    }
-
-    protected virtual void OnClose(Entity<SurgeryGuideTargetComponent> ent, ref BoundUIClosedEvent args)
-    {
-        ent.Comp.SelectionOccupied = false;
-        Dirty(ent);
     }
 }

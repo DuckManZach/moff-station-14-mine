@@ -7,7 +7,8 @@
 
     <BoxContainer Name="SurgeriesContainer" Orientation="Vertical">
         <controls:ListContainer Name="PossibleSurgeries" VerticalExpand="True" Margin="4 4"/>
-        <Button Name="CleanUp" Text="{Loc 'surgery-guide-clean-up'}" StyleClasses="OpenBoth" />
+        <!-- Moffstation - Rename "clean up" to be more clear -->
+        <Button Name="CleanUp" Text="{Loc 'surgery-guide-clean-up-moffstation'}" StyleClasses="OpenBoth" />
     </BoxContainer>
     <BoxContainer Name="StepsContainer" Orientation="Vertical" Visible="False">
         <BoxContainer Orientation="Vertical" Margin="4 4">
