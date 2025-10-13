@@ -10,7 +10,7 @@
   - Nukeops
   - SyndicateSpy
 
-- type:
+- type: antagCategory
   id: Other
   name: antag-catagory-syndicate-name
   description: antag-catagory-syndicate-desc

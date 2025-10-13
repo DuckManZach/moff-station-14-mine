@@ -700,19 +700,15 @@ namespace Content.Client.Lobby.UI
                 ("humanoid-profile-editor-antag-preference-no-button", 1)
             };
 
-            var totalAntags = _prototypeManager.EnumeratePrototypes<AntagPrototype>().ToList();
+            var totalAntags = _prototypeManager.EnumeratePrototypes<AntagPrototype>()
+                .ToList()
+                .ConvertAll(a => (ProtoId<AntagPrototype>)a.ID);
 
-            var categories = new List<AntagCategoryPrototype>();
-            foreach (var antagCategory in _prototypeManager.EnumeratePrototypes<AntagCategoryPrototype>().Where(a => !a.Default).OrderBy(a => a.Weight))
-            {
-                if (antagCategory.Default)
-                    continue;
-
-                if (antagCategory.EditorHidden)
-                    continue;
-
-                categories.Add(antagCategory);
-            }
+            var categories = _prototypeManager.EnumeratePrototypes<AntagCategoryPrototype>()
+                .Where(antagCategory => !antagCategory.EditorHidden)
+                .OrderBy(a => a.Weight)
+                .ThenBy(a => a.Default)
+                .ToList();
 
             foreach (var department in categories)
             {
@@ -748,102 +744,98 @@ namespace Content.Client.Lobby.UI
                     AntagList.AddChild(category);
                 }
 
-                totalAntags = totalAntags.Where(antag => !department.Roles.Contains(_prototypeManager.Index<AntagPrototype>(antag))).ToList();
-            }
-
-            var antags = _prototypeManager.EnumeratePrototypes<AntagPrototype>().Where(antag => antag.SetPreference);
-
-            foreach (var antag in antags)
-            {
-                if (!antag.SetPreference)
-                    continue;
-
-                var antagContainer = new BoxContainer()
+                foreach (var antagProtoID in (department.Default ? totalAntags : department.Roles))
                 {
-                    Orientation = LayoutOrientation.Horizontal,
-                };
+                    var antag = _prototypeManager.Index(antagProtoID);
+                    if (!antag.SetPreference)
+                        continue;
 
-                var selector = new RequirementsSelector()
-                {
-                    Margin = new Thickness(3f, 3f, 3f, 0f),
-                };
-                selector.OnOpenGuidebook += OnOpenGuidebook;
-
-                var title = Loc.GetString(antag.Name);
-                var description = Loc.GetString(antag.Objective);
-                selector.Setup(items, title, 250, description, guides: antag.Guides);
-                selector.Select(Profile?.AntagPreferences.Contains(antag.ID) == true ? 0 : 1);
-
-                if (!_requirements.IsAllowed(
-                        antag,
-                        (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter,
-                        out var reason))
-                {
-                    selector.LockRequirements(reason);
-                    Profile = Profile?.WithAntagPreference(antag.ID, false);
-                    SetDirty();
-                }
-                else
-                {
-                    selector.UnlockRequirements();
-                }
-
-                selector.OnSelected += preference =>
-                {
-                    Profile = Profile?.WithAntagPreference(antag.ID, preference == 0);
-                    SetDirty();
-                };
-
-                antagContainer.AddChild(selector);
-
-                // Moffstation - Begin - Enable loadouts for antags
-                var loadoutWindowBtn = new Button()
-                {
-                    // Disabled = true,
-                    Text = Loc.GetString("loadout-window-moffstation"), // Moffstation
-                    HorizontalAlignment = HAlignment.Right,
-                    Margin = new Thickness(3f, 0f, 0f, 0f),
-                };
-
-                antagContainer.AddChild(loadoutWindowBtn);
-
-                var protoManager = IoCManager.Instance!.Resolve<IPrototypeManager>();
-
-                // If no loadout found then disabled button
-                if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(antag.ID), out var roleLoadoutProto))
-                {
-                    loadoutWindowBtn.Disabled = true;
-                }
-                else
-                {
-                    loadoutWindowBtn.OnPressed += _ =>
+                    var antagContainer = new BoxContainer()
                     {
-                        RoleLoadout loadout;
-                        if (Profile != null && Profile.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(antag.ID), out var roleLoadout))
-                        {
-                            // Clone so we don't modify the underlying loadout.
-                            loadout = roleLoadout.Clone();
-                        }
-                        else
-                        {
-                            loadout = new RoleLoadout(roleLoadoutProto.ID);
-                            loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
-                        }
-
-                        OpenLoadout(null, loadout, roleLoadoutProto);
+                        Orientation = LayoutOrientation.Horizontal,
                     };
-                }
-                // Moffstation - End
 
-                if (!totalAntags.Contains(antag))
-                {
-                    foreach (var category in categories.Where(c => c.Default))
+                    var selector = new RequirementsSelector()
                     {
+                        Margin = new Thickness(3f, 3f, 3f, 0f),
+                    };
+                    selector.OnOpenGuidebook += OnOpenGuidebook;
 
+                    var title = Loc.GetString(antag.Name);
+                    var description = Loc.GetString(antag.Objective);
+                    selector.Setup(items, title, 250, description, guides: antag.Guides);
+                    selector.Select(Profile?.AntagPreferences.Contains(antag.ID) == true ? 0 : 1);
+
+                    if (!_requirements.IsAllowed(
+                            antag,
+                            (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter,
+                            out var reason))
+                    {
+                        selector.LockRequirements(reason);
+                        Profile = Profile?.WithAntagPreference(antag.ID, false);
+                        SetDirty();
                     }
+                    else
+                    {
+                        selector.UnlockRequirements();
+                    }
+
+                    selector.OnSelected += preference =>
+                    {
+                        Profile = Profile?.WithAntagPreference(antag.ID, preference == 0);
+                        SetDirty();
+                    };
+
+                    antagContainer.AddChild(selector);
+
+                    // Moffstation - Begin - Enable loadouts for antags
+                    var loadoutWindowBtn = new Button()
+                    {
+                        // Disabled = true,
+                        Text = Loc.GetString("loadout-window-moffstation"), // Moffstation
+                        HorizontalAlignment = HAlignment.Right,
+                        Margin = new Thickness(3f, 0f, 0f, 0f),
+                    };
+
+                    antagContainer.AddChild(loadoutWindowBtn);
+
+                    var protoManager = IoCManager.Instance!.Resolve<IPrototypeManager>();
+
+                    // If no loadout found then disabled button
+                    if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(antag.ID),
+                            out var roleLoadoutProto))
+                    {
+                        loadoutWindowBtn.Disabled = true;
+                    }
+                    else
+                    {
+                        loadoutWindowBtn.OnPressed += _ =>
+                        {
+                            RoleLoadout loadout;
+                            if (Profile != null && Profile.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(antag.ID),
+                                    out var roleLoadout))
+                            {
+                                // Clone so we don't modify the underlying loadout.
+                                loadout = roleLoadout.Clone();
+                            }
+                            else
+                            {
+                                loadout = new RoleLoadout(roleLoadoutProto.ID);
+                                loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+                            }
+
+                            OpenLoadout(null, loadout, roleLoadoutProto);
+                        };
+                    }
+
+                    category.AddChild(antagContainer);
+
+                    totalAntags = totalAntags.Where(a =>
+                            !department.Roles.Contains(_prototypeManager.Index(a)))
+                        .ToList();
                 }
-                AntagList.AddChild(antagContainer);
             }
+                    // Moffstation - End
         }
 
         private void SetDirty()
