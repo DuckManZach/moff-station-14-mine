@@ -721,7 +721,7 @@ namespace Content.Client.Lobby.UI
                         Orientation = LayoutOrientation.Vertical,
                         Name = department.ID,
                         ToolTip = Loc.GetString("humanoid-profile-editor-jobs-amount-in-department-tooltip",
-                            ("departmentName", departmentName))
+                            ("departmentName", departmentName)),
                     };
 
                     category.AddChild(new PanelContainer
@@ -734,8 +734,10 @@ namespace Content.Client.Lobby.UI
                             {
                                 Text = Loc.GetString(
                                     "humanoid-profile-editor-antag-label-moffstation", // Moffstation - Colored job list
-                                    ("departmentName", departmentName)),
+                                    ("departmentName", departmentName),
+                                    ("color",  department.TextColor)),
                                 Margin = new Thickness(5f, 2f, 0, 2f) // Moffstation - Colored job list
+
                             }
                         }
                     });
@@ -834,6 +836,11 @@ namespace Content.Client.Lobby.UI
                             !department.Roles.Contains(_prototypeManager.Index(a)))
                         .ToList();
                 }
+
+                category.AddChild(new Control
+                {
+                    MinSize = new Vector2(0, 23),
+                });
             }
                     // Moffstation - End
         }
