@@ -9,13 +9,6 @@ public sealed partial class SurgeryGuideTargetComponent : Component
 {
     [DataField]
     public string Category = "Surgery";
-
-    // Moffstation - Start - Fix double surgery glitch
-    /// <summary>
-    /// Whether someone is already selecting a surgery for the patient
-    /// </summary>
-    [DataField]
-    public bool SelectionOccupied;
 }
 
 [Serializable, NetSerializable]

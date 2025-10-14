@@ -65,6 +65,7 @@ public sealed class WoundableHealthAnalyzerSystem : SharedWoundableHealthAnalyze
             }
         }
 
+        /* Moffstation - Start - Remove gasses from health analyzer
         foreach (var lung in _body.GetBodyOrganEntityComps<LungComponent>(uid))
         {
             foreach (var gasId in Enum.GetValues<Gas>())
@@ -87,6 +88,7 @@ public sealed class WoundableHealthAnalyzerSystem : SharedWoundableHealthAnalyze
                 ret[reagent] = (ret[reagent].InBloodstream + amount, ret[reagent].Metabolites);
             }
         }
+        */
 
         return ret;
     }
