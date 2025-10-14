@@ -72,8 +72,6 @@ namespace Content.Client.HealthAnalyzer.UI
             DamageButton.TooltipSupplier = _ => _damageTooltip;
             BloodButton.TooltipSupplier = _ => _bloodTooltip;
             LungHealthButton.TooltipSupplier = _ => _lungHealthTooltip;
-            SpO2Button.TooltipSupplier = _ => _spo2Tooltip;
-            EtCO2Button.TooltipSupplier = _ => _etco2Tooltip;
             RespiratoryRateButton.TooltipSupplier = _ => _respiratoryRateTooltip;
             // End Offbrand
         }
@@ -238,45 +236,33 @@ namespace Content.Client.HealthAnalyzer.UI
                 }
                 BrainHealthText.Visible = true;
                 BrainHealthLabel.Visible = true;
-                BrainHealthLabel.Text = Loc.GetString("health-analyzer-window-entity-brain-health-value", ("value", $"{woundable.BrainHealth * 100:F1}"));
+                BrainHealthLabel.Text = Loc.GetString("health-analyzer-window-entity-brain-health-value-moffstation", ("value", $"{woundable.BrainHealth * 100:F1}"));
                 BrainHealthButton.Visible = true;
 
                 HeartHealthText.Visible = true;
                 HeartHealthLabel.Visible = true;
-                HeartHealthLabel.Text = Loc.GetString("health-analyzer-window-entity-heart-health-value", ("value", $"{woundable.HeartHealth * 100:F1}"));
+                HeartHealthLabel.Text = Loc.GetString("health-analyzer-window-entity-heart-health-value-moffstation", ("value", $"{woundable.HeartHealth * 100:F1}"));
                 HeartHealthButton.Visible = true;
 
                 HeartRateText.Visible = true;
                 HeartRateLabel.Visible = true;
-                HeartRateLabel.Text = Loc.GetString("health-analyzer-window-entity-heart-rate-value", ("value", woundable.HeartRate));
+                HeartRateLabel.Text = Loc.GetString("health-analyzer-window-entity-heart-rate-value-moffstation", ("value", woundable.HeartRate));
                 HeartRateButton.Visible = true;
 
                 var (systolic, diastolic) = woundable.BloodPressure;
                 BloodPressureText.Visible = true;
                 BloodPressureLabel.Visible = true;
-                BloodPressureLabel.Text = Loc.GetString("health-analyzer-window-entity-blood-pressure-value", ("systolic", systolic), ("diastolic", diastolic));
+                BloodPressureLabel.Text = Loc.GetString("health-analyzer-window-entity-blood-pressure-value-moffstation", ("systolic", systolic), ("diastolic", diastolic));
                 BloodPressureButton.Visible = true;
 
                 LungHealthText.Visible = true;
                 LungHealthLabel.Visible = true;
-                LungHealthLabel.Text = Loc.GetString("health-analyzer-window-entity-lung-health-value", ("value", $"{woundable.LungHealth * 100:F1}"));
+                LungHealthLabel.Text = Loc.GetString("health-analyzer-window-entity-lung-health-value-moffstation", ("value", $"{woundable.LungHealth * 100:F1}"));
                 LungHealthButton.Visible = true;
-
-                SpO2Text.Visible = true;
-                SpO2Text.Text = Loc.GetString("health-analyzer-window-entity-spo2-text", ("spo2", woundable.Spo2Name));
-                SpO2Label.Visible = true;
-                SpO2Label.Text = Loc.GetString("health-analyzer-window-entity-spo2-value", ("value", $"{woundable.Spo2 * 100:F1}"));
-                SpO2Button.Visible = true;
-
-                EtCO2Text.Visible = true;
-                EtCO2Text.Text = Loc.GetString("health-analyzer-window-entity-etco2-text", ("etco2", woundable.Etco2Name));
-                EtCO2Label.Visible = true;
-                EtCO2Label.Text = Loc.GetString("health-analyzer-window-entity-etco2-value", ("value", $"{woundable.Etco2}"));
-                EtCO2Button.Visible = true;
 
                 RespiratoryRateText.Visible = true;
                 RespiratoryRateLabel.Visible = true;
-                RespiratoryRateLabel.Text = Loc.GetString("health-analyzer-window-entity-respiratory-rate-value", ("value", $"{woundable.RespiratoryRate}"));
+                RespiratoryRateLabel.Text = Loc.GetString("health-analyzer-window-entity-respiratory-rate-value-moffstation", ("value", $"{woundable.RespiratoryRate}"));
                 RespiratoryRateButton.Visible = true;
 
                 BloodLabel.Visible = false;
@@ -300,12 +286,6 @@ namespace Content.Client.HealthAnalyzer.UI
                 HeartRateButton.Visible = false;
                 HeartHealthButton.Visible = false;
                 LungHealthButton.Visible = false;
-                SpO2Text.Visible = false;
-                SpO2Label.Visible = false;
-                SpO2Button.Visible = false;
-                EtCO2Text.Visible = false;
-                EtCO2Label.Visible = false;
-                EtCO2Button.Visible = false;
                 RespiratoryRateText.Visible = false;
                 RespiratoryRateLabel.Visible = false;
                 RespiratoryRateButton.Visible = false;
