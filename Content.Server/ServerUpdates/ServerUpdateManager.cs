@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server.Chat.Managers;
+using Content.Server.GameTicking;
 using Content.Shared.CCVar;
 using Robust.Server;
 using Robust.Server.Player;
@@ -27,6 +28,7 @@ public sealed class ServerUpdateManager : IPostInjectInit
     [Dependency] private readonly IBaseServer _server = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly GameTicker _ticker = default!;    // Moffstation
 
     private ISawmill _sawmill = default!;
 
@@ -64,6 +66,7 @@ public sealed class ServerUpdateManager : IPostInjectInit
                 ServerEmptyUpdateRestartCheck("uptime");
             }
         }
+        if (_ticker.RunLevel == GameRunLevel.PreRoundLobby && (_uptimeRestart || _updateOnRoundEnd))
     }
 
     /// <summary>
