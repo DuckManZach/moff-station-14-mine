@@ -76,7 +76,7 @@ public sealed class MachineUpgraderSystem : EntitySystem
         if (ent.Comp.CurrentTarget is not { } target)
             return;
 
-        var ev = new RPEDDoAfterEvent(target, 0);
+        var ev = new RPEDDoAfterEvent(target, 0, args.ProtoId);
 
         var doAfterArgs = new DoAfterArgs(EntityManager, args.Actor, TimeSpan.FromSeconds(1), ev, target)
         {
@@ -141,16 +141,29 @@ public sealed class MachineUpgraderSystem : EntitySystem
         var tile = _mapSystem.GetTileRef(gridUid.Value, mapGrid, location);
         var position = _mapSystem.TileIndicesFor(gridUid.Value, mapGrid, location);
 
-        // Ensure the RCD operation is still valid
-        if (!IsRCDOperationStillValid(uid, component, gridUid.Value, mapGrid, tile, position, args.Target, args.User))
-            return;
+        // // Ensure the RCD operation is still valid
+        // if (!IsRCDOperationStillValid(uid, component, gridUid.Value, mapGrid, tile, position, args.Target, args.User))
+        //     return;
 
         // Finalize the operation (this should handle prediction properly)
-        FinalizeRCDOperation(uid, component, gridUid.Value, mapGrid, tile, position, args.Direction, args.Target, args.User);
+        // FinalizeRCDOperation(uid, component, gridUid.Value, mapGrid, tile, position, args.Direction, args.Target, args.User);
 
         // Play audio and consume charges
-        _audio.PlayPredicted(component.SuccessSound, uid, args.User);
-        _sharedCharges.AddCharges(uid, -args.Cost);
+        // _audio.PlayPredicted(component.SuccessSound, uid, args.User);
+        // _sharedCharges.AddCharges(uid, -args.Cost);
+    }
+
+    private void FinalizeRPEDOperation(EntityUid uid,
+        MachineUpgraderComponent component,
+        EntProtoId upgrade,
+        EntityUid gridUid,
+        MapGridComponent mapGrid,
+        Vector2i position,
+        Direction direction,
+        EntityUid? target,
+        EntityUid user)
+    {
+
     }
 
     private Dictionary<ProtoId<MaterialPrototype>, float> GetCost(EntProtoId upgrade, EntProtoId original)

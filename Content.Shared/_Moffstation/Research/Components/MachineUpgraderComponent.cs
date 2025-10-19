@@ -46,10 +46,13 @@ public sealed partial class RPEDDoAfterEvent : DoAfterEvent
 
     private RPEDDoAfterEvent() { }
 
-    public RPEDDoAfterEvent(EntityUid target, int cost)
+    public RPEDDoAfterEvent(EntityUid target, int cost, EntProtoId upgrade)
     {
         Cost = cost;
+        Upgrade = upgrade;
     }
+
+    public EntProtoId Upgrade;
 
     public override DoAfterEvent Clone()
     {
