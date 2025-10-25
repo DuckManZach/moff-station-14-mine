@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared._Moffstation.Research.Components;
 using Content.Shared._Moffstation.Research.Prototypes;
 using Content.Shared.Construction;
+using Content.Shared.Construction.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Materials;
@@ -166,8 +167,12 @@ public sealed class MachineUpgraderSystem : EntitySystem
 
     }
 
-    private Dictionary<ProtoId<MaterialPrototype>, float> GetCost(EntProtoId upgrade, EntProtoId original)
+    private Dictionary<ProtoId<MaterialPrototype>, float>? GetCost(EntityUid uid, EntProtoId upgrade, EntProtoId original)
     {
+        if (!TryComp<FlatpackCreatorComponent>(uid, out var flatpackComp)
+            return null;
+
+            TryComp<MachineComponent>(uid, out var machineComp)
         _flatpack.GetFlatpackCreationCost();
     }
 }
