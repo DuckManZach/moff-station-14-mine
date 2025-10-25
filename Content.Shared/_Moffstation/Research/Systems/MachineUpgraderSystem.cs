@@ -168,6 +168,6 @@ public sealed class MachineUpgraderSystem : EntitySystem
 
     private Dictionary<ProtoId<MaterialPrototype>, float> GetCost(EntProtoId upgrade, EntProtoId original)
     {
-        _flatpack.GetFlatpackCreationCost()
+        _flatpack.GetFlatpackCreationCost();
     }
 }

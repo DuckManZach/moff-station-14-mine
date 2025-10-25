@@ -19,3 +19,9 @@
     interfaces:
       enum.RpedUiKey.Key:
         type: RPEDMenuBoundUserInterface
+  - type: MaterialStorage
+    whitelist:
+      tags:
+      - Sheet
+      - RawMaterial
+      - Ingot
