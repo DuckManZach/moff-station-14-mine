@@ -9,9 +9,11 @@
     sprite: Clothing/OuterClothing/Bio/general.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Bio/general.rsi
-  - type: HideLayerClothing
-    slots:
-    - Tail
+#  Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+#  Moffstation - End
   - type: Armor
     modifiers:
       coefficients:
@@ -86,7 +88,7 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.95
     sprintModifier: 0.95
-    
+
 - type: entity
   parent: ClothingOuterBioGeneral
   id: ClothingOuterBioVirology

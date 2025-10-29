@@ -73,9 +73,11 @@
   - type: GroupExamine
   - type: ProtectedFromStepTriggers
     slots: WITHOUT_POCKET
-  - type: HideLayerClothing
-    slots:
-    - Tail
+# Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+# Moffstation - End
 
 - type: entity
   parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing]
@@ -112,9 +114,11 @@
     tags:
     - CorgiWearable
     - WhitelistChameleon
-  - type: HideLayerClothing
-    slots:
-    - Tail
+# Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+# Moffstation - End
 
 - type: entity
   parent: [ClothingOuterBaseLarge, GeigerCounterClothing, AllowSuitStorageClothing]
@@ -140,9 +144,11 @@
       toggleable-clothing: !type:ContainerSlot {}
   - type: ProtectedFromStepTriggers
     slots: WITHOUT_POCKET
-  - type: HideLayerClothing
-    slots:
-    - Tail
+# Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+# Moffstation - End
 
 - type: entity
   parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing, BaseToggleClothing, BaseHighlyIllegalContraband]
@@ -207,9 +213,11 @@
         whitelist:
           tags:
             - PowerCell
-  - type: HideLayerClothing
-    slots:
-    - Tail
+# Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+# Moffstation - End
 
 - type: entity
   parent: ClothingOuterBase
@@ -309,9 +317,11 @@
   - type: ContainerContainer
     containers:
       toggleable-clothing: !type:ContainerSlot {}
-  - type: HideLayerClothing
-    slots:
-    - Tail
+# Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+# Moffstation - End
 
 - type: entity
   parent: ClothingOuterSuitCarp

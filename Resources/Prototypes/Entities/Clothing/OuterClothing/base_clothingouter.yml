@@ -145,9 +145,11 @@
       flatReductions:
         Heat: 10 # the average lightbulb only does around four damage!
     slots: OUTERCLOTHING
-  - type: HideLayerClothing
-    slots:
-    - Tail
+# Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+# Moffstation - End
 
 - type: entity
   abstract: true
@@ -177,9 +179,11 @@
       flatReductions:
         Heat: 10 # the average lightbulb only does around four damage!
     slots: OUTERCLOTHING
-  - type: HideLayerClothing
-    slots:
-    - Tail
+# Moffstation - Start - Dont hide lizor tails
+#  - type: HideLayerClothing
+#    slots:
+#    - Tail
+# Moffstation - End
 
 - type: entity
   parent: ClothingOuterBase
