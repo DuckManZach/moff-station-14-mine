@@ -1,0 +1,9 @@
+- type: antag
+  id: Stowaway
+  name: roles-stowaway
+  antagonist: true
+  setPreference: true
+  objective: roles-stowaway-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 1h
