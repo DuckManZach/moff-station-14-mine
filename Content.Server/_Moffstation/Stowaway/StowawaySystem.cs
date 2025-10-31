@@ -1,12 +1,15 @@
+using Content.Server._Moffstation.GameTicking.Rules.Components;
+using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Systems;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Storage.Components;
 using Robust.Shared.Random;
 
 namespace Content.Server._Moffstation.Stowaway;
 
-public sealed class StowawaySystem : EntitySystem
+public sealed class StowawaySystem : GameRuleSystem<StowawayComponent>
 {
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
@@ -14,10 +17,12 @@ public sealed class StowawaySystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<StowawayComponent, PlayerSpawnCompleteEvent>(OnSpawn);
+        base.Initialize();
+
+        SubscribeLocalEvent<StowawayComponent, ComponentInit>(OnInit);
     }
 
-    private void OnSpawn(Entity<StowawayComponent> ent, ref PlayerSpawnCompleteEvent ev)
+    protected override void Started(EntityUid uid, StowawayComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         var validLockers = new List<(EntityUid, EntityStorageComponent)>();
 
@@ -36,4 +41,6 @@ public sealed class StowawaySystem : EntitySystem
         var (locker, storageComp) = _random.Pick(validLockers);
         _entityStorage.Insert(ent.Owner, locker, storageComp);
     }
+
+    private void OnInit()
 }
