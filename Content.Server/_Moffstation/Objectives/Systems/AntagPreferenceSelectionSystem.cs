@@ -7,19 +7,19 @@ using Robust.Shared.Random;
 namespace Content.Server._Moffstation.Objectives.Systems;
 
 /// <summary>
-/// This handles selecting a high-value target for any systems that select random targets.
+/// This handles selecting a target for any systems that select random (non-antag) targets from antag preferences.
 /// </summary>
-public sealed class HighValueTargetSelectionSystem : EntitySystem
+public sealed class AntagPreferenceSelectionSystem : EntitySystem
 {
     [Dependency] private readonly IServerPreferencesManager _pref = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
     /// <summary>
     /// Selects a target from the list of possible targets with a priority on those with
-    /// the High Value Target role selected.
+    /// the role selected.
     /// </summary>
     public Entity<MindComponent> SelectTarget(
-        Entity<HighValueTargetSelectionComponent?> rule,
+        Entity<AntagPreferenceSelectionComponent?> rule,
         IEnumerable<Entity<MindComponent>> targets)
     {
         var allPossibleTargets = new List<Entity<MindComponent>>(targets);
@@ -36,8 +36,8 @@ public sealed class HighValueTargetSelectionSystem : EntitySystem
                 continue;
 
             var pref = (HumanoidCharacterProfile) _pref.GetPreferences(userId).SelectedCharacter;
-            if (pref.AntagPreferences.Contains(rule.Comp.HighValueTargetPrototype)
-                || _random.Prob(rule.Comp.NonTargetSelectionProbability))
+            if (pref.AntagPreferences.Contains(rule.Comp.AntagTargetPrototype)
+                || _random.Prob(rule.Comp.UnselectedChance))
                 return mind;
         }
 

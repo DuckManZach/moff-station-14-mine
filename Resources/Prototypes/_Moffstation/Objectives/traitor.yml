@@ -155,7 +155,7 @@
   - type: TargetObjective
     title: objective-condition-leave-card-on-person
   - type: PickRandomPerson
-  - type: HighValueTargetSelection
+  - type: AntagPreferenceSelection
   - type: EscapeShuttleCondition
   - type: ObjectiveBlacklistRequirement
     blacklist:

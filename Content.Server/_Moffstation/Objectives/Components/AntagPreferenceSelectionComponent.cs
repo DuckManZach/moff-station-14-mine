@@ -8,17 +8,17 @@ namespace Content.Server._Moffstation.Objectives.Components;
 /// This is used to mark objectives which select random people and prioritize high value targets
 /// </summary>
 [RegisterComponent]
-public sealed partial class HighValueTargetSelectionComponent : Component
+public sealed partial class AntagPreferenceSelectionComponent : Component
 {
     /// <summary>
     /// The antag prototype selected from each possible target's preferences
     /// </summary>
-    [DataField, Required]
-    public ProtoId<AntagPrototype> HighValueTargetPrototype = "HighValueTarget";
+    [DataField]
+    public ProtoId<AntagPrototype> AntagTargetPrototype = "HighValueTarget";
 
     /// <summary>
-    /// If the selected individual is not a high value target, how likely are they to be selected anyway?
+    /// If the selected individual doesn't have the preference, what are the odds they will be selected anyway?
     /// </summary>
     [DataField]
-    public float NonTargetSelectionProbability = 0.3f;
+    public float UnselectedChance = 0.3f;
 }
