@@ -32,7 +32,10 @@ public sealed class StationPowerTests
         "Plasma",
         "Reach",
         "Exo",
-        "Frezon", // Moffstation
+        // Moffstation - Start
+        "Frezon",
+        "Crux",
+        // Moffstation - End
     ];
 
     [Explicit]
