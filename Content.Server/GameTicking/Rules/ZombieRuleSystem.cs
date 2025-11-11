@@ -35,8 +35,6 @@ public sealed class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponent>
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly ZombieSystem _zombie = default!;
 
-    // Blocks evac during a quarantine
-    private bool _blockEvac;
     public override void Initialize()
     {
         base.Initialize();
@@ -44,25 +42,6 @@ public sealed class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponent>
         SubscribeLocalEvent<InitialInfectedRoleComponent, GetBriefingEvent>(OnGetBriefing);
         SubscribeLocalEvent<ZombieRoleComponent, GetBriefingEvent>(OnGetBriefing);
         SubscribeLocalEvent<IncurableZombieComponent, ZombifySelfActionEvent>(OnZombifySelf);
-        SubscribeLocalEvent<ZombieRuleComponent, EntityZombifiedEvent>(OnNewZombie);
-    }
-
-    private void OnNewZombie(Entity<ZombieRuleComponent> ent, ref EntityZombifiedEvent args)
-    {
-        if (GetInfectedFraction(false) > 0.8)
-        {
-
-        }
-    }
-
-    private void QuarantineStation()
-    {
-        foreach (var station in _station.GetStations())
-        {
-            _chat.DispatchStationAnnouncement(station, Loc.GetString("zombie-shuttle-call"), colorOverride: Color.Crimson);
-        }
-
-        _roundEnd.CancelRoundEndCountdown();
     }
 
     private void OnGetBriefing(Entity<InitialInfectedRoleComponent> role, ref GetBriefingEvent args)

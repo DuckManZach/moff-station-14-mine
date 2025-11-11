@@ -263,14 +263,14 @@ namespace Content.Server.Zombies
                 if (HasComp<InitialInfectedComponent>(entity))
                 {
                     args.BonusDamage = -args.BaseDamage;
-                    _popup.PopupCursor(Loc.GetString("zombie-friendly-fire"), uid, PopupType.LargeCaution);
+                    _popup.PopupCursor(Loc.GetString("zombie-friendly-fire"), uid, PopupType.MediumCaution);
                 }
                 // Moffstation - End
 
                 if (HasComp<ZombieComponent>(entity))
                 {
                     args.BonusDamage = -args.BaseDamage;
-                    _popup.PopupCursor(Loc.GetString("zombie-friendly-fire"), uid, PopupType.LargeCaution); // Moffstation - Zombie improvements
+                    _popup.PopupCursor(Loc.GetString("zombie-friendly-fire"), uid, PopupType.MediumCaution); // Moffstation - Zombie improvements
                 }
                 else if (!HasComp<WoundableComponent>(entity)) // Offbrand
                 {
