@@ -28,6 +28,7 @@ public sealed partial class AdminNotesLine : BoxContainer
     {
         { NoteType.Message, AdminNotesTextureBase + "message.png" },
         { NoteType.Watchlist, AdminNotesTextureBase + "watchlist.png" },
+        { NoteType.Trial, AdminNotesTextureBase + "watchlist.png" },
     };
 
     public AdminNotesLine(SpriteSystem sprites, SharedAdminNote note)

@@ -294,6 +294,7 @@ namespace Content.Server.Database
         Task<int> AddAdminNote(int? roundId, Guid player, TimeSpan playtimeAtNote, string message, NoteSeverity severity, bool secret, Guid createdBy, DateTimeOffset createdAt, DateTimeOffset? expiryTime);
         Task<int> AddAdminWatchlist(int? roundId, Guid player, TimeSpan playtimeAtNote, string message, Guid createdBy, DateTimeOffset createdAt, DateTimeOffset? expiryTime);
         Task<int> AddAdminMessage(int? roundId, Guid player, TimeSpan playtimeAtNote, string message, Guid createdBy, DateTimeOffset createdAt, DateTimeOffset? expiryTime);
+        Task<int> AddTrialStatus(int? roundId, Guid player, TimeSpan playtimeAtNote, string message, Guid createdBy, DateTimeOffset createdAt);
         Task<AdminNoteRecord?> GetAdminNote(int id);
         Task<AdminWatchlistRecord?> GetAdminWatchlist(int id);
         Task<AdminMessageRecord?> GetAdminMessage(int id);
@@ -888,6 +889,35 @@ namespace Content.Server.Database
         }
 
         public Task<int> AddAdminMessage(int? roundId, Guid player, TimeSpan playtimeAtNote, string message, Guid createdBy, DateTimeOffset createdAt, DateTimeOffset? expiryTime)
+        {
+            DbWriteOpsMetric.Inc();
+            var note = new AdminMessage
+            {
+                RoundId = roundId,
+                CreatedById = createdBy,
+                LastEditedById = createdBy,
+                PlayerUserId = player,
+                PlaytimeAtNote = playtimeAtNote,
+                Message = message,
+                CreatedAt = createdAt.UtcDateTime,
+                LastEditedAt = createdAt.UtcDateTime,
+                ExpirationTime = expiryTime?.UtcDateTime
+            };
+
+            return RunDbCommand(() => _db.AddAdminMessage(note));
+        }
+
+        public Task<int> AddTrialStatus(int? roundId,
+            Guid player,
+            TimeSpan playtimeAtNote,
+            string message,
+            Guid createdBy,
+            DateTimeOffset createdAt)
+        {
+
+        }
+
+        (int? roundId, Guid player, TimeSpan playtimeAtNote, string message, Guid createdBy, DateTimeOffset createdAt, DateTimeOffset? expiryTime)
         {
             DbWriteOpsMetric.Inc();
             var note = new AdminMessage

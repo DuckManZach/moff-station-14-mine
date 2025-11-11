@@ -35,4 +35,10 @@ public enum NoteType
     ///     A role ban, converted to a shared note
     /// </summary>
     RoleBan = 4,
+
+    // Moffstation - Start - Visible trials
+    /// <summary>
+    /// Marker for trial members
+    /// </summary>
+    Trial = 101,
 }

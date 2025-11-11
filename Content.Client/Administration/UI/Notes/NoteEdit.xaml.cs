@@ -59,6 +59,7 @@ public sealed partial class NoteEdit : FancyWindow
         TypeOption.AddItem(Loc.GetString("admin-note-editor-type-note"), (int) NoteType.Note);
         TypeOption.AddItem(Loc.GetString("admin-note-editor-type-message"), (int) NoteType.Message);
         TypeOption.AddItem(Loc.GetString("admin-note-editor-type-watchlist"), (int) NoteType.Watchlist);
+        TypeOption.AddItem(Loc.GetString("trial watchlist"), (int) NoteType.Trial);
         TypeOption.OnItemSelected += OnTypeChanged;
 
 
