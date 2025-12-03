@@ -11,7 +11,7 @@
         - type: StationNameSetup
           mapNameTemplate: '{0} Crux Station {1}'
           nameGenerator:
-            !type:SyndicateNameGenerator
+            !type:NanotrasenNameGenerator
             prefixCreator: 'PG'
         - type: StationEmergencyShuttle
           emergencyShuttlePath: /Maps/Shuttles/emergency_amber.yml
@@ -58,7 +58,7 @@
             SecurityOfficer: [ 3, 3 ]
             Detective: [ 1, 1 ]
             SecurityCadet: [ 2, 2 ] #intern, not counted
-            Prisoner: [ 2, 2 ]
+            Prisoner: [ 1, 1 ]
             #supply (6)
             SalvageSpecialist: [ 2, 2 ]
             CargoTechnician: [ 2, 2 ]

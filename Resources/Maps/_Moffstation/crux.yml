@@ -20,7 +20,7 @@ tilemap:
   5: FloorBoxing
   52: FloorBrokenWood
   17: FloorCarpetClown
-  14: FloorCheckerboardWood
+  14: FloorWood
   19: FloorClown
   16: FloorConcrete
   25: FloorDark
@@ -34,7 +34,7 @@ tilemap:
   11: FloorHydro
   21: FloorLino
   36: FloorMetalDiamond
-  50: FloorMetalOrangeSolid
+  50: FloorSteel
   18: FloorMime
   29: FloorMono
   15: FloorOldConcrete
@@ -42,12 +42,12 @@ tilemap:
   35: FloorReinforced
   34: FloorShowroom
   26: FloorShuttleBlack
-  44: FloorStarcupCarpetDiamondBlue
-  45: FloorStarcupCarpetDiamondOrange
-  49: FloorStarcupCarpetDiamondViolet
-  43: FloorStarcupCarpetFancyBlue
-  28: FloorStarcupCarpetMemphis
-  54: FloorStarcupCarpetOrange
+  44: FloorSteel
+  45: FloorSteel
+  49: FloorSteel
+  43: FloorSteel
+  28: FloorSteel
+  54: FloorSteel
   1: FloorSteel
   13: FloorSteelCheckerDark
   12: FloorSteelCheckerLight
@@ -61,13 +61,13 @@ tilemap:
   23: FloorWhiteMono
   31: FloorWhitePlastic
   7: FloorWood
-  47: FloorWoodBlack
-  33: FloorWoodDark
+  47: FloorWood
+  33: FloorWood
   56: FloorWoodLarge
-  10: FloorWoodLargeDark
-  8: FloorWoodLight
-  32: FloorWoodParquetDark
-  20: FloorWoodParquetLight
+  10: FloorWoodLarge
+  8: FloorWood
+  32: FloorWood
+  20: FloorWood
   6: Lattice
   0: Plating
   53: PlatingDamaged
@@ -3956,675 +3956,6 @@ entities:
     - type: AccessReader
       accessListsOriginal:
       - - Atmospherics
-- proto: AirAlarmAutoLink
-  entities:
-  - uid: 31
-    components:
-    - type: MetaData
-      name: Evac Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 25.5,-37.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 32
-    components:
-    - type: MetaData
-      name: Medbay Air Alarm
-    - type: Transform
-      pos: -9.5,11.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 33
-    components:
-    - type: MetaData
-      name: Bar Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 2.5,-6.5
-      parent: 2
-  - uid: 34
-    components:
-    - type: MetaData
-      name: Artifact Lab Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -7.5,38.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 35
-    components:
-    - type: MetaData
-      name: Sci Breakroom Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -8.5,29.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 36
-    components:
-    - type: MetaData
-      name: Med Storage Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -16.5,14.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 37
-    components:
-    - type: MetaData
-      name: CMO Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -15.5,19.5
-      parent: 2
-  - uid: 38
-    components:
-    - type: MetaData
-      name: Morgue Air Alarm
-    - type: Transform
-      pos: -14.5,24.5
-      parent: 2
-  - uid: 39
-    components:
-    - type: MetaData
-      name: Cloning Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -8.5,21.5
-      parent: 2
-  - uid: 40
-    components:
-    - type: MetaData
-      name: Cryogenics Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -3.5,18.5
-      parent: 2
-  - uid: 41
-    components:
-    - type: MetaData
-      name: N Hall Air Alarm 2
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 2.5,31.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 42
-    components:
-    - type: MetaData
-      name: Robotics Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -1.5,35.5
-      parent: 2
-  - uid: 43
-    components:
-    - type: MetaData
-      name: R&D Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -6.5,34.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 44
-    components:
-    - type: MetaData
-      name: RD Office Air Alarm
-    - type: Transform
-      pos: -5.5,43.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 45
-    components:
-    - type: MetaData
-      name: Anomaly Lab Air Alarm
-    - type: Transform
-      pos: -13.5,44.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 46
-    components:
-    - type: MetaData
-      name: Sec Front Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 5.5,15.5
-      parent: 2
-  - uid: 47
-    components:
-    - type: MetaData
-      name: Sec Breakroom Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 14.5,15.5
-      parent: 2
-  - uid: 48
-    components:
-    - type: MetaData
-      name: HoS Office Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 12.5,25.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 49
-    components:
-    - type: MetaData
-      name: Detective Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 8.5,26.5
-      parent: 2
-  - uid: 50
-    components:
-    - type: MetaData
-      name: Brig Air Alarm
-    - type: Transform
-      pos: 15.5,12.5
-      parent: 2
-  - uid: 51
-    components:
-    - type: MetaData
-      name: Bridge Air Alarm
-    - type: Transform
-      pos: 35.5,5.5
-      parent: 2
-  - uid: 52
-    components:
-    - type: MetaData
-      name: Vault Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 32.5,6.5
-      parent: 2
-  - uid: 53
-    components:
-    - type: MetaData
-      name: Conference Room Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 32.5,-3.5
-      parent: 2
-  - uid: 54
-    components:
-    - type: MetaData
-      name: Captain Office Air Alarm
-    - type: Transform
-      pos: 36.5,-4.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 55
-    components:
-    - type: MetaData
-      name: Chapel Air Alarm
-    - type: Transform
-      pos: 28.5,-20.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 56
-    components:
-    - type: MetaData
-      name: Psychology Air Alarm
-    - type: Transform
-      pos: 25.5,-29.5
-      parent: 2
-  - uid: 57
-    components:
-    - type: MetaData
-      name: S Hall Air Alarm 1
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 2.5,-13.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 58
-    components:
-    - type: MetaData
-      name: Musician Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 7.5,-25.5
-      parent: 2
-  - uid: 59
-    components:
-    - type: MetaData
-      name: Janitor Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 13.5,-26.5
-      parent: 2
-  - uid: 60
-    components:
-    - type: MetaData
-      name: SE Hall Air Alarm 2
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.5,-27.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 61
-    components:
-    - type: MetaData
-      name: SE Hall Air Alarm 1
-    - type: Transform
-      pos: 10.5,-18.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 62
-    components:
-    - type: MetaData
-      name: S Hall Air Alarm 2
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -1.5,-32.5
-      parent: 2
-  - uid: 63
-    components:
-    - type: MetaData
-      name: Shuttle Terminal Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -9.5,-38.5
-      parent: 2
-  - uid: 64
-    components:
-    - type: MetaData
-      name: Arrivals Air Alarm
-    - type: Transform
-      pos: -3.5,-43.5
-      parent: 2
-  - uid: 65
-    components:
-    - type: MetaData
-      name: Paramedic Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -20.5,6.5
-      parent: 2
-  - uid: 66
-    components:
-    - type: MetaData
-      name: Chemistry Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -11.5,2.5
-      parent: 2
-  - uid: 67
-    components:
-    - type: MetaData
-      name: Cryosleep Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 17.5,-39.5
-      parent: 2
-  - uid: 68
-    components:
-    - type: MetaData
-      name: SW Hall Air Alarm
-    - type: Transform
-      pos: -12.5,-18.5
-      parent: 2
-  - uid: 69
-    components:
-    - type: MetaData
-      name: Telecoms Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -30.5,14.5
-      parent: 2
-  - uid: 70
-    components:
-    - type: MetaData
-      name: Engineering Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -34.5,-4.5
-      parent: 2
-  - uid: 71
-    components:
-    - type: MetaData
-      name: Engi Storage Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -28.5,4.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 72
-    components:
-    - type: MetaData
-      name: Engi Lockers Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -40.5,4.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 73
-    components:
-    - type: MetaData
-      name: Power Storage APC
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -40.5,-0.5
-      parent: 2
-  - uid: 74
-    components:
-    - type: MetaData
-      name: PA Control Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -46.5,4.5
-      parent: 2
-  - uid: 75
-    components:
-    - type: MetaData
-      name: Atmos Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -32.5,-17.5
-      parent: 2
-  - uid: 76
-    components:
-    - type: MetaData
-      name: W Hall Air Alarm 2
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -25.5,-10.5
-      parent: 2
-    - type: DeviceList
-      devices:
-      - 439
-      - 6388
-      - 242
-      - 218
-      - 6838
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 77
-    components:
-    - type: MetaData
-      name: EVA Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -4.5,-27.5
-      parent: 2
-  - uid: 78
-    components:
-    - type: MetaData
-      name: LO Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -12.5,-33.5
-      parent: 2
-  - uid: 79
-    components:
-    - type: MetaData
-      name: SE Hall Air Alarm 2
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 5.5,-38.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 80
-    components:
-    - type: MetaData
-      name: Logi Lobby Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -15.5,-26.5
-      parent: 2
-  - uid: 81
-    components:
-    - type: MetaData
-      name: Cargo Bay Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -22.5,-32.5
-      parent: 2
-  - uid: 82
-    components:
-    - type: MetaData
-      name: Salvage Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -28.5,-32.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 83
-    components:
-    - type: MetaData
-      name: Surface Shuttle Dock Air Alarm
-    - type: Transform
-      pos: -36.5,-27.5
-      parent: 2
-  - uid: 84
-    components:
-    - type: MetaData
-      name: Arena Air Alarm
-    - type: Transform
-      pos: -15.5,-10.5
-      parent: 2
-  - uid: 85
-    components:
-    - type: MetaData
-      name: E Hall Air Alarm
-    - type: Transform
-      pos: 14.5,2.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 86
-    components:
-    - type: MetaData
-      name: Kitchen Air Alarm
-    - type: Transform
-      pos: 16.5,-4.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 87
-    components:
-    - type: MetaData
-      name: Service Breakroom Air Alarm
-    - type: Transform
-      pos: 17.5,-11.5
-      parent: 2
-  - uid: 88
-    components:
-    - type: MetaData
-      name: Hydroponics Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 24.5,-7.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 89
-    components:
-    - type: MetaData
-      name: Bridge Hall Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 26.5,-1.5
-      parent: 2
-  - uid: 90
-    components:
-    - type: MetaData
-      name: Library Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -11.5,-9.5
-      parent: 2
-  - uid: 91
-    components:
-    - type: MetaData
-      name: Evac Checkpoint Air Alarm
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 26.5,-48.5
-      parent: 2
-  - uid: 92
-    components:
-    - type: MetaData
-      name: HoP Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -6.5,-8.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 93
-    components:
-    - type: MetaData
-      name: Sec Lockers Air Alarm
-    - type: Transform
-      pos: 11.5,19.5
-      parent: 2
-  - uid: 94
-    components:
-    - type: MetaData
-      name: W Hall Air Alarm 1
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -13.5,-1.5
-      parent: 2
-    - type: DeviceList
-      devices:
-      - 439
-      - 6388
-  - uid: 96
-    components:
-    - type: MetaData
-      name: AI Upload Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 12.5,46.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 97
-    components:
-    - type: MetaData
-      name: Pavilion Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -5.5,-3.5
-      parent: 2
-  - uid: 98
-    components:
-    - type: MetaData
-      name: Captain Room Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 34.5,-11.5
-      parent: 2
-  - uid: 99
-    components:
-    - type: MetaData
-      name: HoS Room Air Alarm
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 16.5,28.5
-      parent: 2
-  - uid: 100
-    components:
-    - type: MetaData
-      name: RD Room Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -4.5,44.5
-      parent: 2
-  - uid: 101
-    components:
-    - type: MetaData
-      name: Medical Hall Air Alarm
-    - type: Transform
-      pos: -18.5,11.5
-      parent: 2
-  - uid: 102
-    components:
-    - type: MetaData
-      name: Tech Storage Air Alarm
-    - type: Transform
-      pos: -32.5,12.5
-      parent: 2
-  - uid: 103
-    components:
-    - type: MetaData
-      name: N Hall Air Alarm 1
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -1.5,18.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
-  - uid: 104
-    components:
-    - type: MetaData
-      name: Armory Air Alarm
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 8.5,25.5
-      parent: 2
-  - uid: 13689
-    components:
-    - type: MetaData
-      name: Admin Office Air Alarm
-    - type: Transform
-      pos: 28.5,7.5
-      parent: 2
-  - uid: 14077
-    components:
-    - type: MetaData
-      name: Disposals Air Alarm
-    - type: Transform
-      pos: 26.5,-14.5
-      parent: 2
 - proto: AirAlarmElectronics
   entities:
   - uid: 105
@@ -4632,27 +3963,6 @@ entities:
     - type: Transform
       pos: -29.494461,11.534381
       parent: 2
-- proto: AirAlarmFreezerAutoLink
-  entities:
-  - uid: 106
-    components:
-    - type: MetaData
-      name: Freezer Air Alarm
-    - type: Transform
-      pos: 16.5,-1.5
-      parent: 2
-- proto: AirAlarmVoxAutoLink
-  entities:
-  - uid: 107
-    components:
-    - type: MetaData
-      name: Vox Lounge Air Alarm
-    - type: Transform
-      pos: 4.5,-27.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Atmospherics
 - proto: AirCanister
   entities:
   - uid: 108
@@ -4835,17 +4145,6 @@ entities:
       parent: 2
     - type: AccessReader
       accessListsOriginal: []
-- proto: AirlockBoxerLocked
-  entities:
-  - uid: 133
-    components:
-    - type: MetaData
-      name: Boxer's Room
-    - type: Transform
-      pos: -19.5,-10.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal: []
 - proto: AirlockBrigGlassLocked
   entities:
   - uid: 134
@@ -4864,7 +4163,7 @@ entities:
     - type: Transform
       pos: 16.5,12.5
       parent: 2
-- proto: AirlockBrigmedicGlassLocked
+- proto: AirlockSecurityGlassLocked
   entities:
   - uid: 136
     components:
@@ -4880,7 +4179,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 14.5,14.5
       parent: 2
-- proto: AirlockBrigmedicLocked
+- proto: AirlockSecurityLocked
   entities:
   - uid: 138
     components:
@@ -4894,7 +4193,7 @@ entities:
     - type: Transform
       pos: 9.5,15.5
       parent: 2
-- proto: AirlockCaptainLockedSyndie
+- proto: AirlockCaptainLocked
   entities:
   - uid: 140
     components:
@@ -4956,7 +4255,7 @@ entities:
     - type: Transform
       pos: -12.5,8.5
       parent: 2
-- proto: AirlockChiefEngineerLockedSyndie
+- proto: AirlockChiefEngineerLocked
   entities:
   - uid: 149
     components:
@@ -4986,7 +4285,7 @@ entities:
     - type: Transform
       pos: -34.5,-5.5
       parent: 2
-- proto: AirlockChiefMedicalOfficerLockedSyndie
+- proto: AirlockChiefMedicalOfficerLocked
   entities:
   - uid: 153
     components:
@@ -5002,7 +4301,7 @@ entities:
     - type: Transform
       pos: -15.5,16.5
       parent: 2
-- proto: AirlockClownLocked
+- proto: AirlockServiceLocked
   entities:
   - uid: 155
     components:
@@ -5011,7 +4310,7 @@ entities:
     - type: Transform
       pos: -10.5,-18.5
       parent: 2
-- proto: AirlockCommandGlassLockedSyndie
+- proto: AirlockCommandGlassLocked
   entities:
   - uid: 156
     components:
@@ -5071,7 +4370,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 32.5,4.5
       parent: 2
-- proto: AirlockCommandLockedSyndie
+- proto: AirlockCommandLocked
   entities:
   - uid: 163
     components:
@@ -5092,7 +4391,7 @@ entities:
     - type: Transform
       pos: 6.5,39.5
       parent: 2
-- proto: AirlockCommandSyndie
+- proto: AirlockCommand
   entities:
   - uid: 166
     components:
@@ -5101,7 +4400,7 @@ entities:
     - type: Transform
       pos: 10.5,47.5
       parent: 2
-- proto: AirlockCourierGlassLocked
+- proto: AirlockCargoGlassLocked
   entities:
   - uid: 167
     components:
@@ -5314,7 +4613,7 @@ entities:
     - type: Transform
       pos: -42.5,15.5
       parent: 2
-- proto: AirlockEVAGlassLockedSyndie
+- proto: AirlockEVAGlassLocked
   entities:
   - uid: 197
     components:
@@ -5600,7 +4899,7 @@ entities:
     - type: Transform
       pos: -19.5,-39.5
       parent: 2
-- proto: AirlockExternalGlassSecurityLocked
+- proto: AirlockExternalGlassLocked
   entities:
   - uid: 143
     components:
@@ -5668,7 +4967,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -30.5,-22.5
       parent: 2
-- proto: AirlockExternalGlassShuttleMiningFilled
+- proto: AirlockExternalGlassShuttleLocked
   entities:
   - uid: 234
     components:
@@ -5855,7 +5154,7 @@ entities:
     - type: Transform
       pos: -17.5,-41.5
       parent: 2
-- proto: AirlockHeadOfPersonnelLockedSyndie
+- proto: AirlockHeadOfPersonnelLocked
   entities:
   - uid: 261
     components:
@@ -5871,7 +5170,7 @@ entities:
     - type: Transform
       pos: -3.5,-10.5
       parent: 2
-- proto: AirlockHeadOfSecurityLockedSyndie
+- proto: AirlockHeadOfSecurityLocked
   entities:
   - uid: 263
     components:
@@ -5924,7 +5223,7 @@ entities:
     - type: Transform
       pos: 16.5,-11.5
       parent: 2
-- proto: AirlockLibraryLocked
+- proto: AirlockServiceLocked
   entities:
   - uid: 269
     components:
@@ -6175,7 +5474,7 @@ entities:
     - type: Transform
       pos: -13.5,24.5
       parent: 2
-- proto: AirlockMaintMusicianLocked
+- proto: AirlockMaintServiceLocked
   entities:
   - uid: 312
     components:
@@ -6189,7 +5488,7 @@ entities:
     - type: Transform
       pos: -11.5,30.5
       parent: 2
-- proto: AirlockMaintRoboticsLocked
+- proto: AirlockMaintRnDLocked
   entities:
   - uid: 314
     components:
@@ -6307,7 +5606,7 @@ entities:
     - type: Transform
       pos: -2.5,6.5
       parent: 2
-- proto: AirlockMimeLocked
+- proto: AirlockServiceLocked
   entities:
   - uid: 330
     components:
@@ -6316,7 +5615,7 @@ entities:
     - type: Transform
       pos: -4.5,-18.5
       parent: 2
-- proto: AirlockMusicianLocked
+- proto: AirlockServiceLocked
   entities:
   - uid: 331
     components:
@@ -6325,7 +5624,7 @@ entities:
     - type: Transform
       pos: 2.5,-24.5
       parent: 2
-- proto: AirlockParamedicGlassLocked
+- proto: AirlockMedicalGlassLocked
   entities:
   - uid: 332
     components:
@@ -6345,7 +5644,7 @@ entities:
       parent: 2
     - type: AccessReader
       accessListsOriginal: []
-- proto: AirlockPsychologistLocked
+- proto: AirlockMedicalLocked
   entities:
   - uid: 334
     components:
@@ -6363,7 +5662,7 @@ entities:
       parent: 2
     - type: AccessReader
       accessListsOriginal: []
-- proto: AirlockQuartermasterLockedSyndie
+- proto: AirlockQuartermasterLocked
   entities:
   - uid: 336
     components:
@@ -6379,7 +5678,7 @@ entities:
     - type: Transform
       pos: -9.5,-32.5
       parent: 2
-- proto: AirlockReporterLocked
+- proto: AirlockServiceLocked
   entities:
   - uid: 338
     components:
@@ -6397,7 +5696,7 @@ entities:
     - type: Transform
       pos: -16.5,-6.5
       parent: 2
-- proto: AirlockResearchDirectorGlassLockedSyndie
+- proto: AirlockResearchDirectorGlassLocked
   entities:
   - uid: 340
     components:
@@ -6407,7 +5706,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -5.5,39.5
       parent: 2
-- proto: AirlockResearchDirectorLockedSyndie
+- proto: AirlockResearchDirectorLocked
   entities:
   - uid: 341
     components:
@@ -6425,7 +5724,7 @@ entities:
       parent: 2
     - type: AccessReader
       accessListsOriginal: []
-- proto: AirlockRoboticsGlassLocked
+- proto: AirlockScienceGlassLocked
   entities:
   - uid: 343
     components:
@@ -6444,7 +5743,7 @@ entities:
       parent: 2
     - type: AccessReader
       accessListsOriginal: []
-- proto: AirlockRoboticsLocked
+- proto: AirlockScienceLocked
   entities:
   - uid: 345
     components:
@@ -7045,7 +6344,7 @@ entities:
     - type: Transform
       pos: 16.5,-3.5
       parent: 2
-- proto: AirSensorUnset
+- proto: AirSensor
   entities:
   - uid: 444
     components:
@@ -7080,7 +6379,7 @@ entities:
     - type: Transform
       pos: 28.5,-23.5
       parent: 2
-- proto: AlwaysPoweredLightSodium
+- proto: PoweredlightSodium
   entities:
   - uid: 448
     components:
@@ -7088,7 +6387,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -49.5,-8.5
       parent: 2
-- proto: AlwaysPoweredLightWarm
+- proto: PoweredlightOrange
   entities:
   - uid: 449
     components:
@@ -7148,18 +6447,6 @@ entities:
     components:
     - type: Transform
       pos: -3.421503,40.602367
-      parent: 2
-- proto: AntiAnomalyZone
-  entities:
-  - uid: 457
-    components:
-    - type: Transform
-      pos: -60.5,9.5
-      parent: 2
-  - uid: 458
-    components:
-    - type: Transform
-      pos: -53.5,-3.5
       parent: 2
 - proto: AntiPoisonMedipen
   entities:
@@ -9555,7 +8842,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -41.5,-7.5
       parent: 2
-- proto: BaseSofaTypePlainGrayCorner
+- proto: ComfyChair
   entities:
   - uid: 616
     components:
@@ -9568,21 +8855,21 @@ entities:
     - type: Transform
       pos: 5.5,-28.5
       parent: 2
-- proto: BaseSofaTypePlainGrayDarkLeft
+- proto: ComfyChair
   entities:
   - uid: 618
     components:
     - type: Transform
       pos: 15.5,11.5
       parent: 2
-- proto: BaseSofaTypePlainGrayDarkRight
+- proto: ComfyChair
   entities:
   - uid: 619
     components:
     - type: Transform
       pos: 14.5,11.5
       parent: 2
-- proto: BaseSofaTypePlainGrayLeft
+- proto: ComfyChair
   entities:
   - uid: 620
     components:
@@ -9602,7 +8889,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 5.5,-29.5
       parent: 2
-- proto: BaseSofaTypePlainGrayRight
+- proto: ComfyChair
   entities:
   - uid: 623
     components:
@@ -9779,7 +9066,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 6.5,31.5
       parent: 2
-- proto: BedsheetCaptainSyndie
+- proto: BedsheetCaptain
   entities:
   - uid: 666
     components:
@@ -9814,7 +9101,7 @@ entities:
     - type: Transform
       pos: -14.5,-2.5
       parent: 2
-- proto: BedsheetHOPSyndie
+- proto: BedsheetHOP
   entities:
   - uid: 671
     components:
@@ -9983,7 +9270,7 @@ entities:
     - type: Transform
       pos: -28.5,0.5
       parent: 2
-- proto: BenchSofaPlainBeigeLeft
+- proto: ComfyChair
   entities:
   - uid: 695
     components:
@@ -9997,7 +9284,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -39.5,0.5
       parent: 2
-- proto: BenchSofaPlainBeigeRight
+- proto: ComfyChair
   entities:
   - uid: 697
     components:
@@ -10011,7 +9298,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -39.5,-0.5
       parent: 2
-- proto: BenchSofaPlainMaroonLeft
+- proto: ComfyChair
   entities:
   - uid: 699
     components:
@@ -10019,7 +9306,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 17.5,13.5
       parent: 2
-- proto: BenchSofaPlainMaroonRight
+- proto: ComfyChair
   entities:
   - uid: 700
     components:
@@ -10027,14 +9314,14 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 17.5,14.5
       parent: 2
-- proto: BenchSofaPlainOliveLeft
+- proto: ComfyChair
   entities:
   - uid: 701
     components:
     - type: Transform
       pos: 14.5,-11.5
       parent: 2
-- proto: BenchSofaPlainOliveRight
+- proto: ComfyChair
   entities:
   - uid: 702
     components:
@@ -10119,7 +9406,7 @@ entities:
     - type: Transform
       pos: -17.5,35.5
       parent: 2
-- proto: BlastDoorUnlinkedLogistics
+- proto: BlastDoor
   entities:
   - uid: 714
     components:
@@ -10407,68 +9694,6 @@ entities:
     components:
     - type: Transform
       pos: -17.5,-10.5
-      parent: 2
-- proto: BoxReamBright
-  entities:
-  - uid: 760
-    components:
-    - type: Transform
-      pos: -2.4883342,-6.2309227
-      parent: 2
-- proto: BoxReamClassic
-  entities:
-  - uid: 761
-    components:
-    - type: Transform
-      pos: -2.2471805,-6.2254314
-      parent: 2
-  - uid: 762
-    components:
-    - type: Transform
-      pos: 27.714354,5.981507
-      parent: 2
-- proto: BoxReamWhite
-  entities:
-  - uid: 763
-    components:
-    - type: Transform
-      pos: -2.6573777,-6.2610793
-      parent: 2
-  - uid: 764
-    components:
-    - type: Transform
-      pos: 10.961082,3.708984
-      parent: 2
-  - uid: 14199
-    components:
-    - type: Transform
-      pos: -14.163308,-8.274471
-      parent: 2
-  - uid: 14200
-    components:
-    - type: Transform
-      pos: -12.805264,15.208248
-      parent: 2
-  - uid: 14201
-    components:
-    - type: Transform
-      pos: 24.815243,-32.95519
-      parent: 2
-  - uid: 14202
-    components:
-    - type: Transform
-      pos: -16.78894,-23.911747
-      parent: 2
-  - uid: 14203
-    components:
-    - type: Transform
-      pos: -34.03353,-2.7413595
-      parent: 2
-  - uid: 14204
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -5.271229,34.111946
       parent: 2
 - proto: BoxZiptie
   entities:
@@ -27559,7 +26784,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -43.5,-0.5
       parent: 2
-- proto: CameraHandheld
+- proto: SurveillanceWirelessCameraHandheld
   entities:
   - uid: 4164
     components:
@@ -27686,13 +26911,6 @@ entities:
     components:
     - type: Transform
       pos: -29.51117,-31.45401
-      parent: 2
-- proto: CardBoxSparot
-  entities:
-  - uid: 4180
-    components:
-    - type: Transform
-      pos: -9.523239,-7.403449
       parent: 2
 - proto: CargoRequestComputerCircuitboard
   entities:
@@ -33624,7 +32842,7 @@ entities:
     - type: Transform
       pos: 8.692968,8.448242
       parent: 2
-- proto: ClothingHeadHatBeretCommandSyndie
+- proto: ClothingHeadHatBeretCommand
   entities:
   - uid: 5192
     components:
@@ -33748,13 +32966,6 @@ entities:
     - type: Transform
       pos: 35.73948,-17.41444
       parent: 2
-- proto: ClothingOuterCoatMNKBlackTopCoat
-  entities:
-  - uid: 5218
-    components:
-    - type: Transform
-      pos: 7.661354,30.634687
-      parent: 2
 - proto: ClothingOuterCoatTrench
   entities:
   - uid: 5219
@@ -33833,13 +33044,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingShoesBootsWinterChef
-  entities:
-  - uid: 5228
-    components:
-    - type: Transform
-      pos: 14.477607,-3.521552
-      parent: 2
 - proto: ClothingShoesLeather
   entities:
   - uid: 5157
@@ -34298,14 +33502,6 @@ entities:
     components:
     - type: Transform
       pos: -16.5,-34.5
-      parent: 2
-- proto: ComputerShuttleMining
-  entities:
-  - uid: 5296
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -39.5,-31.5
       parent: 2
 - proto: ComputerSolarControl
   entities:
@@ -35065,13 +34261,6 @@ entities:
     - type: Transform
       pos: -6.548709,-46.358364
       parent: 2
-- proto: CryogenicSleepUnitPrisoner
-  entities:
-  - uid: 14125
-    components:
-    - type: Transform
-      pos: 22.5,7.5
-      parent: 2
 - proto: CryogenicSleepUnitSpawner
   entities:
   - uid: 5256
@@ -35147,7 +34336,7 @@ entities:
     - type: Transform
       pos: -2.5,-14.5
       parent: 2
-- proto: CurtainsBlackOpenDirectional
+- proto: CurtainsBlackOpen
   entities:
   - uid: 5414
     components:
@@ -35185,7 +34374,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 38.5,-19.5
       parent: 2
-- proto: CurtainsBlueOpenDirectional
+- proto: CurtainsBlueOpen
   entities:
   - uid: 5418
     components:
@@ -35247,7 +34436,7 @@ entities:
     - type: Transform
       pos: 26.5,-31.5
       parent: 2
-- proto: CurtainsCyanOpenDirectional
+- proto: CurtainsCyanOpen
   entities:
   - uid: 5428
     components:
@@ -35307,7 +34496,7 @@ entities:
     - type: Transform
       pos: 9.5,3.5
       parent: 2
-- proto: CurtainsRedOpenDirectional
+- proto: CurtainsRedOpen
   entities:
   - uid: 14094
     components:
@@ -35367,13 +34556,6 @@ entities:
     - type: Transform
       pos: -24.5,21.5
       parent: 2
-- proto: DefaultStationBeaconAdminOffice
-  entities:
-  - uid: 5440
-    components:
-    - type: Transform
-      pos: 29.5,5.5
-      parent: 2
 - proto: DefaultStationBeaconAICore
   entities:
   - uid: 5441
@@ -35408,13 +34590,6 @@ entities:
     components:
     - type: Transform
       pos: -11.5,45.5
-      parent: 2
-- proto: DefaultStationBeaconArena
-  entities:
-  - uid: 5446
-    components:
-    - type: Transform
-      pos: -17.5,-14.5
       parent: 2
 - proto: DefaultStationBeaconArmory
   entities:
@@ -35521,26 +34696,12 @@ entities:
     - type: Transform
       pos: -13.5,5.5
       parent: 2
-- proto: DefaultStationBeaconClown
-  entities:
-  - uid: 5462
-    components:
-    - type: Transform
-      pos: -10.5,-15.5
-      parent: 2
 - proto: DefaultStationBeaconCMORoom
   entities:
   - uid: 5463
     components:
     - type: Transform
       pos: -17.5,18.5
-      parent: 2
-- proto: DefaultStationBeaconConferenceRoom
-  entities:
-  - uid: 5464
-    components:
-    - type: Transform
-      pos: 29.5,-4.5
       parent: 2
 - proto: DefaultStationBeaconCryonics
   entities:
@@ -35584,27 +34745,6 @@ entities:
     - type: Transform
       pos: 10.5,-35.5
       parent: 2
-- proto: DefaultStationBeaconEngiBreakroom
-  entities:
-  - uid: 5471
-    components:
-    - type: Transform
-      pos: -38.5,-0.5
-      parent: 2
-- proto: DefaultStationBeaconEngiLobby
-  entities:
-  - uid: 5472
-    components:
-    - type: Transform
-      pos: -27.5,-1.5
-      parent: 2
-- proto: DefaultStationBeaconEngiStorage
-  entities:
-  - uid: 5473
-    components:
-    - type: Transform
-      pos: -31.5,5.5
-      parent: 2
 - proto: DefaultStationBeaconEscapePod
   entities:
   - uid: 5474
@@ -35640,13 +34780,6 @@ entities:
     - type: Transform
       pos: 14.5,25.5
       parent: 2
-- proto: DefaultStationBeaconInterrogation
-  entities:
-  - uid: 5479
-    components:
-    - type: Transform
-      pos: 5.5,22.5
-      parent: 2
 - proto: DefaultStationBeaconJanitorsCloset
   entities:
   - uid: 5480
@@ -35668,13 +34801,6 @@ entities:
     - type: Transform
       pos: -9.5,-4.5
       parent: 2
-- proto: DefaultStationBeaconMailroom
-  entities:
-  - uid: 5483
-    components:
-    - type: Transform
-      pos: -22.5,-25.5
-      parent: 2
 - proto: DefaultStationBeaconMedbay
   entities:
   - uid: 5484
@@ -35682,47 +34808,12 @@ entities:
     - type: Transform
       pos: -6.5,12.5
       parent: 2
-- proto: DefaultStationBeaconMedLobby
-  entities:
-  - uid: 5485
-    components:
-    - type: Transform
-      pos: -7.5,4.5
-      parent: 2
-- proto: DefaultStationBeaconMime
-  entities:
-  - uid: 5486
-    components:
-    - type: Transform
-      pos: -3.5,-15.5
-      parent: 2
 - proto: DefaultStationBeaconMorgue
   entities:
   - uid: 5487
     components:
     - type: Transform
       pos: -13.5,21.5
-      parent: 2
-- proto: DefaultStationBeaconMusician
-  entities:
-  - uid: 5488
-    components:
-    - type: Transform
-      pos: 4.5,-24.5
-      parent: 2
-- proto: DefaultStationBeaconParamedic
-  entities:
-  - uid: 5489
-    components:
-    - type: Transform
-      pos: -18.5,4.5
-      parent: 2
-- proto: DefaultStationBeaconPavilion
-  entities:
-  - uid: 5490
-    components:
-    - type: Transform
-      pos: 0.5,-0.5
       parent: 2
 - proto: DefaultStationBeaconPowerBank
   entities:
@@ -35759,13 +34850,6 @@ entities:
     - type: Transform
       pos: -19.5,-3.5
       parent: 2
-- proto: DefaultStationBeaconRestroom
-  entities:
-  - uid: 5496
-    components:
-    - type: Transform
-      pos: 23.5,-36.5
-      parent: 2
 - proto: DefaultStationBeaconRND
   entities:
   - uid: 5497
@@ -35787,34 +34871,6 @@ entities:
     - type: Transform
       pos: -28.5,-29.5
       parent: 2
-- proto: DefaultStationBeaconSciBreakroom
-  entities:
-  - uid: 5500
-    components:
-    - type: Transform
-      pos: -9.5,32.5
-      parent: 2
-- proto: DefaultStationBeaconSciLobby
-  entities:
-  - uid: 5501
-    components:
-    - type: Transform
-      pos: -3.5,30.5
-      parent: 2
-- proto: DefaultStationBeaconSecBreakroom
-  entities:
-  - uid: 5502
-    components:
-    - type: Transform
-      pos: 16.5,15.5
-      parent: 2
-- proto: DefaultStationBeaconSecLockerRoom
-  entities:
-  - uid: 5503
-    components:
-    - type: Transform
-      pos: 14.5,19.5
-      parent: 2
 - proto: DefaultStationBeaconSecurity
   entities:
   - uid: 5504
@@ -35828,13 +34884,6 @@ entities:
     components:
     - type: Transform
       pos: 28.5,-45.5
-      parent: 2
-- proto: DefaultStationBeaconServiceBreakroom
-  entities:
-  - uid: 5506
-    components:
-    - type: Transform
-      pos: 16.5,-13.5
       parent: 2
 - proto: DefaultStationBeaconSingularity
   entities:
@@ -38484,7 +37533,7 @@ entities:
     - type: Transform
       pos: -14.5,12.5
       parent: 2
-- proto: DresserCaptainFilledSyndie
+- proto: DresserCaptainFilled
   entities:
   - uid: 5946
     components:
@@ -38527,7 +37576,7 @@ entities:
     - type: Transform
       pos: 3.5,-32.5
       parent: 2
-- proto: DresserHeadOfPersonnelFilledSyndie
+- proto: DresserHeadOfPersonnelFilled
   entities:
   - uid: 5953
     components:
@@ -38583,13 +37632,6 @@ entities:
     - type: Transform
       pos: 27.520557,-15.10792
       parent: 2
-- proto: DrinkClownBloodGlass
-  entities:
-  - uid: 5960
-    components:
-    - type: Transform
-      pos: 23.96493,-21.35832
-      parent: 2
 - proto: DrinkColaCanEmpty
   entities:
   - uid: 14095
@@ -38597,13 +37639,6 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 28.277195,-15.243933
-      parent: 2
-- proto: DrinkDrGibbBloodRedCan
-  entities:
-  - uid: 14097
-    components:
-    - type: Transform
-      pos: 27.752678,-15.159697
       parent: 2
 - proto: DrinkFourteenLokoCan
   entities:
@@ -38635,63 +37670,6 @@ entities:
     - type: Transform
       pos: -20.3327,-9.524924
       parent: 2
-- proto: DrinkGlassCocktail
-  entities:
-  - uid: 5965
-    components:
-    - type: Transform
-      pos: 37.7827,-15.131074
-      parent: 2
-  - uid: 5966
-    components:
-    - type: Transform
-      pos: 37.749474,-15.423599
-      parent: 2
-- proto: DrinkGlassFeltmanLanger
-  entities:
-  - uid: 5967
-    components:
-    - type: Transform
-      pos: -2.9321122,-7.085346
-      parent: 2
-  - uid: 5968
-    components:
-    - type: Transform
-      pos: 38.596394,-12.863947
-      parent: 2
-- proto: DrinkGlassHighball
-  entities:
-  - uid: 5969
-    components:
-    - type: Transform
-      pos: 37.527725,-15.267124
-      parent: 2
-  - uid: 5970
-    components:
-    - type: Transform
-      pos: 37.171783,-15.263593
-      parent: 2
-- proto: DrinkGlassOldFashioned
-  entities:
-  - uid: 5971
-    components:
-    - type: Transform
-      pos: 37.156647,-15.609619
-      parent: 2
-  - uid: 5972
-    components:
-    - type: Transform
-      pos: 37.496033,-15.609619
-      parent: 2
-- proto: DrinkHolyWaterFull
-  entities:
-  - uid: 744
-    components:
-    - type: Transform
-      parent: 742
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: DrinkIrishSlammer
   entities:
   - uid: 5973
@@ -38776,31 +37754,6 @@ entities:
     - type: Transform
       pos: 29.366076,-30.189114
       parent: 2
-- proto: DrinkPremiumAbsintheBottleFull
-  entities:
-  - uid: 5985
-    components:
-    - type: Transform
-      pos: 35.343395,6.6153708
-      parent: 2
-- proto: DrinkPurpleAsteradeBottleFull
-  entities:
-  - uid: 5387
-    components:
-    - type: Transform
-      parent: 5386
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-- proto: DrinkRedAsteradeBottleFull
-  entities:
-  - uid: 5388
-    components:
-    - type: Transform
-      parent: 5386
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: DrinkSpaceLube
   entities:
   - uid: 5986
@@ -66594,13 +65547,6 @@ entities:
     - type: Transform
       pos: 28.5,-6.5
       parent: 2
-- proto: HolopadCommandOffice
-  entities:
-  - uid: 9739
-    components:
-    - type: Transform
-      pos: 29.5,6.5
-      parent: 2
 - proto: HolopadCommandQm
   entities:
   - uid: 9740
@@ -66666,13 +65612,6 @@ entities:
     - type: AccessReader
       accessListsOriginal:
       - - Command
-- proto: HolopadEngineeringPA
-  entities:
-  - uid: 14138
-    components:
-    - type: Transform
-      pos: -46.5,8.5
-      parent: 2
 - proto: HolopadEngineeringPower
   entities:
   - uid: 6474
@@ -66731,13 +65670,6 @@ entities:
     components:
     - type: Transform
       pos: -4.5,-26.5
-      parent: 2
-- proto: HolopadGeneralPavilion
-  entities:
-  - uid: 9757
-    components:
-    - type: Transform
-      pos: 0.5,-3.5
       parent: 2
 - proto: HolopadGeneralTools
   entities:
@@ -66927,13 +65859,6 @@ entities:
     - type: AccessReader
       accessListsOriginal:
       - - Command
-- proto: HolopadServiceBreakroom
-  entities:
-  - uid: 9784
-    components:
-    - type: Transform
-      pos: 17.5,-12.5
-      parent: 2
 - proto: HolopadServiceChapel
   entities:
   - uid: 9785
@@ -67063,7 +65988,7 @@ entities:
     - type: Transform
       pos: -8.5,22.5
       parent: 2
-- proto: HospitalCurtainsOpenDirectional
+- proto: HospitalCurtainsOpen
   entities:
   - uid: 9793
     components:
@@ -67240,17 +66165,6 @@ entities:
     - type: Transform
       pos: 35.45277,8.474746
       parent: 2
-- proto: InsulsCabinetFilled
-  entities:
-  - uid: 9841
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -29.5,-13.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Maintenance
 - proto: IntercomAll
   entities:
   - uid: 9842
@@ -67324,19 +66238,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -9.5,16.5
       parent: 2
-- proto: IntercomPrison
-  entities:
-  - uid: 9853
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 9.5,6.5
-      parent: 2
-  - uid: 14043
-    components:
-    - type: Transform
-      pos: 4.5,6.5
-      parent: 2
 - proto: IntercomScience
   entities:
   - uid: 9854
@@ -67358,19 +66259,6 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 2.5,19.5
-      parent: 2
-- proto: IntercomSecurityPrison
-  entities:
-  - uid: 9857
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 9.5,16.5
-      parent: 2
-  - uid: 9858
-    components:
-    - type: Transform
-      pos: 7.5,29.5
       parent: 2
 - proto: IntercomService
   entities:
@@ -68055,13 +66943,6 @@ entities:
         713:
         - - Pressed
           - Toggle
-- proto: LockerAdministrativeAssistantFilledSyndie
-  entities:
-  - uid: 9926
-    components:
-    - type: Transform
-      pos: 28.5,6.5
-      parent: 2
 - proto: LockerAtmosphericsFilledHardsuit
   entities:
   - uid: 9927
@@ -68080,7 +66961,7 @@ entities:
     - type: AccessReader
       accessListsOriginal:
       - - Atmospherics
-- proto: LockerBoozeFilledNoGun
+- proto: LockerBoozeFilled
   entities:
   - uid: 5204
     components:
@@ -68149,7 +67030,7 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: LockerCaptainFilledNoLaserSyndie
+- proto: LockerCaptainFilledNoLaser
   entities:
   - uid: 9930
     components:
@@ -68276,7 +67157,7 @@ entities:
     - type: AccessReader
       accessListsOriginal:
       - - Command
-- proto: LockerHeadOfPersonnelFilledSyndie
+- proto: LockerHeadOfPersonnelFilled
   entities:
   - uid: 9942
     components:
@@ -68391,37 +67272,6 @@ entities:
     - type: Transform
       pos: 4.5,7.5
       parent: 2
-- proto: LockerPsychologistFilled
-  entities:
-  - uid: 3
-    components:
-    - type: Transform
-      pos: 23.5,-27.5
-      parent: 2
-    - type: EntityStorage
-      air:
-        volume: 200
-        immutable: False
-        temperature: 293.14673
-        moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 6
-          - 7
-          - 8
-          - 5
-          - 9
-          - 4
-        paper_label: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
 - proto: LockerQuarterMasterFilled
   entities:
   - uid: 9956
@@ -68655,7 +67505,7 @@ entities:
     - type: Transform
       pos: -43.249405,13.48962
       parent: 2
-- proto: MailTeleporterSyndie
+- proto: CargoMailTeleporter
   entities:
   - uid: 9989
     components:
@@ -68910,13 +67760,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 3.5,-23.5
       parent: 2
-- proto: MiningShuttleConsoleCircuitboard
-  entities:
-  - uid: 10025
-    components:
-    - type: Transform
-      pos: -32.521534,11.552727
-      parent: 2
 - proto: MirrorModern
   entities:
   - uid: 10026
@@ -69106,72 +67949,6 @@ entities:
           ents:
           - 14
     - type: InsideEntityStorage
-- proto: NoticeBoardBridge
-  entities:
-  - uid: 10052
-    components:
-    - type: Transform
-      pos: 31.5,2.5
-      parent: 2
-- proto: NoticeBoardBrig
-  entities:
-  - uid: 10053
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 12.5,5.5
-      parent: 2
-- proto: NoticeBoardCargo
-  entities:
-  - uid: 10054
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -15.5,-33.5
-      parent: 2
-- proto: NoticeBoardEngineering
-  entities:
-  - uid: 10055
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -30.5,0.5
-      parent: 2
-- proto: NoticeBoardGeneral
-  entities:
-  - uid: 10056
-    components:
-    - type: Transform
-      pos: 3.5,6.5
-      parent: 2
-- proto: NoticeBoardMedical
-  entities:
-  - uid: 10057
-    components:
-    - type: Transform
-      pos: -7.5,18.5
-      parent: 2
-- proto: NoticeBoardScience
-  entities:
-  - uid: 10058
-    components:
-    - type: Transform
-      pos: -4.5,39.5
-      parent: 2
-- proto: NoticeBoardSecurity
-  entities:
-  - uid: 10059
-    components:
-    - type: Transform
-      pos: 8.5,19.5
-      parent: 2
-- proto: NoticeBoardServiceAll
-  entities:
-  - uid: 10060
-    components:
-    - type: Transform
-      pos: 15.5,-11.5
-      parent: 2
 - proto: NTDefaultCircuitBoard
   entities:
   - uid: 10061
@@ -69439,55 +68216,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -11.5,-30.5
       parent: 2
-- proto: PaperDyedGreen
-  entities:
-  - uid: 10089
-    components:
-    - type: MetaData
-      desc: You think this is the wrong department for this. This is what happens when the station doesn't have a lawyer's office.
-      name: divorce papers
-    - type: Transform
-      pos: 3.4980536,21.637032
-      parent: 2
-    - type: Paper
-      content: >2-
-
-
-
-
-
-
-
-
-
-        [head=3]<the crayon-written contents of this paper are
-                                complete gibberish>[/head]
-- proto: PaperStickyNoteStackFilled
-  entities:
-  - uid: 6127
-    components:
-    - type: Transform
-      parent: 6126
-    - type: Physics
-      canCollide: False
-  - uid: 10090
-    components:
-    - type: Transform
-      pos: -15.798425,-4.52035
-      parent: 2
-- proto: PaperStickyNoteStackFilledPink
-  entities:
-  - uid: 6128
-    components:
-    - type: Transform
-      parent: 6126
-    - type: Physics
-      canCollide: False
-  - uid: 10091
-    components:
-    - type: Transform
-      pos: 27.302792,6.008897
-      parent: 2
 - proto: ParcelWrap
   entities:
   - uid: 10092
@@ -69516,58 +68244,6 @@ entities:
     components:
     - type: Transform
       pos: -14.312916,-7.1899433
-      parent: 2
-- proto: PenHolder
-  entities:
-  - uid: 10095
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -2.694859,-6.791232
-      parent: 2
-- proto: PenHolderFilled
-  entities:
-  - uid: 10096
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -23.735773,-23.71671
-      parent: 2
-  - uid: 10097
-    components:
-    - type: Transform
-      pos: 11.71436,3.3732905
-      parent: 2
-  - uid: 10098
-    components:
-    - type: Transform
-      pos: -3.4403653,40.973305
-      parent: 2
-  - uid: 10099
-    components:
-    - type: Transform
-      pos: -2.9716153,38.504555
-      parent: 2
-  - uid: 10100
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -15.765279,-4.228147
-      parent: 2
-  - uid: 10101
-    components:
-    - type: Transform
-      pos: 31.11216,5.449514
-      parent: 2
-  - uid: 10102
-    components:
-    - type: Transform
-      pos: -18.074287,18.533852
-      parent: 2
-  - uid: 10103
-    components:
-    - type: Transform
-      pos: -11.692751,-30.749065
       parent: 2
 - proto: PersonalAI
   entities:
@@ -69611,13 +68287,6 @@ entities:
     components:
     - type: Transform
       pos: -6.685114,28.745712
-      parent: 2
-- proto: PillCanisterSoretizone
-  entities:
-  - uid: 10111
-    components:
-    - type: Transform
-      pos: 27.626244,-30.17752
       parent: 2
 - proto: PlantBag
   entities:
@@ -69789,21 +68458,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: PlushieEskie
-  entities:
-  - uid: 10130
-    components:
-    - type: Transform
-      pos: -7.4483633,-9.487052
-      parent: 2
-- proto: PlushieKoni
-  entities:
-  - uid: 10132
-    components:
-    - type: Transform
-      parent: 10131
-    - type: Physics
-      canCollide: False
 - proto: PlushieLizard
   entities:
   - uid: 10133
@@ -69818,15 +68472,6 @@ entities:
     - type: Transform
       pos: 4.4887433,22.48663
       parent: 2
-- proto: PlushieMort
-  entities:
-  - uid: 5396
-    components:
-    - type: Transform
-      parent: 5395
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: PlushieMoth
   entities:
   - uid: 10934
@@ -69970,7 +68615,7 @@ entities:
     - type: Transform
       pos: 10.5,19.5
       parent: 2
-- proto: PosterLegit12GaugeSyndie
+- proto: PosterLegit12Gauge
   entities:
   - uid: 10147
     components:
@@ -69991,14 +68636,7 @@ entities:
     - type: Transform
       pos: -30.5,-27.5
       parent: 2
-- proto: PosterLegitElectra
-  entities:
-  - uid: 10205
-    components:
-    - type: Transform
-      pos: -5.5,30.5
-      parent: 2
-- proto: PosterLegitFoamForceAdSyndie
+- proto: PosterLegitFoamForceAd
   entities:
   - uid: 10150
     components:
@@ -70012,7 +68650,7 @@ entities:
     - type: Transform
       pos: -5.5,-15.5
       parent: 2
-- proto: PosterLegitNoERPSyndie
+- proto: PosterLegitNoERP
   entities:
   - uid: 10152
     components:
@@ -70020,21 +68658,14 @@ entities:
       rot: 3.141592653589793 rad
       pos: 10.5,-34.5
       parent: 2
-- proto: PosterLegitPPENoExcusePink
-  entities:
-  - uid: 10153
-    components:
-    - type: Transform
-      pos: -12.5,41.5
-      parent: 2
-- proto: PosterLegitRenaultSyndie
+- proto: PosterLegitRenault
   entities:
   - uid: 10207
     components:
     - type: Transform
       pos: 26.5,2.5
       parent: 2
-- proto: PosterLegitSafetyInternalsSyndie
+- proto: PosterLegitSafetyInternals
   entities:
   - uid: 13748
     components:
@@ -70054,13 +68685,6 @@ entities:
     components:
     - type: Transform
       pos: 2.5,-9.5
-      parent: 2
-- proto: PosterLegitSyndTCG
-  entities:
-  - uid: 10155
-    components:
-    - type: Transform
-      pos: -16.5,-7.5
       parent: 2
 - proto: PottedPlant1
   entities:
@@ -70172,14 +68796,6 @@ entities:
     components:
     - type: Transform
       pos: -1.5,31.5
-      parent: 2
-- proto: PoweredColdSmallLight
-  entities:
-  - uid: 10170
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,-3.5
       parent: 2
 - proto: PoweredDimSmallLight
   entities:
@@ -70347,84 +68963,6 @@ entities:
     components:
     - type: Transform
       pos: -47.5,14.5
-      parent: 2
-- proto: PoweredFloorLightCold
-  entities:
-  - uid: 10199
-    components:
-    - type: Transform
-      pos: 3.5,-2.5
-      parent: 2
-  - uid: 10200
-    components:
-    - type: Transform
-      pos: 34.5,7.5
-      parent: 2
-  - uid: 10201
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 10.5,45.5
-      parent: 2
-  - uid: 10206
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 7.5,50.5
-      parent: 2
-  - uid: 10208
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 13.5,50.5
-      parent: 2
-  - uid: 10209
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -2.5,2.5
-      parent: 2
-  - uid: 10210
-    components:
-    - type: Transform
-      pos: 34.5,3.5
-      parent: 2
-  - uid: 10212
-    components:
-    - type: Transform
-      pos: 10.5,55.5
-      parent: 2
-  - uid: 13746
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 14.5,45.5
-      parent: 2
-  - uid: 13747
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 6.5,45.5
-      parent: 2
-- proto: PoweredFloorLightPink
-  entities:
-  - uid: 10213
-    components:
-    - type: Transform
-      pos: 34.5,-2.5
-      parent: 2
-- proto: PoweredFloorLightWarm
-  entities:
-  - uid: 10214
-    components:
-    - type: Transform
-      pos: -2.5,-2.5
-      parent: 2
-  - uid: 10215
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 3.5,2.5
       parent: 2
 - proto: PoweredLEDSmallLight
   entities:
@@ -71195,25 +69733,6 @@ entities:
     - type: Transform
       pos: 13.5,-34.5
       parent: 2
-- proto: PoweredlightCold
-  entities:
-  - uid: 10346
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 16.5,-39.5
-      parent: 2
-  - uid: 10347
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -5.5,21.5
-      parent: 2
-  - uid: 10349
-    components:
-    - type: Transform
-      pos: 34.5,10.5
-      parent: 2
 - proto: PoweredlightLED
   entities:
   - uid: 10348
@@ -71366,73 +69885,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -41.5,-34.5
-      parent: 2
-- proto: PoweredLightPostSmallSodium
-  entities:
-  - uid: 10379
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -50.5,-0.5
-      parent: 2
-  - uid: 10380
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -57.5,-0.5
-      parent: 2
-  - uid: 10381
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -57.5,-7.5
-      parent: 2
-  - uid: 10382
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -57.5,-12.5
-      parent: 2
-  - uid: 10383
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -52.5,-17.5
-      parent: 2
-  - uid: 10384
-    components:
-    - type: Transform
-      pos: -60.5,15.5
-      parent: 2
-  - uid: 10385
-    components:
-    - type: Transform
-      pos: -50.5,15.5
-      parent: 2
-  - uid: 10386
-    components:
-    - type: Transform
-      pos: -60.5,3.5
-      parent: 2
-- proto: PoweredlightViolet
-  entities:
-  - uid: 10387
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -7.5,40.5
-      parent: 2
-- proto: PoweredlightWarm
-  entities:
-  - uid: 10388
-    components:
-    - type: Transform
-      pos: 5.5,28.5
-      parent: 2
-  - uid: 10389
-    components:
-    - type: Transform
-      pos: 6.5,-6.5
       parent: 2
 - proto: PoweredSmallLight
   entities:
@@ -72297,147 +70749,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -15.5,-12.5
       parent: 2
-- proto: RailingCornerDeltaV
-  entities:
-  - uid: 10539
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 3.5,-2.5
-      parent: 2
-  - uid: 10540
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -2.5,-2.5
-      parent: 2
-  - uid: 10541
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 3.5,2.5
-      parent: 2
-  - uid: 10542
-    components:
-    - type: Transform
-      pos: -2.5,2.5
-      parent: 2
-- proto: RailingCornerSmallDeltaV
-  entities:
-  - uid: 10543
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -3.5,2.5
-      parent: 2
-  - uid: 10544
-    components:
-    - type: Transform
-      pos: 3.5,-3.5
-      parent: 2
-  - uid: 10545
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 4.5,2.5
-      parent: 2
-  - uid: 10546
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 3.5,3.5
-      parent: 2
-  - uid: 10547
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -2.5,-3.5
-      parent: 2
-  - uid: 10548
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -2.5,3.5
-      parent: 2
-  - uid: 10549
-    components:
-    - type: Transform
-      pos: 4.5,-2.5
-      parent: 2
-  - uid: 10550
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -3.5,-2.5
-      parent: 2
-- proto: RailingDeltaV
-  entities:
-  - uid: 10551
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1.5,-3.5
-      parent: 2
-  - uid: 10552
-    components:
-    - type: Transform
-      pos: 2.5,3.5
-      parent: 2
-  - uid: 10553
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 4.5,1.5
-      parent: 2
-  - uid: 10554
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 2.5,-3.5
-      parent: 2
-  - uid: 10555
-    components:
-    - type: Transform
-      pos: -1.5,3.5
-      parent: 2
-  - uid: 10556
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -3.5,1.5
-      parent: 2
-  - uid: 10557
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -3.5,-1.5
-      parent: 2
-  - uid: 10558
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 4.5,-1.5
-      parent: 2
-- proto: RailingDeltaVWood
-  entities:
-  - uid: 10559
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 20.5,-11.5
-      parent: 2
-  - uid: 10560
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 20.5,-12.5
-      parent: 2
-  - uid: 10561
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 20.5,-13.5
-      parent: 2
 - proto: RandomArtifactSpawner
   entities:
   - uid: 10562
@@ -72555,13 +70866,6 @@ entities:
     - type: Transform
       pos: 17.5,-14.5
       parent: 2
-- proto: RandomNotebookSpawner
-  entities:
-  - uid: 10583
-    components:
-    - type: Transform
-      pos: -15.422823,-4.31385
-      parent: 2
 - proto: RandomPosterAny
   entities:
   - uid: 13749
@@ -72574,7 +70878,7 @@ entities:
     - type: Transform
       pos: 25.5,-15.5
       parent: 2
-- proto: RandomPosterContrabandSyndie
+- proto: RandomPosterContraband
   entities:
   - uid: 10202
     components:
@@ -72596,7 +70900,7 @@ entities:
     - type: Transform
       pos: 15.5,-29.5
       parent: 2
-- proto: RandomPosterLegitSyndie
+- proto: RandomPosterLegit
   entities:
   - uid: 10211
     components:
@@ -74094,7 +72398,7 @@ entities:
     - type: Transform
       pos: 13.994485,25.60425
       parent: 2
-- proto: ShotGunCabinetBartenderFilled
+- proto: ShotGunCabinetFilled
   entities:
   - uid: 10803
     components:
@@ -74193,7 +72497,7 @@ entities:
     - type: Transform
       pos: 7.4454756,46.572803
       parent: 2
-- proto: SignAiSyndie
+- proto: SignAi
   entities:
   - uid: 10819
     components:
@@ -74201,7 +72505,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 6.5,40.5
       parent: 2
-- proto: SignAiUploadSyndie
+- proto: SignAiUpload
   entities:
   - uid: 10820
     components:
@@ -74383,21 +72687,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 2.5,-5.5
       parent: 2
-- proto: SignBlueCross
-  entities:
-  - uid: 10832
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -5.5,2.5
-      parent: 2
-  - uid: 10833
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -1.5,6.5
-      parent: 2
-- proto: SignBridgeSyndie
+- proto: SignBridge
   entities:
   - uid: 10834
     components:
@@ -74421,26 +72711,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -16.5,-22.5
       parent: 2
-- proto: SignCautionSecureArea
-  entities:
-  - uid: 10837
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 10.5,23.5
-      parent: 2
-  - uid: 10838
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 8.5,23.5
-      parent: 2
-  - uid: 10839
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 9.5,47.5
-      parent: 2
 - proto: SignCloning
   entities:
   - uid: 10840
@@ -74448,7 +72718,7 @@ entities:
     - type: Transform
       pos: -9.5,18.5
       parent: 2
-- proto: SignConferenceSyndie
+- proto: SignConference
   entities:
   - uid: 10841
     components:
@@ -74492,7 +72762,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 20.500214,2.7022073
       parent: 2
-- proto: SignDirectionalBridgeSyndie
+- proto: SignDirectionalBridge
   entities:
   - uid: 10847
     components:
@@ -74597,7 +72867,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -21.500692,-18.689192
       parent: 2
-- proto: SignDirectionalHopSyndie
+- proto: SignDirectionalHop
   entities:
   - uid: 10863
     components:
@@ -74631,30 +72901,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.5,-18.5
-      parent: 2
-- proto: SignDirectionalLogistics
-  entities:
-  - uid: 10868
-    components:
-    - type: Transform
-      pos: -21.497849,-1.7003498
-      parent: 2
-  - uid: 10869
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -6.498633,2.3073478
-      parent: 2
-  - uid: 10870
-    components:
-    - type: Transform
-      pos: -1.5013337,-5.6945806
-      parent: 2
-  - uid: 10871
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -1.5,-22.5
       parent: 2
 - proto: SignDirectionalMed
   entities:
@@ -74860,31 +73106,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -36.5,8.5
       parent: 2
-- proto: SignHazardCold
-  entities:
-  - uid: 10900
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -48.5,-14.5
-      parent: 2
-- proto: SignHazardHeat
-  entities:
-  - uid: 10901
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -46.5,-4.5
-      parent: 2
-- proto: SignHazardShock
-  entities:
-  - uid: 10902
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -48.5,12.5
-      parent: 2
-- proto: SignHeadSyndie
+- proto: SignHead
   entities:
   - uid: 10903
     components:
@@ -74953,16 +73175,6 @@ entities:
     - type: Transform
       pos: -19.5,-1.5
       parent: 2
-- proto: SignPlaqueGolden
-  entities:
-  - uid: 10912
-    components:
-    - type: MetaData
-      desc: "Bears the name of the station's original founders: The Shatterdance Institute of Anomalous Research."
-      name: commemorative plaque
-    - type: Transform
-      pos: 0.5,3.5
-      parent: 2
 - proto: SignPsychology
   entities:
   - uid: 10913
@@ -75018,19 +73230,6 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 25.5,-41.5
-      parent: 2
-- proto: SignSmokingProhibited
-  entities:
-  - uid: 10921
-    components:
-    - type: Transform
-      pos: -15.5,44.5
-      parent: 2
-  - uid: 10922
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -15.5,38.5
       parent: 2
 - proto: SignSpace
   entities:
@@ -75098,7 +73297,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -25.5,-13.5
       parent: 2
-- proto: SignVaultSyndie
+- proto: SignVault
   entities:
   - uid: 10933
     components:
@@ -75638,13 +73837,6 @@ entities:
     - type: Transform
       pos: -63.5,-24.5
       parent: 2
-- proto: SpawnMobBunny
-  entities:
-  - uid: 11028
-    components:
-    - type: Transform
-      pos: 15.5,-12.5
-      parent: 2
 - proto: SpawnMobCatBingus
   entities:
   - uid: 13671
@@ -75652,7 +73844,7 @@ entities:
     - type: Transform
       pos: -14.5,12.5
       parent: 2
-- proto: SpawnMobChickenGeneric
+- proto: SpawnMobGoat
   entities:
   - uid: 11030
     components:
@@ -75734,13 +73926,6 @@ entities:
     - type: Transform
       pos: -4.5,36.5
       parent: 2
-- proto: SpawnPointAdminAssistant
-  entities:
-  - uid: 11042
-    components:
-    - type: Transform
-      pos: 30.5,6.5
-      parent: 2
 - proto: SpawnPointAtmos
   entities:
   - uid: 11043
@@ -75820,23 +74005,6 @@ entities:
     - type: Transform
       pos: 37.5,-12.5
       parent: 2
-- proto: SpawnPointCargoAssistant
-  entities:
-  - uid: 11056
-    components:
-    - type: Transform
-      pos: -19.5,-31.5
-      parent: 2
-  - uid: 11057
-    components:
-    - type: Transform
-      pos: -18.5,-33.5
-      parent: 2
-  - uid: 11058
-    components:
-    - type: Transform
-      pos: -18.5,-25.5
-      parent: 2
 - proto: SpawnPointCargoTechnician
   entities:
   - uid: 11059
@@ -75905,18 +74073,6 @@ entities:
     components:
     - type: Transform
       pos: -10.5,-16.5
-      parent: 2
-- proto: SpawnPointCourier
-  entities:
-  - uid: 11070
-    components:
-    - type: Transform
-      pos: -22.5,-24.5
-      parent: 2
-  - uid: 11071
-    components:
-    - type: Transform
-      pos: -20.5,-24.5
       parent: 2
 - proto: SpawnPointDetective
   entities:
@@ -76104,33 +74260,6 @@ entities:
     - type: Transform
       pos: -3.5,4.5
       parent: 2
-- proto: SpawnPointPrisoner
-  entities:
-  - uid: 11104
-    components:
-    - type: Transform
-      pos: 10.5,10.5
-      parent: 2
-  - uid: 11105
-    components:
-    - type: Transform
-      pos: 11.5,4.5
-      parent: 2
-  - uid: 11106
-    components:
-    - type: Transform
-      pos: 21.5,9.5
-      parent: 2
-  - uid: 11107
-    components:
-    - type: Transform
-      pos: 14.5,8.5
-      parent: 2
-  - uid: 11108
-    components:
-    - type: Transform
-      pos: 15.5,11.5
-      parent: 2
 - proto: SpawnPointPsychologist
   entities:
   - uid: 11109
@@ -76180,13 +74309,6 @@ entities:
     components:
     - type: Transform
       pos: -2.5,45.5
-      parent: 2
-- proto: SpawnPointRoboticist
-  entities:
-  - uid: 11117
-    components:
-    - type: Transform
-      pos: 0.5,37.5
       parent: 2
 - proto: SpawnPointSalvageSpecialist
   entities:
@@ -76701,7 +74823,7 @@ entities:
     - type: Transform
       pos: -29.512806,11.534381
       parent: 2
-- proto: SuitStorageCaptainSyndie
+- proto: SuitStorageCaptain
   entities:
   - uid: 11201
     components:
@@ -78992,34 +77114,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 3.5,28.5
       parent: 2
-- proto: TableWoodReinforced
-  entities:
-  - uid: 11535
-    components:
-    - type: Transform
-      pos: 38.5,-13.5
-      parent: 2
-  - uid: 11536
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 38.5,-12.5
-      parent: 2
-  - uid: 11537
-    components:
-    - type: Transform
-      pos: 23.5,-21.5
-      parent: 2
-  - uid: 11538
-    components:
-    - type: Transform
-      pos: 24.5,-21.5
-      parent: 2
-  - uid: 11539
-    components:
-    - type: Transform
-      pos: 25.5,-21.5
-      parent: 2
 - proto: TapeRecorderFilled
   entities:
   - uid: 11540
@@ -79964,13 +78058,6 @@ entities:
     - type: Transform
       pos: 13.5,6.5
       parent: 2
-- proto: VendingMachineCourierDrobe
-  entities:
-  - uid: 11029
-    components:
-    - type: Transform
-      pos: -20.5,-26.5
-      parent: 2
 - proto: VendingMachineCuraDrobe
   entities:
   - uid: 11626
@@ -80059,13 +78146,6 @@ entities:
     components:
     - type: Transform
       pos: -15.5,12.5
-      parent: 2
-- proto: VendingMachineMNKDrobe
-  entities:
-  - uid: 11639
-    components:
-    - type: Transform
-      pos: -7.5,-34.5
       parent: 2
 - proto: VendingMachineNutri
   entities:
@@ -90032,19 +88112,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 18.5,-6.5
       parent: 2
-- proto: WindoorMailLocked
-  entities:
-  - uid: 13592
-    components:
-    - type: MetaData
-      name: Mailroom
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -19.5,-25.5
-      parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Mail
 - proto: WindoorSecureBrigLocked
   entities:
   - uid: 13593
