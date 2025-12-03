@@ -24,8 +24,8 @@
   - type: HitscanBasicRaycast
   - type: HitscanBasicVisuals
     muzzleFlash:
-      sprite: _Impstation/Objects/Weapons/Guns/Projectiles/muzzleflashes.rsi #imp
-      state: energy #imp
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_laser
     travelFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: beam
@@ -75,11 +75,9 @@
       types:
         Heat: 28
   - type: HitscanBasicVisuals
-    # Imp - Start
-    #muzzleFlash:
-    #  sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-    #  state: muzzle_beam_heavy
-    # Imp - End
+    muzzleFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_beam_heavy
     travelFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: beam_heavy
@@ -109,8 +107,8 @@
         Radiation: 10
   - type: HitscanBasicVisuals
     muzzleFlash:
-      sprite: _Impstation/Objects/Weapons/Guns/Projectiles/muzzleflashes.rsi #imp
-      state: energystun #imp
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_xray
     travelFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: xray
@@ -129,8 +127,8 @@
         Heat: 35
   - type: HitscanBasicVisuals
     muzzleFlash:
-      sprite: _Impstation/Objects/Weapons/Guns/Projectiles/muzzleflashes.rsi #imp
-      state: energystun #imp
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_blue
     travelFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: beam_blue
@@ -152,8 +150,8 @@
         Structural: 10
   - type: HitscanBasicVisuals
     muzzleFlash:
-      sprite: _Impstation/Objects/Weapons/Guns/Projectiles/muzzleflashes.rsi #imp
-      state: energy #imp
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_beam_heavy2
     travelFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: beam_heavy2
