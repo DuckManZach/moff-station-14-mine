@@ -178,6 +178,8 @@ public abstract partial class SharedMindSystem : EntitySystem
         var hasUserId = mind?.UserId;
         var hasActiveSession = hasUserId != null && _playerManager.ValidSessionId(hasUserId.Value);
 
+        _playerManager.TryGetSessionByEntity(uid, out var session);
+
         // Scenarios:
         // 1. Dead + No User ID: Entity is permanently dead with no player ever attached
         // 2. Dead + Has User ID + No Session: Player died and disconnected

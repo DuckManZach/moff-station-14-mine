@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Administration.Notes;
 using Robust.Server.Player;
@@ -20,6 +21,7 @@ public sealed class WatchListTracker : EntitySystem
     }
 
     private readonly HashSet<ICommonSession> _watchLists = [];
+    private readonly HashSet<ICommonSession> _trials = [];
 
     private async void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
     {
@@ -39,14 +41,25 @@ public sealed class WatchListTracker : EntitySystem
         return _watchLists.Contains(session);
     }
 
+    public bool IsTrial(ICommonSession session)
+    {
+        return _trials.Contains(session);
+    }
+
     private void RemoveWatchlist(ICommonSession session)
     {
         _watchLists.Remove(session);
+        _trials.Remove(session);
     }
 
     public async Task RefreshWatchlistBySession(ICommonSession session)
     {
-        if ((await _notes.GetActiveWatchlists(session.UserId)).Count != 0)
+        var watchlists = await _notes.GetActiveWatchlists(session.UserId);
+        if (watchlists.Count != 0)
             _watchLists.Add(session);
+        foreach (var watchlist in watchlists.Where(watchlist => watchlist.Message.Contains("[Trial Player]")))
+        {
+            _trials.Add(session);
+        }
     }
 }
