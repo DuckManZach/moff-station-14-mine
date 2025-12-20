@@ -92,3 +92,10 @@ public sealed partial class InitialBloodBrotherComponent : Component
 public sealed partial class BloodBrotherConvertActionEvent : EntityTargetActionEvent;
 
 public sealed partial class BloodBrotherCheckConvertActionEvent : EntityTargetActionEvent;
+
+public sealed partial class BloodBrotherCheckConvertPassiveEvent : EntityEventArgs
+{
+    public Entity<InitialBloodBrotherComponent> Converter;
+
+    public EntityUid Target;
+}

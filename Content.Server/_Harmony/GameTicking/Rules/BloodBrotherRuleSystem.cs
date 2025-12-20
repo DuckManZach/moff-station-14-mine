@@ -51,6 +51,7 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
         SubscribeLocalEvent<BloodBrotherRuleComponent, ObjectivesTextPrependEvent>(OnObjectivesTextPrepend);
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherConvertActionEvent>(OnBloodBrotherConvert);
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherCheckConvertActionEvent>(OnBloodBrotherCheckConvert);
+        SubscribeNetworkEvent<BloodBrotherCheckConvertPassiveEvent>(OnBloodBrotherPassiveCheckConvert);
     }
 
     private void OnObjectivesTextPrepend(Entity<BloodBrotherRuleComponent> entity, ref ObjectivesTextPrependEvent args)
@@ -282,5 +283,19 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
         }
 
         return true;
+    }
+
+    private void OnBloodBrotherPassiveCheckConvert(BloodBrotherCheckConvertPassiveEvent ev)
+    {
+        if (!_mindSystem.TryGetMind(ev.Target, out var mindId, out var targetMind) ||
+            targetMind.UserId == null)
+            return false;
+
+        if (!_preferencesManager.TryGetCachedPreferences(targetMind.UserId.Value, out var preferences))
+            return true;
+
+        var profile = (HumanoidCharacterProfile)preferences.SelectedCharacter;
+
+        return profile.AntagPreferences.Contains(ev.Converter.Comp.RequiredAntagPreference!.Value);
     }
 }

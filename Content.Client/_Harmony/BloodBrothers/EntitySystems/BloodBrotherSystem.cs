@@ -1,4 +1,5 @@
-﻿using Content.Shared._Harmony.BloodBrothers.Components;
+﻿using Content.Client.Lobby;
+using Content.Shared._Harmony.BloodBrothers.Components;
 using Content.Shared._Harmony.BloodBrothers.EntitySystems;
 using Content.Shared.Antag;
 using Content.Shared.StatusIcon.Components;
@@ -11,6 +12,7 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
 {
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
 
     public override void Initialize()
     {
@@ -21,6 +23,7 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
 
     private void OnBloodBrotherGetIcons(Entity<BloodBrotherComponent> entity, ref GetStatusIconsEvent args)
     {
+
         if (_playerManager.LocalSession?.AttachedEntity is { } playerEntity)
         {
             if (!HasComp<ShowAntagIconsComponent>(playerEntity) &&
@@ -31,5 +34,7 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
 
         if (_prototypeManager.TryIndex(entity.Comp.BloodBrotherIcon, out var iconPrototype))
             args.StatusIcons.Add(iconPrototype);
+
+        _preferencesManager.Preferences
     }
 }

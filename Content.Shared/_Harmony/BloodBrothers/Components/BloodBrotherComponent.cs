@@ -14,5 +14,9 @@ public sealed partial class BloodBrotherComponent : Component
     [DataField]
     public ProtoId<FactionIconPrototype> BloodBrotherIcon = "BloodBrotherFaction";
 
+    [DataField]
+    public ProtoId<FactionIconPrototype> BloodBrotherConvertableIcon = "BloodBrotherConvertable";
+
     public override bool SessionSpecific => true;
 }
+
