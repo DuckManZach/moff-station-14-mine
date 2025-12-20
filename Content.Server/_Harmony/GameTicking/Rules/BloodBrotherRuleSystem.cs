@@ -287,7 +287,12 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
 
     private void OnBloodBrotherPassiveCheckConvert(BloodBrotherCheckConvertPassiveEvent ev)
     {
-        if (!_mindSystem.TryGetMind(ev.Target, out var mindId, out var targetMind) ||
+        HasPreference(ev.Converter, ev.Target);
+    }
+
+    private bool HasPreference(Entity<InitialBloodBrotherComponent> ent, EntityUid target)
+    {
+        if (!_mindSystem.TryGetMind(target, out var mindId, out var targetMind) ||
             targetMind.UserId == null)
             return false;
 
@@ -296,6 +301,6 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
 
         var profile = (HumanoidCharacterProfile)preferences.SelectedCharacter;
 
-        return profile.AntagPreferences.Contains(ev.Converter.Comp.RequiredAntagPreference!.Value);
+        return profile.AntagPreferences.Contains(ent.Comp.RequiredAntagPreference!.Value);
     }
 }
