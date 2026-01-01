@@ -26,8 +26,8 @@ public sealed partial class TypingIndicatorSystem
         if (_shouldShowTyping)
             return;
 
-        _isClientTyping = true;
         _lastTextChange = _time.CurTime;
-        RaisePredictiveEvent(new TypingChangedEvent(true, protoId));
+        var state = _isClientTyping ? TypingIndicatorState.Typing : TypingIndicatorState.Idle;
+        RaisePredictiveEvent(new TypingChangedEvent(state, protoId));
     }
 }

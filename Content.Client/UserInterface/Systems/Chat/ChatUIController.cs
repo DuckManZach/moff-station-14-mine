@@ -736,6 +736,12 @@ public sealed partial class ChatUIController : UIController
                 box.ChatInput.ChannelSelector.UpdateChannelSelectButton(prefixChannel, radioChannel, null);
                 break;
         }
+        // Moffstation - Start - Alt typing indicator
+        if (CurrentChannel != prefixChannel)
+            _typingIndicator?.ClientSubmittedChatText();
+
+        CurrentChannel = prefixChannel;
+        // Moffstation - End
     }
     // Starlight - Collective Minds - End
     public (ChatSelectChannel chatChannel, string text, RadioChannelPrototype? radioChannel, CollectiveMindPrototype? collectiveMind) SplitInputContents(string text) // Starlight - Collective Minds - Add Collective Mind prototype.

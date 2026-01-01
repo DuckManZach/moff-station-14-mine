@@ -155,6 +155,7 @@ public partial class ChatBox : UIWidget
             return;
 
         ChatInput.ChannelSelector.Select(toSelect);
+        _controller.CurrentChannel = toSelect;
     }
 
     private void OnInputKeyBindDown(GUIBoundKeyEventArgs args)
@@ -187,12 +188,13 @@ public partial class ChatBox : UIWidget
         _controller.UpdateSelectedChannel(this);
 
         // Warn typing indicator about change
-        _controller.NotifyChatTextChange();
+        _controller.NotifyChatTextChange(SelectedChannel); // Moffstation - Alt Chat indicators
     }
 
     private void OnFocusEnter(LineEditEventArgs args)
     {
         // Warn typing indicator about focus
+        _controller.CurrentChannel = SelectedChannel; // Moffstation - Alt chat indicators
         _controller.NotifyChatFocus(true);
     }
 
