@@ -30,6 +30,7 @@ public sealed class CustomObjectiveSummaryUIController : UIController
         _window.OpenCentered();
         _window.OnClose += () => _window = null;
         _window.OnSubmitted += OnFeedbackSubmitted;
+        _window.UpdateText += UpdateText;
     }
 
     private void UpdateText(string args)
