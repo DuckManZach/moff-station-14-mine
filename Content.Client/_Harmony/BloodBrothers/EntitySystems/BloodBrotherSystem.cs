@@ -12,7 +12,6 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
 {
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
 
     public override void Initialize()
     {
@@ -27,7 +26,9 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
         if (_playerManager.LocalSession?.AttachedEntity is not { } playerEntity)
             return;
 
-        if (!HasComp<BloodBrotherComponent>(playerEntity))
+        if (!HasComp<BloodBrotherComponent>(entity.Owner) &&
+            TryComp<BloodBrotherComponent>(playerEntity, out var bloodBrotherComp) &&
+            bloodBrotherComp.Brother == null)
         {
             if (_prototypeManager.TryIndex(entity.Comp.BloodBrotherConvertableIcon, out var iconPrototype))
                 args.StatusIcons.Add(iconPrototype);
@@ -39,20 +40,12 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
         if (_playerManager.LocalSession?.AttachedEntity is not { } playerEntity)
             return;
 
-        if (_mind.TryGetMind(playerEntity, out var mind, out var targetMind) &&
-            HasComp<BloodBrotherConvertableComponent>(mind) &&
-            entity.Comp.Brother == null)
-        {
-            if (_prototypeManager.TryIndex(entity.Comp.BloodBrotherConvertableIcon, out var iconPrototype))
-                args.StatusIcons.Add(iconPrototype);
-        }
+        if (!HasComp<ShowAntagIconsComponent>(playerEntity) &&
+            entity.Owner != playerEntity &&
+            entity.Comp.Brother != playerEntity)
+            return;
 
-        if (HasComp<ShowAntagIconsComponent>(playerEntity) ||
-            entity.Owner == playerEntity ||
-            entity.Comp.Brother == playerEntity)
-        {
-            if (_prototypeManager.TryIndex(entity.Comp.BloodBrotherIcon, out var iconPrototype))
-                args.StatusIcons.Add(iconPrototype);
-        }
+        if (_prototypeManager.TryIndex(entity.Comp.BloodBrotherIcon, out var iconPrototype))
+            args.StatusIcons.Add(iconPrototype);
     }
 }

@@ -14,6 +14,7 @@ using Content.Server.Roles;
 using Content.Server.Stunnable;
 using Content.Shared._Harmony.BloodBrothers.Components;
 using Content.Shared.Database;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mindshield.Components;
@@ -24,6 +25,7 @@ using Content.Shared.Preferences;
 using Content.Shared.Roles.Components;
 using Content.Shared.Zombies;
 using Robust.Server.Player;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Server._Harmony.GameTicking.Rules;
@@ -43,7 +45,9 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
     [Dependency] private readonly RoleSystem _roleSystem = default!;
     [Dependency] private readonly StunSystem _stunSystem = default!;
     [Dependency] private readonly TargetObjectiveSystem _targetObjectiveSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
+    public TimeSpan NextIconRefresh;
     public override void Initialize()
     {
         base.Initialize();
@@ -51,6 +55,36 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
         SubscribeLocalEvent<BloodBrotherRuleComponent, ObjectivesTextPrependEvent>(OnObjectivesTextPrepend);
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherConvertActionEvent>(OnBloodBrotherConvert);
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherCheckConvertActionEvent>(OnBloodBrotherCheckConvert);
+
+        NextIconRefresh = TimeSpan.Zero;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_timing.CurTime < NextIconRefresh)
+            return;
+
+        var query = QueryActiveRules();
+        while (query.MoveNext(out var uid, out _, out var comp, out _))
+        {
+            if (comp is not { })
+                continue;
+
+            NextIconRefresh = _timing.CurTime + comp.IconRefreshRate;
+
+            var players = _mindSystem.GetAliveHumans();
+            foreach (var player in players)
+            {
+                if (!IsConvertable(player))
+                {
+                    RemCompDeferred<BloodBrotherConvertableComponent>(player);
+                    continue;
+                }
+                EnsureComp<BloodBrotherConvertableComponent>(player);
+            }
+        }
     }
 
     private void OnObjectivesTextPrepend(Entity<BloodBrotherRuleComponent> entity, ref ObjectivesTextPrependEvent args)
@@ -203,61 +237,35 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
     {
         errorMessage = null;
 
-        if (!_mindSystem.TryGetMind(entity, out _, out var converterMind))
+        if (!IsConvertable(entity))
         {
-            DebugTools.Assert("Blood brother tried to convert but had no mind.");
-            Log.Error("Blood brother tried to convert but had no mind.");
-            errorMessage = "guh";
-            return false; // How would this even happen
-        }
-
-        if (!_mindSystem.TryGetMind(target, out var targetMindId, out var targetMind))
-        {
-            errorMessage = "blood-brother-convert-failed-no-mind";
+            errorMessage = "blood-brother-convert-failed-target";
             return false;
         }
 
-        // Target is already a blood brother
-        if (HasComp<BloodBrotherComponent>(target))
+        if (!_mindSystem.TryGetMind(entity.Owner, out var converterMind, out var converterMindComp) ||
+            !_mindSystem.TryGetMind(target, out var targetMind, out var targetMindComp))
         {
-            errorMessage = "blood-brother-convert-failed-already-brother";
+            errorMessage = "blood-brother-convert-failed-target";
             return false;
         }
 
         // Stop the blood brother from converting a target.
-        foreach (var objective in converterMind.Objectives)
+        foreach (var objective in converterMindComp.Objectives)
         {
             if (!TryComp<TargetObjectiveComponent>(objective, out var targetObjective))
                 continue;
 
-            if (targetObjective.Target != targetMindId)
+            if (targetObjective.Target != targetMind)
                 continue;
 
             errorMessage = "blood-brother-convert-failed-target";
             return false;
         }
 
-        if (!HasComp<HumanoidAppearanceComponent>(target))
-        {
-            errorMessage = "blood-brother-convert-failed-no-mind";
-            return false;
-        }
-
-        if (HasComp<ZombieComponent>(target))
-        {
-            errorMessage = "blood-brother-convert-failed-zombie";
-            return false;
-        }
-
-        if (targetMind.UserId == null)
-        {
-            errorMessage = "blood-brother-convert-failed-no-mind";
-            return false;
-        }
-
         // Check antag preference
         if (entity.Comp.RequiredAntagPreference != null &&
-            _preferencesManager.TryGetCachedPreferences(targetMind.UserId.Value, out var preferences))
+            _preferencesManager.TryGetCachedPreferences(targetMindComp.UserId!.Value, out var preferences))
         {
 
             var profile = (HumanoidCharacterProfile)preferences.SelectedCharacter;
@@ -268,16 +276,39 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
                 return false;
             }
         }
+        return true;
+    }
 
-        if (!_mobStateSystem.IsAlive(target))
+    private bool IsConvertable(EntityUid uid)
+    {
+        if (!_mindSystem.TryGetMind(uid, out _, out var targetMind) || targetMind.UserId == null)
         {
-            errorMessage = "blood-brother-convert-failed-dead";
             return false;
         }
 
-        if (HasComp<MindShieldComponent>(target))
+        // Target is already a blood brother
+        if (HasComp<BloodBrotherComponent>(uid))
         {
-            errorMessage = "blood-brother-convert-failed-shielded";
+            return false;
+        }
+
+        if (!HasComp<HumanoidAppearanceComponent>(uid))
+        {
+            return false;
+        }
+
+        if (HasComp<ZombieComponent>(uid))
+        {
+            return false;
+        }
+
+        if (!_mobStateSystem.IsAlive(uid))
+        {
+            return false;
+        }
+
+        if (HasComp<MindShieldComponent>(uid))
+        {
             return false;
         }
 
