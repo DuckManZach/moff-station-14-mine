@@ -47,7 +47,7 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
     [Dependency] private readonly TargetObjectiveSystem _targetObjectiveSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    public TimeSpan NextIconRefresh;
+    private TimeSpan _nextIconRefresh;
     public override void Initialize()
     {
         base.Initialize();
@@ -56,14 +56,14 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherConvertActionEvent>(OnBloodBrotherConvert);
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherCheckConvertActionEvent>(OnBloodBrotherCheckConvert);
 
-        NextIconRefresh = TimeSpan.Zero;
+        _nextIconRefresh = TimeSpan.Zero;
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        if (_timing.CurTime < NextIconRefresh)
+        if (_timing.CurTime < _nextIconRefresh)
             return;
 
         var query = QueryActiveRules();
@@ -72,7 +72,7 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
             if (comp is not { })
                 continue;
 
-            NextIconRefresh = _timing.CurTime + comp.IconRefreshRate;
+            _nextIconRefresh = _timing.CurTime + comp.IconRefreshRate;
 
             var players = _mindSystem.GetAliveHumans();
             foreach (var player in players)
