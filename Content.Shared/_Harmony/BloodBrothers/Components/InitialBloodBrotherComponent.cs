@@ -98,3 +98,13 @@ public sealed partial class InitialBloodBrotherComponent : Component
 public sealed partial class BloodBrotherConvertActionEvent : EntityTargetActionEvent;
 
 public sealed partial class BloodBrotherCheckConvertActionEvent : EntityTargetActionEvent;
+
+public sealed partial class BloodBrotherConvertableRequestEvent : EntityEventArgs
+{
+    public EntityUid Sender;
+}
+
+public sealed partial class BloodBrotherConvertableResponseEvent : EntityEventArgs
+{
+    public HashSet<EntityUid> Eligible = new();
+}

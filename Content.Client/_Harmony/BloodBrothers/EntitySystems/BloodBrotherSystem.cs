@@ -21,7 +21,7 @@ public sealed class BloodBrotherSystem : SharedBloodBrotherSystem
         SubscribeLocalEvent<BloodBrotherConvertableComponent, GetStatusIconsEvent>(OnBloodBrotherConvertableGetIcons);
     }
 
-    private void OnBloodBrotherConvertableGetIcons(Entity<BloodBrotherConvertableComponent> entity, ref GetStatusIconsEvent args)
+    private void OnBloodBrotherConvertableGetIcons(Entity<InitialBloodBrotherComponent> entity, ref GetStatusIconsEvent args)
     {
         if (_playerManager.LocalSession?.AttachedEntity is not { } playerEntity)
             return;

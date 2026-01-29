@@ -250,7 +250,7 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
         return true;
     }
 
-    private bool IsConvertable(EntityUid uid)
+    public bool IsConvertable(EntityUid uid)
     {
         if (!_mindSystem.TryGetMind(uid, out _, out var targetMind) || targetMind.UserId == null)
         {
