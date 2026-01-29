@@ -14,7 +14,7 @@ namespace Content.Shared._Harmony.BloodBrothers.Components;
 /// <summary>
 /// Signifies that an entity is the blood brother chosen by a game-rule.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedBloodBrotherSystem))]
+[RegisterComponent, AutoGenerateComponentPause, NetworkedComponent, Access(typeof(SharedBloodBrotherSystem))]
 [AutoGenerateComponentState]
 public sealed partial class InitialBloodBrotherComponent : Component
 {
@@ -85,6 +85,12 @@ public sealed partial class InitialBloodBrotherComponent : Component
     /// </summary>
     [DataField]
     public EntProtoId<MindRoleComponent> BloodBrotherMindRole = "MindRoleBloodBrother";
+
+    /// <summary>
+    /// Moffstation - How often should convertable icons be updated?
+    /// </summary>
+    [ViewVariables, AutoPausedField]
+    public TimeSpan IconRefreshRate = TimeSpan.FromSeconds(1);
 
     public override bool SendOnlyToOwner => true;
 }

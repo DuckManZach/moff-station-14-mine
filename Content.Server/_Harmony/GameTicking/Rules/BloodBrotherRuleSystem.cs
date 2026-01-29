@@ -47,7 +47,6 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
     [Dependency] private readonly TargetObjectiveSystem _targetObjectiveSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    private TimeSpan _nextIconRefresh;
     public override void Initialize()
     {
         base.Initialize();
@@ -56,35 +55,7 @@ public sealed class BloodBrotherRuleSystem : GameRuleSystem<BloodBrotherRuleComp
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherConvertActionEvent>(OnBloodBrotherConvert);
         SubscribeLocalEvent<InitialBloodBrotherComponent, BloodBrotherCheckConvertActionEvent>(OnBloodBrotherCheckConvert);
 
-        _nextIconRefresh = TimeSpan.Zero;
-    }
 
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        if (_timing.CurTime < _nextIconRefresh)
-            return;
-
-        var query = QueryActiveRules();
-        while (query.MoveNext(out var uid, out _, out var comp, out _))
-        {
-            if (comp is not { })
-                continue;
-
-            _nextIconRefresh = _timing.CurTime + comp.IconRefreshRate;
-
-            var players = _mindSystem.GetAliveHumans();
-            foreach (var player in players)
-            {
-                if (!IsConvertable(player))
-                {
-                    RemCompDeferred<BloodBrotherConvertableComponent>(player);
-                    continue;
-                }
-                EnsureComp<BloodBrotherConvertableComponent>(player);
-            }
-        }
     }
 
     private void OnObjectivesTextPrepend(Entity<BloodBrotherRuleComponent> entity, ref ObjectivesTextPrependEvent args)
