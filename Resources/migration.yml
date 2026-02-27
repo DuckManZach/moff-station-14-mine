@@ -878,5 +878,10 @@ PosterHarmonyWallMeat: RandomPosterAny
 RPD: RCD
 SuitStorageQM: CrateCargoLuxuryHardsuit
 
+# 2026-02-27
+Stunbaton: Nightstick
+WeaponDisabler: null
+WeaponTaser: null
+
 # TODO: When the RG-2 and its safe are ported over, uncomment the line below and add a timestamp.
 #GunSafeDisabler: GunSafePistolRg2
