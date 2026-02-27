@@ -877,3 +877,6 @@ PosterHarmonyMoney: RandomPosterAny
 PosterHarmonyWallMeat: RandomPosterAny
 RPD: RCD
 SuitStorageQM: CrateCargoLuxuryHardsuit
+
+# TODO: When the RG-2 and its safe are ported over, uncomment the line below and add a timestamp.
+#GunSafeDisabler: GunSafePistolRg2

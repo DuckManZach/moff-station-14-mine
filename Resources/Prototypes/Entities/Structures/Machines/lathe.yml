@@ -412,7 +412,7 @@
     - SecurityExplosives
     - SecurityAmmo
     - SecurityWeapons
-    - SecurityDisablers
+    #- SecurityDisablers # Moffstation - no stuns
     # Moffstation - Start - Modular HUDs
     - ModularHudFrames
     - SecurityModularHudFrames
