@@ -1,8 +1,7 @@
-using System.Diagnostics.CodeAnalysis;
-using Content.Server.Access.Systems;
 using Content.Server._CD.Loadouts;
-using Content.Server.Forensics;
+using Content.Server.Access.Systems;
 using Content.Shared.Access.Components;
+using Content.Shared.Clothing;
 using Content.Shared.Forensics.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
@@ -12,7 +11,6 @@ using Content.Shared.Roles;
 using Content.Shared.StationRecords;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 
 namespace Content.Server.StationRecords.Systems;
 
@@ -41,7 +39,6 @@ public sealed class StationRecordsSystem : SharedStationRecordsSystem
     [Dependency] private readonly StationRecordKeyStorageSystem _keyStorage = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IdCardSystem _idCard = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -98,7 +95,10 @@ public sealed class StationRecordsSystem : SharedStationRecordsSystem
         TryComp<FingerprintComponent>(player, out var fingerprintComponent);
         TryComp<DnaComponent>(player, out var dnaComponent);
 
-        CreateGeneralRecord(station, idUid.Value, profile.Name, profile.Age, profile.Species, profile.Gender, jobId, fingerprintComponent?.Fingerprint, dnaComponent?.DNA, profile, records);
+        // Moffstation - Start - If the loadout specifies a name override, use that instead of the profile name for in the record.
+        var loadoutNameOrProfileName = profile.Loadouts.GetValueOrDefault(LoadoutSystem.GetJobPrototype(jobId))?.EntityName ?? profile.Name;
+        CreateGeneralRecord(station, idUid.Value, loadoutNameOrProfileName, profile.Age, profile.Species, profile.Gender, jobId, fingerprintComponent?.Fingerprint, dnaComponent?.DNA, profile, records);
+        // Moffstation - End
     }
 
 
@@ -219,27 +219,6 @@ public sealed class StationRecordsSystem : SharedStationRecordsSystem
         return false;
     }
 
-    /// <summary>
-    /// Gets a random record from the station's record entries.
-    /// </summary>
-    /// <param name="ent">The EntityId of the station from which you want to get the record.</param>
-    /// <param name="entry">The resulting entry.</param>
-    /// <typeparam name="T">Type to get from the record set.</typeparam>
-    /// <returns>True if a record was obtained. False otherwise.</returns>
-    public bool TryGetRandomRecord<T>(Entity<StationRecordsComponent?> ent, [NotNullWhen(true)] out T? entry)
-    {
-        entry = default;
-
-        if (!Resolve(ent.Owner, ref ent.Comp))
-            return false;
-
-        if (ent.Comp.Records.Keys.Count == 0)
-            return false;
-
-        var key = _random.Pick(ent.Comp.Records.Keys);
-
-        return ent.Comp.Records.TryGetRecordEntry(key, out entry);
-    }
 
     /// <summary>
     /// Get the name for a record, or an empty string if it has no record.

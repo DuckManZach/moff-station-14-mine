@@ -295,7 +295,7 @@
   id: ChefPilot # Tagged entity can control someone wearing a Chef's hat if inside their hat.
 
 - type: Tag
-  id: ChemDispensable # Storage whitelist: ChemDispenserEmpty, SmartFridge, BorgModuleAdvancedChemical
+  id: ChemDispensable # Storage whitelist: ChemDispenserEmpty, SmartFridge, BorgModuleChemical
 
 - type: Tag
   id: Chicken # Reproductive partner key. MetamorphRecipe: FoodBurgerChicken
@@ -322,13 +322,13 @@
   id: ClothMade # SpecialDigestible: OrganMothStomach. Storage whitelist: FoodBoxCloth
 
 - type: Tag
-  id: ClownMask # CargoBounty: BountyClownCostume. ConstructionGraph: Honker, BananaClownMask
+  id: ClownMask # ConstructionGraph: Honker, BananaClownMask
 
 - type: Tag
   id: ClownRecorder # ConstructionGraph: ClownHardsuit
 
 - type: Tag
-  id: ClownShoes # CargoBounty: BountyClownCostume. ConstructionGraph: Honker, BananaClownShoes
+  id: ClownShoes # ConstructionGraph: Honker, BananaClownShoes
 
 - type: Tag
   id: ClownSuit # ConstructionGraph: BananaClownJumpsuit
@@ -412,6 +412,21 @@
   id: Creamsicle # Blacklist on BountyFruit
 
 - type: Tag
+  id: CyborgCleaningModule # Borg chassis module requirements: BorgModuleCleaning, BorgModuleAdvancedCleaning
+
+- type: Tag
+  id: CyborgClowningModule # Borg chassis module requirements: BorgModuleClowning, BorgModuleAdvancedClowning
+
+- type: Tag
+  id: CyborgMiningModule # Borg chassis module requirements: BorgModuleMining, BorgModuleAdvancedMining
+
+- type: Tag
+  id: CyborgToolModule # Borg chassis module requirements: BorgModuleTool, BorgModuleAdvancedTool
+
+- type: Tag
+  id: CyborgTopicalModule # Borg chassis module requirements: BorgModuleTopicals, BorgModuleAdvancedTopical
+
+- type: Tag
   id: Crowbar # Storage whitelist: BaseClothingBeltEngineering, ClothingBeltChiefEngineer. ItemMapper: BaseClothingBeltEngineering, ClothingBeltChiefEngineer
 
 - type: Tag
@@ -488,6 +503,9 @@
 
 - type: Tag
   id: DoorElectronicsConfigurator # Used by ActivatableUIComponent on entity DoorElectronics to whitelist a tagged tool to open the UI.
+
+- type: Tag
+  id: DoorRemoteWhitelist # Doors with this tag can be interacted with door remotes
 
 - type: Tag
   id: DrinkBottle # Storage whitelist: BoozeDispenserEmpty, SodaDispenserEmpty
@@ -976,6 +994,9 @@
 
 - type: Tag
   id: MothershipModule # Cyborg module category for evil xenoborg core
+
+- type: Tag
+  id: MothershipPinpointerPiece # ConstructionGraph: RepairMothershipPinpointer
 
 - type: Tag
   id: Mouse # CargoBounty: BountyMouse
