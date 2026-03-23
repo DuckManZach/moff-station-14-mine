@@ -1,5 +1,7 @@
 using Content.Server._Moffstation.Objectives.Systems;
+using Content.Shared.Tag;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._Moffstation.Objectives.Components;
 
@@ -13,7 +15,7 @@ public sealed partial class AdLibObjectiveComponent : Component
     /// The key is the entry on the localization strong, the value is the eligible group
     /// </summary>
     [DataField]
-    public Dictionary<string, string> FillIns = new();
+    public Dictionary<string, List<string>> FillIns = new();
 
     /// <summary>
     /// What the blanks will be filled in with before an option is selected
@@ -31,9 +33,5 @@ public sealed partial class AdLibObjectiveComponent : Component
     [DataField(required: true)]
     public LocId ObjectiveText;
     [DataField(required: true)]
-    public LocId ObjectiveNoOwnerText;
-    [DataField(required: true)]
     public LocId DescriptionText;
-    [DataField(required: true)]
-    public LocId DescriptionMultiplyText;
 }

@@ -1,0 +1,21 @@
+- type: entity
+  parent: [BaseLivingObjective, BaseTraitorObjective]
+  id: BaseAdLib
+  components:
+  - type: Objective
+    difficulty: 1.5
+    icon:
+      sprite: Objects/Weapons/Guns/Pistols/viper.rsi
+      state: icon
+  - type: AdLibObjective
+    fillIns:
+      one:
+        whitelist:
+        - test
+        blacklist:
+        - test
+      two:
+      - text
+      - text
+    objectiveText: adlib-example
+    descriptionText: adlib-example
