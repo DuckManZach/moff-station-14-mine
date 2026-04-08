@@ -1,14 +1,9 @@
-using Content.Server._Moffstation.Objectives.Systems;
-using Content.Shared.Tag;
-using Robust.Shared.Containers;
-using Robust.Shared.Prototypes;
-
-namespace Content.Server._Moffstation.Objectives.Components;
+namespace Content.Server._Moffstation.Objectives.Components.AdLibs;
 
 /// <summary>
 /// This is used for objectives with "fill in the blank" options
 /// </summary>
-[RegisterComponent, Access(typeof(AdLibObjectiveSystem))]
+[RegisterComponent]
 public sealed partial class AdLibObjectiveComponent : Component
 {
     /// <summary>

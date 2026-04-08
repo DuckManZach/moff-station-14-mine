@@ -1,9 +1,9 @@
 using System.Linq;
-using Content.Server._Moffstation.Objectives.Components;
+using Content.Server._Moffstation.Objectives.Components.AdLibs;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Objectives.Systems;
 
-namespace Content.Server._Moffstation.Objectives.Systems;
+namespace Content.Server._Moffstation.Objectives.Systems.AdLibs;
 
 public sealed class AdLibObjectiveSystem : EntitySystem
 {
