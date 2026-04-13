@@ -167,12 +167,12 @@ public sealed class MachineUpgraderSystem : EntitySystem
 
     }
 
-    private Dictionary<ProtoId<MaterialPrototype>, float>? GetCost(EntityUid uid, EntProtoId upgrade, EntProtoId original)
-    {
-        if (!TryComp<FlatpackCreatorComponent>(uid, out var flatpackComp)
-            return null;
-
-            TryComp<MachineComponent>(uid, out var machineComp)
-        _flatpack.GetFlatpackCreationCost();
-    }
+    // private Dictionary<ProtoId<MaterialPrototype>, float>? GetCost(EntityUid uid, EntProtoId upgrade, EntProtoId original)
+    // {
+    //     if (!TryComp<FlatpackCreatorComponent>(uid, out var flatpackComp)
+    //         return null;
+    //
+    //         TryComp<MachineComponent>(uid, out var machineComp)
+    //     _flatpack.GetFlatpackCreationCost();
+    // }
 }
