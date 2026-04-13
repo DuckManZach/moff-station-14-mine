@@ -244,6 +244,9 @@ namespace Content.IntegrationTests.Tests
 
                 // makes an announcement on mapInit.
                 "AnnounceOnSpawn",
+
+                // Moffstation - Portals spawn more stuff on trigger, self-explanatory
+                "SpawnEntityTableOnTrigger",
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);
@@ -390,7 +393,6 @@ namespace Content.IntegrationTests.Tests
                 "LoadedChunk", // Worldgen chunk loading malding.
                 "BiomeSelection", // Whaddya know, requires config.
                 "ActivatableUI", // Requires enum key
-                "Woundable", // Offbrand - we're not doing this on its own
             };
 
             await using var pair = await PoolManager.GetServerClient();

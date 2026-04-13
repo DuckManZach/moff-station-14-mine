@@ -7,8 +7,8 @@
     - type: MachineBoard
       prototype: Autolathe
       stackRequirements:
-        MatterBin: 3 #moffstation - Revert machine parts
         Manipulator: 1 #moffstation - Revert machine parts
+        MatterBin: 3 #moffstation - Revert machine parts
         Glass: 1
 
 - type: entity
@@ -20,7 +20,10 @@
   - type: MachineBoard
     prototype: AutolatheHyperConvection
     stackRequirements:
-      MatterBin: 3 #moffstation - Revert machine parts
+      # Moffstation - Begin - Revert machine parts
+      Manipulator: 1 # 4 on upstream, 3 moved to matter bins
+      MatterBin: 3
+      # Moffstation - End
       Glass: 1
     tagRequirements:
       Igniter:
@@ -691,8 +694,8 @@
         Cable: 5
     - type: PhysicalComposition
       materialComposition:
-        Steel: 30
-        Plastic: 30
+        Steel: 25
+        Plastic: 25
     - type: StaticPrice
       price: 15
 
@@ -734,8 +737,8 @@
         Cable: 5
     - type: PhysicalComposition
       materialComposition:
-        Steel: 30
-        Plastic: 30
+        Steel: 25
+        Plastic: 25
     - type: StaticPrice
       price: 15
 
@@ -755,8 +758,8 @@
         CableMV: 5
     - type: PhysicalComposition
       materialComposition:
-        Steel: 30
-        Plastic: 30
+        Steel: 25
+        Plastic: 25
     - type: StaticPrice
       price: 15
 
@@ -1084,7 +1087,7 @@
 
 - type: entity
   id: SyndicateMicrowaveMachineCircuitboard
-  parent: BaseMachineCircuitboard
+  parent: [ BaseMachineCircuitboard, BaseSyndicateContraband ]
   name: donk co. microwave machine board
   components:
     - type: Sprite
@@ -1151,6 +1154,10 @@
     prototype: SurveillanceCameraRouterConstructed
     stackRequirements:
       Cable: 1
+  # L5 — camera router blade server
+  - type: BladeServerBoard
+    prototype: SurveillanceCameraRouterBladeServerConstructed
+  # End L5 — camera router blade server
 
 - type: entity
   id: SurveillanceCameraWirelessRouterCircuitboard
@@ -1165,6 +1172,10 @@
     stackRequirements:
       Cable: 2
       Glass: 1
+  # L5 — camera router blade server
+  - type: BladeServerBoard
+    prototype: SurveillanceCameraWirelessRouterBladeServerConstructed
+  # End L5 — camera router blade server
 
 - type: entity
   parent: BaseMachineCircuitboard
@@ -1179,6 +1190,10 @@
     stackRequirements:
       Cable: 2
       Glass: 1
+  # L5 — camera router blade server
+  - type: BladeServerBoard
+    prototype: SurveillanceCameraWirelessRouterBladeServerXenoborg
+  # End L5 — camera router blade server
 
 - type: entity
   id: SurveillanceWirelessCameraMovableCircuitboard
@@ -1386,8 +1401,8 @@
     prototype: CutterMachine
     stackRequirements:
       Steel: 2
-      Capacitor: 1
-      Manipulator: 1
+      Capacitor: 1 #moffstation - Revert machine parts
+      Manipulator: 1 #moffstation - Revert machine parts
       Cable: 1
 
 - type: entity

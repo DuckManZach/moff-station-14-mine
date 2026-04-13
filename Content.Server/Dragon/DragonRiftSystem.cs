@@ -2,16 +2,14 @@ using Content.Server.Chat.Systems;
 using Content.Server.NPC;
 using Content.Server.NPC.Systems;
 using Content.Server.Pinpointer;
-using Content.Shared.Damage;
 using Content.Shared.Dragon;
 using Content.Shared.Examine;
 using Content.Shared.Sprite;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization.Manager;
 using System.Numerics;
-using Robust.Shared.Audio;
+using Content.Shared.Damage.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Utility;
@@ -90,7 +88,21 @@ public sealed class DragonRiftSystem : EntitySystem
             if (comp.SpawnAccumulator > comp.SpawnCooldown)
             {
                 comp.SpawnAccumulator -= comp.SpawnCooldown;
-                var ent = Spawn(comp.SpawnPrototype, xform.Coordinates);
+                // Moffstation - Start - Empowered carp spawns
+                //var ent = Spawn(comp.SpawnPrototype, xform.Coordinates);
+                var spawnType = comp.SpawnPrototype; // Base carp prototype
+
+                if (comp.State > DragonRiftState.Charging) // Checks to see if Rift has reached threshhold
+                {
+                    comp.EmpoweredSpawnAccumulator++;
+                    if ((comp.EmpoweredSpawnAccumulator %= comp.EmpoweredSpawnCooldown) == 0)
+                    {
+                        spawnType = comp.EmpoweredSpawnPrototype; // Replaces base carp prototype with sharkminnow
+                    }
+                }
+
+                var ent = Spawn(spawnType, xform.Coordinates);
+                // Moffstation - End
 
                 // Update their look to match the leader.
                 if (TryComp<RandomSpriteComponent>(comp.Dragon, out var randomSprite))

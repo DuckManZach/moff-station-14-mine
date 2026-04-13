@@ -13,17 +13,16 @@ See the Harmony contributing guidelines for an example on what we want: https://
 <!-- Discuss how this would affect game balance or explain why it was changed. Link any relevant discussions or issues. -->
 
 ## Technical details
-<!-- Summary of code changes for easier review. -->
+<!-- Summary of code changes for easier review. Only required for complex changes-->
 
 ## Media
-<!-- Attach media if the PR makes ingame changes (clothing, items, features, etc).
-Small fixes/refactors are exempt. Media may be used in SS14 progress reports with credit. -->
+<!-- Attach media if the PR makes in-game changes (clothing, items, features, etc). -->
 
 ## Requirements
-<!-- Confirm the following by placing an X in the brackets [X]: -->
-- [ ] I have read and am following the [Pull Request and Changelog Guidelines](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html).
+<!-- Confirm the following by placing an X in the brackets without spaces inside (for example: [X] ): -->
+- [ ] I have read and am following the [Upstream Pull Request and Changelog Guidelines](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html) as well as the [Moffstation Contributing Guidelines](https://github.com/moff-station/moff-station-14/blob/master/CONTRIBUTING.md).
 - [ ] I have properly sectioned my changes into fork namespaces, and/or followed proper guidelines for modifying upstream files.
-- [ ] I have added media to this PR or it does not require an ingame showcase.
+- [ ] I have added media to this PR or it does not require an in-game showcase.
 <!-- You should understand that not following the above may get your PR closed at maintainer’s discretion -->
 
 ## Breaking changes
@@ -34,8 +33,11 @@ This will be posted in #codebase-changes. -->
 <!-- Add a Changelog entry to make players aware of new features or changes that could affect gameplay.
 Make sure to read the guidelines and take this Changelog template out of the comment block in order for it to show up.
 Changelog must have a :cl: symbol, so the bot recognizes the changes and adds them to the game's changelog. -->
-<!--
+<!-- Changelog changes go here, below the :cl:-->
 :cl:
+
+
+<!-- Changelog Changes go above here, these are the templates
 - add: Added fun!
 - remove: Removed fun!
 - tweak: Changed fun!

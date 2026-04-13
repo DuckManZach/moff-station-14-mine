@@ -19,8 +19,15 @@
   - type: MindRole
     antagPrototype: PirateCaptain
 
-# Vampires
+- type: entity
+  parent: MindRolePirate
+  id: MindRolePirateCorsair
+  name: Pirate Corsair Role
+  components:
+  - type: MindRole
+    roleType: SoloAntagonist
 
+# Vampires
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleVampire
@@ -33,7 +40,6 @@
   - type: VampireRole
 
 # Syndicate
-
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleSyndicateSpy
@@ -45,3 +51,36 @@
     antagPrototype: SyndicateSpy
     subtype: roles-antag-short-syndicate-spy
   - type: SyndicateSpyRole
+
+# Wizard Duelists
+- type: entity
+  parent: MindRoleWizard
+  id: MindRoleWizardDuelistBase
+  name: Wizard Duelist Role
+  components:
+  - type: MindRole
+    roleType: FreeAgent
+    antagPrototype: Wizard
+    exclusiveAntag: true
+    subtype: role-subtype-wizard
+
+- type: entity
+  parent: MindRoleWizardDuelistBase
+  id: MindRoleWizardDuelistRed
+  name: Red Wizard Duelist Role
+  components:
+  - type: WizardDuelistRedRole
+
+- type: entity
+  parent: MindRoleWizardDuelistBase
+  id: MindRoleWizardDuelistBlue
+  name: Blue Wizard Duelist Role
+  components:
+  - type: WizardDuelistBlueRole
+
+- type: entity
+  parent: MindRoleWizardDuelistBase
+  id: MindRoleWizardDuelistViolet
+  name: Violet Wizard Duelist Role
+  components:
+  - type: WizardDuelistVioletRole

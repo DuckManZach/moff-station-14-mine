@@ -18,7 +18,7 @@ public sealed class BorgSwitchableTypeSystem : SharedBorgSwitchableTypeSystem
 {
     [Dependency] private readonly BorgSystem _borgSystem = default!;
     [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    // [Dependency] private readonly SpriteSystem _sprite = default!; // Moffstation - No longer used
     [Dependency] private readonly IResourceCache _resourceCache = default!; // Moffstation - Early merge of Borg RSI fix
 
     public override void Initialize()
@@ -67,25 +67,6 @@ public sealed class BorgSwitchableTypeSystem : SharedBorgSwitchableTypeSystem
                 // Queue update so state changes apply.
                 _appearance.QueueUpdate(entity, appearance);
             }
-        }
-
-        if (prototype.SpriteBodyMovementState is { } movementState)
-        {
-            var spriteMovement = EnsureComp<SpriteMovementComponent>(entity);
-            spriteMovement.NoMovementLayers.Clear();
-            spriteMovement.NoMovementLayers["movement"] = new PrototypeLayerData
-            {
-                State = prototype.SpriteBodyState,
-            };
-            spriteMovement.MovementLayers.Clear();
-            spriteMovement.MovementLayers["movement"] = new PrototypeLayerData
-            {
-                State = movementState,
-            };
-        }
-        else
-        {
-            RemComp<SpriteMovementComponent>(entity);
         }
 
         base.UpdateEntityAppearance(entity, prototype);

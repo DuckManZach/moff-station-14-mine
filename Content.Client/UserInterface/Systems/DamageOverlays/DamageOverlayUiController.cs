@@ -1,8 +1,10 @@
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Traits.Assorted;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
@@ -10,8 +12,6 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Player;
-using System.Linq; // Offbrand
-using Content.Shared._Offbrand.Wounds; // Offbrand
 
 namespace Content.Client.UserInterface.Systems.DamageOverlays;
 
@@ -22,9 +22,8 @@ public sealed class DamageOverlayUiController : UIController
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     [UISystemDependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
-    [UISystemDependency] private readonly HeartSystem _heart = default!; // Offbrand
-    [UISystemDependency] private readonly PainSystem _pain = default!; // Offbrand
-
+    [UISystemDependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [UISystemDependency] private readonly DamageableSystem _damageable = default!;
     private Overlays.DamageOverlay _overlay = default!;
 
     public override void Initialize()
@@ -34,7 +33,6 @@ public sealed class DamageOverlayUiController : UIController
         SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<MobThresholdChecked>(OnThresholdCheck);
-        SubscribeLocalEvent<bPotentiallyUpdateDamageOverlayEventb>(OnPotentiallyUpdateDamageOverlay); // Offbrand
     }
 
     private void OnPlayerAttach(LocalPlayerAttachedEvent args)
@@ -75,62 +73,11 @@ public sealed class DamageOverlayUiController : UIController
         _overlay.CritLevel = 0f;
         _overlay.PainLevel = 0f;
         _overlay.OxygenLevel = 0f;
-        _overlay.AlwaysRenderAll = false; // Offbrand
     }
 
     //TODO: Jezi: adjust oxygen and hp overlays to use appropriate systems once bodysim is implemented
     private void UpdateOverlays(EntityUid entity, MobStateComponent? mobState, DamageableComponent? damageable = null, MobThresholdsComponent? thresholds = null)
     {
-// Begin Offbrand Changes
-        TryUpdateSimpleOverlays(entity, mobState, damageable, thresholds);
-        TryUpdateWoundableOverlays(entity);
-    }
-
-    private void OnPotentiallyUpdateDamageOverlay(ref bPotentiallyUpdateDamageOverlayEventb args)
-    {
-        if (args.Target != _playerManager.LocalEntity)
-            return;
-
-        UpdateOverlays(args.Target, null);
-    }
-
-    private void TryUpdateWoundableOverlays(EntityUid entity)
-    {
-        if (!EntityManager.TryGetComponent<PainComponent>(entity, out var pain) ||
-            !EntityManager.TryGetComponent<ShockThresholdsComponent>(entity, out var shockThresholds) ||
-            !EntityManager.TryGetComponent<BrainDamageComponent>(entity, out var brainDamage) ||
-            !EntityManager.TryGetComponent<BrainDamageThresholdsComponent>(entity, out var brainThresholds) ||
-            !EntityManager.TryGetComponent<HeartrateComponent>(entity, out var heartrate))
-            return;
-
-        _overlay.AlwaysRenderAll = true;
-        var maxBrain = brainThresholds.DamageStateThresholds.Keys.Max();
-        var maxShock = shockThresholds.Thresholds.Keys.Max();
-
-        switch (brainThresholds.CurrentState)
-        {
-            case MobState.Alive or MobState.Critical:
-            {
-                _overlay.CritLevel = FixedPoint2.Clamp(brainDamage.Damage / maxBrain, 0, 1).Float();
-                _overlay.PainLevel = FixedPoint2.Clamp(_pain.GetShock((entity, pain)) / maxShock, 0, 1).Float();
-                _overlay.OxygenLevel = FixedPoint2.Clamp(1 - _heart.BloodOxygenation((entity, heartrate)), 0, 1).Float();
-                _overlay.DeadLevel = 0;
-                break;
-            }
-            case MobState.Dead:
-            {
-                _overlay.CritLevel = 0;
-                _overlay.PainLevel = 0;
-                _overlay.OxygenLevel = 0;
-                break;
-            }
-        }
-
-    }
-
-    private void TryUpdateSimpleOverlays(EntityUid entity, MobStateComponent? mobState, DamageableComponent? damageable = null, MobThresholdsComponent? thresholds = null)
-    {
-// End Offbrand Changes
         if (mobState == null && !EntityManager.TryGetComponent(entity, out mobState) ||
             thresholds == null && !EntityManager.TryGetComponent(entity, out thresholds) ||
             damageable == null && !EntityManager.TryGetComponent(entity, out  damageable))
@@ -145,6 +92,7 @@ public sealed class DamageOverlayUiController : UIController
             return; //this entity intentionally has no overlays
         }
 
+        var damagePerGroup = _damageable.GetDamagePerGroup((entity, damageable));
         var critThreshold = foundThreshold.Value;
         _overlay.State = mobState.CurrentState;
 
@@ -155,11 +103,12 @@ public sealed class DamageOverlayUiController : UIController
                 FixedPoint2 painLevel = 0;
                 _overlay.PainLevel = 0;
 
-                if (!EntityManager.HasComponent<PainNumbnessComponent>(entity))
+                if (!_statusEffects.TryEffectsWithComp<PainNumbnessStatusEffectComponent>(entity, out _))
                 {
                     foreach (var painDamageType in damageable.PainDamageGroups)
                     {
-                        damageable.DamagePerGroup.TryGetValue(painDamageType, out var painDamage);
+
+                        damagePerGroup.TryGetValue(painDamageType, out var painDamage);
                         painLevel += painDamage;
                     }
                     _overlay.PainLevel = FixedPoint2.Min(1f, painLevel / critThreshold).Float();
@@ -170,7 +119,7 @@ public sealed class DamageOverlayUiController : UIController
                     }
                 }
 
-                if (damageable.DamagePerGroup.TryGetValue("Airloss", out var oxyDamage))
+                if (damagePerGroup.TryGetValue("Airloss", out var oxyDamage))
                 {
                     _overlay.OxygenLevel = FixedPoint2.Min(1f, oxyDamage / critThreshold).Float();
                 }
@@ -182,7 +131,7 @@ public sealed class DamageOverlayUiController : UIController
             case MobState.Critical:
             {
                 if (!_mobThresholdSystem.TryGetDeadPercentage(entity,
-                        FixedPoint2.Max(0.0, damageable.TotalDamage), out var critLevel))
+                        FixedPoint2.Max(0.0, _damageable.GetTotalDamage((entity, damageable))), out var critLevel))
                     return;
                 _overlay.CritLevel = critLevel.Value.Float();
 

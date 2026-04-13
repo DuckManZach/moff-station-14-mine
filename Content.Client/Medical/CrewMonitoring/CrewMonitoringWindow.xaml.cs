@@ -32,6 +32,11 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
     private bool _tryToScrollToListFocus;
     private Texture? _blipTexture;
 
+    // Moffstation - Navigation map warp
+    private bool _warpEnabled = false;
+    public Action<NetCoordinates>? WarpRequested;
+    // Moffstation - End
+
     public CrewMonitoringWindow()
     {
         RobustXamlLoader.Load(this);
@@ -43,7 +48,7 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
         NavMap.TrackedEntitySelectedAction += SetTrackedEntityFromNavMap;
     }
 
-    public void Set(string stationName, EntityUid? mapUid)
+    public void Set(string stationName, EntityUid? mapUid, bool enableWarp = false)
     {
         _blipTexture = _spriteSystem.Frame0(new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/NavMap/beveled_circle.png")));
 
@@ -52,6 +57,8 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
 
         else
             NavMap.Visible = false;
+
+        _warpEnabled = enableWarp; // Moffstation - Navigation map warp
 
         StationName.AddStyleClass("LabelBig");
         StationName.Text = stationName;
@@ -89,7 +96,7 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
                 if (existingSensor.Coordinates != null && sensor.Coordinates == null)
                     continue;
 
-                if (existingSensor.WoundableData != null && sensor.WoundableData == null) // Offbrand
+                if (existingSensor.DamagePercentage != null && sensor.DamagePercentage == null)
                     continue;
             }
 
@@ -130,7 +137,7 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
             };
 
             deparmentLabel.SetMessage(department);
-            deparmentLabel.StyleClasses.Add(StyleNano.StyleClassTooltipActionDescription);
+            deparmentLabel.StyleClasses.Add("font-large");
 
             SensorsTable.AddChild(deparmentLabel);
 
@@ -155,8 +162,7 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
                 HorizontalExpand = true,
             };
 
-            deparmentLabel.SetMessage(Loc.GetString("crew-monitoring-user-interface-no-department"));
-            deparmentLabel.StyleClasses.Add(StyleNano.StyleClassTooltipActionDescription);
+            deparmentLabel.SetMessage(Loc.GetString("crew-monitoring-ui-no-department-label"));
 
             SensorsTable.AddChild(deparmentLabel);
 
@@ -194,7 +200,7 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
             };
 
             if (sensor.SuitSensorUid == _trackedEntity)
-                sensorButton.AddStyleClass(StyleNano.StyleClassButtonColorGreen);
+                sensorButton.AddStyleClass(StyleClass.Positive);
 
             SensorsTable.AddChild(sensorButton);
 
@@ -232,36 +238,21 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
             // Specify texture for the user status icon
             var specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "alive");
 
-            // Begin Offbrand Additions
-            if (sensor.WoundableData?.AnyVitalCritical == true)
-            {
-                specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "critical");
-            }
-            else if (sensor.WoundableData is { } woundableSummary)
-            {
-                var worstRating = Math.Max((byte)woundableSummary.BloodPressureRating, Math.Max((byte)woundableSummary.BloodOxygenationRating, (byte)woundableSummary.HeartRateRating));
-                var index = MathF.Round(4f * ((float)worstRating)/5f);
-                specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "health" + index);
-            }
-            // End Offbrand Additions
-
             if (!sensor.IsAlive)
             {
                 specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "dead");
             }
 
-            // Begin Offbrand Removals
-            // else if (sensor.DamagePercentage != null)
-            // {
-            //     var index = MathF.Round(4f * sensor.DamagePercentage.Value);
+            else if (sensor.DamagePercentage != null)
+            {
+                var index = MathF.Round(4f * sensor.DamagePercentage.Value);
 
-            //     if (index >= 5)
-            //         specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "critical");
+                if (index >= 5)
+                    specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "critical");
 
-            //     else
-            //         specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "health" + index);
-            // }
-            // End Offbrand Removals
+                else
+                    specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Alerts/human_crew_monitoring.rsi"), "health" + index);
+            }
 
             // Status icon
             var statusIcon = new AnimatedTextureRect
@@ -319,35 +310,36 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
 
             jobContainer.AddChild(jobLabel);
 
-            // Begin Offbrand Additions
-            var vitalsContainer = new BoxContainer()
+            // Moffstation - Navigation map warp
+            if (_warpEnabled)
             {
-                SizeFlagsStretchRatio = 1.25f,
-                Orientation = LayoutOrientation.Horizontal,
-                HorizontalExpand = true,
-                SeparationOverride = 8,
-            };
-
-            if (sensor.WoundableData is { } woundable)
-            {
-                vitalsContainer.AddChild(new RichTextLabel() { Text = Loc.GetString("offbrand-crew-monitoring-heart-rate", ("rate", woundable.HeartRate), ("rating", woundable.HeartRateRating)) });
-                var (systolic, diastolic) = woundable.BloodPressure;
-                vitalsContainer.AddChild(new RichTextLabel() { Text = Loc.GetString("offbrand-crew-monitoring-blood-pressure", ("systolic", systolic), ("diastolic", diastolic), ("rating", woundable.BloodPressureRating)) });
-                vitalsContainer.AddChild(new RichTextLabel() { Text = Loc.GetString("offbrand-crew-monitoring-oxygenation", ("oxygenation", $"{woundable.BloodOxygenation * 100:F1}"), ("rating", woundable.BloodOxygenationRating)) });
+                var warpButton = new Button { Text = Loc.GetString("crew-monitoring-ui-warp-button-label"), Disabled = sensorButton.Disabled };
+                warpButton.OnButtonUp += _ =>
+                {
+                    if (sensor.Coordinates is { } coords)
+                        WarpRequested?.Invoke(coords);
+                };
+                mainContainer.AddChild(warpButton);
             }
-
-            mainContainer.AddChild(vitalsContainer);
-            // End Offbrand Additions
+            // Moffstation - End
 
             // Add user coordinates to the navmap
             if (coordinates != null && NavMap.Visible && _blipTexture != null)
             {
-                NavMap.TrackedEntities.TryAdd(sensor.SuitSensorUid,
-                    new NavMapBlip
-                    (CoordinatesToLocal(coordinates.Value),
-                    _blipTexture,
-                    (_trackedEntity == null || sensor.SuitSensorUid == _trackedEntity) ? Color.LimeGreen : Color.LimeGreen * Color.DimGray,
-                    sensor.SuitSensorUid == _trackedEntity));
+                // Moffstation - Navigation map warp
+                if (proto != null)
+                {
+                    NavMap.TrackedEntities.TryAdd(sensor.SuitSensorUid,
+                        new NavMapBlip(
+                            CoordinatesToLocal(coordinates.Value),
+                            _spriteSystem.Frame0(proto.Icon),
+                            Color.White,
+                            sensor.SuitSensorUid == _trackedEntity,
+                            true,
+                            4f)
+                        );
+                }
+                // Moffstation - End
 
                 NavMap.Focus = _trackedEntity;
 
@@ -399,22 +391,25 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
             var castSensor = (CrewMonitoringButton) sensor;
 
             if (castSensor.SuitSensorUid == prevTrackedEntity)
-                castSensor.RemoveStyleClass(StyleNano.StyleClassButtonColorGreen);
+                castSensor.RemoveStyleClass(StyleClass.Positive);
 
             else if (castSensor.SuitSensorUid == currTrackedEntity)
-                castSensor.AddStyleClass(StyleNano.StyleClassButtonColorGreen);
+                castSensor.AddStyleClass(StyleClass.Positive);
 
             if (castSensor?.Coordinates == null)
                 continue;
 
             if (NavMap.TrackedEntities.TryGetValue(castSensor.SuitSensorUid, out var data))
             {
-                data = new NavMapBlip
-                    (CoordinatesToLocal(data.Coordinates),
+                // Moffstation - Navigation map warp
+                data = new NavMapBlip(
+                    CoordinatesToLocal(data.Coordinates),
                     data.Texture,
-                    (currTrackedEntity == null || castSensor.SuitSensorUid == currTrackedEntity) ? Color.LimeGreen : Color.LimeGreen * Color.DimGray,
-                    castSensor.SuitSensorUid == currTrackedEntity);
-
+                    Color.White,
+                    castSensor.SuitSensorUid == currTrackedEntity,
+                    true,
+                    4f);
+                // Moffstation - End
                 NavMap.TrackedEntities[castSensor.SuitSensorUid] = data;
             }
         }

@@ -42,6 +42,7 @@
   - type: AtmosExposed
   - type: Temperature
     currentTemperature: 290
+  - type: TemperatureDamage
   # required for cooking to work
   - type: InternalTemperature
     thickness: 0.02
@@ -70,16 +71,6 @@
     # once it would say bloated, turn into the rotten prototype
     stage: 1
 
-# bruh
-- type: Tag
-  id: Raw
-
-- type: Tag
-  id: Cooked
-
-- type: Tag
-  id: Cutlet
-
 # Raw
 
 - type: entity
@@ -98,6 +89,11 @@
           Quantity: 9
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 18 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatCutlet
@@ -132,6 +128,11 @@
         reagents:
         - ReagentId: UncookedAnimalProteins
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 9 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatCutlet
@@ -199,6 +200,11 @@
           Quantity: 2
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 11 # Mothstation- End
   - type: InternalTemperature
     conductivity: 0.44
     thickness: 0.004 # bacon is thin so faster to cook than a steak
@@ -231,6 +237,11 @@
           Quantity: 9
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 18 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatBearCutlet
@@ -264,6 +275,11 @@
           Quantity: 9
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 18 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatPenguinCutlet
@@ -295,6 +311,11 @@
           Quantity: 9
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 18 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatChickenCutlet
@@ -328,6 +349,11 @@
           Quantity: 9
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 18 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatDuckCutlet
@@ -395,6 +421,11 @@
           Quantity: 1
         - ReagentId: Fat
           Quantity: 2
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 3 # Mothstation- End
   - type: Construction
     graph: CrabSteak
     node: start
@@ -416,6 +447,11 @@
           Quantity: 5
         - ReagentId: Fat
           Quantity: 3
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 8 # Mothstation- End
   - type: InternalTemperature
     thickness: 0.1 # very big, do cook it in lava
   - type: Construction
@@ -487,6 +523,11 @@
           Quantity: 3
         - ReagentId: Fat
           Quantity: 3
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 6 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatCutlet
@@ -514,6 +555,11 @@
           Quantity: 9
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 18 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatLizardCutlet
@@ -588,6 +634,11 @@
           Quantity: 9
         - ReagentId: Fat
           Quantity: 9
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 18 # Mothstation- End
   - type: SliceableFood
     count: 3
     slice: FoodMeatSpiderCutlet
@@ -640,6 +691,11 @@
         reagents:
         - ReagentId: UncookedAnimalProteins
           Quantity: 1
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatPulp
+        Quantity: 1 # Mothstation- End
   - type: Item
     size: Tiny
     shape:
@@ -941,6 +997,11 @@
           Quantity: 90
         - ReagentId: Fat
           Quantity: 90
+  - type: Extractable # Moffstation - Meat Pulp
+    juiceSolution:
+      reagents:
+      - ReagentId: MeatAnomaly
+        Quantity: 180 # Mothstation- End
   - type: SliceableFood
     count: 10
     sliceTime: 5
@@ -1241,6 +1302,23 @@
       right:
       - state: plain-cooked-inhand-right
         color: "#F7E3A3"
+
+- type: entity
+  parent: FoodMeatChickenFried
+  id: FoodMeatChickenFriedVox
+  name: mystery fried chicken
+  description: “Eleven secret herbs and… oh no. That’s not chicken."
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 2
+        - ReagentId: Protein
+          Quantity: 5
+        - ReagentId: Ammonia
+          Quantity: 3
 
 - type: entity
   parent: FoodMeatBase

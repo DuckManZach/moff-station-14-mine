@@ -24,6 +24,13 @@ public sealed class TypingIndicatorVisualizerSystem : VisualizerSystem<TypingInd
 
         var overrideIndicator = evt.GetMostRecentIndicator();
 
+        // Moffstation - Start - Typing indicators
+        // This intentionally overrides the indicator from clothing
+        // the type of speech takes priority over the generalized speech bubble
+        if (component.TypingIndicatorOverride != null)
+            overrideIndicator = component.TypingIndicatorOverride;
+        // Moffstation - End
+
         if (overrideIndicator != null)
             currentTypingIndicator = overrideIndicator.Value;
 
@@ -37,8 +44,7 @@ public sealed class TypingIndicatorVisualizerSystem : VisualizerSystem<TypingInd
         if (!layerExists)
             layer = SpriteSystem.LayerMapReserve((uid, args.Sprite), TypingIndicatorLayers.Base);
 
-        SpriteSystem.LayerSetRsi((uid, args.Sprite), layer, proto.SpritePath);
-        SpriteSystem.LayerSetRsiState((uid, args.Sprite), layer, proto.TypingState);
+        SpriteSystem.LayerSetRsi((uid, args.Sprite), layer, proto.SpritePath, proto.TypingState);
         args.Sprite.LayerSetShader(layer, proto.Shader);
         SpriteSystem.LayerSetOffset((uid, args.Sprite), layer, proto.Offset);
 

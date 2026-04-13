@@ -5,9 +5,7 @@ using Content.Server.NPC.Queries.Considerations;
 using Content.Server.NPC.Queries.Curves;
 using Content.Server.NPC.Queries.Queries;
 using Content.Server.Nutrition.Components;
-using Content.Server.Temperature.Components;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Inventory;
@@ -30,7 +28,9 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.Atmos.Components;
 using System.Linq;
-using Content.Shared._Offbrand.Wounds; // Offbrand
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Temperature.Components;
 
 namespace Content.Server.NPC.Systems;
 
@@ -55,7 +55,7 @@ public sealed class NPCUtilitySystem : EntitySystem
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly MobThresholdSystem _thresholdSystem = default!;
     [Dependency] private readonly TurretTargetSettingsSystem _turretTargetSettings = default!;
-    [Dependency] private readonly HealthRankingSystem _healthRanking = default!; // Offbrand
+    [Dependency] private readonly DamageableSystem _damageable = default!;
 
     private EntityQuery<PuddleComponent> _puddleQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -187,7 +187,7 @@ public sealed class NPCUtilitySystem : EntitySystem
                     return 0f;
 
                 var nutrition = _ingestion.TotalNutrition(targetUid, owner);
-                if (nutrition <= 1.0f)
+                if (nutrition == 0.0f)
                     return 0f;
 
                 return 1f;
@@ -306,11 +306,10 @@ public sealed class NPCUtilitySystem : EntitySystem
             {
                 if (!TryComp(targetUid, out DamageableComponent? damage))
                     return 0f;
-                if (_healthRanking.RankHealth(targetUid, con.TargetState) is { } ranking) // Offbrand
-                    return ranking; // Offbrand
-                if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, damage.TotalDamage, out var percentage))
+                var totalDamage = _damageable.GetTotalDamage((targetUid, damage));
+                if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, totalDamage, out var percentage))
                     return Math.Clamp((float)(1 - percentage), 0f, 1f);
-                if (_thresholdSystem.TryGetIncapPercentage(targetUid, damage.TotalDamage, out var incapPercentage))
+                if (_thresholdSystem.TryGetIncapPercentage(targetUid, totalDamage, out var incapPercentage))
                     return Math.Clamp((float)(1 - incapPercentage), 0f, 1f);
                 return 0f;
             }
@@ -339,11 +338,11 @@ public sealed class NPCUtilitySystem : EntitySystem
             }
             case TargetIsAliveCon:
             {
-                return _mobState.IsAlive(targetUid) && !_healthRanking.IsCritical(targetUid) ? 1f : 0f; // Offbrand
+                return _mobState.IsAlive(targetUid) ? 1f : 0f;
             }
             case TargetIsCritCon:
             {
-                return _healthRanking.IsCritical(targetUid) ? 1f : 0f; // Offbrand
+                return _mobState.IsCritical(targetUid) ? 1f : 0f;
             }
             case TargetIsDeadCon:
             {
@@ -508,7 +507,7 @@ public sealed class NPCUtilitySystem : EntitySystem
     {
         switch (filter)
         {
-            case ComponentFilter compFilter:
+            case Content.Server.NPC.Queries.Queries.ComponentFilter compFilter:
             {
                 _entityList.Clear();
 
@@ -605,5 +604,13 @@ public readonly record struct UtilityResult(Dictionary<EntityUid, float> Entitie
             return EntityUid.Invalid;
 
         return Entities.MinBy(x => x.Value).Key;
+    }
+
+    /// <summary>
+    /// Returns a GetEnumerable sorted in descending score.
+    /// </summary>
+    public IEnumerable<KeyValuePair<EntityUid, float>> GetEnumerable()
+    {
+        return Entities.OrderByDescending(x => x.Value);
     }
 }

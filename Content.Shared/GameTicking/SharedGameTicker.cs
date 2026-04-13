@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Roles;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -7,6 +8,10 @@ using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio;
+using Content.Shared.GameTicking.Prototypes;
+// Goob Station - Round End Screen
+using Content.Shared.Mobs;
+using Content.Shared.FixedPoint;
 
 namespace Content.Shared.GameTicking
 {
@@ -95,14 +100,14 @@ namespace Content.Shared.GameTicking
     public sealed class TickerLobbyStatusEvent : EntityEventArgs
     {
         public bool IsRoundStarted { get; }
-        public string? LobbyBackground { get; }
+        public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; }
         public bool YouAreReady { get; }
         // UTC.
         public TimeSpan StartTime { get; }
         public TimeSpan RoundStartTimeSpan { get; }
         public bool Paused { get; }
 
-        public TickerLobbyStatusEvent(bool isRoundStarted, string? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
+        public TickerLobbyStatusEvent(bool isRoundStarted, ProtoId<LobbyBackgroundPrototype>? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
         {
             IsRoundStarted = isRoundStarted;
             LobbyBackground = lobbyBackground;
@@ -190,6 +195,16 @@ namespace Content.Shared.GameTicking
             public bool Observer;
 
             public bool Connected;
+
+            // Goobstation - Start - cool player manifest
+            public string? LastWords;
+
+            public MobState EntMobState;
+
+#pragma warning disable CS0618 // Type or member is obsolete // Moffstation - The obsolescense is saying "only use this for grouping in the UI", which is what this is used for.
+            public IReadOnlyDictionary<ProtoId<DamageGroupPrototype>, FixedPoint2> DamagePerGroup;
+#pragma warning restore CS0618 // Type or member is obsolete
+            // Goobstation - End
         }
 
         public string GamemodeTitle { get; }

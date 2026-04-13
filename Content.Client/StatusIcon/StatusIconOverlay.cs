@@ -88,28 +88,36 @@ public sealed class StatusIconOverlay : Overlay
                 if (proto.LocationPreference == StatusIconLocationPreference.Left ||
                     proto.LocationPreference == StatusIconLocationPreference.None && countL <= countR)
                 {
-                    if (accOffsetL + texture.Height > _sprite.GetLocalBounds((uid, sprite)).Height * EyeManager.PixelsPerMeter)
-                        break;
+                    // Moffstation - Move icon cutoff check into `if` so that `Mod` layer icons don't get dropped when they could fit.
                     if (proto.Layer == StatusIconLayer.Base)
                     {
+                        // Moffstation - Begin
+                        if (accOffsetL + texture.Height > _sprite.GetLocalBounds((uid, sprite)).Height * EyeManager.PixelsPerMeter)
+                            break;
+                        // Moffstation - End
+
                         accOffsetL += texture.Height;
                         countL++;
                     }
                     yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float)(accOffsetL - proto.Offset) / EyeManager.PixelsPerMeter;
-                    xOffset = -(bounds.Width + sprite.Offset.X) / 2f;
+                    xOffset = -(bounds.Width + sprite.Offset.X) / 2f + (float)proto.OffsetHorizontal / EyeManager.PixelsPerMeter;
 
                 }
                 else
                 {
-                    if (accOffsetR + texture.Height > _sprite.GetLocalBounds((uid, sprite)).Height * EyeManager.PixelsPerMeter)
-                        break;
+                    // Moffstation - Move icon cutoff check into `if` so that `Mod` layer icons don't get dropped when they could fit.
                     if (proto.Layer == StatusIconLayer.Base)
                     {
+                        // Moffstation - Begin
+                        if (accOffsetR + texture.Height > _sprite.GetLocalBounds((uid, sprite)).Height * EyeManager.PixelsPerMeter)
+                            break;
+                        // Moffstation - End
+
                         accOffsetR += texture.Height;
                         countR++;
                     }
                     yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float)(accOffsetR - proto.Offset) / EyeManager.PixelsPerMeter;
-                    xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float)texture.Width / EyeManager.PixelsPerMeter;
+                    xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float)(texture.Width - proto.OffsetHorizontal) / EyeManager.PixelsPerMeter;
 
                 }
 

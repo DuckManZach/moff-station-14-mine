@@ -9,6 +9,10 @@ borg-mind-removed = {CAPITALIZE($name)} shut off!
 borg-module-too-many = There's not enough room for another module...
 borg-module-duplicate = This module is already installed in this cyborg.
 borg-module-whitelist-deny = This module doesn't fit in this type of cyborg...
+borg-module-incompatible = This module isn't compatible with {THE($existing)}.
+
+borg-module-action-name = Activate {$moduleName}
+borg-module-action-description = Select the {$moduleName}, enabling you to use the tools it provides.
 
 borg-construction-guide-string = The cyborg limbs and torso must be attached to the endoskeleton.
 
@@ -18,6 +22,7 @@ borg-ui-no-brain = No brain present
 borg-ui-remove-battery = Remove
 borg-ui-modules-label = Modules:
 borg-ui-module-counter = {$actual}/{$max}
+borg-ui-self-provider-warning = [color=crimson]This chassis overrides brain laws![/color]
 
 # Transponder
 borg-transponder-disabled-popup = A brain shoots out the top of {$name}!
@@ -62,5 +67,3 @@ borg-type-medical-transponder = medical cyborg
 borg-type-service-name = Service
 borg-type-service-desc = Help out with a wide range of crew services, ranging from serving snacks and drinks to botany to entertainment.
 borg-type-service-transponder = service cyborg
-
-

@@ -69,10 +69,12 @@
       90: 0.7
       120: 0.5
   - type: Stamina
-    critThreshold: 200
+    baseCritThreshold: 200
   - type: Bloodstream
-    bloodReagent: FluorosulfuricAcid
-    bloodMaxVolume: 650
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: FluorosulfuricAcid
+        Quantity: 650
   - type: MeleeWeapon
     altDisarm: false
     angle: 0
@@ -81,7 +83,7 @@
     animation: WeaponArcBite
     damage:
       #groups:
-        #Brute: 6
+        #Piercing: 6
       types:
         Blunt: 2
         Slash: 10
@@ -97,6 +99,7 @@
       Dead:
         Base: dead
   - type: Puller
+    needsHands: false # Moffstation - even more Xeno buffs
   - type: Butcherable
     butcheringType: Spike
     spawned:
@@ -110,14 +113,15 @@
     description: ghost-role-information-xeno-description
     rules: ghost-role-information-xeno-rules
     raffle:
-      settings: default
+      settings: short # Moffstation - even more Xeno buffs
   - type: GhostTakeoverAvailable
   - type: TypingIndicator
     proto: alien
   - type: Temperature
+    currentTemperature: 310.15
+  - type: TemperatureDamage
     heatDamageThreshold: 360
     coldDamageThreshold: -150
-    currentTemperature: 310.15
   - type: Tag
     tags:
       - CannotSuicide
@@ -150,7 +154,7 @@
       #100: Dead
       300: Dead
   - type: Stamina
-    critThreshold: 300
+    baseCritThreshold: 300
   - type: SlowOnDamage
     speedModifierThresholds:
       #50: 0.7
@@ -201,7 +205,7 @@
   - type: MeleeWeapon
     damage:
       #groups:
-        #Brute: 6
+        #Slash: 6
       types:
         Blunt: 10
         Slash: 5
@@ -250,7 +254,7 @@
   - type: MeleeWeapon
     damage:
       #groups:
-        #Brute: 12
+        #Slash: 12
       types:
         Blunt: 10
         Slash: 25
@@ -297,7 +301,7 @@
     attackRate: 1.5
     damage:
       #groups:
-        #Brute: 10
+        #Slash: 10
      types:
        Slash: 20
        Structural: 20
@@ -339,7 +343,7 @@
     attackRate: 2
     damage:
       #groups:
-        #Brute: 5
+        #Slash: 5
       types:
         Blunt: 3
         Slash: 7
@@ -466,6 +470,7 @@
   - type: NpcFactionMember
     factions:
     - Xeno
+    - SimpleHostile
   - type: MeleeWeapon
     angle: 0
     animation: WeaponArcBite
@@ -562,10 +567,12 @@
   - type: ComplexInteraction
   - type: MobState
   - type: Stamina
-    critThreshold: 200
+    baseCritThreshold: 200
   - type: Bloodstream
-    bloodReagent: FluorosulfuricAcid
-    bloodMaxVolume: 300
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: FluorosulfuricAcid
+        Quantity: 300
   - type: MeleeWeapon
     altDisarm: false
     angle: 0
@@ -573,8 +580,8 @@
      collection: AlienClaw
     animation: WeaponArcBite
     damage:
-     groups:
-       Brute: 5
+      types:
+        Slash: 5
   - type: DamageStateVisuals
     states:
       Alive:
@@ -592,9 +599,10 @@
   - type: TypingIndicator
     proto: alien
   - type: Temperature
+    currentTemperature: 310.15
+  - type: TemperatureDamage
     heatDamageThreshold: 360
     coldDamageThreshold: -150
-    currentTemperature: 310.15
   - type: NoSlip
   - type: Perishable #Ummmm the acid kills a lot of the bacteria or something
     molsPerSecondPerUnitMass: 0.0005

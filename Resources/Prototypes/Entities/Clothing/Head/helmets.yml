@@ -255,6 +255,8 @@
     sprite: Clothing/Head/Helmets/templar.rsi
   - type: Clothing
     sprite: Clothing/Head/Helmets/templar.rsi
+  - type: Item
+    storedRotation: 0
   - type: IngestionBlocker
   - type: IdentityBlocker
   - type: HideLayerClothing
@@ -329,9 +331,9 @@
   description: An atmos fire helmet, able to keep the user cool in any situation.
   components:
   - type: Sprite
-    sprite: Clothing/Head/Helmets/atmos_firehelmet.rsi
+    sprite: _Moffstation/Clothing/Head/Helmets/atmos_firehelmet.rsi # Moffstation
   - type: Clothing
-    sprite: Clothing/Head/Helmets/atmos_firehelmet.rsi
+    sprite: _Moffstation/Clothing/Head/Helmets/atmos_firehelmet.rsi # Moffstation
     quickEquip: true
   - type: IngestionBlocker
   - type: TemperatureProtection
@@ -347,12 +349,15 @@
     tags:
     - WhitelistChameleon
     - FireHelmet
-    - CorgiWearable
   - type: HideLayerClothing
     layers:
       Hair: HEAD
       Snout: HEAD
   - type: BreathMask
+  - type: PointLight # Moffstation - Start
+    color: "LemonChiffon"
+    radius: 4
+    energy: 1 # Moffstation - End
 
 #Chitinous Helmet
 - type: entity
@@ -552,7 +557,7 @@
   - type: PointLight
     enabled: false
     radius: 1.4
-    energy: 1.4
+    energy: 2.5
     color: red
     netsync: false
     mask: /Textures/Effects/LightMasks/double_cone.png

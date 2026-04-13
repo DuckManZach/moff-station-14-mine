@@ -58,6 +58,7 @@
         toggleAction: ActionAGhostShowStationRecords
       enum.CommunicationsConsoleUiKey.Key:
         toggleAction: ActionAGhostShowCommunications
+  - type: NavMapWarp # Moffstation - Navigation map warp
   - type: CrewMonitoringConsole
   - type: GeneralStationRecordConsole
   - type: DeviceNetwork
@@ -71,6 +72,7 @@
     title: comms-console-announcement-title-station-ai
     color: "#5ed7aa"
   - type: ShowJobIcons
+  - type: ShowCrewIcons
   - type: DamagedSiliconAccent
     startPowerCorruptionAtCharIdx: 4
     maxPowerCorruptionAtCharIdx: 20
@@ -96,6 +98,7 @@
       enum.SiliconLawsUiKey.Key:
         type: SiliconLawBoundUserInterface
   - type: ShowJobIcons
+  - type: ShowCrewIcons
 
 # Ai
 - type: entity
@@ -241,12 +244,17 @@
     powerLoad: 500
   - type: ExtensionCableReceiver
   - type: Battery
+    # Very important:
+    # Disable networking to prevent the battery getting continuously dirtied every tick as it interacts with the power network.
+    # This can not be done by changing the charge rate as the power supply ramps up over time.
+    # This disables prediction for this battery.
+    netsync: false
     maxCharge: 300000
     startingCharge: 300000
   - type: ApcPowerReceiverBattery
     idleLoad: 500
     batteryRechargeRate: 1000
-    batteryRechargeEfficiency: 0 # Setting to zero until the light flickering issue associated with dynamic power loads is fixed 
+    batteryRechargeEfficiency: 0 # Setting to zero until the light flickering issue associated with dynamic power loads is fixed
   - type: StationAiCore
   - type: StationAiVision
   - type: InteractionOutline
@@ -315,7 +323,7 @@
       - StationAiCoreElectronics
   - type: StaticPrice
     price: 5000
-      
+
 # The job-ready version of an AI spawn.
 - type: entity
   id: PlayerStationAi
@@ -334,7 +342,7 @@
   description: An unfinished computer core for housing an artifical intelligence.
   components:
   - type: Anchorable
-    flags: 
+    flags:
     - Anchorable
   - type: Rotatable
   - type: Sprite
@@ -400,7 +408,7 @@
 # The actual brain inside the core
 - type: entity
   id: StationAiBrain
-  parent: PositronicBrain
+  parent: PositronicBrain # Moffstation - let them be ion'd!
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
   - type: Sprite
@@ -452,6 +460,13 @@
       state: ai_female
   - type: NameIdentifier
     group: StationAi
+  - type: ToggleableGhostRole
+    roleName: station-ai-ghost-role-name
+    roleDescription: station-ai-ghost-role-description
+    roleRules: ghost-role-information-silicon-rules
+    mindRoles:
+    - MindRoleGhostRoleSilicon
+    job: StationAi
 
 # Hologram projection that the AI's eye tracks.
 - type: entity
@@ -538,7 +553,7 @@
   - type: ContainerFill
     containers:
       borg_brain:
-        - PositronicBrain
+        - PositronicBrainSyndicate
       borg_module:
         - BorgModuleOperative
         - BorgModuleL6C
@@ -598,20 +613,21 @@
     - type: GhostTakeoverAvailable
 
 - type: entity
-  name: syndicate invasion borg spawner
-  id: PlayerBorgSyndicateInvasionGhostRoleSpawner
   parent: MarkerBase
+  id: PlayerBorgSyndicateInvasionGhostRoleSpawner
+  name: syndicate invasion borg spawner
   components:
   - type: Sprite
     layers:
       - state: red
       - sprite: Structures/Decoration/banner.rsi
         state: banner_syndicate
-  - type: RandomSpawner
-    prototypes:
-    - PlayerBorgSyndicateAssaultGhostRole
-    - PlayerBorgSyndicateAssaultGhostRole # Saboteurs are kinda like cyborg medics, we want less.
-    - PlayerBorgSyndicateSaboteurGhostRole
+  - type: EntityTableSpawner
+    table: !type:GroupSelector
+      children:
+      - id: PlayerBorgSyndicateAssaultGhostRole
+      - id: PlayerBorgSyndicateSaboteurGhostRole
+        weight: 0.5 # Saboteurs are kinda like cyborg medics, we want less.
 
 - type: entity
   parent: EngineeringBorgChassisDerelict
@@ -621,8 +637,9 @@
   - type: ContainerFill
     containers:
       borg_brain:
-      - PositronicBrain
+      - PositronicBrainIonStormed
       borg_module:
+      - BorgModulePrying
       - BorgModuleTool
       - BorgModuleFireExtinguisher
       - BorgModuleConstruction
@@ -659,8 +676,9 @@
   - type: ContainerFill
     containers:
       borg_brain:
-        - PositronicBrain
+        - PositronicBrainIonStormed
       borg_module:
+        - BorgModulePrying
         - BorgModuleTool
         - BorgModuleFireExtinguisher
   - type: ItemSlots
@@ -694,8 +712,9 @@
   - type: ContainerFill
     containers:
       borg_brain:
-      - PositronicBrain
+      - PositronicBrainIonStormed
       borg_module:
+      - BorgModulePrying
       - BorgModuleTool
       - BorgModuleFireExtinguisher
       - BorgModuleCleaning
@@ -731,8 +750,9 @@
   - type: ContainerFill
     containers:
       borg_brain:
-      - PositronicBrain
+      - PositronicBrainIonStormed
       borg_module:
+      - BorgModulePrying
       - BorgModuleTool
       - BorgModuleFireExtinguisher
       - BorgModuleChemical
@@ -769,8 +789,9 @@
   - type: ContainerFill
     containers:
       borg_brain:
-      - PositronicBrain
+      - PositronicBrainIonStormed
       borg_module:
+      - BorgModulePrying
       - BorgModuleTool #No fire extinguisher, traversal is better
       - BorgModuleMining
       - BorgModuleTraversal
@@ -806,7 +827,7 @@
   - type: ContainerFill
     containers:
       borg_brain:
-      - PositronicBrain
+      - PositronicBrainSyndicateIonStormed
       borg_module:
       - BorgModuleOperative
       - BorgModuleC20r

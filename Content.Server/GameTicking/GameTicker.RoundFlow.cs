@@ -9,6 +9,7 @@ using Content.Server.Roles;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
@@ -24,6 +25,13 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using Content.Shared._Goob.LastWords; // Goob Station - End of Round Screen
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.GameTicking
 {
@@ -32,6 +40,7 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly DiscordWebhook _discord = default!;
         [Dependency] private readonly RoleSystem _role = default!;
         [Dependency] private readonly ITaskManager _taskManager = default!;
+        [Dependency] private readonly DamageableSystem _damageable = default!; // Moffstation - Goob roundend info
 
         private static readonly Counter RoundNumberMetric = Metrics.CreateCounter(
             "ss14_round_number",
@@ -403,7 +412,9 @@ namespace Content.Server.GameTicking
                 }
                 else
                 {
-                    profile = HumanoidCharacterProfile.Random();
+                    var speciesToBlacklist =
+                        new HashSet<string>(_cfg.GetCVar(CCVars.ICNewAccountSpeciesBlacklist).Split(","));
+                    profile = HumanoidCharacterProfile.Random(speciesToBlacklist);
                 }
                 readyPlayerProfiles.Add(userId, profile);
             }
@@ -571,6 +582,27 @@ namespace Content.Server.GameTicking
 
                 var roles = _roles.MindGetAllRoleInfo(mindId);
 
+                // Goobstation - Start - Cool player manifest
+                var lastWords = "";
+                var mobState = MobState.Invalid;
+#pragma warning disable CS0618 // Type or member is obsolete // Moffstation - new API, I'm using it right
+                IReadOnlyDictionary<ProtoId<DamageGroupPrototype>, FixedPoint2>? damagePerGroup = null;
+#pragma warning restore CS0618 // Type or member is obsolete
+                if (TryComp<LastWordsComponent>(mindId, out var lastWordsComponent)
+                    && !TerminatingOrDeleted(entity))
+                {
+                    lastWords = lastWordsComponent.LastWords;
+
+                    if (TryComp<MobStateComponent>(entity, out var mobStateComp) && mobState is { } _)
+                        mobState = mobStateComp.CurrentState;
+
+                    if (entity is { } e)
+#pragma warning disable CS0618 // Type or member is obsolete // Moffstation - new damage API, we specifically wanna show this for grouping in the UI, which is what this method's obsolescence warns about.
+                        damagePerGroup = _damageable.GetDamagePerGroup(e);
+#pragma warning restore CS0618 // Type or member is obsolete
+                }
+                // Goobstation - End
+
                 var playerEndRoundInfo = new RoundEndMessageEvent.RoundEndPlayerInfo()
                 {
                     // Note that contentPlayerData?.Name sticks around after the player is disconnected.
@@ -587,7 +619,13 @@ namespace Content.Server.GameTicking
                     JobPrototypes = roles.Where(role => !role.Antagonist).Select(role => role.Prototype).ToArray(),
                     AntagPrototypes = roles.Where(role => role.Antagonist).Select(role => role.Prototype).ToArray(),
                     Observer = observer,
-                    Connected = connected
+                    Connected = connected,
+                    // Goob Station - End of Round Screen
+                    LastWords = lastWords,
+                    EntMobState = mobState,
+#pragma warning disable CS0618 // Type or member is obsolete // Moffstation Grouping in the UI
+                    DamagePerGroup = damagePerGroup ?? new Dictionary<ProtoId<DamageGroupPrototype>, FixedPoint2>(),
+#pragma warning restore CS0618 // Type or member is obsolete
                 };
                 listOfPlayerInfo.Add(playerEndRoundInfo);
             }
@@ -766,6 +804,22 @@ namespace Content.Server.GameTicking
 
             return true;
         }
+
+        // Moffstation - Start - SetCountdown Command
+        public bool SetCountdown(TimeSpan time)
+        {
+            if (_runLevel != GameRunLevel.PreRoundLobby) // must be in preround
+                return false;
+
+            _roundStartTime = _gameTiming.CurTime + time;
+            RaiseNetworkEvent(new TickerLobbyCountdownEvent(_roundStartTime, Paused));
+            _chatManager.DispatchServerAnnouncement(
+                Loc.GetString("game-ticker-set-countdown", ("seconds", time.TotalSeconds))
+            );
+
+            return true;
+        }
+        // Moffstation - End
 
         private void UpdateRoundFlow(float frameTime)
         {

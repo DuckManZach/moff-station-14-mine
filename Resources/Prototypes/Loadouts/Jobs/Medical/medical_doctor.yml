@@ -1,36 +1,4 @@
-# Senior Time
-- type: loadoutEffectGroup
-  id: SeniorPhysician
-  effects:
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobChemist
-      time: 21600 #6 hrs
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobMedicalDoctor
-      time: 21600 #6 hrs
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:DepartmentTimeRequirement
-      department: Medical
-      time: 216000 # 60 hrs
-
-# Other Timers
-
-- type: loadoutEffectGroup
-  id: MedicalHeadMirrorTimer
-  effects:
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobMedicalDoctor
-      time: 108000 #30 hrs
-
 # Head
-
 - type: loadout
   id: SeniorPhysicianBeret
   effects:
@@ -43,7 +11,7 @@
   id: MedicalHeadMirror
   effects:
   - !type:GroupLoadoutEffect
-    proto: MedicalHeadMirrorTimer
+    proto: MedicalJourneymanTimer
   equipment:
     head: ClothingHeadMirror
 
@@ -56,16 +24,19 @@
   id: BlueSurgeryCap
   equipment:
     head: ClothingHeadHatSurgcapBlue
+  groupBy: "medical doctor caps" # Moffstation
 
 - type: loadout
   id: GreenSurgeryCap
   equipment:
     head: ClothingHeadHatSurgcapGreen
+  groupBy: "medical doctor caps" # Moffstation
 
 - type: loadout
   id: PurpleSurgeryCap
   equipment:
     head: ClothingHeadHatSurgcapPurple
+  groupBy: "medical doctor caps" # Moffstation
 
 - type: loadout
   id: NurseHat
@@ -77,11 +48,13 @@
   id: MedicalDoctorJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitMedicalDoctor
+  groupBy: "medical doctor jumpsuits" # Moffstation
 
 - type: loadout
   id: MedicalDoctorJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtMedicalDoctor
+  groupBy: "medical doctor jumpskirts" # Moffstation
 
 - type: loadout
   id: SeniorPhysicianJumpsuit
@@ -90,6 +63,7 @@
     proto: SeniorPhysician
   equipment:
     jumpsuit: ClothingUniformJumpsuitSeniorPhysician
+  groupBy: "medical doctor jumpsuits" # Moffstation
 
 - type: loadout
   id: SeniorPhysicianJumpskirt
@@ -98,21 +72,25 @@
     proto: SeniorPhysician
   equipment:
     jumpsuit: ClothingUniformJumpskirtSeniorPhysician
+  groupBy: "medical doctor jumpskirts" # Moffstation
 
 - type: loadout
   id: MedicalBlueScrubs
   equipment:
     jumpsuit: UniformScrubsColorBlue
+  groupBy: "medical doctor scrubs" # Moffstation
 
 - type: loadout
   id: MedicalGreenScrubs
   equipment:
     jumpsuit: UniformScrubsColorGreen
+  groupBy: "medical doctor scrubs" # Moffstation
 
 - type: loadout
   id: MedicalPurpleScrubs
   equipment:
     jumpsuit: UniformScrubsColorPurple
+  groupBy: "medical doctor scrubs" # Moffstation
 
 # Back
 - type: loadout
@@ -169,25 +147,8 @@
     id: SeniorPhysicianPDA
   groupBy: "doctor roles" # Moffstation - Additional Roles
 
-# Gloves
-- type: loadout
-  id: NitrileGloves
-  equipment:
-    gloves: ClothingHandsGlovesNitrile
-
 #Masks
 - type: loadout
   id: SterileMask
   equipment:
     mask: ClothingMaskSterile
-
-#Eyewear
-- type: loadout
-  id: MedicalHud
-  equipment:
-    eyes: ClothingEyesHudMedical
-
-- type: loadout
-  id: MedicalEyePatchHud
-  equipment:
-    eyes: ClothingEyesEyepatchHudMedical

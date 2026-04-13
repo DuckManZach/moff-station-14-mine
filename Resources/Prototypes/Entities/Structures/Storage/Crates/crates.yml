@@ -333,6 +333,19 @@
     access: [["Command"]]
 
 - type: entity
+  parent: CrateBaseSecure
+  id: CrateSyndicateSecure
+  name: secure syndicate crate
+  description: A dark steel crate with red bands and a letter S embossed on the front.
+  components:
+  - type: Icon
+    sprite: Structures/Storage/Crates/syndicate_secure.rsi
+  - type: Sprite
+    sprite: Structures/Storage/Crates/syndicate_secure.rsi
+  - type: AccessReader
+    access: [["SyndicateAgent", "NuclearOperative"]]
+
+- type: entity
   parent: CrateGeneric
   id: CrateLivestock
   name: livestock crate
@@ -643,7 +656,7 @@
     access: [["Service"]]
 
 - type: entity
-  parent: CrateGeneric
+  parent: [ CrateGeneric , BaseHighlyIllegalContraband ] # Moffstation - Pirates!
   id: CratePirate
   name: pirate chest
   description: A space pirate chest, not for station lubbers.
@@ -671,7 +684,7 @@
     stateDoorClosed: crate_door
 
 - type: entity
-  parent: CratePirate
+  parent: CrateGeneric # Moffstation - break parenting off of Pirate Chest
   id: CrateToyBox
   name: toy box
   suffix: Empty
@@ -692,6 +705,12 @@
   - type: Icon
     sprite: Structures/Storage/Crates/toybox.rsi
     state: crate_icon
+  # Moffstation - Start - break parenting off of Pirate Chest
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateDoorOpen: crate_open
+    stateDoorClosed: crate_door
+  # Moffstation - End
 
 - type: entity
   parent: CrateGeneric
@@ -822,7 +841,7 @@
 - type: entity
   parent: CrateGenericSteel
   id: CrateSyndicate
-  name: Syndicate crate
+  name: syndicate crate
   description: A dark steel crate with red bands and a letter S embossed on the front.
   components:
   - type: Icon

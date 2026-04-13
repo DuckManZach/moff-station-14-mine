@@ -35,14 +35,9 @@ public sealed partial class StatusEffectComponent : Component
     /// <summary>
     /// If true, this status effect has been applied. Used to ensure that <see cref="StatusEffectAppliedEvent"/> only fires once.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    /// We actually don't want to network this, that way client can apply an effect it's receiving properly!
+    [DataField]
     public bool Applied;
-
-    /// <summary>
-    /// Offbrand - When the status effect started
-    /// </summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField, AutoNetworkedField]
-    public TimeSpan? StartedAt;
 
     /// <summary>
     /// Whitelist, by which it is determined whether this status effect can be imposed on a particular entity.
@@ -55,4 +50,10 @@ public sealed partial class StatusEffectComponent : Component
     /// </summary>
     [DataField]
     public EntityWhitelist? Blacklist;
+
+    /// <summary>
+    /// QoL function, returns total duration of this status effect.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan Duration => EndEffectTime == null ? TimeSpan.MaxValue : EndEffectTime.Value - StartEffectTime;
 }

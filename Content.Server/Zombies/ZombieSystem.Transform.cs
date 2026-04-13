@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Atmos.Components;
 using Content.Server.Body.Components;
@@ -13,12 +14,10 @@ using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
 using Content.Server.StationEvents.Components;
 using Content.Server.Speech.Components;
-using Content.Server.Temperature.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
-using Content.Shared.Chat;
 using Content.Shared.CombatMode;
 using Content.Shared.CombatMode.Pacification;
-using Content.Shared.Damage;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
@@ -38,13 +37,15 @@ using Content.Shared.Prying.Components;
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Ghost.Roles.Components;
+using Content.Shared.Humanoid.Markings;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Tag;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.Roles;
-using Content.Shared._Offbrand.Wounds; // Offbrand
+using Content.Shared.Temperature.Components;
+using Robust.Shared.Utility;
 
 namespace Content.Server.Zombies;
 
@@ -63,7 +64,7 @@ public sealed partial class ZombieSystem
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly GhostSystem _ghost = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private readonly SharedVisualBodySystem _visualBody = default!;
     [Dependency] private readonly IdentitySystem _identity = default!;
     [Dependency] private readonly ServerInventorySystem _inventory = default!;
     [Dependency] private readonly MindSystem _mind = default!;
@@ -78,8 +79,7 @@ public sealed partial class ZombieSystem
     private static readonly ProtoId<NpcFactionPrototype> ZombieFaction = "Zombie";
     private static readonly string MindRoleZombie = "MindRoleZombie";
     private static readonly List<ProtoId<AntagPrototype>> BannableZombiePrototypes = ["Zombie"];
-    private static readonly EntProtoId AddOnWoundableZombified = "AddOnWoundableZombified"; // Offbrand
-    private static readonly EntProtoId AddOnAnyZombified = "AddOnAnyZombified"; // Offbrand
+    internal static readonly HashSet<HumanoidVisualLayers> AdditionalZombieLayers = [HumanoidVisualLayers.Tail, HumanoidVisualLayers.HeadSide, HumanoidVisualLayers.HeadTop, HumanoidVisualLayers.Snout];
 
     /// <summary>
     /// Handles an entity turning into a zombie when they die or go into crit
@@ -147,39 +147,6 @@ public sealed partial class ZombieSystem
         RemComp<ComplexInteractionComponent>(target);
         RemComp<SentienceTargetComponent>(target);
 
-        // Begin Offbrand
-        if (RemComp<WoundableComponent>(target))
-        {
-            RemComp<HeartrateComponent>(target);
-            RemComp<HeartDefibrillatableComponent>(target);
-            RemComp<HeartStopOnHypovolemiaComponent>(target);
-            RemComp<HeartStopOnHighStrainComponent>(target);
-            RemComp<HeartStopOnBrainHealthComponent>(target);
-            RemComp<PainComponent>(target);
-            RemComp<HeartrateAlertsComponent>(target);
-            RemComp<ShockThresholdsComponent>(target);
-            RemComp<ShockAlertsComponent>(target);
-            RemComp<BrainDamageComponent>(target);
-            RemComp<BrainDamageOxygenationComponent>(target);
-            RemComp<BrainDamageThresholdsComponent>(target);
-            RemComp<BrainDamageOnDamageComponent>(target);
-            RemComp<HeartDamageOnDamageComponent>(target);
-            RemComp<MaximumDamageComponent>(target);
-            RemComp<CprTargetComponent>(target);
-            RemComp<Content.Server.Construction.Components.ConstructionComponent>(target);
-            RemComp<CryostasisFactorComponent>(target);
-            RemComp<UniqueWoundOnDamageComponent>(target);
-            RemComp<IntrinsicPainComponent>(target);
-            RemComp<LungDamageComponent>(target);
-            RemComp<LungDamageOnInhaledAirTemperatureComponent>(target);
-            RemComp<LungDamageAlertsComponent>(target);
-
-            var entProto = _protoManager.Index(AddOnWoundableZombified);
-            EntityManager.RemoveComponents(target, entProto.Components);
-            EntityManager.AddComponents(target, entProto.Components);
-        }
-        // End Offbrand
-
         //funny voice
         var accentType = "zombie";
         if (TryComp<ZombieAccentOverrideComponent>(target, out var accent))
@@ -192,7 +159,6 @@ public sealed partial class ZombieSystem
         var combat = EnsureComp<CombatModeComponent>(target);
         RemComp<PacifiedComponent>(target);
         _combat.SetCanDisarm(target, false, combat);
-        _combat.SetInCombatMode(target, true, combat);
 
         //This is the actual damage of the zombie. We assign the visual appearance
         //and range here because of stuff we'll find out later
@@ -225,27 +191,49 @@ public sealed partial class ZombieSystem
             _autoEmote.AddEmote(target, "ZombieGroan");
         }
 
-        //We have specific stuff for humanoid zombies because they matter more
-        if (TryComp<HumanoidAppearanceComponent>(target, out var huApComp)) //huapcomp
+        if (TryComp<BloodstreamComponent>(target, out var stream) && stream.BloodReferenceSolution is { } reagents)
+            zombiecomp.BeforeZombifiedBloodReagents = reagents.Clone();
+
+        if (_visualBody.TryGatherMarkingsData(target, null, out var profiles, out _, out var markings))
         {
-            //store some values before changing them in case the humanoid get cloned later
-            zombiecomp.BeforeZombifiedSkinColor = huApComp.SkinColor;
-            zombiecomp.BeforeZombifiedEyeColor = huApComp.EyeColor;
-            zombiecomp.BeforeZombifiedCustomBaseLayers = new(huApComp.CustomBaseLayers);
-            if (TryComp<BloodstreamComponent>(target, out var stream))
-                zombiecomp.BeforeZombifiedBloodReagent = stream.BloodReagent;
+            // TODO: My kingdom for ZombieSystem just using cloning system
+            zombiecomp.BeforeZombifiedProfiles = profiles;
+            zombiecomp.BeforeZombifiedMarkings = markings.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.ToDictionary(
+                    it => it.Key,
+                    it => it.Value.ShallowClone()));
 
-            _humanoidAppearance.SetSkinColor(target, zombiecomp.SkinColor, verify: false, humanoid: huApComp);
+            var zombifiedProfiles = profiles.ToDictionary(pair => pair.Key,
+                pair => pair.Value with { EyeColor = zombiecomp.EyeColor, SkinColor = zombiecomp.SkinColor });
+            _visualBody.ApplyProfiles(target, zombifiedProfiles);
 
-            // Messing with the eye layer made it vanish upon cloning, and also it didn't even appear right
-            huApComp.EyeColor = zombiecomp.EyeColor;
+            var newMarkings = markings.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.ToDictionary(
+                    it => it.Key,
+                    it => it.Value.ShallowClone()));
 
-            // this might not resync on clone?
-            _humanoidAppearance.SetBaseLayerId(target, HumanoidVisualLayers.Tail, zombiecomp.BaseLayerExternal, humanoid: huApComp);
-            _humanoidAppearance.SetBaseLayerId(target, HumanoidVisualLayers.HeadSide, zombiecomp.BaseLayerExternal, humanoid: huApComp);
-            _humanoidAppearance.SetBaseLayerId(target, HumanoidVisualLayers.HeadTop, zombiecomp.BaseLayerExternal, humanoid: huApComp);
-            _humanoidAppearance.SetBaseLayerId(target, HumanoidVisualLayers.Snout, zombiecomp.BaseLayerExternal, humanoid: huApComp);
+            foreach (var markingSet in newMarkings.Values)
+            {
+                foreach (var (layer, layerMarkings) in markingSet)
+                {
+                    if (!AdditionalZombieLayers.Contains(layer))
+                        continue;
 
+                    for (var i = 0; i < layerMarkings.Count; i++)
+                    {
+                        layerMarkings[i] = layerMarkings[i].WithColor(zombiecomp.SkinColor);
+                    }
+                }
+            }
+
+            _visualBody.ApplyMarkings(target, newMarkings);
+        }
+
+        //We have specific stuff for humanoid zombies because they matter more
+        if (HasComp<HumanoidProfileComponent>(target))
+        {
             //This is done here because non-humanoids shouldn't get baller damage
             melee.Damage = zombiecomp.DamageOnBite;
 
@@ -263,18 +251,11 @@ public sealed partial class ZombieSystem
         //The zombie gets the assigned damage weaknesses and strengths
         _damageable.SetDamageModifierSetId(target, "Zombie");
 
-        // Begin Offbrand
-        var allProto = _protoManager.Index(AddOnAnyZombified);
-        EntityManager.RemoveComponents(target, allProto.Components);
-        EntityManager.AddComponents(target, allProto.Components);
-        // End Offbrand
-
         //This makes it so the zombie doesn't take bloodloss damage.
         //NOTE: they are supposed to bleed, just not take damage
         _bloodstream.SetBloodLossThreshold(target, 0f);
         //Give them zombie blood
-        _bloodstream.ChangeBloodReagent(target, zombiecomp.NewBloodReagent);
-        _bloodstream.FlushChemicals(target, null, 100); // Offbrand
+        _bloodstream.ChangeBloodReagents(target, zombiecomp.NewBloodReagents);
 
         //This is specifically here to combat insuls, because frying zombies on grilles is funny as shit.
         _inventory.TryUnequip(target, "gloves", true, true);
@@ -288,21 +269,15 @@ public sealed partial class ZombieSystem
         _mind.MakeSentient(target);
 
         //Make the zombie not die in the cold. Good for space zombies
-        if (TryComp<TemperatureComponent>(target, out var tempComp))
+        if (TryComp<TemperatureDamageComponent>(target, out var tempComp))
             tempComp.ColdDamage.ClampMax(0);
 
         //Heals the zombie from all the damage it took while human
-        if (TryComp<DamageableComponent>(target, out var damageablecomp))
-            _damageable.SetAllDamage(target, damageablecomp, 0);
+        _damageable.ClearAllDamage(target);
         _mobState.ChangeMobState(target, MobState.Alive);
 
         _faction.ClearFactions(target, dirty: false);
         _faction.AddFaction(target, ZombieFaction);
-
-        // Begin Offbrand
-        var rejuv = new Content.Shared.Rejuvenate.RejuvenateEvent();
-        RaiseLocalEvent(target, rejuv);
-        // End Offbrand
 
         //gives it the funny "Zombie ___" name.
         _nameMod.RefreshNameModifiers(target);

@@ -121,6 +121,17 @@
   - type: Clothing
     sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/reporter.rsi
 
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtAnchorman
+  name: news anchor suit
+  description: To bring the station the news so they don't have to get it themselves.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/anchorman.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/anchorman.rsi
+
 # Prisoner
 - type: entity
   parent: ClothingUniformJumpskirtPrisonerUpstream
@@ -129,17 +140,33 @@
   description: A jumpskirt used for prisoners. It has suit sensors automatically enabled at all times.
   components:
   - type: Sprite
-    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/prisoner.rsi
-    layers: []
-  - type: Clothing
-    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/prisoner.rsi
-    clothingVisuals: {}
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    layers:
+    - state: icon
+      color: &color-orange "#db542e"
+    - state: professional-trinkets-icon
+    - state: color-trinkets-icon
+      color: &color-black "#3f3f3f"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left
+        color: *color-orange
       right:
       - state: inhand-right
+        color: *color-orange
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    clothingVisuals:
+      jumpsuit:
+      - state: equipped-INNERCLOTHING
+        color: *color-orange
+      - state: professional-trinkets-equipped-INNERCLOTHING
+      - state: color-trinkets-equipped-INNERCLOTHING
+        color: *color-black
+  - type: SuitSensor
+    controlsLocked: true
+    randomMode: false
   - type: Tag
     tags:
     - ClothMade
@@ -154,9 +181,30 @@
   description: A jumpskirt for the most crooked of crewmembers.
   components:
   - type: Sprite
-    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/prisonerstriped.rsi
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    layers:
+    - state: icon
+      color: &color-grey "#9b9b9b"
+    - state: professional-trinkets-icon
+    - state: color-trinkets-icon
+      color: *color-black
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: *color-grey
+      right:
+      - state: inhand-right
+        color: *color-grey
   - type: Clothing
-    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/prisonerstriped.rsi
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    clothingVisuals:
+      jumpsuit:
+      - state: equipped-INNERCLOTHING
+        color: *color-grey
+      - state: professional-trinkets-equipped-INNERCLOTHING
+      - state: color-trinkets-equipped-INNERCLOTHING
+        color: *color-black
   - type: SuitSensor
     controlsLocked: true
     randomMode: false
@@ -164,6 +212,7 @@
   - type: Tag
     tags:
     - ClothMade
+    - Recyclable
     - PrisonUniform
     - WhitelistChameleon
 
@@ -178,6 +227,17 @@
     sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/hopformal.rsi
   - type: Clothing
     sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/hopformal.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband]
+  id: ClothingUniformJumpskirtHoPFestive
+  name: head of personnel's festive skirt
+  description: A warm red jumpskirt under a blue vest and unique hood. The entire uniform is lined with comfortable fur keeping you well insulated.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/hopfestive.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/hopfestive.rsi
 
 # CMO
 - type: entity
@@ -236,3 +296,194 @@
     sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/qmvista.rsi
   - type: Clothing
     sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/qmvista.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband]
+  id: ClothingUniformJumpskirtQMCruiser
+  name: quartermaster's cruiser skirt
+  description: An outfit indicative of a quartermaster with experience piloting shuttles.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/qmcruiser.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/qmcruiser.rsi
+
+#Cargo
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtSeniorCargo
+  name: Senior Cargonian Jumpskirt
+  description: A resilient jumpskirt, issued to members of the Cargonian front.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/senior-cargo.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/senior-cargo.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtCourier
+  name: Courier Jumpskirt
+  description: A jumpskirt made for maximum mobility, feels like you've got on nothing at all.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/courier.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/courier.rsi
+
+# Detective
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband]
+  id: ClothingUniformJumpskirtDetSleuth
+  name: sleuth suit
+  description: An outfit for a sleuth who has just one more thing to tell you about.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/sleuth.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/sleuth.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband, ClothingUniformFoldableBase]
+  id: ClothingUniformJumpskirtDetInvestigator
+  name: Investigator Skirt
+  description: An outfit for an Ace Investigator in search of missing animals.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/investigator.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/investigator.rsi
+#RD
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband]
+  id: ClothingUniformJumpskirtRDRobo
+  name: research director's roboticist turtleneck
+  description: It's a turtleneck worn by those with a deep understanding of cyborgs and other artificial intelligences.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/rdrobo.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/rdrobo.rsi
+# Scientist
+- type: entity
+  parent: [ClothingUniformSkirtBase]
+  id: ClothingUniformJumpskirtMachinist
+  name: machinist jumpskirt
+  description: It's a slimming black with reinforced seams; great for mechanical work.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/machinist.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/machinist.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtScientistFormal
+  name: scientist's formal jumpskirt
+  description: A uniform for sophisticated scientists, best worn with its matching tie.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/scientist_formal.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/scientist_formal.rsi
+
+#engineering
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtSeniorAtmos
+  name: senior atmospherics jumpskirt
+  description: A sign of skill and prestige within the atmospherics department.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/senior_atmos.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/senior_atmos.rsi
+
+#Lawyer
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtProsecutorKarmic
+  name: karmic prosecutor suitskirt
+  description: A stylish cyan piece worn by prosecutors tired of foolish foolery of foolish fools.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/prosecutorkarmic.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/prosecutorkarmic.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtLawyerPsyched
+  name: psyched lawyer suitskirt
+  description: A stylish yellow piece worn by lawyers interested in psycho-analysing witness testimonies.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/lawyerpsyched.rsi
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/lawyerpsyched.rsi
+
+#Salvage
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtColorSalvage
+  name: salvage jumpskirt
+  description: A tasteful salvage jumpskirt that reminds you of the good old days of cargonia.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    layers:
+    - state: icon
+      color: &color-salvage "#93469b"
+    - state: basics-trinkets-icon
+    - state: color-trinkets-icon
+      color: &color-cargo "#e39e00"
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: *color-salvage
+      right:
+      - state: inhand-right
+        color: *color-salvage
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    clothingVisuals:
+      jumpsuit:
+      - state: equipped-INNERCLOTHING
+        color: *color-salvage
+      - state: basics-trinkets-equipped-INNERCLOTHING
+      - state: color-trinkets-equipped-INNERCLOTHING
+        color: *color-cargo
+
+#Janitor
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtColorCustodian
+  name: custodian jumpskirt
+  description: A Jumpskirt designed for custodians wanting to help the crew practice for the big game.
+  components:
+  - type: Sprite
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    layers:
+    - state: icon
+      color: *color-black
+    - state: professional-trinkets-icon
+    - state: color-trinkets-icon
+      color: &color-purple "#ac50e6"
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: *color-black
+      right:
+      - state: inhand-right
+        color: *color-black
+  - type: Clothing
+    sprite: _Moffstation/Clothing/Uniforms/Jumpskirt/jumpskirt.rsi
+    clothingVisuals:
+      jumpsuit:
+      - state: equipped-INNERCLOTHING
+        color: *color-black
+      - state: professional-trinkets-equipped-INNERCLOTHING
+      - state: color-trinkets-equipped-INNERCLOTHING
+        color: *color-purple

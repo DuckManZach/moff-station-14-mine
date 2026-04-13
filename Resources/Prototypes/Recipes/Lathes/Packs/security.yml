@@ -49,9 +49,6 @@
   - MagazinePistolSubMachineGunTopMountedEmpty
   - MagazineRifle
   - MagazineRifleEmpty
-  - MagazineShotgun
-  - MagazineShotgunEmpty
-  - MagazineShotgunSlug
   - SpeedLoaderMagnum
   - SpeedLoaderMagnumEmpty
 
@@ -142,3 +139,4 @@
   recipes:
   - WeaponDisabler
   - WeaponDisablerSMG
+  - ClothingHandsKnuckleDustersStun # Moffstation - Stun Knuckles are cool
