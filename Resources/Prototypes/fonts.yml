@@ -1,18 +1,18 @@
 - type: font
   id: Default
-  path: /Fonts/_Moffstation/Pixel-Operator/PixelOperator-Regular.ttf
+  path: /Fonts/_Moffstation/JetBrainsMono/JetBrainsMono-Regular.ttf
 
 - type: font
   id: DefaultItalic
-  path: /Fonts/_Moffstation/Pixel-Operator/PixelOperator-Italic.ttf
+  path: /Fonts/_Moffstation/JetBrainsMono/JetBrainsMono-Italic.ttf
 
 - type: font
   id: DefaultBold
-  path: /Fonts/_Moffstation/Pixel-Operator/PixelOperator-Bold.ttf
+  path: /Fonts/_Moffstation/JetBrainsMono/JetBrainsMono-Bold.ttf
 
 - type: font
   id: DefaultBoldItalic
-  path: /Fonts/_Moffstation/Pixel-Operator/PixelOperator-BoldItalic.ttf
+  path: /Fonts/_Moffstation/JetBrainsMono/JetBrainsMono-BoldItalic.ttf
 
 - type: font
   id: NotoSansDisplay
