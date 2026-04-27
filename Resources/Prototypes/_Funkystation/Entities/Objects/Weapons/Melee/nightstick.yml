@@ -34,7 +34,7 @@
       types:
         Blunt: 12
     activatedSoundOnHit:
-      collection: Nightstick
+      collection: BoxingHit # Moffstation - I like these sounds more
     activatedBluntStaminaDamageFactor: 2.5
   - type: ToggleableVisuals
     spriteLayer: extend
