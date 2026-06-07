@@ -37,3 +37,6 @@ trait-feeble-disability-desc = You are easy to shove around; the ideal bully tar
 
 trait-uncloneable-disability-name = Uncloneable
 trait-uncloneable-disability-desc = You are unable to be cloned by cloning pods.
+
+trait-synth-name = Synthetic
+trait-synth-desc = You are a biomechanical construct, who has been artificially created.

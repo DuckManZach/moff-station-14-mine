@@ -106,3 +106,37 @@
   - !type:AddCompsEffect
     components:
     - type: BlackAndWhiteOverlay
+
+#- type: trait
+#  id: Synth
+#  name: trait-synth-name
+#  description: trait-synth-desc
+#  category: Medical
+#  conditions:
+#  - !type:HasCompCondition
+#    component: Silicon
+#    invert: true
+#  - !type:HasCompCondition
+#    component: BorgChassis
+#    invert: true
+#    tooltip: trait-condition-borg-not
+#  effects:
+#  - !type:AddCompsEffect
+#    components:
+#    - type: EmpVulnerable
+#  - !type:OverrideCompsEffect
+#    components:
+#    - type: Bloodstream
+#      bloodReferenceSolution:
+#        reagents:
+#        - ReagentId: SynthBlood
+#          Quantity: 600
+#      # The base bloodloss healing stuff
+#      bloodlossDamage:
+#        types:
+#          Bloodloss: 0.5
+#      bloodlossHealDamage:
+#        types:
+#          Bloodloss: -1
+#    - type: TypingIndicator
+#      proto: robot
