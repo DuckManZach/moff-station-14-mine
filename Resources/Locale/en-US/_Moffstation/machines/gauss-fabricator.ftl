@@ -1,0 +1,11 @@
+gauss-fabricator-window-title = Gaussian Fabrication Unit
+gauss-fabricator-window-draw-rate = Draw Rate:
+gauss-fabricator-window-received = Received:
+gauss-fabricator-window-draw-level = Draw Level:
+gauss-fabricator-window-progress = Output Progress:
+gauss-fabricator-window-decrease-large = -10 kW
+gauss-fabricator-window-decrease-small = -1 kW
+gauss-fabricator-window-increase-small = +1 kW
+gauss-fabricator-window-increase-large = +10 kW
+gauss-fabricator-window-on = On
+gauss-fabricator-window-off = Off

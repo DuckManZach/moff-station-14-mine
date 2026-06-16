@@ -1,0 +1,61 @@
+- type: entity
+  id: GaussFabricator
+  parent: BaseMachine
+  name: gaussian fabrication unit
+  description: A high-voltage fabrication unit that channels raw HV current through precision electromagnetic coils, slowly crystallizing dense magnetic alloy as a byproduct. The hum is normal.
+  components:
+  - type: Sprite
+    sprite: Structures/Power/power.rsi
+    state: wiredmachine
+    snapCardinals: true
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: BatteryCharger
+    voltage: High
+  - type: PowerNetworkBattery
+    maxChargeRate: 10000
+    canDischarge: false
+  - type: Battery
+    maxCharge: 5000000
+    startingCharge: 0
+    netSyncEnabled: false
+  - type: LightningTarget
+    priority: 2
+  - type: AmbientSound
+    enabled: true
+    volume: -2
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/buzzing.ogg
+  - type: BatteryInterface
+    minChargeRate: 0
+    maxChargeRate: 150000
+  - type: GaussFabricator
+    outputPrototype: MoffRefinedConductorIngot
+  - type: ActivatableUI
+    key: enum.GaussFabricatorUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.GaussFabricatorUiKey.Key:
+        type: GaussFabricatorBoundUserInterface
+
+- type: entity
+  parent: BaseItem
+  id: MoffRefinedConductorIngot
+  name: gaussian hypermagnet
+  description: A dense ferromagnetic puck crystallized by the intense electromagnetic fields of a Gaussian Fabrication Unit. Highly sought after for its unusual magnetic properties.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver_3
+    color: "#9fc8e8"
+  - type: Item
+    size: Small
+    heldPrefix: silver
+    sprite: Objects/Materials/ingots.rsi
+  - type: StaticPrice
+    price: 200

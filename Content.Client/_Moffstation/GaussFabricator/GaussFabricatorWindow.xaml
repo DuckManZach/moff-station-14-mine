@@ -1,0 +1,77 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:moff="clr-namespace:Content.Client._Moffstation.GaussFabricator"
+    MinSize="300 200"
+    Resizable="False">
+    <BoxContainer
+        Margin="12 8"
+        Orientation="Vertical"
+        SeparationOverride="8">
+
+        <!-- Output progress -->
+        <BoxContainer Orientation="Vertical" SeparationOverride="4">
+            <Label
+                Text="{Loc 'gauss-fabricator-window-progress'}"
+                StyleClasses="highlight"/>
+            <ProgressBar Name="OutputProgressBar"
+                HorizontalExpand="True"
+                MaxValue="1"
+                MinValue="0"
+                SetHeight="22"
+                VerticalAlignment="Center"/>
+        </BoxContainer>
+
+        <!-- Draw rate level: received | gap to target | unused capacity -->
+        <BoxContainer Orientation="Vertical" SeparationOverride="4">
+            <GridContainer Columns="2">
+                <Label
+                    Text="{Loc 'gauss-fabricator-window-draw-rate'}"
+                    StyleClasses="highlight"
+                    HorizontalExpand="True"/>
+                <Label Name="DrawRateLabel" Text="0 W"/>
+                <Label
+                    Text="{Loc 'gauss-fabricator-window-received'}"
+                    StyleClasses="highlight"
+                    HorizontalExpand="True"/>
+                <Label Name="ReceivedLabel" Text="0 W"/>
+            </GridContainer>
+            <moff:PowerDrawBar Name="DrawLevelBar"
+                MinSize="0 22"
+                HorizontalExpand="True"/>
+        </BoxContainer>
+
+        <!-- Draw rate adjustment -->
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Name="DecreaseLargeButton"
+                Text="{Loc 'gauss-fabricator-window-decrease-large'}"
+                HorizontalExpand="True"
+                StyleClasses="OpenRight"/>
+            <Button Name="DecreaseSmallButton"
+                Text="{Loc 'gauss-fabricator-window-decrease-small'}"
+                HorizontalExpand="True"
+                StyleClasses="OpenBoth"/>
+            <Button Name="IncreaseSmallButton"
+                Text="{Loc 'gauss-fabricator-window-increase-small'}"
+                HorizontalExpand="True"
+                StyleClasses="OpenBoth"/>
+            <Button Name="IncreaseLargeButton"
+                Text="{Loc 'gauss-fabricator-window-increase-large'}"
+                HorizontalExpand="True"
+                StyleClasses="OpenLeft"/>
+        </BoxContainer>
+
+        <!-- On/off toggle -->
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Name="OnButton"
+                Text="{Loc 'gauss-fabricator-window-on'}"
+                StyleClasses="OpenRight"
+                HorizontalExpand="True"/>
+            <Button Name="OffButton"
+                Text="{Loc 'gauss-fabricator-window-off'}"
+                StyleClasses="OpenLeft"
+                HorizontalExpand="True"/>
+        </BoxContainer>
+
+    </BoxContainer>
+</controls:FancyWindow>
