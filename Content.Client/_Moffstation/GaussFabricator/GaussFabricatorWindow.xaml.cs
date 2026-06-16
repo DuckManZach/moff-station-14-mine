@@ -10,6 +10,8 @@ namespace Content.Client._Moffstation.GaussFabricator;
 [GenerateTypedNameReferences]
 public sealed partial class GaussFabricatorWindow : FancyWindow
 {
+    [Dependency] private ILocalizationManager _loc = null!;
+
     public event Action<float>? OnAdjustDrawRate;
     public event Action<bool>? OnToggle;
 
@@ -18,6 +20,7 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     public GaussFabricatorWindow()
     {
         RobustXamlLoader.Load(this);
+        IoCManager.InjectDependencies(this);
 
         DecreaseLargeButton.OnPressed += _ => OnAdjustDrawRate?.Invoke(-10_000f);
         DecreaseSmallButton.OnPressed += _ => OnAdjustDrawRate?.Invoke(-1_000f);
@@ -55,13 +58,8 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
         return Color.InterpolateBetween(Color.Lime, Color.Cyan, (t - 0.5f) * 2f);
     }
 
-    private static string FormatPower(float watts)
+    private string FormatPower(float value)
     {
-        return watts switch
-        {
-            >= 1_000_000f => $"{watts / 1_000_000f:F1} MW",
-            >= 1_000f => $"{watts / 1_000f:F1} kW",
-            _ => $"{watts:F0} W",
-        };
+        return _loc.GetString("battery-menu-power-value", ("value", value));
     }
 }

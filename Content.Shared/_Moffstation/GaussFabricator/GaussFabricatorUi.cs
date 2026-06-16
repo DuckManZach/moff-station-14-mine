@@ -20,7 +20,6 @@ public sealed class GaussFabricatorBuiState(
     public readonly float ConfiguredDrawRate = configuredDrawRate;
     public readonly float ReceivedPower = receivedPower;
     public readonly float MaxChargeRate = maxChargeRate;
-    /// <summary>Energy progress toward next output, 0–1.</summary>
     public readonly float Progress = progress;
     public readonly bool IsOn = isOn;
 }

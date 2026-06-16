@@ -1,8 +1,8 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Audio;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
+using Content.Server.Sound;
 using Content.Shared._Moffstation.GaussFabricator;
 using Content.Shared.Database;
 using Content.Shared.Power.Components;
@@ -17,8 +17,8 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
-    [Dependency] private AmbientSoundSystem _ambientSound = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private EmitSoundSystem _sound = default!;
 
     public override void Initialize()
     {
@@ -41,11 +41,9 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
         if (!TryComp<PowerNetworkBatteryComponent>(ent, out var pnb))
             return;
 
-        var oldRate = pnb.MaxChargeRate;
         pnb.MaxChargeRate = Math.Clamp(pnb.MaxChargeRate + args.Delta, ent.Comp.MinDrawRate, ent.Comp.MaxDrawRate);
 
-        if (pnb.MaxChargeRate != oldRate)
-            _adminLog.Add(LogType.Action, $"{ToPrettyString(args.Actor):actor} set draw rate to {pnb.MaxChargeRate} W on {ToPrettyString(ent):target}");
+        _adminLog.Add(LogType.Action, $"{ToPrettyString(args.Actor):actor} set draw rate to {pnb.MaxChargeRate} W on {ToPrettyString(ent):target}");
 
         UpdateUi(ent);
     }
@@ -59,7 +57,7 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
             return;
 
         pnb.Enabled = args.On;
-        _ambientSound.SetAmbience(ent.Owner, args.On);
+        _sound.SetEnabled(ent.Owner, args.On);
         _adminLog.Add(LogType.Action, $"{ToPrettyString(args.Actor):actor} toggled {ToPrettyString(ent):target} {(args.On ? "on" : "off")}");
         UpdateUi(ent);
     }
@@ -71,23 +69,23 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
         var query = EntityQueryEnumerator<GaussFabricatorComponent, PowerNetworkBatteryComponent, BatteryComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var fabricator, out var pnb, out var battery, out var xform))
         {
-            if (pnb.Enabled)
-            {
-                var received = pnb.CurrentReceiving;
-
-                if (battery.MaxCharge > 0f && _battery.GetCharge((uid, battery)) >= battery.MaxCharge)
-                {
-                    _battery.SetCharge((uid, battery), 0f);
-                    Spawn(fabricator.OutputPrototype, xform.Coordinates);
-                }
-
-                // Add waste heat proportional to power draw to the surrounding atmosphere.
-                if (received > 0f && _atmosphere.GetContainingMixture((uid, xform), excite: true) is { } mixture)
-                    _atmosphere.AddHeat(mixture, received * fabricator.HeatMultiplier * frameTime);
-            }
-
             if (_uiSystem.IsUiOpen(uid, GaussFabricatorUiKey.Key))
                 UpdateUi((uid, fabricator));
+
+            if (!pnb.Enabled)
+                continue;
+
+            var received = pnb.CurrentReceiving;
+
+            if (battery.MaxCharge > 0f && _battery.GetCharge((uid, battery)) >= battery.MaxCharge)
+            {
+                _battery.SetCharge((uid, battery), 0f);
+                Spawn(fabricator.OutputPrototype, xform.Coordinates);
+            }
+
+            // Add waste heat proportional to power draw to the surrounding atmosphere.
+            if (received > 0f && _atmosphere.GetContainingMixture((uid, xform), excite: true) is { } mixture)
+                _atmosphere.AddHeat(mixture, received * fabricator.HeatMultiplier * frameTime);
         }
     }
 

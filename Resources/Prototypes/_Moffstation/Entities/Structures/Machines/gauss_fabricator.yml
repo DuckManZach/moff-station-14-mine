@@ -30,11 +30,6 @@
     netSyncEnabled: false
   - type: LightningTarget
     priority: 2
-  - type: AmbientSound
-    enabled: true
-    range: 5
-    sound:
-      path: /Audio/Ambience/Objects/buzzing.ogg
   - type: GaussFabricator
     outputPrototype: MoffRefinedConductorIngot
     maxDrawRate: 250000
