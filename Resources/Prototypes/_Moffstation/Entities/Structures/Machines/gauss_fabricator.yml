@@ -1,3 +1,8 @@
+# Thingy that makes engi money
+# When the battery becomes full, it pops out a thingy that's worth money, and the capacity resets
+# right now at max (250KW) it takes 40 seconds to fill, and produces one thingy
+# Right now thats about 300 per minute per thing, seems reasonable enough!
+# TODO: See if this needs to be balanced
 - type: entity
   id: GaussFabricator
   parent: BaseMachine
@@ -20,32 +25,33 @@
     maxChargeRate: 10000
     canDischarge: false
   - type: Battery
-    maxCharge: 5000000
+    maxCharge: 10000000
     startingCharge: 0
     netSyncEnabled: false
   - type: LightningTarget
     priority: 2
   - type: AmbientSound
     enabled: true
-    volume: -2
     range: 5
     sound:
       path: /Audio/Ambience/Objects/buzzing.ogg
   - type: GaussFabricator
     outputPrototype: MoffRefinedConductorIngot
-    maxDrawRate: 150000
+    maxDrawRate: 250000
   - type: ActivatableUI
     key: enum.GaussFabricatorUiKey.Key
   - type: UserInterface
     interfaces:
       enum.GaussFabricatorUiKey.Key:
         type: GaussFabricatorBoundUserInterface
+  - type: StaticPrice
+    price: 2000
 
 - type: entity
   parent: BaseItem
   id: MoffRefinedConductorIngot
   name: gaussian hypermagnet
-  description: A dense ferromagnetic puck crystallized by the intense electromagnetic fields of a Gaussian Fabrication Unit. Highly sought after for its unusual magnetic properties.
+  description: A dense magnet crystallized by intense electromagnetic fields. Highly sought after for its unusual magnetic properties.
   components:
   - type: Sprite
     sprite: Objects/Materials/ingots.rsi
