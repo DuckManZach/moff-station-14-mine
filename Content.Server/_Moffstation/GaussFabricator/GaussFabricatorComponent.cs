@@ -16,4 +16,12 @@ public sealed partial class GaussFabricatorComponent : Component
     /// </summary>
     [DataField]
     public float HeatMultiplier = 0.05f;
+
+    /// <summary>Minimum draw rate players can configure via the UI, in watts.</summary>
+    [DataField]
+    public float MinDrawRate;
+
+    /// <summary>Maximum draw rate players can configure via the UI, in watts.</summary>
+    [DataField]
+    public float MaxDrawRate = 150000f;
 }

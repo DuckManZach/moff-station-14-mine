@@ -16,13 +16,10 @@ public sealed class PowerDrawBar : Control
     // Watts between each small notch.
     public float NotchInterval = 10_000f;
     // Every N small notches becomes a medium notch.
-    public int MediumNotchDivisor = 10;
-    // Every N small notches becomes a big notch.
-    public int BigNotchDivisor = 50;
+    public int MediumNotchDivisor = 5;
 
     public float SmallNotchHeight  = 0.15f;
     public float MediumNotchHeight = 0.35f;
-    public float BigNotchHeight    = 1.0f;
 
     // If the pixel distance between small notches falls below this, scale up by ScaleMultiplier.
     public int MinSmallNotchScreenDistance = 3;
@@ -92,9 +89,8 @@ public sealed class PowerDrawBar : Control
         {
             var x            = w / _maxRate * PixelWidth;
             var index        = (int) MathF.Round(w / NotchInterval);
-            var isBig        = index % BigNotchDivisor    == 0;
-            var isMedium     = !isBig && index % MediumNotchDivisor == 0;
-            var notchHeight  = (isBig ? BigNotchHeight : isMedium ? MediumNotchHeight : SmallNotchHeight) * PixelHeight;
+            var isMedium     = index % MediumNotchDivisor == 0;
+            var notchHeight  = (isMedium ? MediumNotchHeight : SmallNotchHeight) * PixelHeight;
 
             handle.DrawLine(new Vector2(x, PixelHeight), new Vector2(x, PixelHeight - notchHeight), NotchColor);
         }

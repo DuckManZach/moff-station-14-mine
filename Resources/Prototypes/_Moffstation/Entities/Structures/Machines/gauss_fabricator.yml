@@ -31,11 +31,9 @@
     range: 5
     sound:
       path: /Audio/Ambience/Objects/buzzing.ogg
-  - type: BatteryInterface
-    minChargeRate: 0
-    maxChargeRate: 150000
   - type: GaussFabricator
     outputPrototype: MoffRefinedConductorIngot
+    maxDrawRate: 150000
   - type: ActivatableUI
     key: enum.GaussFabricatorUiKey.Key
   - type: UserInterface
