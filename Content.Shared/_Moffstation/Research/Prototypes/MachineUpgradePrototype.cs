@@ -1,3 +1,4 @@
+using Content.Shared.Research.Prototypes;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Moffstation.Research.Prototypes;
@@ -24,4 +25,11 @@ public sealed partial class MachineUpgradePrototype : IPrototype
     /// </summary>
     [DataField]
     public HashSet<EntProtoId> UpgradedMachines = new();
+
+    /// <summary>
+    /// The technology that must be unlocked before this upgrade is available.
+    /// If null, the upgrade is always available.
+    /// </summary>
+    [DataField]
+    public ProtoId<TechnologyPrototype>? RequiredTechnology;
 }

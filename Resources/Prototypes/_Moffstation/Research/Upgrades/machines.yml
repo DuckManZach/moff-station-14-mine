@@ -1,3 +1,50 @@
+# Industrial
+
+- type: machineUpgrade
+  id: AutolatheUpgrade
+  name: autolathe upgrade
+  baseMachines:
+  - Autolathe
+  upgradedMachines:
+  - AutolatheHyperConvection
+  requiredTechnology: IndustrialEngineering
+
+- type: machineUpgrade
+  id: ProtolatheUpgrade
+  name: protolathe upgrade
+  baseMachines:
+  - Protolathe
+  upgradedMachines:
+  - ProtolatheHyperConvection
+  requiredTechnology: IndustrialEngineering
+
+- type: machineUpgrade
+  id: CircuitImprinterUpgrade
+  name: circuit imprinter upgrade
+  baseMachines:
+  - CircuitImprinter
+  upgradedMachines:
+  - CircuitImprinterHyperConvection
+  requiredTechnology: IndustrialEngineering
+
+- type: machineUpgrade
+  id: OreProcessorUpgrade
+  name: ore processor upgrade
+  baseMachines:
+  - OreProcessor
+  upgradedMachines:
+  - OreProcessorIndustrial
+  requiredTechnology: SalvageEquipment
+
+- type: machineUpgrade
+  id: SmesUpgrade
+  name: SMES upgrade
+  baseMachines:
+  - SMESBasic
+  upgradedMachines:
+  - SMESAdvanced
+  requiredTechnology: AdvancedPowercells
+
 - type: machineUpgrade
   id: RechargerUpgrades
   name: recharger upgrades
@@ -6,3 +53,66 @@
   - WeaponCapacitorRecharger
   upgradedMachines:
   - TurboItemRecharger
+  requiredTechnology: AdvancedPowercells
+
+# Atmospherics
+
+- type: machineUpgrade
+  id: ThermomachineFreezerUpgrade
+  name: freezer upgrade
+  baseMachines:
+  - GasThermoMachineFreezer
+  upgradedMachines:
+  - GasThermoMachineHellfireFreezer
+  requiredTechnology: AdvancedAtmospherics
+
+- type: machineUpgrade
+  id: ThermomachineHeaterUpgrade
+  name: heater upgrade
+  baseMachines:
+  - GasThermoMachineHeater
+  upgradedMachines:
+  - GasThermoMachineHellfireHeater
+  requiredTechnology: AdvancedAtmospherics
+
+# Power
+
+- type: machineUpgrade
+  id: PortableGeneratorJrPacmanUpgrade
+  name: Jr. PACMAN generator upgrade
+  baseMachines:
+  - PortableGeneratorJrPacman
+  upgradedMachines:
+  - PortableGeneratorPacman
+  requiredTechnology: PowerGeneration
+
+- type: machineUpgrade
+  id: PortableGeneratorPacmanUpgrade
+  name: PACMAN generator upgrade
+  baseMachines:
+  - PortableGeneratorPacman
+  upgradedMachines:
+  - PortableGeneratorSuperPacman
+  requiredTechnology: PowerGeneration
+
+# Science
+
+- type: machineUpgrade
+  id: AnomalyVesselUpgrade
+  name: anomaly vessel upgrade
+  baseMachines:
+  - MachineAnomalyVessel
+  upgradedMachines:
+  - MachineAnomalyVesselExperimental
+  requiredTechnology: AdvancedAnomalyResearch
+
+# Civilian
+
+- type: machineUpgrade
+  id: ReagentGrinderUpgrade
+  name: reagent grinder upgrade
+  baseMachines:
+  - KitchenReagentGrinder
+  upgradedMachines:
+  - ReagentGrinderIndustrial
+  requiredTechnology: Hydroponics

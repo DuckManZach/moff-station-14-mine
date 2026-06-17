@@ -5,6 +5,9 @@
   description: Your handy-dandy all-in-one upgrading tool.
   components:
   - type: MachineUpgrader
+    upgradeTime: 3
+    baseMachineCost:
+      Steel: 750
   - type: Sprite
     sprite: Objects/Tools/rcd.rsi
     state: icon
@@ -19,12 +22,6 @@
     interfaces:
       enum.RpedUiKey.Key:
         type: RPEDMenuBoundUserInterface
-  - type: MaterialStorage
-    whitelist:
-      tags:
-      - Sheet
-      - RawMaterial
-      - Ingot
   - type: FlatpackCreator
     baseMachineCost:
       Steel: 750
