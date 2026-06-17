@@ -7,6 +7,7 @@ news-read-program-name = Station news
 
 crew-manifest-program-name = Crew manifest
 crew-manifest-cartridge-loading = Loading ...
+crew-manifest-cartridge-loading-failed = Failed to load crew manifest!
 
 net-probe-program-name = NetProbe
 net-probe-scan = Scanned {$device}!
@@ -15,6 +16,9 @@ net-probe-label-address = Address
 net-probe-label-frequency = Frequency
 net-probe-label-network = Network
 
+# Moffstation - Begin
+log-probe-window-title = Log Probe
+# Moffstation - End
 log-probe-program-name = LogProbe
 log-probe-scan = Downloaded logs from {$device}!
 log-probe-label-time = Time

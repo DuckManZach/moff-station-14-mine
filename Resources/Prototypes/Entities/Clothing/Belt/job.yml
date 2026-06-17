@@ -43,8 +43,9 @@
       - TrayScanner
       - GasAnalyzer
       - HandLabeler
+      - LawProgrammer # Moffstation - Cyborg Programmation
   - type: ItemMapper
-    sprite: &BeltOverlay Clothing/Belt/belt_overlay.rsi
+    sprite: _Moffstation/Clothing/Belt/belt_overlay.rsi # Moffstation
     mapLayers:
       drill:
         whitelist:
@@ -135,13 +136,13 @@
       - WetFloorSign
       - HolosignProjector
       - Plunger
+      - TrashBagBlue
       - GoldenPlunger
       - WireBrush
-      components:
       - LightReplacer
-      - SmokeOnTrigger
+      - CleanerGrenade
   - type: ItemMapper
-    sprite: *BeltOverlay
+    sprite: &BeltOverlay "Clothing/Belt/belt_overlay.rsi"  # Moffstation
     mapLayers:
       bottle:
         whitelist:
@@ -151,10 +152,46 @@
         whitelist:
           tags:
           - Spray
-      wrench:
+      light_replacer:
         whitelist:
           tags:
-          - Wrench
+          - LightReplacer
+      trashbag:
+        whitelist:
+          tags:
+          - TrashBag
+      trashbag_blue:
+        whitelist:
+          tags:
+          - TrashBagBlue
+      wetfloorsign:
+        whitelist:
+          tags:
+          - WetFloorSign
+      soap:
+        whitelist:
+          tags:
+          - Soap
+      wire_brush:
+        whitelist:
+          tags:
+          - WireBrush
+      holosign:
+        whitelist:
+          tags:
+          - HolosignProjector
+      plunger:
+        whitelist:
+          tags:
+          - Plunger
+      golden_plunger:
+        whitelist:
+          tags:
+          - GoldenPlunger
+      cleaner_grenade:
+        whitelist:
+          tags:
+          - CleanerGrenade
   - type: Appearance
 
 - type: entity
@@ -292,9 +329,9 @@
   description: A belt used to hold kitchen knives and condiments for quick access.
   components:
   - type: Sprite
-    sprite: Clothing/Belt/chef.rsi
+    sprite: _Moffstation/Clothing/Belt/chef.rsi # Moffstation
   - type: Clothing
-    sprite: Clothing/Belt/chef.rsi
+    sprite: _Moffstation/Clothing/Belt/chef.rsi # Moffstation
   - type: Storage
     whitelist:
       tags:

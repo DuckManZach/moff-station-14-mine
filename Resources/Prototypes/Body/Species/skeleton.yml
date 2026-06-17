@@ -42,6 +42,7 @@
 - type: entity
   parent: BaseSpeciesAppearance
   id: AppearanceSkeletonPerson
+  categories: [ HideSpawnMenu ]
   name: skeletonperson appearance
   components:
   - type: Inventory
@@ -74,8 +75,9 @@
   name: Urist McBones
   components:
   - type: Damageable
-    damageContainer: BiologicalMetaphysical
     damageModifierSet: Skeleton
+  - type: Injurable
+    damageContainer: BiologicalMetaphysical
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:
@@ -100,6 +102,10 @@
     speedModifierThresholds:
       60: 0.9
       80: 0.7
+  # Moffstation - Start - Skeleton Drinking
+  - type: MessyDrinker
+    spillChance: 1
+  # Moffstation - End
   - type: Speech
     speechVerb: Skeleton
   - type: ZombieImmune
@@ -183,7 +189,7 @@
     messagePerceivedByOthers: hugging-success-generic-others
 
 - type: entity
-  parent: OrganBase
+  parent: OrganBaseOrganic
   id: OrganSkeletonPerson
   abstract: true
   suffix: SkeletonPerson
@@ -202,9 +208,15 @@
     markingData:
       group: Skeleton
 
+# Moffstation - Start - Skeleton Drinker
 - type: entity
-  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganSkeletonPersonExternal ]
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganSkeletonPersonExternal, OrganBaseStomach ]
   id: OrganSkeletonPersonTorso
+  components:
+  - type: Metabolizer
+    maxReagents: 0
+    stages: []
+  # Moffstation - End
 
 - type: entity
   parent: [ OrganBaseHead, OrganSkeletonPersonExternal ]

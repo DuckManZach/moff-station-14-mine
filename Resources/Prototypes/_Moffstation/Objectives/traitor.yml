@@ -1,16 +1,3 @@
-- type: entity
-  parent: BaseTraitorStealObjective
-  id: BigIronStealObjective
-  components:
-  - type: Objective
-    # HoS will have this on them a lot of the time so..
-    difficulty: 3
-  - type: NotJobRequirement
-    jobs: [ HeadOfSecurity ]
-  - type: StealCondition
-    stealGroup: WeaponRevolverBigIron
-    owner: job-name-hos
-
 # Open-ended
 
 # objective to disrupt a certain department
@@ -155,16 +142,8 @@
   - type: TargetObjective
     title: objective-condition-leave-card-on-person
   - type: PickRandomPerson
-  - type: HighValueTargetSelection
   - type: EscapeShuttleCondition
   - type: ObjectiveBlacklistRequirement
     blacklist:
       components:
       - SimpleObjective
-
-- type: entity
-  parent: BaseCMOStealObjective
-  id: ValkyrieHudStealObjective
-  components:
-  - type: StealCondition
-    stealGroup: ClothingEyesGlassesMedChem

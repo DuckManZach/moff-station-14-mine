@@ -856,3 +856,57 @@ CrateVendingMachineRestockGetmoreChocolateCorpFilled: VendingMachineRestockGetmo
 CrateVendingMachineRestockChangFilled: VendingMachineRestockChang
 CrateVendingMachineRestockDiscountDansFilled: VendingMachineRestockDiscountDans
 CrateVendingMachineRestockDonutFilled: VendingMachineRestockDonut
+
+# 2026-03-28
+# The great solutions YAML nuke
+FoodMeatSnail: MobSnail
+
+# Moffstation - 2026-04-10 - Scylla Updates from Harmony
+BarSignMcLiltens: BarSignPinkDogCafe
+BicaridineChemistryBottleHarmony: ChemistryBottleBicaridine
+ClothingHeadHatFedoraBlueHarmony: null
+ClothingHeadPyjamaNanotrasenBlue: null
+ClothingHeadWhiteBow: ClothingHeadHatHairFlowerWhite
+ClothingUniformJumpsuitPyjamaNanotrasenBlue: null
+DermalineChemistryBottleHarmony: ChemistryBottleDermaline
+DrinkThirstTrapGlass: DrinkWizardAleFull
+LockerQuarterMasterFilledNoSuit: LockerQuarterMasterFilled
+PlushieAvali: PlushieMoth
+PosterHarmonyAlwaysWatching: RandomPosterAny
+PosterHarmonyCan: RandomPosterAny
+PosterHarmonyDoNotGamble: RandomPosterAny
+PosterHarmonyMakeshiftClown: RandomPosterAny
+PosterHarmonyManOfWeh: RandomPosterAny
+PosterHarmonyMoney: RandomPosterAny
+PosterHarmonyWallMeat: RandomPosterAny
+RPD: RCD
+SuitStorageQM: CrateCargoLuxuryHardsuit
+
+# 2026-04-25
+CratePartsT3: null
+CratePartsT3T4: null
+CratePartsT4: null
+
+# Moffstation - 2026-06-07 - Elkridge Updates from Harmony
+TelecomServerFilledCargoOnly: TelecomServerFilledCargo
+TelecomServerFilledSalvage: null
+
+# Moffstation - 2026-06-09 - Dove Station Migrations
+IntercomSupplyCargo: IntercomSupply
+PosterHarmonyArnold: RandomPosterLegit
+PosterHarmonyEnrico: RandomPosterLegit
+PosterHarmonyFaded: RandomPosterLegit
+PosterHarmonyHarmony: PosterMoffsector
+PosterHarmonyMagicCandle: RandomPosterLegit
+PosterHarmonyMaintsSlasher: RandomPosterLegit
+PosterHarmonyMuhrinePropaganda: RandomPosterLegit
+PosterHarmonySmokeBreak: RandomPosterLegit
+PosterHarmonySpaceAsshole: RandomPosterLegit
+PosterHarmonySuperMatter: RandomPosterLegit
+PosterHarmonyWorkHard: RandomPosterLegit
+SecurityBola: Bola
+BookSOP: BookSpaceLaw
+
+# Moffstation - 2026-06-09
+DrinkAviationGlass: RussianMothroachGlass
+PosterHarmonySafetyLizz: RandomPosterLegit

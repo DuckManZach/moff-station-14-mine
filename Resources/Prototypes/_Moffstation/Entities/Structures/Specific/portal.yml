@@ -26,8 +26,9 @@
     falloff: 10.0
     netsync: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -55,6 +56,8 @@
   name: hell portal
   description: a portal letting loose the worst hell has to offer.
   components:
+  - type: WarpPoint
+    location: Hell Portal
   - type: SpawnEntityTableOnTrigger
     useMapCoords: true
     table: !type:AllSelector

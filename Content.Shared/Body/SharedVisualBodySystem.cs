@@ -14,10 +14,11 @@ namespace Content.Shared.Body;
 /// </summary>
 public abstract partial class SharedVisualBodySystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly MarkingManager _marking = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedScaleVisualsSystem _scaleVisuals = default!; // Moffstation - Height scaling
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private MarkingManager _marking = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+
+    [Dependency] private SharedScaleVisualsSystem _scaleVisuals = default!; // Moffstation - Height scaling
 
     public override void Initialize()
     {
@@ -28,6 +29,7 @@ public abstract partial class SharedVisualBodySystem : EntitySystem
         SubscribeLocalEvent<VisualOrganComponent, BodyRelayedEvent<ApplyOrganProfileDataEvent>>(OnVisualOrganApplyProfile);
         SubscribeLocalEvent<VisualOrganMarkingsComponent, BodyRelayedEvent<ApplyOrganMarkingsEvent>>(OnMarkingsOrganApplyMarkings);
         SubscribeLocalEvent<HumanoidProfileComponent, ApplyOrganProfileDataEvent>(OnApplyOrganProfileData); // Moffstation - Height scaling
+        SubscribeLocalEvent<VisualOrganComponent, ForceUpdateOrganVisualsEvent>(OnForceOrganUpdate);//Moffstation - Re-add Geras
 
         InitializeModifiers();
         InitializeInitial();
@@ -78,6 +80,14 @@ public abstract partial class SharedVisualBodySystem : EntitySystem
         ent.Comp.Data.Color = color;
         Dirty(ent);
     }
+
+    //Moffstation - Re-add Geras - Begin
+    private void OnForceOrganUpdate(Entity<VisualOrganComponent> ent, ref ForceUpdateOrganVisualsEvent args)
+    {
+        ent.Comp.Data.State = args.State;
+        Dirty(ent);
+    }
+    //Moffstation - End
 
     protected virtual void SetOrganAppearance(Entity<VisualOrganComponent> ent, PrototypeLayerData data)
     {
