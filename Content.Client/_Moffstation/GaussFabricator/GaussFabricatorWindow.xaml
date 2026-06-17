@@ -9,7 +9,6 @@
         Orientation="Vertical"
         SeparationOverride="8">
 
-        <!-- Output progress -->
         <BoxContainer Orientation="Vertical" SeparationOverride="4">
             <Label
                 Text="{Loc 'gauss-fabricator-window-progress'}"
@@ -22,7 +21,6 @@
                 VerticalAlignment="Center"/>
         </BoxContainer>
 
-        <!-- Draw rate level: received | gap to target | unused capacity -->
         <BoxContainer Orientation="Vertical" SeparationOverride="4">
             <GridContainer Columns="2">
                 <Label
@@ -41,27 +39,8 @@
                 HorizontalExpand="True"/>
         </BoxContainer>
 
-        <!-- Draw rate adjustment -->
-        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
-            <Button Name="DecreaseLargeButton"
-                Text="{Loc 'gauss-fabricator-window-decrease-large'}"
-                HorizontalExpand="True"
-                StyleClasses="OpenRight"/>
-            <Button Name="DecreaseSmallButton"
-                Text="{Loc 'gauss-fabricator-window-decrease-small'}"
-                HorizontalExpand="True"
-                StyleClasses="OpenBoth"/>
-            <Button Name="IncreaseSmallButton"
-                Text="{Loc 'gauss-fabricator-window-increase-small'}"
-                HorizontalExpand="True"
-                StyleClasses="OpenBoth"/>
-            <Button Name="IncreaseLargeButton"
-                Text="{Loc 'gauss-fabricator-window-increase-large'}"
-                HorizontalExpand="True"
-                StyleClasses="OpenLeft"/>
-        </BoxContainer>
+        <GridContainer Name="AdjustmentButtons" HorizontalExpand="True"/>
 
-        <!-- On/off toggle -->
         <BoxContainer Orientation="Horizontal" SeparationOverride="4">
             <Button Name="OnButton"
                 Text="{Loc 'gauss-fabricator-window-on'}"

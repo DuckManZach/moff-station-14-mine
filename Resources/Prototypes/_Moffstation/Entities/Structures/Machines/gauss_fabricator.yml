@@ -28,11 +28,18 @@
     maxCharge: 10000000
     startingCharge: 0
     netSyncEnabled: false
+  - type: AmbientSound
+    range: 10
+    sound:
+      path: /Audio/Ambience/Objects/buzzing.ogg
   - type: LightningTarget
     priority: 2
   - type: GaussFabricator
-    outputPrototype: MoffRefinedConductorIngot
-    maxDrawRate: 250000
+  - type: SpawnOnBatteryFull
+    proto: MoffRefinedConductorIngot
+  - type: AccessReader
+    access: [["Engineering"]]
+  - type: ActivatableUIRequiresAccess
   - type: ActivatableUI
     key: enum.GaussFabricatorUiKey.Key
   - type: UserInterface

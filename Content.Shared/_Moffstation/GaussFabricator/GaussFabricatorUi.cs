@@ -22,6 +22,21 @@ public sealed class GaussFabricatorBuiState(
     public readonly float MaxChargeRate = maxChargeRate;
     public readonly float Progress = progress;
     public readonly bool IsOn = isOn;
+
+    public override bool Equals(object? obj)
+    {
+        return obj is GaussFabricatorBuiState other
+            && ConfiguredDrawRate.Equals(other.ConfiguredDrawRate)
+            && ReceivedPower.Equals(other.ReceivedPower)
+            && MaxChargeRate.Equals(other.MaxChargeRate)
+            && Progress.Equals(other.Progress)
+            && IsOn == other.IsOn;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(ConfiguredDrawRate, ReceivedPower, MaxChargeRate, Progress, IsOn);
+    }
 }
 
 [Serializable, NetSerializable]
