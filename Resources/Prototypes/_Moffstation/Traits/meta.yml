@@ -1,0 +1,35 @@
+- type: trait
+  id: MarkedAsProtected
+  name: trait-marked-as-protected-name
+  description: trait-marked-as-protected-desc
+  category: Meta
+  cost: 1
+  conditions:
+  - !type:InDepartmentCondition
+    department: Command
+    invert: true
+  - !type:InDepartmentCondition
+    department: Security
+    invert: true
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: TargetObjectiveImmune
+
+- type: trait
+  id: NoParadoxClone
+  name: trait-no-paradox-clone-name
+  description: trait-no-paradox-clone-desc
+  category: Meta
+  cost: 1
+  conditions:
+  - !type:InDepartmentCondition
+    department: Command
+    invert: true
+  - !type:InDepartmentCondition
+    department: Security
+    invert: true
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: NoParadoxClone

@@ -1,0 +1,62 @@
+- type: trait
+  id: Deuteranopia
+  name: trait-deuteranopia-name
+  description: trait-deuteranopia-desc
+  category: Disabilities
+  cost: -1
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: DogVision
+
+- type: trait
+  id: UltraVision
+  name: trait-ultra-vision-name
+  description: trait-ultra-vision-desc
+  category: Disabilities
+  cost: 1
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: UltraVision
+
+- type: trait
+  id: ArmAmputeeLeft
+  name: trait-arm-amputee-left-name
+  description: trait-arm-amputee-left-desc
+  category: Disabilities
+  cost: -3
+  conditions:
+  - !type:HasCompCondition
+    component: Hands
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: Amputee
+      location: Left
+
+- type: trait
+  id: ArmAmputeeRight
+  name: trait-arm-amputee-right-name
+  description: trait-arm-amputee-right-desc
+  category: Disabilities
+  cost: -3
+  conditions:
+  - !type:HasCompCondition
+    component: Hands
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: Amputee
+      location: Right
+
+- type: trait
+  id: Dysgraphia
+  name: trait-dysgraphia-name
+  description: trait-dysgraphia-desc
+  category: Disabilities
+  cost: -1
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: BlockWriting

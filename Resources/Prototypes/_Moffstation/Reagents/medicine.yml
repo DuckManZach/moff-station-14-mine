@@ -1,0 +1,24 @@
+- type: reagent
+  id: Soretizone
+  name: reagent-name-soretizone
+  group: Medicine
+  desc: reagent-desc-soretizone
+  flavor: medicine
+  color: "#f0a030"
+  physicalDesc: reagent-physical-desc-granular
+  metabolisms:
+    Bloodstream:
+      effects:
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectPainNumbness
+        time: 90
+        type: Update
+
+- type: reagent
+  id: Neurozenium
+  name: reagent-name-neurozenium
+  group: Medicine
+  desc: reagent-desc-neurozenium
+  flavor: medicine
+  color: "#a0c8f0"
+  physicalDesc: reagent-physical-desc-translucent

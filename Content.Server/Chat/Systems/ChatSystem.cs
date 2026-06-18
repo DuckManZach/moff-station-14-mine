@@ -15,6 +15,7 @@ using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs.Systems;
+using Content.Shared._Moffstation.Traits.Components; // Moffstation - Hushed trait
 using Content.Shared.Players.RateLimiting;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
@@ -228,6 +229,11 @@ public sealed partial class ChatSystem : SharedChatSystem
             }
         }
         // Starlight - End
+
+        // Moffstation - Start - Hushed trait: force hushed entities to always whisper
+        if (desiredType == InGameICChatType.Speak && HasComp<HushedComponent>(source))
+            desiredType = InGameICChatType.Whisper;
+        // Moffstation - End
 
         // Otherwise, send whatever type.
         switch (desiredType)

@@ -1,0 +1,43 @@
+- type: trait
+  id: IrishAccent
+  name: trait-irish-accent-name
+  description: trait-irish-accent-desc
+  category: Accents
+  cost: 0
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: IrishAccent
+
+- type: trait
+  id: AnglishTung
+  name: trait-anglish-tung-name
+  description: trait-anglish-tung-desc
+  category: Accents
+  cost: 0
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: AnglishAccent
+
+- type: trait
+  id: SlavicAccent
+  name: trait-slavic-accent-name
+  description: trait-slavic-accent-desc
+  category: Accents
+  cost: 0
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: SlavicAccent
+
+- type: trait
+  id: Hushed
+  name: trait-hushed-name
+  description: trait-hushed-desc
+  category: Accents
+  cost: -1
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: Hushed

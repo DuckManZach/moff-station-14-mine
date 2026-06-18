@@ -1,0 +1,65 @@
+# Pill entities for Moffstation traits
+
+- type: entity
+  name: pill
+  suffix: Soretizone 5u
+  parent: Pill
+  id: PillSoretizone
+  components:
+  - type: Pill
+    pillType: 5
+  - type: Sprite
+    state: pill6
+  - type: Label
+    currentLabel: soretizone 5u
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Soretizone
+        Quantity: 5
+
+- type: entity
+  name: pill canister
+  parent: PillCanister
+  id: PillCanisterSoretizone
+  suffix: Soretizone 5u, 14
+  components:
+  - type: Label
+    currentLabel: soretizone 5u
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: PillSoretizone
+        amount: 14
+
+- type: entity
+  name: pill
+  suffix: Neurozenium 5u
+  parent: Pill
+  id: PillNeurozenium
+  components:
+  - type: Pill
+    pillType: 6
+  - type: Sprite
+    state: pill7
+  - type: Label
+    currentLabel: neurozenium 5u
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Neurozenium
+        Quantity: 5
+
+- type: entity
+  name: pill canister
+  parent: PillCanister
+  id: PillCanisterNeurozenium
+  suffix: Neurozenium 5u, 14
+  components:
+  - type: Label
+    currentLabel: neurozenium 5u
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: PillNeurozenium
+        amount: 14

@@ -1,5 +1,6 @@
 # Categories
 trait-category-misc = Miscellaneous
+trait-category-meta = Meta
 
 # Accents
 
@@ -40,3 +41,15 @@ trait-uncloneable-disability-desc = You are unable to be cloned by cloning pods.
 
 trait-synth-name = Synthetic
 trait-synth-desc = You are a biomechanical construct, who has been artificially created.
+
+trait-chronic-pain-name = Chronic Pain
+trait-chronic-pain-desc = You suffer from chronic pain that periodically overwhelms you, leaving you temporarily paralyzed. Soretizone can help manage symptoms.
+
+trait-unborgable-name = Unborgable
+trait-unborgable-desc = Your mind fundamentally resists borging. Your brain cannot be placed in a Man-Machine Interface.
+
+trait-redshirt-name = Redshirt
+trait-redshirt-desc = You are exceptionally frail. You die at 100 points of damage instead of the normal 200.
+
+trait-depression-name = Depression
+trait-depression-desc = You suffer from clinical depression. There is no direct mechanical effect, but your doctor has helpfully pre-prescribed some medication.

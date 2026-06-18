@@ -1,0 +1,12 @@
+- type: trait
+  id: Addicted
+  name: trait-addicted-name
+  description: trait-addicted-desc
+  category: Mental
+  cost: -1
+  effects:
+  - !type:AddCompsEffect
+    components:
+    - type: AddictedTrait
+  - !type:SpawnItemInHandEffect
+    item: Cigarette

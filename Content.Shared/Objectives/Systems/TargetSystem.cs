@@ -2,6 +2,7 @@
 using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Filters;
+using Content.Shared._Moffstation.Traits.Components; // Moffstation - MarkedAsProtected trait
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Random;
@@ -61,6 +62,11 @@ public sealed partial class TargetSystem : EntitySystem
             // the player has to be alive
             if (!_mind.TryGetMind(uid, out var mind, out var mindComp) || mind == exclude || !_mobState.IsAlive(uid, mobState))
                 continue;
+
+            // Moffstation - Start - MarkedAsProtected trait: skip entities immune to objective targeting
+            if (HasComp<TargetObjectiveImmuneComponent>(uid))
+                continue;
+            // Moffstation - End
 
             allHumans.Add((mind, mindComp));
         }

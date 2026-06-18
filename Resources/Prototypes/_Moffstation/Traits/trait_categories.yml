@@ -1,4 +1,10 @@
 - type: traitCategory
+  id: Meta
+  name: trait-category-meta
+  priority: 50
+  accentColor: yellow  # Green
+
+- type: traitCategory
   id: Misc
   name: trait-category-misc
   priority: 10000

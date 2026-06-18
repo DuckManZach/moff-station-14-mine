@@ -3,6 +3,7 @@ using Content.Server.Cloning;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Medical.SuitSensors;
 using Content.Server.Objectives.Components;
+using Content.Shared._Moffstation.Traits.Components; // Moffstation - NoParadoxClone trait
 using Content.Shared._Starlight.CollectiveMind; // Starlight - Collective Minds
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Gibbing.Components;
@@ -61,6 +62,10 @@ public sealed partial class ParadoxCloneRuleSystem : GameRuleSystem<ParadoxClone
         {
             // get possible targets
             var allAliveHumanoids = _target.GetAliveHumans();
+
+            // Moffstation - Start - NoParadoxClone trait: filter out entities that cannot be paradox cloned
+            allAliveHumanoids.RemoveWhere(mind => mind.Comp.OwnedEntity is { } entity && HasComp<NoParadoxCloneComponent>(entity));
+            // Moffstation - End
 
             // we already checked when starting the gamerule, but someone might have died since then.
             if (allAliveHumanoids.Count == 0)

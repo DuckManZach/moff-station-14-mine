@@ -21,22 +21,35 @@
   - TemperatureDamage
   - TemperatureSpeed
   # traits
+  - AddictedTrait # Moffstation - Addicted trait
+  - Amputee # Moffstation - ArmAmputee traits
   - BlackAndWhiteOverlay
+  - BlockWriting # Moffstation - Dysgraphia trait
+  - ChronicPain # Moffstation - ChronicPain trait
   - Clumsy
   - DisarmProne # Moffstation - Add feeble trait
+  - DogVision # Moffstation - Deuteranopia trait
+  - Hushed # Moffstation - Hushed trait
   - ImpairedMobility
   # - LegsParalyzed (you get healed)
   - LightweightDrunk
   - Muted
   - Narcolepsy
+  - NoParadoxClone # Moffstation - NoParadoxClone trait
   - Pacified
   - Paracusia
   - PermanentBlindness
   - Snoring
+  - TargetObjectiveImmune # Moffstation - MarkedAsProtected trait
+  - Unborgable # Moffstation - Unborgable trait
   - Uncloneable # Moffstation - Add uncloneable (wait, how are clones supposed to get uncloneable??)
   - Unrevivable
+  - UltraVision # Moffstation - UltraVision trait
   # accents
   - Accentless
+  - AnglishAccent # Moffstation - AnglishTung trait
+  - IrishAccent # Moffstation - IrishAccent trait
+  - SlavicAccent # Moffstation - SlavicAccent trait
   - BackwardsAccent
   - BarkAccent
   - BleatingAccent
