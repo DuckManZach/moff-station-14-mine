@@ -59,12 +59,10 @@ entities:
     - type: MetaData
     - type: Transform
     - type: Map
-    - type: PhysicsMap
     - type: Broadphase
     - type: OccluderTree
     - type: LoadedMap
     - type: GridTree
-    - type: MovedGrids
   - uid: 6
     components:
     - type: MetaData
@@ -39920,7 +39918,6 @@ entities:
     - links:
       - 13053
       type: DeviceLinkSink
-    - type: ActiveConveyor
   - uid: 5435
     components:
     - rot: -1.5707963267948966 rad
@@ -66760,7 +66757,6 @@ entities:
       type: Transform
     - powerLoad: 0
       type: ApcPowerReceiver
-    - type: Timer
   - uid: 8645
     components:
     - rot: 1.5707963267948966 rad
@@ -67621,7 +67617,6 @@ entities:
       type: Transform
     - powerLoad: 0
       type: ApcPowerReceiver
-    - type: Timer
   - uid: 10761
     components:
     - rot: 1.5707963267948966 rad
@@ -72931,7 +72926,6 @@ entities:
         5598:
         - Pressed: Toggle
       type: DeviceLinkSource
-    - type: ItemCooldown
   - uid: 5600
     components:
     - rot: -1.5707963267948966 rad
@@ -73020,7 +73014,6 @@ entities:
         8383:
         - Pressed: Toggle
       type: DeviceLinkSource
-    - type: ItemCooldown
   - uid: 13039
     components:
     - pos: -2.5,-4.5
@@ -73038,7 +73031,6 @@ entities:
         13038:
         - Pressed: Toggle
       type: DeviceLinkSource
-    - type: ItemCooldown
   - uid: 13040
     components:
     - rot: 3.141592653589793 rad
@@ -73073,7 +73065,6 @@ entities:
         13024:
         - Pressed: Toggle
       type: DeviceLinkSource
-    - type: ItemCooldown
   - uid: 13041
     components:
     - pos: 12.5,10.5
@@ -73089,7 +73080,6 @@ entities:
         13042:
         - Pressed: Toggle
       type: DeviceLinkSource
-    - type: ItemCooldown
   - uid: 13045
     components:
     - rot: 1.5707963267948966 rad
@@ -73139,7 +73129,6 @@ entities:
         13048:
         - Pressed: Toggle
       type: DeviceLinkSource
-    - type: ItemCooldown
   - uid: 13052
     components:
     - pos: -53.5,-30.5
