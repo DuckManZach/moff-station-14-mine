@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Client.Parallax.Data;
+using Content.Shared._Moffstation.Parallax;
 using Content.Shared.CCVar;
 using Nett;
 using Robust.Client.Graphics;

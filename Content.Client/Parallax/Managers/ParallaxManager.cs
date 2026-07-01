@@ -1,10 +1,13 @@
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Client.Parallax.Data;
+using Content.Client.IoC;
+using Content.Client.Resources;
 using Content.Shared.CCVar;
-using Robust.Shared.Prototypes;
+using Content.Shared._Moffstation.Parallax;
+using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Parallax.Managers;
 
@@ -12,7 +15,7 @@ public sealed partial class ParallaxManager : IParallaxManager
 {
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
-    [Dependency] private IDependencyCollection _deps = null!;
+    [Dependency] private GeneratedParallaxCache _generatedCache = null!;
 
     private ISawmill _sawmill = Logger.GetSawmill("parallax");
 
@@ -50,17 +53,13 @@ public sealed partial class ParallaxManager : IParallaxManager
         if (_parallaxesLQ.Remove(name, out var layers))
         {
             foreach (var layer in layers)
-            {
-                layer.Config.Texture.Unload(_deps);
-            }
+                UnloadLayer(layer.Config.Texture);
         }
 
         if (_parallaxesHQ.Remove(name, out layers))
         {
             foreach (var layer in layers)
-            {
-                layer.Config.Texture.Unload(_deps);
-            }
+                UnloadLayer(layer.Config.Texture);
         }
     }
 
@@ -121,9 +120,7 @@ public sealed partial class ParallaxManager : IParallaxManager
             _sawmill.Verbose($"Loading parallax {name} cancelled");
 
             foreach (var loadedLayer in loadedLayers)
-            {
-                loadedLayer.Config.Texture.Unload(_deps);
-            }
+                UnloadLayer(loadedLayer.Config.Texture);
         }
         catch (Exception ex)
         {
@@ -153,7 +150,7 @@ public sealed partial class ParallaxManager : IParallaxManager
     {
         var prepared = new ParallaxLayerPrepared()
         {
-            Texture = await config.Texture.GenerateTexture(cancel),
+            Texture = await GenerateTexture(config.Texture, cancel),
             Config = config
         };
 
@@ -161,5 +158,20 @@ public sealed partial class ParallaxManager : IParallaxManager
 
         return prepared;
     }
-}
 
+    private async Task<Texture> GenerateTexture(IParallaxTextureSource source, CancellationToken cancel)
+    {
+        return source switch
+        {
+            ImageParallaxTextureSource img => StaticIoC.ResC.GetTexture(img.Path),
+            GeneratedParallaxTextureSource gen => await _generatedCache.Load(gen.Identifier, gen.ParallaxConfigPath, cancel),
+            _ => throw new NotSupportedException($"Unknown parallax texture source type: {source.GetType().Name}")
+        };
+    }
+
+    private void UnloadLayer(IParallaxTextureSource source)
+    {
+        if (source is GeneratedParallaxTextureSource gen)
+            _generatedCache.Unload(gen.Identifier);
+    }
+}

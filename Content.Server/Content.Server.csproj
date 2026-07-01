@@ -11,6 +11,9 @@
   <Import Project="../MSBuild/Content.props" />
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
+    <!-- Moffstation - Begin -->
+    <PackageReference Include="SixLabors.ImageSharp" />
+    <!-- Moffstation - End -->
     <PackageReference Include="NetCord" />
     <PackageReference Include="prometheus-net" />
     <PackageReference Include="Microsoft.Extensions.ObjectPool" />

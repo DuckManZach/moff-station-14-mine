@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Client.Parallax.Data;
+using Content.Shared._Moffstation.Parallax;
 using Content.Client.Parallax.Managers;
 using Content.Shared.Parallax;
 using Robust.Client.Graphics;
