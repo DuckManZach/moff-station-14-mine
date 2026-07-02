@@ -63,9 +63,10 @@ namespace Content.Client.Atmos.UI
         // Moffstation - Begin (filter multiple gases)
         public void SetFilteredGases(IEnumerable<Gas> filtered)
         {
-            foreach (var gas in filtered)
+            var filteredSet = filtered as HashSet<Gas> ?? filtered.ToHashSet();
+            foreach (var (gas, button) in _gasButtons)
             {
-                _gasButtons[gas].Pressed = true;
+                button.Pressed = filteredSet.Contains(gas);
             }
         }
         // Moffstation - End

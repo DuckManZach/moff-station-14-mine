@@ -30,6 +30,11 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         [Dependency] private SharedPopupSystem _popupSystem = default!;
         [Dependency] private NodeContainerSystem _nodeContainer = default!;
 
+        // Moffstation - Begin (filter multiple gases)
+        private static readonly Gas[] _allGases = Enum.GetValues<Gas>();
+        private readonly GasMixture _transferBuffer = new();
+        // Moffstation - End
+
         public override void Initialize()
         {
             base.Initialize();
@@ -50,7 +55,10 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         {
             // Moffstation - Begin (filter multiple gases)
             if (filter.FilteredGas is {} filteredGas)
+            {
                 filter.FilteredGases.Add(filteredGas);
+                filter.FilteredGas = null;
+            }
             // Moffstation - End
             UpdateAppearance(uid, filter);
         }
@@ -77,7 +85,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
             var removed = inletNode.Air.RemoveVolume(transferVol);
 
             // Moffstation - Begin (filter multiple gases)
-            var passingGasses = Enum.GetValues<Gas>().Except(filter.FilteredGases).ToHashSet();
+            var passingGasses = _allGases.Except(filter.FilteredGases).ToHashSet(); // Moffstation - _allGases cached to avoid per-tick reflection
 
             var success = false;
             success |= TryTransfer(removed, filter.FilteredGases, filterNode.Air);
@@ -126,7 +134,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
                 return;
 
             _userInterfaceSystem.SetUiState(uid, GasFilterUiKey.Key,
-                new GasFilterBoundUserInterfaceState(MetaData(uid).EntityName, filter.TransferRate, filter.Enabled, filter.FilteredGases)); // Moffstation - filter multiple gases
+                new GasFilterBoundUserInterfaceState(MetaData(uid).EntityName, filter.TransferRate, filter.Enabled, new HashSet<Gas>(filter.FilteredGases))); // Moffstation - filter multiple gases
         }
 
         private void UpdateAppearance(EntityUid uid, GasFilterComponent? filter = null)
@@ -160,7 +168,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         {
             if (!Enum.IsDefined(args.Gas))
             {
-                Log.Warning($"{ToPrettyString(ent.Owner)} received GasFilterSelectGasMessage with an invalid ID: {args.Gas}");
+                Log.Warning($"{ToPrettyString(ent.Owner)} received GasFilterToggleGasMessage with an invalid ID: {args.Gas}");
                 return;
             }
 
@@ -227,15 +235,17 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
             if (transferredMoles <= Atmospherics.GasMinMoles)
                 return false;
 
-            var transferredMixture = new GasMixture { Temperature = source.Temperature };
+            // Moffstation - reuse _transferBuffer to avoid per-call allocation
+            _transferBuffer.Clear();
+            _transferBuffer.Temperature = source.Temperature;
             foreach (var gas in gasses)
             {
                 var value = (source.GetMoles(gas) / availableMoles) * transferredMoles;
-                transferredMixture.SetMoles(gas, value);
+                _transferBuffer.SetMoles(gas, value);
                 source.AdjustMoles(gas, -value);
             }
 
-            _atmosphereSystem.Merge(target, transferredMixture);
+            _atmosphereSystem.Merge(target, _transferBuffer);
             return true;
         }
         // Moffstation - End
