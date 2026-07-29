@@ -20,7 +20,7 @@
                 <Control Name="DefaultState" VerticalExpand="True">
                     <BoxContainer Name="TopLeft" Orientation="Vertical">
                         <!-- Left Top Panel -->
-                        <PanelContainer StyleClasses="BackgroundPanel" HorizontalAlignment="Left" Name="LeftSideTop"
+                        <PanelContainer StyleClasses="MoffLobbyCard" HorizontalAlignment="Left" Name="LeftSideTop"
                                         VerticalAlignment="Top">
                             <BoxContainer Orientation="Vertical" HorizontalAlignment="Center" MaxWidth="800">
                                 <info:LinkBanner Name="LinkBanner" VerticalExpand="false" HorizontalAlignment="Center"
@@ -58,7 +58,7 @@
                     <!-- Left Bot Panel -->
                     <BoxContainer Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                         <info:DevInfoBanner Name="DevInfoBanner" VerticalExpand="false" Margin="3 3 3 3" />
-                        <PanelContainer StyleClasses="BackgroundPanel" Margin="3 3 3 3">
+                        <PanelContainer StyleClasses="MoffLobbyCard" Margin="3 3 3 3">
                             <BoxContainer Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3 3 3 3">
                                 <RichTextLabel Name="LobbySong" Access="Public" HorizontalAlignment="Left" />
                                 <RichTextLabel Name="LobbyBackground" Access="Public" HorizontalAlignment="Left" />
@@ -71,13 +71,13 @@
                 <Control Access="Public" Visible="False" Name="CharacterSetupState" VerticalExpand="True" />
             </BoxContainer>
             <!-- Right Panel -->
-            <PanelContainer Name="RightSide" Access="Public" StyleClasses="BackgroundPanel" HorizontalAlignment="Right" VerticalExpand="True"
+            <PanelContainer Name="RightSide" Access="Public" StyleClasses="MoffLobbyRoot" HorizontalAlignment="Right" VerticalExpand="True"
                             VerticalAlignment="Stretch">
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                     <!-- Top row -->
                     <BoxContainer Orientation="Horizontal" MinSize="0 40" Name="HeaderContainer" Access="Public"
                                   SeparationOverride="4">
-                        <Label Name="ServerName" Access="Public" StyleClasses="LabelHeadingBigger" VAlign="Center"
+                        <Label Name="ServerName" Access="Public" StyleClasses="MoffLobbyTitle" VAlign="Center"
                                HorizontalExpand="True" HorizontalAlignment="Center" />
                     </BoxContainer>
                     <!-- Gold line -->
@@ -85,6 +85,15 @@
                     <controls:HSpacer Spacing="10" />
                     <!-- Voting & misc button bar -->
                     <BoxContainer Orientation="Horizontal" MinSize="0 40" HorizontalAlignment="Right">
+                        <!-- Moff Start - Stats and admin remarks moved here from the customization menu -->
+                        <Button Name="StatsButton"
+                                Text="{Loc 'character-setup-gui-character-setup-stats-button'}"
+                                StyleClasses="ButtonBig" />
+                        <cc:CommandButton Name="AdminRemarksButton"
+                                          Command="adminremarks"
+                                          Text="{Loc 'character-setup-gui-character-setup-adminremarks-button'}"
+                                          StyleClasses="ButtonBig" />
+                        <!-- Moff end -->
                         <Button Name="AHelpButton" Access="Public" Text="{Loc 'ui-lobby-ahelp-button'}"
                                 StyleClasses="ButtonBig" />
                         <vote:VoteCallMenuButton Name="CallVoteButton" StyleClasses="ButtonBig" />
@@ -124,7 +133,7 @@
             </PanelContainer>
         </SplitContainer>
         <PanelContainer Name="ExpandPanel"
-                        StyleClasses="BackgroundPanel"
+                        StyleClasses="MoffLobbyCard"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Margin="0 2 2 0"

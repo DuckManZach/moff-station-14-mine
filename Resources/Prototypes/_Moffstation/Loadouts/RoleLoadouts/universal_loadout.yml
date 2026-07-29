@@ -1,0 +1,7 @@
+# Applied to every character regardless of job. A job loadout that fills one of these groups overrides it.
+- type: roleLoadout
+  id: MoffUniversal
+  points: 5
+  groups:
+  - Trinkets
+  - Glasses

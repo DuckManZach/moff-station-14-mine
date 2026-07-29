@@ -1,0 +1,133 @@
+<loadouts:MoffLoadoutEditor
+    xmlns="https://spacestation14.io"
+    xmlns:loadouts="clr-namespace:Content.Client._Moffstation.Lobby.UI.Loadouts"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    HorizontalExpand="True"
+    VerticalExpand="True">
+
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True"
+                  Margin="12"
+                  SeparationOverride="8">
+
+        <PanelContainer StyleClasses="MoffProfileHeader" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="8">
+                <Label Text="{Loc 'moff-loadout-editing-label'}"
+                       StyleClasses="MoffProfileTitle"
+                       VerticalAlignment="Center" />
+
+                <OptionButton Name="ScopeSelector" MinWidth="300" />
+
+                <Control HorizontalExpand="True" />
+
+                <controls:ConfirmButton Name="ResetCategoryButton"
+                                        Text="{Loc 'moff-loadout-reset-category'}"
+                                        ConfirmationText="{Loc 'moff-loadout-reset-confirm'}"
+                                        Disabled="True" />
+
+                <controls:ConfirmButton Name="ResetLoadoutButton"
+                                        Text="{Loc 'moff-loadout-reset-loadout'}"
+                                        ConfirmationText="{Loc 'moff-loadout-reset-confirm'}"
+                                        StyleClasses="negative" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Search -->
+        <PanelContainer StyleClasses="MoffProfileCard" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="8">
+                <LineEdit Name="SearchEdit"
+                          PlaceHolder="{Loc 'moff-loadout-search-placeholder'}"
+                          HorizontalExpand="True" />
+
+                <Button Name="ClearSearchButton" Text="{Loc 'moff-ui-clear'}" Disabled="True" />
+
+                <Label Text="{Loc 'moff-ui-selected-only'}" VerticalAlignment="Center" />
+
+                <controls:SwitchButton Name="SelectedOnly"
+                                       OffStateText=""
+                                       OnStateText=""
+                                       VerticalAlignment="Center" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Catalog -->
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="10">
+
+            <!-- Categories -->
+            <PanelContainer StyleClasses="MoffProfileCard" MinWidth="230" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              SeparationOverride="6">
+
+                    <PanelContainer StyleClasses="MoffProfileHeader">
+                        <Label Text="{Loc 'moff-loadout-categories'}" StyleClasses="MoffProfileTitle" />
+                    </PanelContainer>
+
+                    <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+                        <BoxContainer Name="CategoryList"
+                                      Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="4" />
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <!-- Item grid -->
+            <PanelContainer StyleClasses="MoffProfileCard" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              SeparationOverride="6">
+
+                    <!-- Category information and point budget -->
+                    <PanelContainer StyleClasses="MoffProfileHeader">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
+                            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="8">
+                                <Label Name="CategoryTitle"
+                                       Text="{Loc 'moff-loadout-all-items'}"
+                                       StyleClasses="MoffProfileTitle"
+                                       VerticalAlignment="Center" />
+
+                                <Control HorizontalExpand="True" />
+
+                                <Label Name="CategoryRequirementLabel"
+                                       Modulate="#9eabb5"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Visible="False" />
+
+                                <Label Name="PointLabel"
+                                       Modulate="#9eabb5"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Visible="False" />
+                            </BoxContainer>
+
+                            <ProgressBar Name="PointBar"
+                                         MinValue="0"
+                                         MaxValue="30"
+                                         Value="0"
+                                         HorizontalExpand="True"
+                                         MinHeight="6"
+                                         Visible="False" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <!-- Item cards -->
+                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+                        <GridContainer Name="ItemGrid"
+                                       Columns="5"
+                                       HorizontalExpand="True"
+                                       HSeparationOverride="8"
+                                       VSeparationOverride="8" />
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </BoxContainer>
+</loadouts:MoffLoadoutEditor>

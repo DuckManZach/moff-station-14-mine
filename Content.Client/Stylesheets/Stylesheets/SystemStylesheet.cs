@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client._Moffstation.Stylesheets; // Moff
 using Content.Client.Stylesheets.Fonts;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -49,6 +50,8 @@ public partial class SystemStylesheet : CommonStylesheet
             // Finally, load all the other sheetlets.
             GetAllSheetletRules<PalettedStylesheet, CommonSheetletAttribute>(man),
             GetAllSheetletRules<SystemStylesheet, CommonSheetletAttribute>(man),
+            // Moff - Load our theme last so it overrides upstream rules.
+            GetSheetletRules<PalettedStylesheet>(typeof(MoffThemeSheetlet), man),
         };
 
         Stylesheet = new Stylesheet(rules.SelectMany(x => x).ToArray());

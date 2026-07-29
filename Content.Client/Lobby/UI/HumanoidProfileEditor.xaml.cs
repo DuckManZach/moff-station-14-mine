@@ -157,8 +157,11 @@ namespace Content.Client.Lobby.UI
             };
 
             Traits.OnTraitsChanged += OnTraitsSelectionChanged; // DeltaV
+            // Moff - The antag tab now lives inside the Roles tab.
             Antags.OnAntagsChanged += OnAntagsSelectionChanged; // Moffstation
             Antags.OnLoadoutPressed += OnAntagLoadoutPressed; // Moffstation
+
+            InitializeMoffEditors(); // Moff - Wire up the loadout and roles editors
 
             #region Left
 
@@ -174,7 +177,7 @@ namespace Content.Client.Lobby.UI
 
             #region Appearance
 
-            TabContainer.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-appearance-tab"));
+            // Moff - Tab titles are set in InitializeMoffEditors.
 
             #region Sex
 
@@ -228,13 +231,18 @@ namespace Content.Client.Lobby.UI
 
             RefreshSpecies();
 
-            SpeciesButton.OnItemSelected += args =>
+            // Moff - Species is selectable from both Identity and Appearance, so keep the two in step.
+            void OnSpeciesSelected(OptionButton.ItemSelectedEventArgs args)
             {
                 SpeciesButton.SelectId(args.Id);
+                AppearanceSpeciesButton.SelectId(args.Id); // Moff
                 SetSpecies(_species[args.Id].ID);
                 Traits.RefreshTraits(); // DeltaV - Allows for hiding traits
                 OnSkinColorOnValueChanged();
-            };
+            }
+
+            SpeciesButton.OnItemSelected += OnSpeciesSelected;
+            AppearanceSpeciesButton.OnItemSelected += OnSpeciesSelected; // Moff
 
             // Umbra re-added this.
             #endregion Species
@@ -323,37 +331,16 @@ namespace Content.Client.Lobby.UI
 
             #region Jobs
 
-            TabContainer.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-jobs-tab"));
-
-            PreferenceUnavailableButton.AddItem(
-                Loc.GetString("humanoid-profile-editor-preference-unavailable-stay-in-lobby-button"),
-                (int)PreferenceUnavailableMode.StayInLobby);
-            PreferenceUnavailableButton.AddItem(
-                Loc.GetString("humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button",
-                              ("overflowJob", Loc.GetString(SharedGameTicker.FallbackOverflowJobName))),
-                (int)PreferenceUnavailableMode.SpawnAsOverflow);
-
-            PreferenceUnavailableButton.OnItemSelected += args =>
-            {
-                PreferenceUnavailableButton.SelectId(args.Id);
-                Profile = Profile?.WithPreferenceUnavailable((PreferenceUnavailableMode)args.Id);
-                SetDirty();
-            };
-
-            _jobCategories = new Dictionary<string, BoxContainer>();
-
+            // Moff Start - MoffRolesEditor owns the jobs list and the preference-unavailable button.
             Antags.RefreshAntags(Profile); // Moffstation - Antags
             RefreshJobs();
+            // Moff end
 
             #endregion Jobs
-
-            TabContainer.SetTabTitle(2, Loc.GetString("moff-special-roles-tab")); // Moffstation - Expanded non-crew roles
 
             // RefreshTraits(); // DeltaV
 
             #region Markings
-
-            TabContainer.SetTabTitle(4, Loc.GetString("humanoid-profile-editor-markings-tab"));
 
             _markingsModel.MarkingsChanged += (_, _) => OnMarkingChange();
             _markingsModel.MarkingsReset += OnMarkingChange;

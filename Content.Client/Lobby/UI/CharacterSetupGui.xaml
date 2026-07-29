@@ -12,14 +12,8 @@
                        Margin="8 0 0 0" VAlign="Center"
                        StyleClasses="LabelHeadingBigger" />
 
-                <Button Name="StatsButton" HorizontalExpand="True"
-                        Text="{Loc 'character-setup-gui-character-setup-stats-button'}"
-                        StyleClasses="ButtonBig"
-                        HorizontalAlignment="Right" />
-                <cc:CommandButton Name="AdminRemarksButton"
-                                  Command="adminremarks"
-                                  Text="{Loc 'character-setup-gui-character-setup-adminremarks-button'}"
-                                  StyleClasses="ButtonBig" />
+                <!-- Moff - Stats and admin remarks moved to the lobby screen. -->
+                <Control HorizontalExpand="True" />
                 <Button Name="RulesButton"
                         Text="{Loc 'character-setup-gui-character-setup-rules-button'}"
                         StyleClasses="ButtonBig"/>

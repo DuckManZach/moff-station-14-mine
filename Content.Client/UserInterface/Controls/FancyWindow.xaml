@@ -3,20 +3,22 @@
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       MouseFilter="Stop"
                       MinWidth="200" MinHeight="150">
-    <PanelContainer StyleClasses="BackgroundPanel" />
+    <!-- Moff Start - Restyled window chrome -->
+    <PanelContainer StyleClasses="MoffWindowBackground" />
 
-    <BoxContainer Orientation="Vertical">
-        <Control>
-            <PanelContainer StyleClasses="WindowHeadingBackground" Name="WindowHeader" />
-            <BoxContainer Margin="4 2 4 0" Orientation="Horizontal">
+    <BoxContainer Orientation="Vertical" SeparationOverride="0">
+        <!-- WindowHeader is now the panel itself so HeaderClass can still swap the whole title bar style. -->
+        <PanelContainer Name="WindowHeader" StyleClasses="MoffWindowTitleBar" MinHeight="28">
+            <BoxContainer Orientation="Horizontal" Margin="6 1 5 1" SeparationOverride="5">
                 <Label Name="WindowTitle"
                        HorizontalExpand="True" VAlign="Center" StyleClasses="FancyWindowTitle" ClipText="true" />
                 <TextureButton Name="HelpButton" StyleClasses="windowHelpButton" VerticalAlignment="Center" Disabled="True" Visible="False" Access="Public" />
                 <TextureButton Name="CloseButton" StyleClasses="windowCloseButton"
-                               VerticalAlignment="Center" />
+                               VerticalAlignment="Center" SetSize="20 20" />
             </BoxContainer>
-        </Control>
-        <PanelContainer StyleClasses="LowDivider" />
+        </PanelContainer>
+        <PanelContainer StyleClasses="MoffWindowTitleDivider" MinHeight="2" />
+        <!-- Moff end -->
         <Control Access="Public" Name="ContentsContainer" StyleClasses="WindowContentsContainer" RectClipContent="True" VerticalExpand="true" />
     </BoxContainer>
 </controls:FancyWindow>

@@ -67,9 +67,7 @@ namespace Content.Client.Lobby.UI
             InitializeMoffJobPriorities(); // Moffstation - Multi-character selection
             RulesButton.OnPressed += _ => new RulesAndInfoWindow().Open();
 
-            StatsButton.OnPressed += _ => new PlaytimeStatsWindow().OpenCentered();
-
-            _cfg.OnValueChanged(CCVars.SeeOwnNotes, p => AdminRemarksButton.Visible = p, true);
+            // Moff - Stats and admin remarks are wired up in LobbyGui now.
             _cfg.OnValueChanged(CCVars.GameMaxCharacterSlots, _ => ReloadCharacterPickers());
         }
 

@@ -25,28 +25,23 @@ public sealed partial class HumanoidProfileEditor
     // One at a time.
     private LoadoutWindow? _loadoutWindow;
 
-    private List<(string, RequirementsSelector)> _jobPriorities = new();
-
-    private readonly Dictionary<string, BoxContainer> _jobCategories;
-
-    /// <summary>
-    /// Updates selected job priorities to the profile's.
-    /// </summary>
-    private void UpdateJobPriorities()
-    {
-        foreach (var (jobId, prioritySelector) in _jobPriorities)
-        {
-            var priority = Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never;
-            prioritySelector.Select(MoffFromJobPriority(priority)); // Moff - Yes/no selector
-        }
-    }
-
     /// <summary>
     /// Refresh all loadouts.
     /// </summary>
     public void RefreshLoadouts()
     {
         _loadoutWindow?.Dispose();
+        LoadoutEditor.SetProfile(Profile); // Moff - Job loadouts now live in their own tab
+    }
+
+    /// <summary>
+    /// Refreshes all job selectors.
+    /// </summary>
+    // Moff - Jobs are now cards in MoffRolesEditor; this just forwards to it.
+    public void RefreshJobs()
+    {
+        RolesEditor.SyncProfile(Profile);
+        RolesEditor.RefreshJobs();
     }
 
     private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
@@ -107,16 +102,11 @@ public sealed partial class HumanoidProfileEditor
             JobOverride = null;
             ReloadPreview();
         };
-
-        if (Profile is null)
-            return;
-
-        UpdateJobPriorities();
     }
 
-    /// <summary>
-    /// Refreshes all job selectors.
-    /// </summary>
+    // Moff Start - Superseded by MoffRolesEditor's job cards and MoffLoadoutEditor's per-job scopes.
+    // #if rather than a block comment because the body already contains one.
+#if false
     public void RefreshJobs()
     {
         JobList.RemoveAllChildren();
@@ -299,6 +289,8 @@ public sealed partial class HumanoidProfileEditor
 
         UpdateJobPriorities();
     }
+#endif
+    // Moff end
 
     // Moffstation - Start - Antag loadout button
     private void OnAntagLoadoutPressed(ProtoId<AntagPrototype> antagId)

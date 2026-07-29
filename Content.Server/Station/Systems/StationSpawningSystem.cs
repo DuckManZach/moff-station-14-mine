@@ -6,6 +6,7 @@ using Content.Server.PDA;
 using Content.Server.Station.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
+using Content.Shared._Moffstation.Preferences.Loadouts; // Moff - Universal loadout
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -92,6 +93,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     {
         ProtoMan.Resolve(job, out var prototype);
         RoleLoadout? loadout = null;
+        // Moff Start - Universal loadout, applied to every job unless that job's own loadout fills the same group.
+        RoleLoadout? universalLoadout = null;
+        RoleLoadoutPrototype? universalProto = null;
+        // Moff end
 
         // Need to get the loadout up-front to handle names if we use an entity spawn override.
         var jobLoadout = LoadoutSystem.GetJobPrototype(prototype?.ID);
@@ -107,6 +112,20 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 loadout.SetDefault(profile, _actors.GetSession(entity), ProtoMan);
             }
         }
+
+        // Moff Start - Resolve the universal loadout the same way. Cloned because we strip overridden groups from it.
+        if (profile != null && ProtoMan.TryIndex(MoffLoadouts.Universal, out universalProto))
+        {
+            if (profile.Loadouts.TryGetValue(MoffLoadouts.Universal, out var savedUniversal))
+                universalLoadout = savedUniversal.Clone();
+
+            if (universalLoadout == null)
+            {
+                universalLoadout = new RoleLoadout(MoffLoadouts.Universal);
+                universalLoadout.SetDefault(profile, _actors.GetSession(entity), ProtoMan);
+            }
+        }
+        // Moff end
 
         // If we're not spawning a humanoid, we're gonna exit early without doing all the humanoid stuff.
         if (prototype?.JobEntity != null)
@@ -159,6 +178,23 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             var startingGear = ProtoMan.Index<StartingGearPrototype>(prototype.StartingGear);
             EquipStartingGear(entity.Value, startingGear, raiseEvent: false);
         }
+
+        // Moff Start - Universal loadout goes last so storage items land in whichever bag the job ended up with.
+        if (universalLoadout != null && universalProto != null)
+        {
+            // A group the job loadout filled is considered overridden, so drop our version of it.
+            if (loadout != null)
+            {
+                foreach (var group in loadout.SelectedLoadouts)
+                {
+                    if (group.Value.Count > 0)
+                        universalLoadout.SelectedLoadouts.Remove(group.Key);
+                }
+            }
+
+            EquipRoleLoadout(entity.Value, universalLoadout, universalProto);
+        }
+        // Moff end
 
         var gearEquippedEv = new StartingGearEquippedEvent(entity.Value);
         RaiseLocalEvent(entity.Value, ref gearEquippedEv);

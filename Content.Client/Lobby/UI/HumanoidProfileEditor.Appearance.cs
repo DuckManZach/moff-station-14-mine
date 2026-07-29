@@ -207,6 +207,7 @@ public sealed partial class HumanoidProfileEditor
     public void RefreshSpecies()
     {
         SpeciesButton.Clear();
+        AppearanceSpeciesButton.Clear(); // Moff - Species is selectable from Identity and Appearance
         _species.Clear();
 
         _species.AddRange(_prototypeManager.EnumeratePrototypes<SpeciesPrototype>().Where(o => o.RoundStart));
@@ -217,10 +218,12 @@ public sealed partial class HumanoidProfileEditor
         {
             var name = Loc.GetString(_species[i].Name);
             SpeciesButton.AddItem(name, i);
+            AppearanceSpeciesButton.AddItem(name, i); // Moff
 
             if (Profile?.Species.Equals(_species[i].ID) == true)
             {
                 SpeciesButton.SelectId(i);
+                AppearanceSpeciesButton.SelectId(i); // Moff
             }
         }
 
