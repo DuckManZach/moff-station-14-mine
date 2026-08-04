@@ -1,0 +1,11 @@
+# Recolours the station's standard lighting to mellower, yellower nightshift lighting.
+- type: entity
+  parent: BaseVariationPass
+  id: ESNightshiftVariationPass
+  components:
+  - type: ESNightshiftVariationPass
+    lampReplacements:
+      LightTube: ESLightTubeNightshift
+      LedLightTube: ESLedLightTubeNightshift
+      LightBulb: ESLightBulbNightshift
+      LedLightBulb: ESLedLightBulbNightshift
