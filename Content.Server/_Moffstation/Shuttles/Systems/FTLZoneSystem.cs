@@ -1,4 +1,5 @@
 using Content.Server.Shuttles.Events;
+using Content.Server.Shuttles.Systems;
 using Content.Shared._Moffstation.Shuttles.Components;
 using Content.Shared._Moffstation.Shuttles.Systems;
 using Content.Shared.Popups;
@@ -20,6 +21,7 @@ public sealed partial class FTLZoneSystem : SharedFTLZoneSystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private PvsOverrideSystem _pvsOverride = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
 
     private static readonly EntProtoId ZoneProto = "MoffFTLZone";
 
@@ -42,6 +44,8 @@ public sealed partial class FTLZoneSystem : SharedFTLZoneSystem
         // Broadcast, so subscribing alongside SalvageSystem and NukeopsRuleSystem is fine. Raised only from CanFTL,
         // which nothing but player-driven FTL calls - the emergency shuttle and arrivals go straight to FTLToDock.
         SubscribeLocalEvent<ConsoleFTLAttemptEvent>(OnConsoleFTLAttempt);
+
+        InitializeArrival();
     }
 
     private void OnConsoleFTLAttempt(ref ConsoleFTLAttemptEvent ev)

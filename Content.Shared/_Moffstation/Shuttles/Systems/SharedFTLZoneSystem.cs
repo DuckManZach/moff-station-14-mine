@@ -12,7 +12,7 @@ public abstract partial class SharedFTLZoneSystem : EntitySystem
     [Dependency] protected SharedMapSystem Maps = default!;
     [Dependency] protected SharedTransformSystem XformSystem = default!;
 
-    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] protected EntityQuery<PhysicsComponent> PhysicsQuery = default!;
 
     /// <summary>
     /// The zone entity on the given map, if it has one.
@@ -45,7 +45,7 @@ public abstract partial class SharedFTLZoneSystem : EntitySystem
         if (xform.MapUid is not { } mapUid || !TryGetZone(mapUid, out var zone))
             return true;
 
-        if (!_physicsQuery.TryComp(shuttleUid, out var physics))
+        if (!PhysicsQuery.TryComp(shuttleUid, out var physics))
             return false;
 
         var shuttlePos = Maps.GetGridPosition((shuttleUid, physics, xform));
