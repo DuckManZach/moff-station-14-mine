@@ -26,7 +26,6 @@ public sealed partial class MoffSectorScreen : BoxContainer
 
     private readonly SharedFTLZoneSystem _zones;
     private readonly ShuttleSystem _shuttles;
-    private readonly SharedMapSystem _maps;
 
     private EntityUid? _console;
     private EntityUid? _shuttleEntity;
@@ -47,7 +46,6 @@ public sealed partial class MoffSectorScreen : BoxContainer
 
         _zones = _entManager.System<SharedFTLZoneSystem>();
         _shuttles = _entManager.System<ShuttleSystem>();
-        _maps = _entManager.System<SharedMapSystem>();
 
         FTLButton.OnPressed += _ =>
         {
