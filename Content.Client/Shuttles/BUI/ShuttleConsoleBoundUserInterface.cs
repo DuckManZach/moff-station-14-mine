@@ -23,17 +23,31 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         base.Open();
         _window = this.CreateWindow<ShuttleConsoleWindow>();
 
-        _window.RequestFTL += OnFTLRequest;
-        _window.RequestBeaconFTL += OnFTLBeaconRequest;
+        // Moff Start - sector list replaces point-and-click FTL
+        // _window.RequestFTL += OnFTLRequest;
+        // _window.RequestBeaconFTL += OnFTLBeaconRequest;
+        _window.RequestViewSector += OnViewSectorRequest;
+        _window.RequestFTLSector += OnFTLSectorRequest;
+        _window.RequestExitSector += OnExitSectorRequest;
+        // Moff end
         _window.DockRequest += OnDockRequest;
         _window.UndockRequest += OnUndockRequest;
-        _window.RequestExitSector += OnExitSectorRequest; // Moff - Exit Sector button
     }
 
-    // Moff Start - Exit Sector button
+    // Moff Start - sector list
     private void OnExitSectorRequest()
     {
         SendMessage(new ShuttleConsoleExitSectorMessage());
+    }
+
+    private void OnViewSectorRequest(EntityUid sector)
+    {
+        SendMessage(new ShuttleConsoleViewSectorMessage(EntMan.GetNetEntity(sector)));
+    }
+
+    private void OnFTLSectorRequest(EntityUid sector)
+    {
+        SendMessage(new ShuttleConsoleFTLSectorMessage(EntMan.GetNetEntity(sector)));
     }
     // Moff end
 

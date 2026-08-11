@@ -17,13 +17,16 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     private ShuttleConsoleMode _mode = ShuttleConsoleMode.Nav;
 
-    public event Action<MapCoordinates, Angle>? RequestFTL;
-    public event Action<NetEntity, Angle>? RequestBeaconFTL;
+    // Moff Start - the sector screen replaces point-and-click FTL, so these two are no longer raised.
+    // public event Action<MapCoordinates, Angle>? RequestFTL;
+    // public event Action<NetEntity, Angle>? RequestBeaconFTL;
+    public event Action<EntityUid>? RequestViewSector;
+    public event Action<EntityUid>? RequestFTLSector;
+    public event Action? RequestExitSector;
+    // Moff end
 
     public event Action<NetEntity, NetEntity>? DockRequest;
     public event Action<NetEntity>? UndockRequest;
-
-    public event Action? RequestExitSector; // Moff - Exit Sector button
 
     public ShuttleConsoleWindow()
     {
@@ -45,17 +48,17 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         NavModeButton.Pressed = true;
         SetupMode(_mode);
 
-        MapContainer.RequestFTL += (coords, angle) =>
+        // Moff Start - sector list replaces the FTL/beacon click handlers
+        MapContainer.RequestViewSector += sector =>
         {
-            RequestFTL?.Invoke(coords, angle);
+            RequestViewSector?.Invoke(sector);
         };
 
-        MapContainer.RequestBeaconFTL += (ent, angle) =>
+        MapContainer.RequestFTLSector += sector =>
         {
-            RequestBeaconFTL?.Invoke(ent, angle);
+            RequestFTLSector?.Invoke(sector);
         };
 
-        // Moff Start - Exit Sector button
         MapContainer.RequestExitSector += () =>
         {
             RequestExitSector?.Invoke();
