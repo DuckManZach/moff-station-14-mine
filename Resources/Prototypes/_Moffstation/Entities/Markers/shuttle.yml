@@ -7,6 +7,7 @@
   components:
   - type: Transform
     anchored: false
+    gridTraversal: false
   - type: FTLZone
   # Shuttles arrive on top of this, and Smimsh deletes whatever it lands on.
   - type: FTLSmashImmune

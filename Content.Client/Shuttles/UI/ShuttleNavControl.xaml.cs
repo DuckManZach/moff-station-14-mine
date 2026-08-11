@@ -131,6 +131,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         base.Draw(handle);
 
         DrawBacking(handle);
+        DrawNavParallax(handle); // Moff - parallax backdrop
         DrawCircles(handle);
 
         // No data

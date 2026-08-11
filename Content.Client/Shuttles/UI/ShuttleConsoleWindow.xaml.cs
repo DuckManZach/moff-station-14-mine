@@ -17,10 +17,7 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     private ShuttleConsoleMode _mode = ShuttleConsoleMode.Nav;
 
-    // Moff Start - the sector screen replaces point-and-click FTL, so these two are no longer raised.
-    // public event Action<MapCoordinates, Angle>? RequestFTL;
-    // public event Action<NetEntity, Angle>? RequestBeaconFTL;
-    public event Action<EntityUid>? RequestViewSector;
+    // Moff Start - the sector screen replaces point-and-click FTL
     public event Action<EntityUid>? RequestFTLSector;
     public event Action? RequestExitSector;
     // Moff end
@@ -49,11 +46,6 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         SetupMode(_mode);
 
         // Moff Start - sector list replaces the FTL/beacon click handlers
-        MapContainer.RequestViewSector += sector =>
-        {
-            RequestViewSector?.Invoke(sector);
-        };
-
         MapContainer.RequestFTLSector += sector =>
         {
             RequestFTLSector?.Invoke(sector);

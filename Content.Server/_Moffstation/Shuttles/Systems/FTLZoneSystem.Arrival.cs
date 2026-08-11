@@ -2,9 +2,9 @@ using System.Numerics;
 using Content.Server.Shuttles.Events;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Shuttles.UI.MapObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Server._Moffstation.Shuttles.Systems;
@@ -18,9 +18,6 @@ public sealed partial class FTLZoneSystem
     /// How many spots inside the zone to try before settling for the middle of it.
     /// </summary>
     private const int ArrivalAttempts = 10;
-
-    // Not readonly - FindGridsIntersecting takes it by ref.
-    private List<Entity<MapGridComponent>> _grids = new();
 
     private void InitializeArrival()
     {
@@ -41,7 +38,7 @@ public sealed partial class FTLZoneSystem
     /// <summary>
     /// Picks a free spot inside the destination's zone for this shuttle to arrive at.
     /// </summary>
-    public bool TryGetArrival(EntityUid shuttleUid, EntityUid mapUid, out EntityCoordinates coordinates, out Angle angle)
+    private bool TryGetArrival(EntityUid shuttleUid, EntityUid mapUid, out EntityCoordinates coordinates, out Angle angle)
     {
         coordinates = default;
         angle = default;
@@ -61,13 +58,16 @@ public sealed partial class FTLZoneSystem
 
         angle = _random.NextAngle();
 
+        List<ShuttleExclusionObject>? exclusions = null;
+        _console.GetFTLExclusions(ref exclusions);
+
         var centre = origin;
         for (var i = 0; i < ArrivalAttempts; i++)
         {
             // sqrt keeps the sampling even across the disc instead of clumping in the middle.
             var candidate = origin + _random.NextAngle().ToVec() * (spread * MathF.Sqrt(_random.NextFloat()));
 
-            if (!IsClear(shuttleUid, map.MapId, candidate))
+            if (!_shuttle.FTLFree(shuttleUid, new EntityCoordinates(mapUid, candidate), angle, exclusions, checkRange: false))
                 continue;
 
             centre = candidate;
@@ -80,30 +80,6 @@ public sealed partial class FTLZoneSystem
         // offset the same way ConsoleFTL does. Otherwise a shuttle can arrive and immediately be unable to leave.
         if (PhysicsQuery.TryComp(shuttleUid, out var physics))
             coordinates = coordinates.Offset(angle.RotateVec(-physics.LocalCenter));
-
-        return true;
-    }
-
-    /// <summary>
-    /// Whether the shuttle would fit here without overlapping another grid. This is the grid half of
-    /// <see cref="SharedShuttleSystem.FTLFree"/>, minus its range check, which no sector-to-sector jump could pass.
-    /// </summary>
-    private bool IsClear(EntityUid shuttleUid, MapId mapId, Vector2 position)
-    {
-        var buffer = _shuttle.GetFTLBufferRange(shuttleUid) + SharedShuttleSystem.FTLBufferRange;
-
-        _grids.Clear();
-        Maps.FindGridsIntersecting(mapId,
-            new PhysShapeCircle(buffer, position),
-            Robust.Shared.Physics.Transform.Empty,
-            ref _grids,
-            includeMap: false);
-
-        foreach (var grid in _grids)
-        {
-            if (grid.Owner != shuttleUid)
-                return false;
-        }
 
         return true;
     }

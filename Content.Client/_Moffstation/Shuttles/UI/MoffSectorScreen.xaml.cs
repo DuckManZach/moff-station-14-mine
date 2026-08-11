@@ -36,9 +36,7 @@ public sealed partial class MoffSectorScreen : BoxContainer
     private StartEndTime _ftlTime;
 
     private readonly Dictionary<EntityUid, Button> _sectors = new();
-    private readonly List<EntityUid> _eligible = new();
 
-    public event Action<EntityUid>? RequestViewSector;
     public event Action<EntityUid>? RequestFTLSector;
     public event Action? RequestExitSector;
 
@@ -117,37 +115,48 @@ public sealed partial class MoffSectorScreen : BoxContainer
         ExitSectorButton.Disabled = !ready || !inZone;
 
         FTLReasonLabel.Visible = ready && !inZone;
-        FTLReasonLabel.Text = Loc.GetString("shuttle-console-ftl-zone");
     }
 
     private void RebuildSectors()
     {
-        _eligible.Clear();
+        if (_shuttleEntity is not { } shuttle || _console is not { } console)
+            return;
 
+        var eligible = new List<(EntityUid Uid, string Name)>();
         var query = _entManager.AllEntityQueryEnumerator<MapComponent, MetaDataComponent>();
-        while (query.MoveNext(out var uid, out var map, out _))
+
+        while (query.MoveNext(out var uid, out var map, out var meta))
         {
             // Handles the whitelist and the coordinate-disk requirement for expedition maps for us.
-            if (_shuttleEntity is not { } shuttle ||
-                _console is not { } console ||
-                !_shuttles.CanFTLTo(shuttle, map.MapId, console))
-            {
+            if (!_shuttles.CanFTLTo(shuttle, map.MapId, console))
                 continue;
-            }
 
-            _eligible.Add(uid);
+            eligible.Add((uid, meta.EntityName));
         }
 
         // Only tear the list down when the set actually changes, otherwise selection flickers every state update.
-        if (_eligible.Count == _sectors.Count && _eligible.TrueForAll(_sectors.ContainsKey))
-            return;
+        if (eligible.Count == _sectors.Count)
+        {
+            var same = true;
+            foreach (var (uid, _) in eligible)
+            {
+                if (_sectors.ContainsKey(uid))
+                    continue;
+
+                same = false;
+                break;
+            }
+
+            if (same)
+                return;
+        }
 
         SectorList.RemoveAllChildren();
         _sectors.Clear();
 
-        foreach (var uid in _eligible)
+        foreach (var (uid, entityName) in eligible)
         {
-            var name = _entManager.GetComponent<MetaDataComponent>(uid).EntityName;
+            var name = entityName;
 
             if (string.IsNullOrEmpty(name))
                 name = Loc.GetString("shuttle-console-unknown");
@@ -180,9 +189,6 @@ public sealed partial class MoffSectorScreen : BoxContainer
         {
             button.Pressed = uid == mapUid;
         }
-
-        // Sectors the player isn't in are outside their PVS, so ask the server to push this one's grids over.
-        RequestViewSector?.Invoke(mapUid);
 
         if (_entManager.TryGetComponent<MapComponent>(mapUid, out var map))
             SectorRadar.FocusSector(map.MapId);

@@ -1,14 +1,21 @@
 <ui:MoffSectorScreen xmlns="https://spacestation14.io"
                      xmlns:ui="clr-namespace:Content.Client._Moffstation.Shuttles.UI"
                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                     xmlns:parallax="clr-namespace:Content.Client.Parallax"
                      Visible="False"
                      HorizontalExpand="True">
-    <ui:MoffSectorMapControl Name="SectorRadar"
-                             MouseFilter="Stop"
-                             Margin="5 4 10 5"
-                             HorizontalExpand="True"
-                             VerticalExpand="True"
-                             VerticalAlignment="Stretch"/>
+    <!-- Parallax is a sibling behind the radar rather than something the radar draws: children render on top of
+         their parent, so it can't be nested, and this reuses ParallaxControl instead of a fourth copy of the tiler. -->
+    <Control Margin="5 4 10 5"
+             HorizontalExpand="True"
+             VerticalExpand="True">
+        <parallax:ParallaxControl Name="SectorParallax"/>
+        <ui:MoffSectorMapControl Name="SectorRadar"
+                                 MouseFilter="Stop"
+                                 HorizontalExpand="True"
+                                 VerticalExpand="True"
+                                 VerticalAlignment="Stretch"/>
+    </Control>
     <BoxContainer VerticalAlignment="Top"
                   HorizontalAlignment="Right"
                   MinWidth="256"
@@ -35,6 +42,7 @@
                 TextAlign="Center"
                 Disabled="True"/>
         <Label Name="FTLReasonLabel"
+               Text="{Loc 'shuttle-console-ftl-zone'}"
                HorizontalAlignment="Center"
                Visible="False"/>
         <controls:ConfirmButton Name="ExitSectorButton"

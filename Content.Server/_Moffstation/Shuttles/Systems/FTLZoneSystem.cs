@@ -21,6 +21,7 @@ public sealed partial class FTLZoneSystem : SharedFTLZoneSystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private PvsOverrideSystem _pvsOverride = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ShuttleConsoleSystem _console = default!;
     [Dependency] private ShuttleSystem _shuttle = default!;
 
     private static readonly EntProtoId ZoneProto = "MoffFTLZone";
@@ -90,11 +91,12 @@ public sealed partial class FTLZoneSystem : SharedFTLZoneSystem
         if (TryGetZone(mapUid, out zone))
             return true;
 
-        if (FindReferenceGrid(mapUid) is not { } reference)
+        if (!TryComp<MapComponent>(mapUid, out var map) || GetLargestGrid(map.MapId) is not { } reference)
             return false;
 
-        var distance = reference.Comp.LocalAABB.Size.Length() / 2f + _random.NextFloat(MinOffset, MaxOffset);
-        var position = XformSystem.GetWorldPosition(reference.Owner) + _random.NextAngle().ToVec() * distance;
+        var half = reference.Comp.LocalAABB.Size.Length() / 2f;
+        var position = XformSystem.GetWorldPosition(reference.Owner) +
+                       _random.NextVector2(half + MinOffset, half + MaxOffset);
 
         // Attached rather than positioned, so it stays parented to the map instead of latching onto a passing grid.
         var uid = SpawnAttachedTo(ZoneProto, new EntityCoordinates(mapUid, position));
@@ -103,26 +105,5 @@ public sealed partial class FTLZoneSystem : SharedFTLZoneSystem
         Log.Info($"Placed FTL zone for {ToPrettyString(mapUid)} at {position}, anchored on {ToPrettyString(reference)}");
 
         return true;
-    }
-
-    /// <summary>
-    /// The biggest grid on the map, which the zone gets placed relative to.
-    /// </summary>
-    private Entity<MapGridComponent>? FindReferenceGrid(EntityUid mapUid)
-    {
-        if (!TryComp<MapComponent>(mapUid, out var map))
-            return null;
-
-        Entity<MapGridComponent>? largest = null;
-        foreach (var grid in Maps.GetAllGrids(map.MapId))
-        {
-            if (largest is not { } current ||
-                grid.Comp.LocalAABB.Size.Length() > current.Comp.LocalAABB.Size.Length())
-            {
-                largest = grid;
-            }
-        }
-
-        return largest;
     }
 }

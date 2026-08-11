@@ -1,4 +1,6 @@
 using Content.Shared._Moffstation.Shuttles.Components;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Shared._Moffstation.Shuttles.Systems;
@@ -32,6 +34,26 @@ public abstract partial class SharedFTLZoneSystem : EntitySystem
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// The map's biggest grid - its "station". Both the zone placement and the console's camera anchor on this, so
+    /// they have to agree on which grid it is.
+    /// </summary>
+    public Entity<MapGridComponent>? GetLargestGrid(MapId mapId)
+    {
+        Entity<MapGridComponent>? largest = null;
+
+        foreach (var grid in Maps.GetAllGrids(mapId))
+        {
+            if (largest is not { } current ||
+                grid.Comp.LocalAABB.Size.Length() > current.Comp.LocalAABB.Size.Length())
+            {
+                largest = grid;
+            }
+        }
+
+        return largest;
     }
 
     /// <summary>

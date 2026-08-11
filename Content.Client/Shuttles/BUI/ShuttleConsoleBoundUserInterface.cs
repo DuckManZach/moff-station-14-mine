@@ -24,9 +24,6 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         _window = this.CreateWindow<ShuttleConsoleWindow>();
 
         // Moff Start - sector list replaces point-and-click FTL
-        // _window.RequestFTL += OnFTLRequest;
-        // _window.RequestBeaconFTL += OnFTLBeaconRequest;
-        _window.RequestViewSector += OnViewSectorRequest;
         _window.RequestFTLSector += OnFTLSectorRequest;
         _window.RequestExitSector += OnExitSectorRequest;
         // Moff end
@@ -38,11 +35,6 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
     private void OnExitSectorRequest()
     {
         SendMessage(new ShuttleConsoleExitSectorMessage());
-    }
-
-    private void OnViewSectorRequest(EntityUid sector)
-    {
-        SendMessage(new ShuttleConsoleViewSectorMessage(EntMan.GetNetEntity(sector)));
     }
 
     private void OnFTLSectorRequest(EntityUid sector)
@@ -65,24 +57,6 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         {
             DockEntity = entity,
             TargetDockEntity = target,
-        });
-    }
-
-    private void OnFTLBeaconRequest(NetEntity ent, Angle angle)
-    {
-        SendMessage(new ShuttleConsoleFTLBeaconMessage()
-        {
-            Beacon = ent,
-            Angle = angle,
-        });
-    }
-
-    private void OnFTLRequest(MapCoordinates obj, Angle angle)
-    {
-        SendMessage(new ShuttleConsoleFTLPositionMessage()
-        {
-            Coordinates = obj,
-            Angle = angle,
         });
     }
 

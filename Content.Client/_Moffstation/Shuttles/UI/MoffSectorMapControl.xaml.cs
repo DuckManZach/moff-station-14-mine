@@ -26,6 +26,9 @@ public sealed partial class MoffSectorMapControl : BaseShuttleControl
 
     private EntityUid? _shuttleEntity;
 
+    // Not readonly - FindGridsIntersecting takes it by ref.
+    private List<Entity<MapGridComponent>> _grids = new();
+
     protected override bool Draggable => true;
 
     // Wide zoom range: a sector's station and its zone can be hundreds of units apart, and the screen has to fit both.
@@ -65,23 +68,12 @@ public sealed partial class MoffSectorMapControl : BaseShuttleControl
     }
 
     /// <summary>
-    /// The sector's station - its largest grid - or the map origin if it hasn't got one. Deliberately not the zone or
-    /// the shuttle: the station is the landmark a pilot orients by, and it keeps the view still as the shuttle moves.
+    /// The sector's station, or the map origin if it hasn't got one. Deliberately not the zone or the shuttle: the
+    /// station is the landmark a pilot orients by, and it keeps the view still as the shuttle moves.
     /// </summary>
     private Vector2 GetSectorCentre(MapId mapId)
     {
-        Entity<MapGridComponent>? largest = null;
-
-        foreach (var grid in Maps.GetAllGrids(mapId))
-        {
-            if (largest is not { } current ||
-                grid.Comp.LocalAABB.Size.Length() > current.Comp.LocalAABB.Size.Length())
-            {
-                largest = grid;
-            }
-        }
-
-        return largest is { } station ? Maps.GetGridPosition(station.Owner) : Vector2.Zero;
+        return _zones.GetLargestGrid(mapId) is { } station ? Maps.GetGridPosition(station.Owner) : Vector2.Zero;
     }
 
     /// <summary>
@@ -117,6 +109,8 @@ public sealed partial class MoffSectorMapControl : BaseShuttleControl
         }
 
         DrawRecenter();
+
+        DrawParallaxBackground(handle, ViewingMap, Offset);
         DrawCircles(handle);
 
         // Unrotated, so this is just "shift by the view centre, scale to pixels, flip Y, move to the middle".
@@ -141,23 +135,28 @@ public sealed partial class MoffSectorMapControl : BaseShuttleControl
     }
 
     /// <summary>
-    /// Real hull outlines rather than the diamonds the upstream map screen uses, which is the whole point of pushing
-    /// the sector's grids to the client in the first place.
+    /// Real hull outlines rather than the diamonds the upstream map screen draws for distant maps.
     /// </summary>
     private void DrawGrids(DrawingHandleScreen handle, Matrix3x2 worldToView)
     {
-        foreach (var grid in Maps.GetAllGrids(ViewingMap))
+        // Culled to the viewport: DrawGrid transforms every vertex of every grid it's handed, so an unfiltered
+        // GetAllGrids would chew through whole stations that are panned off screen.
+        _grids.Clear();
+        Maps.FindGridsIntersecting(ViewingMap,
+            new Box2(Offset - WorldRangeVector, Offset + WorldRangeVector),
+            ref _grids,
+            approx: true,
+            includeMap: false);
+
+        foreach (var grid in _grids)
         {
-            IFFComponent? iff = null;
-
-            if (grid.Owner != _shuttleEntity &&
-                EntManager.TryGetComponent(grid.Owner, out iff) &&
-                (iff.Flags & IFFFlags.Hide) != 0x0)
-            {
-                continue;
-            }
-
             var self = _shuttleEntity == grid.Owner;
+            EntManager.TryGetComponent(grid.Owner, out IFFComponent? iff);
+
+            // Same filter the nav radar uses, so debris and IFF-hidden grids don't clutter the sector view.
+            if (!self && !_shuttles.CanDraw(grid.Owner, iffComp: iff))
+                continue;
+
             var color = _shuttles.GetIFFColor(grid.Owner, self, iff);
 
             DrawGrid(handle, _xform.GetWorldMatrix(grid.Owner) * worldToView, grid, color);

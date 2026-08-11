@@ -12,14 +12,27 @@ public sealed partial class ShuttleNavControl
 {
     private SharedFTLZoneSystem? _zones;
 
-    public bool ShowZone = true;
+    /// <summary>
+    /// Starfield behind the nav radar, matching the sector map. Resolves the map itself so the call can sit right
+    /// after DrawBacking, before the range rings get drawn over it.
+    /// </summary>
+    private void DrawNavParallax(DrawingHandleScreen handle)
+    {
+        if (_coordinates is not { } coords ||
+            !EntManager.TryGetComponent(coords.EntityId, out TransformComponent? xform))
+        {
+            return;
+        }
+
+        DrawParallaxBackground(handle, xform.MapID, _transform.ToMapCoordinates(coords).Position);
+    }
 
     /// <summary>
     /// Draws the zone circle, plus an edge-pinned marker when it's off screen so the pilot knows which way to fly.
     /// </summary>
     private void DrawFTLZone(DrawingHandleScreen handle, Matrix3x2 worldToView, EntityUid? mapUid, Vector2 shuttlePos)
     {
-        if (!ShowZone || mapUid is not { } map)
+        if (mapUid is not { } map)
             return;
 
         // Resolved lazily because the constructor is upstream.
