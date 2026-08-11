@@ -1,0 +1,14 @@
+# Spawned automatically on every FTL destination map, or place one by hand to pick the arrival point yourself.
+- type: entity
+  id: MoffFTLZone
+  parent: MarkerBase
+  name: FTL zone
+  description: The point every FTL in this sector arrives at.
+  components:
+  - type: Transform
+    anchored: false
+  - type: FTLZone
+  # Shuttles arrive on top of this, and Smimsh deletes whatever it lands on.
+  - type: FTLSmashImmune
+  - type: Sprite
+    state: pink
