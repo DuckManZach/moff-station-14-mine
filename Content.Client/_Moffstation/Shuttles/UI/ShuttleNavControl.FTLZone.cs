@@ -19,12 +19,20 @@ public sealed partial class ShuttleNavControl
     private void DrawNavParallax(DrawingHandleScreen handle)
     {
         if (_coordinates is not { } coords ||
+            _rotation is not { } rotation ||
             !EntManager.TryGetComponent(coords.EntityId, out TransformComponent? xform))
         {
             return;
         }
 
-        DrawParallaxBackground(handle, xform.MapID, _transform.ToMapCoordinates(coords).Position);
+        // The same angle the grids are drawn at, recomputed here rather than passed in so the upstream Draw only
+        // needs the one call. See the ourEntRot/rot pair in ShuttleNavControl.Draw.
+        var ourEntRot = RotateWithEntity ? _transform.GetWorldRotation(xform) : rotation;
+
+        DrawParallaxBackground(handle,
+            xform.MapID,
+            _transform.ToMapCoordinates(coords).Position,
+            ourEntRot + rotation);
     }
 
     /// <summary>
