@@ -291,11 +291,18 @@
     objectiveBlacklist:
       tags:
       - ParadoxCloneObjectiveBlacklist
-  - type: AntagObjectives
-    objectives:
-    - ParadoxCloneKillObjective
-    - ParadoxCloneCoexistObjective  # Moffstation - Paradox clone free agents
-    - ParadoxCloneLivingObjective
+  # Moff start - Selectable objectives
+  - type: AntagRandomObjectives
+    minChoices: 1
+    maxChoices: 1
+    sets:
+    - groups: ParadoxCloneObjectiveGroups
+#  - type: AntagObjectives
+#    objectives:
+#    - ParadoxCloneKillObjective
+#    - ParadoxCloneCoexistObjective  # Moffstation - Paradox clone free agents
+#    - ParadoxCloneLivingObjective
+  # Moff end
   - type: AntagRandomSpawn # TODO: improve spawning so they only start in maints
   - type: AntagSelection
     selectionTime: Enroll # Moffstation - antag enrollment

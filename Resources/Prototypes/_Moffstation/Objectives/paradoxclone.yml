@@ -1,3 +1,49 @@
+# this requires a table within a table, so we'll just make one for now
+- type: weightedRandom
+  id: ParadoxCloneObjectiveGroups
+  weights:
+    ParadoxCloneObjectiveGroupDefault: 1.0
+
+- type: weightedRandom
+  id: ParadoxCloneObjectiveGroupDefault
+  weights:
+    ParadoxCloneCoexistObjectivePack: 1.0
+    ParadoxCloneReplaceObjectivePack: 1.0
+
+- type: entity
+  parent: BaseParadoxCloneObjective
+  id: ParadoxCloneCoexistObjectivePack
+  description: Coexist with your original self in this dimension.
+  components:
+  - type: Objective
+    icon:
+      sprite: Interface/Alerts/pacified.rsi
+      state: icon
+  - type: SimpleObjective
+    title: objective-condition-coexist
+  - type: MoffObjectivePack
+    objectives: !type:AllSelector
+      children:
+      - id: ParadoxCloneCoexistObjective
+      - id: ParadoxCloneLivingObjective
+
+- type: entity
+  parent: BaseParadoxCloneObjective
+  id: ParadoxCloneReplaceObjectivePack
+  description: Replace your original to fix the paradox.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Weapons/Guns/Pistols/viper.rsi
+      state: icon
+  - type: SimpleObjective
+    title: objective-condition-replace
+  - type: MoffObjectivePack
+    objectives: !type:AllSelector
+      children:
+      - id: ParadoxCloneKillObjective
+      - id: ParadoxCloneLivingObjective
+
 - type: entity
   parent: [BaseParadoxCloneObjective]
   id: ParadoxCloneCoexistObjective
