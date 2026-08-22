@@ -21,6 +21,10 @@ public abstract partial class ServerDbBase
     /// their currently selected character, so that players who predate multi-character
     /// selection keep their existing setup on first login.
     /// </remarks>
+    /// <returns>
+    /// A non-authoritative state if the player has no preferences row yet, so that consumers fall
+    /// back to per-character priorities instead of reading them as "wants no job at all".
+    /// </returns>
     public async Task<MoffCharacterSelectionState> GetMoffCharacterSelectionAsync(
         NetUserId userId,
         CancellationToken cancel = default)
@@ -37,10 +41,15 @@ public abstract partial class ServerDbBase
             .AsSplitQuery()
             .SingleOrDefaultAsync(p => p.UserId == userId.UserId, cancel);
 
-        var state = new MoffCharacterSelectionState { IsAuthoritative = true };
-
+        // A brand new account has no preferences row yet: UserDbDataManager runs every loader
+        // concurrently, so this read races the one that creates it and usually wins. Claiming to be
+        // authoritative then would leave a first-time player with no priorities at all and eligible
+        // for no job, so hand back a non-authoritative state and let them fall back for this one
+        // session. Their next login finds the row and seeds it properly.
         if (prefs == null)
-            return state;
+            return new MoffCharacterSelectionState();
+
+        var state = new MoffCharacterSelectionState { IsAuthoritative = true };
 
         if (prefs.MoffPreference == null)
         {

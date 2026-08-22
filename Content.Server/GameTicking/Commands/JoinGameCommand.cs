@@ -96,6 +96,10 @@ namespace Content.Server.GameTicking.Commands
             }
 
             ticker.MakeJoinGame(player, station, id);
+
+            // Moff - Multi-character selection: MakeJoinGame can bail before reaching the spawn that
+            // would consume the pinned character, so drop anything left over.
+            ClearMoffCharacter(player);
         }
     }
 }

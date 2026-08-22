@@ -1,6 +1,8 @@
 using System.Linq;
 using Content.Server._Moffstation.Preferences;
 using Content.Server._Moffstation.Station;
+using Content.Server.Antag.Components;
+using Content.Shared.Antag;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Player;
@@ -54,11 +56,12 @@ public sealed partial class AntagSelectionSystem
     }
 
     /// <summary>
-    /// Per preselected antag, the prototypes a character must have enabled to fill that slot.
+    /// Every antag slot <paramref name="session"/> is currently preselected for, along with the
+    /// prototypes a character must have enabled to fill it.
     /// </summary>
-    public List<HashSet<ProtoId<AntagPrototype>>> GetMoffPreSelectedAntagPrefRoles(ICommonSession session)
+    public List<MoffPreSelectedAntag> GetMoffPreSelectedAntags(ICommonSession session)
     {
-        var result = new List<HashSet<ProtoId<AntagPrototype>>>();
+        var result = new List<MoffPreSelectedAntag>();
 
         var query = QueryAllRules();
         while (query.MoveNext(out var uid, out var comp, out _))
@@ -74,13 +77,32 @@ public sealed partial class AntagSelectionSystem
                 if (!ProtoMan.Resolve(antag.Proto, out var proto))
                     continue;
 
+                // No pref roles means the slot doesn't care which character fills it.
                 if (proto.PrefRoles.Count == 0)
                     continue;
 
-                result.Add(proto.PrefRoles.ToHashSet());
+                result.Add(new MoffPreSelectedAntag((uid, comp), antag, proto.PrefRoles.ToHashSet()));
             }
         }
 
         return result;
     }
+
+    /// <summary>
+    /// Gives up a preselected slot the character who spawned cannot fill. Losing the antag role is
+    /// the tolerable outcome here; the alternative is not spawning the player at all.
+    /// </summary>
+    public void DropMoffPreSelectedAntag(MoffPreSelectedAntag preSelected, ICommonSession session)
+    {
+        DeSelectSession(preSelected.GameRule, preSelected.Antag, session);
+    }
 }
+
+/// <summary>
+/// One antag slot a player has been preselected for, and what it takes to fill it. Carries the rule
+/// and specifier so the slot can be given up again if no suitable character exists.
+/// </summary>
+public readonly record struct MoffPreSelectedAntag(
+    Entity<AntagSelectionComponent> GameRule,
+    ProtoId<AntagSpecifierPrototype> Antag,
+    HashSet<ProtoId<AntagPrototype>> PrefRoles);

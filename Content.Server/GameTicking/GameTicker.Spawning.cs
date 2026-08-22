@@ -166,6 +166,13 @@ namespace Content.Server.GameTicking
             if (DummyTicker)
                 return;
 
+            // Moff Start - Multi-character selection: consume the pinned character up here so the
+            // early returns below still spend it; one left behind would silently apply itself to
+            // whatever spawn came next. It is applied to the profile further down, after character
+            // randomisation, which still gets the last word.
+            var moffExplicit = _moffCharacterPicker.TakeExplicitChoice(player.UserId);
+            // Moff end
+
             if (station == EntityUid.Invalid)
             {
                 var stations = GetSpawnableStations();
@@ -218,9 +225,7 @@ namespace Content.Server.GameTicking
             }
 
             // Moff Start - Multi-character selection: a late join names its character, so apply that
-            // before anything downstream reads the profile.
-            var moffExplicit = _moffCharacterPicker.TakeExplicitChoice(player.UserId);
-
+            // before anything downstream reads the profile. Taken at the top of this method.
             if (moffExplicit != null)
                 character = moffExplicit;
             // Moff end
@@ -279,29 +284,11 @@ namespace Content.Server.GameTicking
             // job, not whoever is selected in the lobby. Randomized characters are left alone, and
             // a readied player always spawns, so the lobby-selected character is the last resort.
             if (!_randomizeCharacters && moffExplicit == null)
-            {
-                if (_moffCharacterPicker.PickProfile(player, jobId) is { } picked)
-                {
-                    character = picked;
-                }
-                // This is copied and pasted from above, buuuuut the above stuff is just upstream code so like..
-                // I think not putting it in a function is fine
-                else
-                {
-                    Log.Warning($"No active character of {player} will take {jobId}; You staying in the lobby, twin.");
-                    if (!LobbyEnabled)
-                    {
-                        JoinAsObserver(player);
-                    }
+                character = _moffCharacterPicker.PickProfile(player, jobId, character);
 
-                    var evNoJobs = new NoJobsAvailableSpawningEvent(player); // Used by gamerules to wipe their antag slot, if they got one
-                    RaiseLocalEvent(evNoJobs);
-
-                    _chatManager.DispatchServerMessage(player,
-                        Loc.GetString("game-ticker-player-no-jobs-available-when-joining"));
-                    return;
-                }
-            }
+            // A pinned character skips the picker, so this is where it counts as spawned.
+            if (moffExplicit != null)
+                _moffCharacterPicker.RecordSpawnedProfile(player.UserId, character);
             // Moff end
 
             DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName);

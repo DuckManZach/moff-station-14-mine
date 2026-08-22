@@ -225,6 +225,11 @@ public sealed partial class MoffCharacterSelectionManager : IPostInjectInit
         try
         {
             await _db.SaveMoffJobPriorities(userId, state.JobPriorities);
+
+            // The write went through, so what we hold now matches the database even if the load
+            // could not say so -- see the brand-new-account case in GetMoffCharacterSelectionAsync.
+            if (_cached.ContainsKey(userId))
+                _cached[userId] = state with { IsAuthoritative = true };
         }
         catch (Exception e)
         {

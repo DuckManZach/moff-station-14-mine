@@ -54,4 +54,12 @@ internal sealed partial class JoinGameCommand
         _entManager.System<MoffCharacterPickerSystem>().SetExplicitChoice(player.UserId, profile);
         return true;
     }
+
+    /// <summary>
+    /// Drops any choice pinned by <see cref="TrySetMoffCharacter"/> that the spawn did not use.
+    /// </summary>
+    private void ClearMoffCharacter(ICommonSession player)
+    {
+        _entManager.System<MoffCharacterPickerSystem>().ClearExplicitChoice(player.UserId);
+    }
 }
