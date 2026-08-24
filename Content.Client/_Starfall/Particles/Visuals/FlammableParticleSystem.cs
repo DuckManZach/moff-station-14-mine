@@ -9,11 +9,11 @@ namespace Content.Client._Starfall.Particles;
 /// <summary>
 /// Particles when entities are on fire.
 /// </summary>
-public sealed class FlammableParticleSystem : EntitySystem
+public sealed partial class FlammableParticleSystem : EntitySystem
 {
-    [Dependency] private readonly ParticleSystem _particles = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private ParticleSystem _particles = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly ProtoId<ParticleEffectPrototype> FireEffect  = "SfFireContinuous";
     private static readonly ProtoId<ParticleEffectPrototype> SmokeEffect = "SfFireSmoke";
@@ -29,13 +29,7 @@ public sealed class FlammableParticleSystem : EntitySystem
 
     private readonly Dictionary<EntityUid, FireState> _active = new();
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<FlammableComponent, AppearanceChangeEvent>(OnAppearanceChange);
-        SubscribeLocalEvent<FlammableComponent, ComponentShutdown>(OnShutdown);
-    }
-
+    [SubscribeLocalEvent]
     private void OnAppearanceChange(Entity<FlammableComponent> ent, ref AppearanceChangeEvent args)
     {
         if (!_appearance.TryGetData(ent, FireVisuals.OnFire, out bool onFire))
@@ -80,6 +74,7 @@ public sealed class FlammableParticleSystem : EntitySystem
         }
     }
 
+    [SubscribeLocalEvent]
     private void OnShutdown(Entity<FlammableComponent> ent, ref ComponentShutdown args)
     {
         if (_active.Remove(ent, out var state))

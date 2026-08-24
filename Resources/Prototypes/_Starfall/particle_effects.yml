@@ -32,66 +32,20 @@
     radius: 0.1
 
 - type: particleEffect
-  id: SfGibMist
-  sprite:
-    sprite: _Starfall/Particles/generic.rsi
-    state: soft_dot_big
-  startColor: "#FFFFFFFF" #Gets changed by GibParticleSystem's ColorOverride to match the victim's blood color.
-  endColor: "#FFFFFF00"
-  alphaOverLifetime:
-    - time: 0.0
-      value: 1
-    - time: 0.08
-      value: 1
-    - time: 0.5
-      value: 0.6
-    - time: 1.0
-      value: 0.0
-  sizeOverLifetime:
-    - time: 0.0
-      value: 0.3
-    - time: 0.2
-      value: 1.2
-    - time: 1.0
-      value: 2.0
-  lifetime: 1.4
-  lifetimeVariance: 0.4
-  speed: 1
-  speedVariance: 1.2
-  particleSize: 0.5
-  sizeVariance: 0.3
-  emissionRate: 0
-  maxCount: 55
-  burst: true
-  gravity: 1
-  drag: 0.85
-  noiseStrength: 0.5
-  noiseFrequency: 0.9
-  spreadAngle: 60
-  emitAngle: 0
-  startRotation: 0
-  startRotationVariance: 60
-  rotationSpeed: 1
-  rotationSpeedVariance: 45
-  shape:
-    type: CircleFill
-    radius: 0.2
-
-- type: particleEffect
   id: SfWeldingBurst
   sprite:
     sprite: _Starfall/Particles/generic.rsi
     state: curl
   shader: unshaded
   colorOverLifetime:
-    - time: 0.0
-      color: "#FFFFFFFF"
-    - time: 0.1
-      color: "#FFEE88FF"
-    - time: 0.6
-      color: "#FF8800AA"
-    - time: 1.0
-      color: "#FF220000"
+  - time: 0.0
+    color: "#FFFFFFFF"
+  - time: 0.1
+    color: "#FFEE88FF"
+  - time: 0.6
+    color: "#FF8800AA"
+  - time: 1.0
+    color: "#FF220000"
   lifetime: 0.3
   lifetimeVariance: 0.3
   speed: 5.0
@@ -110,10 +64,76 @@
     radius: 0.12
 
 - type: particleEffect
+  id: SfGibMist
+  sprite:
+    sprite: _Starfall/Particles/generic.rsi
+    state: cross
+  startColor: "#FFFFFFFF" #Gets changed by GibParticleSystem's ColorOverride to match the victim's blood color.
+  endColor: "#FFFFFFFF"
+  sizeOverLifetime:
+    - time: 0.0
+      value: 0.7
+    - time: 0.25
+      value: 1.0
+    - time: 1.0
+      value: 0.75
+  lifetime: 0.45
+  lifetimeVariance: 0.25
+  speed: 2.4
+  speedVariance: 1.9
+  particleSize: 1.1
+  sizeVariance: 0.85
+  stretchFactor: 0.5  # droplets streak along their flight path
+  emissionRate: 0
+  maxCount: 80
+  burst: true
+  gravity: 1.5
+  drag: 3.5  # high drag keeps the splat tight instead of flinging it across the room
+  noiseStrength: 0.6  # per-particle wobble, so the burst isn't a clean circle
+  noiseFrequency: 1.6
+  spreadAngle: 360
+  emitAngle: 0
+  startRotation: 0
+  startRotationVariance: 180
+  rotationSpeed: 0
+  rotationSpeedVariance: 45
+  shape:
+    type: CircleFill
+    radius: 0.15
+
+- type: particleEffect
+  id: SfGibSpecks
+  sprite:
+    sprite: _Starfall/Particles/generic.rsi
+    state: dot
+  startColor: "#FFFFFFFF" #Gets changed by GibParticleSystem's ColorOverride to match the victim's blood color.
+  endColor: "#FFFFFFFF"
+  lifetime: 0.55
+  lifetimeVariance: 0.3
+  speed: 4.0
+  speedVariance: 2.8
+  particleSize: 2.5  # dot is a single pixel in a 32x32 sheet, so the quad has to be big for it to read
+  sizeVariance: 0.8
+  stretchFactor: 0.2
+  emissionRate: 0
+  maxCount: 80
+  burst: true
+  gravity: 1.6
+  drag: 3.0  # specks outrun the crosses a little, but not by much
+  noiseStrength: 0.5
+  noiseFrequency: 1.9
+  spreadAngle: 360
+  emitAngle: 0
+  shape:
+    type: CircleFill
+    radius: 0.1
+
+- type: particleEffect
   id: SfSmoke
   sprite:
-    sprite: Effects/chemsmoke.rsi
-    state: chemsmoke
+    sprite: _Moffstation/Particles/pixel.rsi
+    state: smoke_puff
+  pixelSnap: true
   startColor: "#CCCCCCCC"
   endColor: "#CCCCCC00"
   lifetime: 2.0
@@ -133,7 +153,7 @@
   spreadAngle: 60
   emitAngle: 0
   startRotationVariance: 180
-  rotationSpeedVariance: 25
+  rotationSpeedVariance: 0
 
 - type: particleEffect
   id: SfFireContinuous
@@ -179,8 +199,9 @@
 - type: particleEffect
   id: SfFireSmoke
   sprite:
-    sprite: Effects/chemsmoke.rsi
-    state: chemsmoke
+    sprite: _Moffstation/Particles/pixel.rsi
+    state: smoke_puff
+  pixelSnap: true
   startColor: "#555555AA"
   endColor: "#33333300"
   sizeOverLifetime:
@@ -214,7 +235,7 @@
   spreadAngle: 25
   emitAngle: 0
   startRotationVariance: 180
-  rotationSpeedVariance: 40
+  rotationSpeedVariance: 0
   shape:
     type: CircleFill
     radius: 0.25
@@ -251,8 +272,9 @@
 - type: particleEffect
   id: SfFootstepDust
   sprite:
-    sprite: Effects/chemsmoke.rsi
-    state: chemsmoke
+    sprite: _Moffstation/Particles/pixel.rsi
+    state: dust_puff
+  pixelSnap: true
   startColor: "#CCCCCC88"
   endColor: "#CCCCCC00"
   sizeOverLifetime:
@@ -289,7 +311,7 @@
   startRotation: 0
   startRotationVariance: 180
   rotationSpeed: 0
-  rotationSpeedVariance: 90
+  rotationSpeedVariance: 0
   shape:
     type: CircleFill
     radius: 0.1

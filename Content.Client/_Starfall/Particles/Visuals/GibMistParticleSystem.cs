@@ -7,21 +7,23 @@ namespace Content.Client._Starfall.Particles;
 /// Receives <see cref="GibMistParticleEvent"/> from the server and spawns
 /// a blood-mist particle burst tinted to the entity's actual blood color.
 /// </summary>
-public sealed class GibMistParticleSystem : EntitySystem
+public sealed partial class GibMistParticleSystem : EntitySystem
 {
-    [Dependency] private readonly ParticleSystem _particles = default!;
+    [Dependency] private ParticleSystem _particles = default!;
 
     private static readonly ProtoId<ParticleEffectPrototype> MistEffect = "SfGibMist";
+    private static readonly ProtoId<ParticleEffectPrototype> SpeckEffect = "SfGibSpecks";
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeNetworkEvent<GibMistParticleEvent>(OnGibMist);
-    }
-
+    [SubscribeNetworkEvent]
     private void OnGibMist(GibMistParticleEvent ev)
     {
-        var emitter = _particles.SpawnEffect(MistEffect, ev.Coords);
+        SpawnTinted(MistEffect, ev);
+        SpawnTinted(SpeckEffect, ev);
+    }
+
+    private void SpawnTinted(ProtoId<ParticleEffectPrototype> effect, GibMistParticleEvent ev)
+    {
+        var emitter = _particles.SpawnEffect(effect, ev.Coords);
         if (emitter == null)
             return;
 

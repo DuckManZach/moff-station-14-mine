@@ -8,17 +8,15 @@ namespace Content.Client._Starfall.Particles;
 /// Useful if something goes wrong and needs to be killed FAST..
 /// </summary>
 [AnyCommand]
-public sealed class ParticlePanicCommand : IConsoleCommand
+public sealed partial class ParticlePanicCommand : LocalizedEntityCommands
 {
-    public string Command => "particlepanic";
-    public string Description => "Kills all active particle emitters and clears every live particle immediately.";
-    public string Help => $"Usage: {Command}";
+    [Dependency] private ParticleSystem _particles = default!;
 
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override string Command => "particlepanic";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        var particles = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ParticleSystem>();
-        var count = particles.KillAll();
-        shell.WriteLine($"Cleared {count} emitter(s)/particle(s).");
+        var count = _particles.KillAll();
+        shell.WriteLine(Loc.GetString("cmd-particlepanic-cleared", ("count", count)));
     }
 }
-

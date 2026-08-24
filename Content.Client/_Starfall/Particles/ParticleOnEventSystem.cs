@@ -12,24 +12,14 @@ namespace Content.Client._Starfall.Particles;
 /// although you should put this on the projectile entity itself as an emitter ideally.</item>
 /// All other event particle needs should use <see cref="SpawnParticleEffect"/> in <c>EntityEffectOnTrigger</c> component instead of dedicated components here.
 /// </summary>
-public sealed class ParticleOnEventSystem : EntitySystem
+public sealed partial class ParticleOnEventSystem : EntitySystem
 {
-    [Dependency] private readonly ParticleSystem _particles = default!;
+    [Dependency] private ParticleSystem _particles = default!;
 
     // Track emitters spawned by OnThrown so we can stop them when the entity lands
     private readonly Dictionary<EntityUid, ActiveEmitter> _thrownEmitters = new();
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<ParticleOnThrownComponent, ThrownEvent>(OnThrown);
-        SubscribeLocalEvent<ParticleOnThrownComponent, LandEvent>(OnThrownLanded);
-        SubscribeLocalEvent<ParticleOnThrownComponent, ComponentShutdown>(OnThrownShutdown);
-
-        SubscribeLocalEvent<ParticleOnGunShotProjectileComponent, AmmoShotEvent>(OnGunShotProjectile);
-    }
-
+    [SubscribeLocalEvent]
     private void OnThrown(Entity<ParticleOnThrownComponent> ent, ref ThrownEvent args)
     {
         // Stop any existing emitter first to avoid orphaning it on a re-throw.
@@ -41,11 +31,13 @@ public sealed class ParticleOnEventSystem : EntitySystem
             _thrownEmitters[ent.Owner] = emitter;
     }
 
+    [SubscribeLocalEvent]
     private void OnThrownLanded(Entity<ParticleOnThrownComponent> ent, ref LandEvent args)
     {
         StopThrownEmitter(ent.Owner);
     }
 
+    [SubscribeLocalEvent]
     private void OnThrownShutdown(Entity<ParticleOnThrownComponent> ent, ref ComponentShutdown args)
     {
         StopThrownEmitter(ent.Owner);
@@ -57,6 +49,7 @@ public sealed class ParticleOnEventSystem : EntitySystem
             _particles.RemoveParticle(emitter);
     }
 
+    [SubscribeLocalEvent]
     private void OnGunShotProjectile(Entity<ParticleOnGunShotProjectileComponent> ent, ref AmmoShotEvent args)
     {
         // Infinite-duration allowed: the emitter is cleaned up when the projectile is destroyed.
