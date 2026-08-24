@@ -70,36 +70,21 @@
     state: cross
   startColor: "#FFFFFFFF" #Gets changed by GibParticleSystem's ColorOverride to match the victim's blood color.
   endColor: "#FFFFFFFF"
-  alphaOverLifetime:
-    - time: 0.0
-      value: 1
-    - time: 0.08
-      value: 1
-    - time: 0.5
-      value: 0.6
-    - time: 1.0
-      value: 0.0
-  sizeOverLifetime:
-    - time: 0.0
-      value: 0.3
-    - time: 0.2
-      value: 1.2
-    - time: 1.0
-      value: 2.0
-  lifetime: 1.4
-  lifetimeVariance: 0.4
-  speed: 1
-  speedVariance: 1.2
-  particleSize: 1.1  # cross is a ~3px mark in a 32x32 sheet, so the quad runs bigger than soft_dot_big's did
+  lifetime: 0.6
+  lifetimeVariance: 0.2
+  speed: 3.0
+  speedVariance: 2.0
+  particleSize: 1.1
   sizeVariance: 0.3
+  stretchFactor: 0.4
   emissionRate: 0
   maxCount: 40
   burst: true
-  gravity: 1
-  drag: 0.85
+  gravity: 0.4
+  drag: 4.0
   noiseStrength: 0.5
   noiseFrequency: 0.9
-  spreadAngle: 60
+  spreadAngle: 220
   emitAngle: 0
   startRotation: 0
   startRotationVariance: 60
@@ -116,36 +101,21 @@
     state: dot
   startColor: "#FFFFFFFF" #Gets changed by GibParticleSystem's ColorOverride to match the victim's blood color.
   endColor: "#FFFFFFFF"
-  alphaOverLifetime:
-    - time: 0.0
-      value: 1
-    - time: 0.08
-      value: 1
-    - time: 0.5
-      value: 0.6
-    - time: 1.0
-      value: 0.0
-  sizeOverLifetime:
-    - time: 0.0
-      value: 0.3
-    - time: 0.2
-      value: 1.2
-    - time: 1.0
-      value: 2.0
-  lifetime: 1.4
-  lifetimeVariance: 0.4
-  speed: 1
-  speedVariance: 1.2
-  particleSize: 2.5  # dot is a single pixel in a 32x32 sheet, so the quad has to be big for it to read
+  lifetime: 0.6
+  lifetimeVariance: 0.2
+  speed: 4.0
+  speedVariance: 2.5
+  particleSize: 2.5
   sizeVariance: 0.3
+  stretchFactor: 0.25
   emissionRate: 0
   maxCount: 15
   burst: true
-  gravity: 1
-  drag: 0.85
+  gravity: 0.4
+  drag: 3.5
   noiseStrength: 0.5
   noiseFrequency: 0.9
-  spreadAngle: 60
+  spreadAngle: 200
   emitAngle: 0
   shape:
     type: CircleFill
