@@ -64,7 +64,7 @@ public sealed partial class FlammableParticleSystem : EntitySystem
         }
 
         // Update intensity on live emitters
-        if (state.OnFire && state.FireEmitter != null)
+        if (state is { OnFire: true })
         {
             var intensity = Math.Clamp(stacks / MaxStacks * 2f, 1f, 2f);
             if (state.FireEmitter != null)
