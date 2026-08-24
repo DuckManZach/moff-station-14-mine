@@ -78,7 +78,7 @@
   sizeVariance: 0.3
   stretchFactor: 0.4
   emissionRate: 0
-  maxCount: 40
+  maxCount: 80
   burst: true
   gravity: 0.4
   drag: 4.0
@@ -109,7 +109,7 @@
   sizeVariance: 0.3
   stretchFactor: 0.25
   emissionRate: 0
-  maxCount: 15
+  maxCount: 40
   burst: true
   gravity: 0.4
   drag: 3.5
