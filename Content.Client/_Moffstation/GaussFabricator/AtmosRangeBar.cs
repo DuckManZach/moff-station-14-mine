@@ -3,7 +3,6 @@ using Content.Shared._Moffstation.GaussFabricator;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
-using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
 namespace Content.Client._Moffstation.GaussFabricator;
@@ -38,9 +37,6 @@ public sealed class AtmosRangeBar : Control
     /// </summary>
     public string ValueFormat { get; set; } = "F0";
 
-    /// <summary>
-    /// Drawn in place of the reading when the fabricator isn't in a gas mixture.
-    /// </summary>
     public string NoDataText { get; set; } = "N/A";
 
     public AtmosRangeBar()
@@ -118,7 +114,6 @@ public sealed class AtmosRangeBar : Control
 
     private void DrawThreshold(DrawingHandleScreen handle, float y, Color color)
     {
-        // Snapped to whole pixels, otherwise a half-pixel rect blends away to nothing.
         var thickness = MathF.Max(2f, MathF.Round(2f * UIScale));
         var top = MathF.Round(y - thickness / 2f);
         handle.DrawRect(new UIBox2(0, top, PixelWidth, top + thickness), color);
