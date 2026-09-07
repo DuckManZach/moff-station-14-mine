@@ -93,6 +93,14 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
             || !TryComp<BatteryComponent>(ent, out var battery))
             return;
 
+        // Null when the fabricator is in space or otherwise not in a gas mixture.
+        var mixture = _atmosphere.GetContainingMixture(ent.Owner);
+
+        // One output is spawned per full battery, so outputs per minute is just how fast we fill it.
+        var outputRate = battery.MaxCharge > 0f
+            ? pnb.CurrentReceiving * pnb.Efficiency * 60f / battery.MaxCharge
+            : 0f;
+
         _uiSystem.SetUiState(
             ent.Owner,
             GaussFabricatorUiKey.Key,
@@ -101,6 +109,9 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
                 pnb.CurrentReceiving,
                 ent.Comp.MaxDrawRate,
                 _battery.GetChargeLevel((ent.Owner, battery)),
+                outputRate,
+                new GaussFabricatorGauge(mixture?.Temperature, ent.Comp.TemperatureRange),
+                new GaussFabricatorGauge(mixture?.Pressure, ent.Comp.PressureRange),
                 pnb.Enabled));
     }
 }

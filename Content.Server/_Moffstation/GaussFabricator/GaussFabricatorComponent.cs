@@ -1,3 +1,4 @@
+using Content.Shared._Moffstation.GaussFabricator;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._Moffstation.GaussFabricator;
@@ -24,4 +25,16 @@ public sealed partial class GaussFabricatorComponent : Component
     /// </summary>
     [DataField]
     public float MaxDrawRate = 250000f;
+
+    /// <summary>
+    /// Acceptable and optimal ambient temperature, in kelvin. Display only.
+    /// </summary>
+    [DataField]
+    public GaussFabricatorRange TemperatureRange = new(20f, 60f, 130f, 200f);
+
+    /// <summary>
+    /// Acceptable and optimal ambient pressure, in kPa. Display only.
+    /// </summary>
+    [DataField]
+    public GaussFabricatorRange PressureRange = new(20f, 80f, 120f, 300f);
 }

@@ -35,6 +35,9 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
 
         PopulateButtons();
 
+        TemperatureBar.NoDataText = _loc.GetString("gauss-fabricator-window-no-data");
+        PressureBar.NoDataText = _loc.GetString("gauss-fabricator-window-no-data");
+
         OnButton.Group = _toggleGroup;
         OffButton.Group = _toggleGroup;
         OnButton.OnPressed += _ => OnToggle?.Invoke(true);
@@ -45,10 +48,15 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     {
         DrawRateLabel.Text = FormatPower(state.ConfiguredDrawRate);
         ReceivedLabel.Text = FormatPower(state.ReceivedPower);
+        OutputRateLabel.Text = _loc.GetString(
+            "gauss-fabricator-window-output-rate",
+            ("rate", state.OutputRate.ToString("F2")));
 
         _targetProgress = Math.Clamp(state.Progress, 0f, 1f);
 
         DrawLevelBar.SetValues(state.MaxChargeRate, state.ReceivedPower, state.ConfiguredDrawRate);
+        TemperatureBar.SetValue(state.Temperature);
+        PressureBar.SetValue(state.Pressure);
 
         if (state.IsOn)
             OnButton.Pressed = true;
@@ -73,8 +81,10 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     private void PopulateButtons()
     {
         AdjustmentButtons.Children.Clear();
-        var deltas = _increments.Select(i => -i).Concat(_increments.Reverse()).ToList();
-        AdjustmentButtons.Columns = deltas.Count;
+        var deltas = _increments.Select(i => -i).Concat(_increments).ToList();
+        // One row of decrements above one row of increments, so the window doesn't have to be six buttons wide
+        var columns = _increments.Count();
+        AdjustmentButtons.Columns = columns;
         for (var i = 0; i < deltas.Count; i++)
         {
             var delta = deltas[i];
@@ -82,10 +92,11 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
             // Doing this because FormatPower doesn't support negative numbers
             var button = new Button { Text = (delta < 0 ? "-" : "+") + FormatPower(Math.Abs(delta)), HorizontalExpand = true };
 
-            // Setup the style classes
-            if (i == 0)
+            // Setup the style classes, rounding off each row's own outer edges
+            var column = i % columns;
+            if (column == 0)
                 button.StyleClasses.Add("OpenRight");
-            else if (i == deltas.Count - 1)
+            else if (column == columns - 1)
                 button.StyleClasses.Add("OpenLeft");
             else
                 button.StyleClasses.Add("OpenBoth");
