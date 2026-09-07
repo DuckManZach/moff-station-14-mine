@@ -14,7 +14,6 @@ public sealed class GaussFabricatorBoundUserInterface(EntityUid owner, Enum uiKe
         base.Open();
 
         _window = this.CreateWindow<GaussFabricatorWindow>();
-        _window.Title = Loc.GetString("gauss-fabricator-window-title");
         _window.OnAdjustDrawRate += delta => SendMessage(new GaussFabricatorAdjustDrawRateMessage(delta));
         _window.OnToggle += on => SendMessage(new GaussFabricatorToggleMessage(on));
     }

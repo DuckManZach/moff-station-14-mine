@@ -1,5 +1,5 @@
 gauss-fabricator-window-title = Gaussian Fabrication Unit
-gauss-fabricator-window-draw-rate = Draw Rate:
+gauss-fabricator-window-draw-rate = Target Draw Rate:
 gauss-fabricator-window-received = Receiving:
 gauss-fabricator-window-progress = Output Progress:
 gauss-fabricator-window-decrease-large = -10 kW

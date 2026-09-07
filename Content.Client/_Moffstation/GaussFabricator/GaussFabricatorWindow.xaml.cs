@@ -18,6 +18,8 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     public event Action<float>? OnAdjustDrawRate;
     public event Action<bool>? OnToggle;
 
+    private const float TweenInverseHalfLife = 8f; // How the bar be moving
+
     private readonly ButtonGroup _toggleGroup = new();
 
     // Draw adjustment button increments, from largest to smallest
@@ -57,9 +59,8 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-
-        const float tweenInverseHalfLife = 8f;
-        var factor = MathHelper.Clamp01(tweenInverseHalfLife * args.DeltaSeconds);
+        
+        var factor = MathHelper.Clamp01(TweenInverseHalfLife * args.DeltaSeconds);
         _displayedProgress = MathHelper.Lerp(_displayedProgress, _targetProgress, factor);
 
         if (MathF.Abs(_displayedProgress - _targetProgress) < 0.001f)
@@ -77,9 +78,9 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
         for (var i = 0; i < deltas.Count; i++)
         {
             var delta = deltas[i];
-            // if its less than zero add a negative sign, if its positive don't
+            // if its less than zero add a negative sign, if its positive add a plus sign
             // Doing this because FormatPower doesn't support negative numbers
-            var button = new Button { Text = (delta < 0 ? "-" : "") + FormatPower(Math.Abs(delta)), HorizontalExpand = true };
+            var button = new Button { Text = (delta < 0 ? "-" : "+") + FormatPower(Math.Abs(delta)), HorizontalExpand = true };
 
             // Setup the style classes
             if (i == 0)
@@ -96,10 +97,9 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
 
     private static Color ProgressColor(float t)
     {
-        if (t < 0.5f)
-            return Color.InterpolateBetween(Color.Red, Color.Lime, t * 2f);
-
-        return Color.InterpolateBetween(Color.Lime, Color.Cyan, (t - 0.5f) * 2f);
+        return t < 0.5f 
+            ? Color.InterpolateBetween(Color.Red, Color.Lime, t * 2f) 
+            : Color.InterpolateBetween(Color.Lime, Color.Cyan, (t - 0.5f) * 2f);
     }
 
     private string FormatPower(float value)
