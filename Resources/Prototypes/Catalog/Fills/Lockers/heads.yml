@@ -23,8 +23,16 @@
   components:
   - type: EntityTableContainerFill
     containers:
-      entity_storage: !type:NestedSelector
-        tableId: LockerFillQuarterMaster
+    # Moffstation - Start - Harmony QM Hardsuit in locker variations
+      # entity_storage: !type:NestedSelector
+        # tableId: LockerFillQuarterMaster
+      entity_storage: !type:AllSelector
+        children:
+        - !type:NestedSelector
+          tableId: LockerFillQuarterMaster
+        - !type:NestedSelector
+          tableId: FillQuarterMasterHardsuit
+    # Moffstation - End
 
 # No laser table
 - type: entityTable
@@ -46,7 +54,7 @@
       prob: 0.1
     - id: RubberStampCaptain
     - id: SpaceCash1000
-    - id: WeaponDisabler
+    #- id: WeaponDisabler # Moff - no stuns
     - id: ClothingEyesGlassesCommand
     - id: OrganSkeletonPersonHead # A skull to accompany your skeleton crew
       conditions:
@@ -133,7 +141,7 @@
     - id: ClothingNeckGoldmedal
     - id: DoorRemoteService
     - id: HoPIDCard
-    - id: WeaponDisabler
+    #- id: WeaponDisabler # Moff - no stuns
     - id: ClothingEyesHudCommand
     - id: PlushieLizardJobHeadofpersonnel
       prob: 0.02
@@ -214,10 +222,8 @@
   id: LockerFillChiefMedicalOfficerNoHardsuit
   table: !type:AllSelector
     children:
-    # Moffstation - Begin - MedChem Goggles
-#    - id: ClothingEyesHudMedical
-    - id: ClothingEyesGlassesMedChem
-    # Moffstation - End
+    # - id: ClothingEyesHudMedical # Moffstation - Modular Eyewear
+    - id: ClothingEyesHudMedChem # Moffstation - Modular Eyewear
     - id: ClothingBeltMedicalFilled
     - id: HandheldCrewMonitor
     - id: Hypospray
@@ -340,8 +346,7 @@
     - id: HoloprojectorSecurity
     - id: RubberStampHos
     - id: BoxHoSCircuitboards
-    - id: WeaponDisabler
-    #- id: WeaponTaser # Moffstation - Remove tasers
+    #- id: WeaponDisabler # Moffstation - no stuns
     - id: WantedListCartridge
     - id: DrinkHosFlask
     - id: PlushieLizardJobHeadofsecurity

@@ -57,8 +57,7 @@
     allowedEmotes:
     - Laugh
   - type: Vocal
-    sounds:
-      Unsexed: UnisexSiliconSyndicate
+    emoteSounds: UnisexSiliconSyndicate
   - type: InteractionPopup
     interactSuccessString: petting-success-syndicate-cyborg
     interactFailureString: petting-failure-syndicate-cyborg
@@ -190,6 +189,7 @@
       50: Critical
       100: Dead
   - type: Destructible
+    generateOverkillThreshold: false
     thresholds:
     - trigger:
         !type:DamageTrigger
@@ -225,6 +225,11 @@
     group: Null
   - type: AccessReader
     access: [ [ "Command" ], [ "Research" ] ]
+  - type: NpcFactionMember
+    factions:
+    - NanoTrasen
+  - type: ShowJobIcons
+  - type: ShowCrewIcons
 
 - type: entity
   id: PlayerAiShellBattery
