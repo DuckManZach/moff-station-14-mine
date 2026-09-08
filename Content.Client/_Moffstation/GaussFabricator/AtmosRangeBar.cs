@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._Moffstation.GaussFabricator;
+using Content.Shared.Destructible.Thresholds;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -28,7 +29,8 @@ public sealed class AtmosRangeBar : Control
 
     private readonly Font _font;
 
-    private GaussFabricatorRange _range;
+    private MinMax _acceptable;
+    private MinMax _optimal;
     private float? _targetCurrent;
     private float? _displayedCurrent;
 
@@ -48,7 +50,8 @@ public sealed class AtmosRangeBar : Control
 
     public void SetValue(GaussFabricatorGauge gauge)
     {
-        _range = gauge.Range;
+        _acceptable = gauge.Acceptable;
+        _optimal = gauge.Optimal;
         _targetCurrent = gauge.Current;
     }
 
@@ -76,17 +79,17 @@ public sealed class AtmosRangeBar : Control
     {
         handle.DrawRect(PixelSizeBox, _backgroundColor);
 
-        var span = _range.MaxAcceptable - _range.MinAcceptable;
+        float span = _acceptable.Max - _acceptable.Min;
         if (span <= 0f)
             return;
 
-        var displayMin = _range.MinAcceptable - span * DisplayPadding;
-        var displayMax = _range.MaxAcceptable + span * DisplayPadding;
+        var displayMin = _acceptable.Min - span * DisplayPadding;
+        var displayMax = _acceptable.Max + span * DisplayPadding;
 
-        var minAcceptableY = ValueToY(_range.MinAcceptable, displayMin, displayMax);
-        var maxAcceptableY = ValueToY(_range.MaxAcceptable, displayMin, displayMax);
-        var minOptimalY = ValueToY(_range.MinOptimal, displayMin, displayMax);
-        var maxOptimalY = ValueToY(_range.MaxOptimal, displayMin, displayMax);
+        var minAcceptableY = ValueToY(_acceptable.Min, displayMin, displayMax);
+        var maxAcceptableY = ValueToY(_acceptable.Max, displayMin, displayMax);
+        var minOptimalY = ValueToY(_optimal.Min, displayMin, displayMax);
+        var maxOptimalY = ValueToY(_optimal.Max, displayMin, displayMax);
 
         handle.DrawRect(new UIBox2(0, maxAcceptableY, PixelWidth, minAcceptableY), _acceptableColor);
         handle.DrawRect(new UIBox2(0, maxOptimalY, PixelWidth, minOptimalY), _optimalFillColor);
@@ -96,8 +99,8 @@ public sealed class AtmosRangeBar : Control
         DrawThreshold(handle, maxOptimalY, _optimalColor);
         DrawThreshold(handle, minOptimalY, _optimalColor);
 
-        DrawLabel(handle, _range.MaxOptimal.ToString(ValueFormat), maxOptimalY, _optimalColor, above: true, right: false);
-        DrawLabel(handle, _range.MinOptimal.ToString(ValueFormat), minOptimalY, _optimalColor, above: false, right: false);
+        DrawLabel(handle, _optimal.Max.ToString(ValueFormat), maxOptimalY, _optimalColor, above: true, right: false);
+        DrawLabel(handle, _optimal.Min.ToString(ValueFormat), minOptimalY, _optimalColor, above: false, right: false);
 
         if (_displayedCurrent is not { } current)
         {

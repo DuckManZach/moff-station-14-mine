@@ -1,4 +1,4 @@
-using Content.Shared._Moffstation.GaussFabricator;
+using Content.Shared.Destructible.Thresholds;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._Moffstation.GaussFabricator;
@@ -27,14 +27,44 @@ public sealed partial class GaussFabricatorComponent : Component
     public float MaxDrawRate = 250000f;
 
     /// <summary>
-    /// Acceptable and optimal ambient temperature, in kelvin. Display only.
+    /// Ambient temperature outside which the reading counts as bad, in kelvin.
     /// </summary>
     [DataField]
-    public GaussFabricatorRange TemperatureRange = new(20f, 60f, 130f, 200f);
+    public MinMax TemperatureAcceptable = new(20, 200);
 
     /// <summary>
-    /// Acceptable and optimal ambient pressure, in kPa. Display only.
+    /// Ambient temperature inside which the reading counts as optimal, in kelvin.
     /// </summary>
     [DataField]
-    public GaussFabricatorRange PressureRange = new(20f, 80f, 120f, 300f);
+    public MinMax TemperatureOptimal = new(60, 130);
+
+    /// <summary>
+    /// Ambient pressure outside which the reading counts as bad, in kPa.
+    /// </summary>
+    [DataField]
+    public MinMax PressureAcceptable = new(20, 300);
+
+    /// <summary>
+    /// Ambient pressure inside which the reading counts as optimal, in kPa.
+    /// </summary>
+    [DataField]
+    public MinMax PressureOptimal = new(80, 120);
+
+    /// <summary>
+    /// Output speed multiplier for a reading outside its acceptable range.
+    /// </summary>
+    [DataField]
+    public float BadMultiplier = 0.2f;
+
+    /// <summary>
+    /// Output speed multiplier for a reading that is acceptable but not optimal.
+    /// </summary>
+    [DataField]
+    public float NormalMultiplier = 1f;
+
+    /// <summary>
+    /// Output speed multiplier for a reading inside its optimal range.
+    /// </summary>
+    [DataField]
+    public float OptimalMultiplier = 1.5f;
 }

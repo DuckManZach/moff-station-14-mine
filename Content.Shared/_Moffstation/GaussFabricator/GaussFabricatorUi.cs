@@ -1,3 +1,4 @@
+using Content.Shared.Destructible.Thresholds;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._Moffstation.GaussFabricator;
@@ -9,60 +10,21 @@ public enum GaussFabricatorUiKey : byte
 }
 
 /// <summary>
-/// An outer "acceptable" band with a nested inner "optimal" band, used to draw the atmospheric gauges.
-/// </summary>
-[Serializable, NetSerializable, DataDefinition]
-public partial record struct GaussFabricatorRange(
-    float MinAcceptable,
-    float MinOptimal,
-    float MaxOptimal,
-    float MaxAcceptable)
-{
-    [DataField]
-    public float MinAcceptable = MinAcceptable;
-
-    [DataField]
-    public float MinOptimal = MinOptimal;
-
-    [DataField]
-    public float MaxOptimal = MaxOptimal;
-
-    [DataField]
-    public float MaxAcceptable = MaxAcceptable;
-
-    public bool Equals(GaussFabricatorRange other)
-    {
-        return MinAcceptable.Equals(other.MinAcceptable)
-            && MinOptimal.Equals(other.MinOptimal)
-            && MaxOptimal.Equals(other.MaxOptimal)
-            && MaxAcceptable.Equals(other.MaxAcceptable);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(MinAcceptable, MinOptimal, MaxOptimal, MaxAcceptable);
-    }
-}
-
-/// <summary>
-/// One atmospheric readout: the live value, or null when the fabricator isn't in any gas mixture.
+/// One atmospheric readout: the live value (null when the fabricator isn't in any gas mixture), the band
+/// outside which it counts as bad, and the nested band inside which it counts as optimal.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class GaussFabricatorGauge(float? current, GaussFabricatorRange range)
+public partial record struct GaussFabricatorGauge(float? Current, MinMax Acceptable, MinMax Optimal)
 {
-    public readonly float? Current = current;
-    public readonly GaussFabricatorRange Range = range;
+    public readonly float? Current = Current;
+    public readonly MinMax Acceptable = Acceptable;
+    public readonly MinMax Optimal = Optimal;
 
-    public override bool Equals(object? obj)
+    public readonly bool Equals(GaussFabricatorGauge other)
     {
-        return obj is GaussFabricatorGauge other
-            && Nullable.Equals(Current, other.Current)
-            && Range.Equals(other.Range);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Current, Range);
+        return Current.Equals(other.Current)
+            && Acceptable.Equals(other.Acceptable)
+            && Optimal.Equals(other.Optimal);
     }
 }
 

@@ -48,7 +48,10 @@
                         HorizontalExpand="True"/>
                 </BoxContainer>
 
-                <GridContainer Name="AdjustmentButtons" HorizontalExpand="True"/>
+                <BoxContainer Name="AdjustmentButtons"
+                    Orientation="Vertical"
+                    HorizontalExpand="True"
+                    SeparationOverride="2"/>
             </BoxContainer>
 
             <customControls:VSeparator/>

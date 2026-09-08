@@ -22,8 +22,8 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
 
     private readonly ButtonGroup _toggleGroup = new();
 
-    // Draw adjustment button increments, from largest to smallest
-    private readonly IEnumerable<float> _increments = [50000f, 10000f, 1000f];
+    // Draw adjustment button increments, from smallest to largest
+    private readonly IEnumerable<float> _increments = [1000f, 10000f, 50000f];
 
     private float _targetProgress;
     private float _displayedProgress;
@@ -67,7 +67,7 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        
+
         var factor = MathHelper.Clamp01(TweenInverseHalfLife * args.DeltaSeconds);
         _displayedProgress = MathHelper.Lerp(_displayedProgress, _targetProgress, factor);
 
@@ -81,10 +81,20 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     private void PopulateButtons()
     {
         AdjustmentButtons.Children.Clear();
-        var deltas = _increments.Select(i => -i).Concat(_increments).ToList();
-        // One row of decrements above one row of increments, so the window doesn't have to be six buttons wide
-        var columns = _increments.Count();
-        AdjustmentButtons.Columns = columns;
+
+        AdjustmentButtons.AddChild(BuildRow(_increments.Select(i => -i)));
+        AdjustmentButtons.AddChild(BuildRow(_increments));
+    }
+
+    private BoxContainer BuildRow(IEnumerable<float> increments)
+    {
+        var row = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+        };
+
+        var deltas = increments.ToList();
         for (var i = 0; i < deltas.Count; i++)
         {
             var delta = deltas[i];
@@ -92,24 +102,24 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
             // Doing this because FormatPower doesn't support negative numbers
             var button = new Button { Text = (delta < 0 ? "-" : "+") + FormatPower(Math.Abs(delta)), HorizontalExpand = true };
 
-            // Setup the style classes, rounding off each row's own outer edges
-            var column = i % columns;
-            if (column == 0)
+            if (i == 0)
                 button.StyleClasses.Add("OpenRight");
-            else if (column == columns - 1)
+            else if (i == deltas.Count - 1)
                 button.StyleClasses.Add("OpenLeft");
             else
                 button.StyleClasses.Add("OpenBoth");
 
             button.OnPressed += _ => OnAdjustDrawRate?.Invoke(delta);
-            AdjustmentButtons.AddChild(button);
+            row.AddChild(button);
         }
+
+        return row;
     }
 
     private static Color ProgressColor(float t)
     {
-        return t < 0.5f 
-            ? Color.InterpolateBetween(Color.Red, Color.Lime, t * 2f) 
+        return t < 0.5f
+            ? Color.InterpolateBetween(Color.Red, Color.Lime, t * 2f)
             : Color.InterpolateBetween(Color.Lime, Color.Cyan, (t - 0.5f) * 2f);
     }
 

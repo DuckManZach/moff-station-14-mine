@@ -35,17 +35,6 @@
   - type: LightningTarget
     priority: 2
   - type: GaussFabricator
-    # Displayed on the UI gauges only, these don't affect output yet
-    temperatureRange:
-      minAcceptable: 20
-      minOptimal: 60
-      maxOptimal: 130
-      maxAcceptable: 200
-    pressureRange:
-      minAcceptable: 20
-      minOptimal: 80
-      maxOptimal: 120
-      maxAcceptable: 300
   - type: SpawnOnBatteryFull
     proto: MoffRefinedConductorIngot
   - type: AccessReader

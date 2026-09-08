@@ -5,7 +5,9 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Sound;
 using Content.Shared._Moffstation.GaussFabricator;
+using Content.Shared.Atmos;
 using Content.Shared.Database;
+using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.UserInterface;
@@ -73,6 +75,13 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
         var query = EntityQueryEnumerator<GaussFabricatorComponent, PowerNetworkBatteryComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var fabricator, out var pnb, out var xform))
         {
+            // Only excite the tile while running, so an idle fabricator doesn't wake atmos every tick.
+            var mixture = _atmosphere.GetContainingMixture((uid, xform), excite: pnb.Enabled);
+
+            // The solver stores frameTime * CurrentReceiving * Efficiency, so this scales how fast we fill.
+            pnb.Efficiency = GetBandMultiplier(fabricator, fabricator.TemperatureAcceptable, fabricator.TemperatureOptimal, mixture?.Temperature)
+                             * GetBandMultiplier(fabricator, fabricator.PressureAcceptable, fabricator.PressureOptimal, mixture?.Pressure);
+
             if (_uiSystem.IsUiOpen(uid, GaussFabricatorUiKey.Key))
                 UpdateUi((uid, fabricator));
 
@@ -82,9 +91,26 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
             var received = pnb.CurrentReceiving;
 
             // Add waste heat proportional to power draw to the surrounding atmosphere.
-            if (received > 0f && _atmosphere.GetContainingMixture((uid, xform), excite: true) is { } mixture)
+            if (received > 0f && mixture is not null)
                 _atmosphere.AddHeat(mixture, received * fabricator.HeatMultiplier * frameTime);
         }
+    }
+
+    /// <summary>
+    /// Multiplier for one reading. A missing mixture counts as bad, same as being outside the acceptable range.
+    /// </summary>
+    private static float GetBandMultiplier(
+        GaussFabricatorComponent comp,
+        MinMax acceptable,
+        MinMax optimal,
+        float? value)
+    {
+        if (value is not { } reading || reading < acceptable.Min || reading > acceptable.Max)
+            return comp.BadMultiplier;
+
+        return reading >= optimal.Min && reading <= optimal.Max
+            ? comp.OptimalMultiplier
+            : comp.NormalMultiplier;
     }
 
     private void UpdateUi(Entity<GaussFabricatorComponent> ent)
@@ -110,8 +136,8 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
                 ent.Comp.MaxDrawRate,
                 _battery.GetChargeLevel((ent.Owner, battery)),
                 outputRate,
-                new GaussFabricatorGauge(mixture?.Temperature, ent.Comp.TemperatureRange),
-                new GaussFabricatorGauge(mixture?.Pressure, ent.Comp.PressureRange),
+                new GaussFabricatorGauge(mixture?.Temperature, ent.Comp.TemperatureAcceptable, ent.Comp.TemperatureOptimal),
+                new GaussFabricatorGauge(mixture?.Pressure, ent.Comp.PressureAcceptable, ent.Comp.PressureOptimal),
                 pnb.Enabled));
     }
 }
