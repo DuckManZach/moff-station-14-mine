@@ -19,13 +19,6 @@ public partial record struct GaussFabricatorGauge(float? Current, MinMax Accepta
     public readonly float? Current = Current;
     public readonly MinMax Acceptable = Acceptable;
     public readonly MinMax Optimal = Optimal;
-
-    public readonly bool Equals(GaussFabricatorGauge other)
-    {
-        return Current.Equals(other.Current)
-            && Acceptable.Equals(other.Acceptable)
-            && Optimal.Equals(other.Optimal);
-    }
 }
 
 [Serializable, NetSerializable]

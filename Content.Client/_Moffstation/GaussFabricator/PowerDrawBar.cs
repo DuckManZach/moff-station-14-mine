@@ -15,6 +15,8 @@ public sealed class PowerDrawBar : Control
     // interval of big notches measured in small notches
     private const int BigNotchDivisor = 5;
 
+    private const float WattSnapEpsilon = 0.5f;
+
     private const float SmallNotchHeight = 0.15f;
     private const float MediumNotchHeight = 0.35f;
 
@@ -45,16 +47,17 @@ public sealed class PowerDrawBar : Control
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
-        const float tweenInverseHalfLife = 8f;
-        var factor = MathHelper.Clamp01(tweenInverseHalfLife * args.DeltaSeconds);
+        _displayedReceived = GaussFabricatorTween.Approach(
+            _displayedReceived,
+            _targetReceived,
+            args.DeltaSeconds,
+            WattSnapEpsilon);
 
-        _displayedReceived = MathHelper.Lerp(_displayedReceived, _targetReceived, factor);
-        _displayedConfigured = MathHelper.Lerp(_displayedConfigured, _targetConfigured, factor);
-
-        if (MathF.Abs(_displayedReceived - _targetReceived) < 0.5f)
-            _displayedReceived = _targetReceived;
-        if (MathF.Abs(_displayedConfigured - _targetConfigured) < 0.5f)
-            _displayedConfigured = _targetConfigured;
+        _displayedConfigured = GaussFabricatorTween.Approach(
+            _displayedConfigured,
+            _targetConfigured,
+            args.DeltaSeconds,
+            WattSnapEpsilon);
     }
 
     protected override void Draw(DrawingHandleScreen handle)

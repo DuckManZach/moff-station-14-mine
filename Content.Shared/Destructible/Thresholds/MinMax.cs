@@ -26,12 +26,4 @@ public partial struct MinMax
     {
         return new MinMax(tuple.Min, tuple.Max);
     }
-
-    // Moff start - MinMax Comparison operator
-    public readonly bool Equals(MinMax other)
-    {
-        return Min == other.Min
-               && Max == other.Max;
-    }
-    // Moff end
 }

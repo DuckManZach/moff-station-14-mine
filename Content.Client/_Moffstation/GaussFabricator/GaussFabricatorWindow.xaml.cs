@@ -13,14 +13,17 @@ namespace Content.Client._Moffstation.GaussFabricator;
 [GenerateTypedNameReferences]
 public sealed partial class GaussFabricatorWindow : FancyWindow
 {
-    [Dependency] private ILocalizationManager _loc = null!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     public event Action<float>? OnAdjustDrawRate;
     public event Action<bool>? OnToggle;
 
-    private const float TweenInverseHalfLife = 8f; // How the bar be moving
+    private const float ProgressSnapEpsilon = 0.001f;
 
     private readonly ButtonGroup _toggleGroup = new();
+
+    // Reused so the progress bar isn't allocating a style box every frame
+    private readonly StyleBoxFlat _progressStyle = new();
 
     // Draw adjustment button increments, from smallest to largest
     private readonly IEnumerable<float> _increments = [1000f, 10000f, 50000f];
@@ -68,14 +71,15 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     {
         base.FrameUpdate(args);
 
-        var factor = MathHelper.Clamp01(TweenInverseHalfLife * args.DeltaSeconds);
-        _displayedProgress = MathHelper.Lerp(_displayedProgress, _targetProgress, factor);
+        _displayedProgress = GaussFabricatorTween.Approach(
+            _displayedProgress,
+            _targetProgress,
+            args.DeltaSeconds,
+            ProgressSnapEpsilon);
 
-        if (MathF.Abs(_displayedProgress - _targetProgress) < 0.001f)
-            _displayedProgress = _targetProgress;
-
+        _progressStyle.BackgroundColor = ProgressColor(_displayedProgress);
         OutputProgressBar.Value = _displayedProgress;
-        OutputProgressBar.ForegroundStyleBoxOverride = new StyleBoxFlat(ProgressColor(_displayedProgress));
+        OutputProgressBar.ForegroundStyleBoxOverride = _progressStyle;
     }
 
     private void PopulateButtons()
@@ -98,9 +102,14 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
         for (var i = 0; i < deltas.Count; i++)
         {
             var delta = deltas[i];
-            // if its less than zero add a negative sign, if its positive add a plus sign
-            // Doing this because FormatPower doesn't support negative numbers
-            var button = new Button { Text = (delta < 0 ? "-" : "+") + FormatPower(Math.Abs(delta)), HorizontalExpand = true };
+            // Sign lives in the locale string because FormatPower doesn't support negative numbers
+            var button = new Button
+            {
+                Text = _loc.GetString(
+                    delta < 0 ? "gauss-fabricator-window-adjust-decrease" : "gauss-fabricator-window-adjust-increase",
+                    ("value", FormatPower(Math.Abs(delta)))),
+                HorizontalExpand = true,
+            };
 
             if (i == 0)
                 button.StyleClasses.Add("OpenRight");

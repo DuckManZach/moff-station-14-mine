@@ -11,14 +11,16 @@ namespace Content.Client._Moffstation.GaussFabricator;
 /// <summary>
 /// Vertical gauge plotting a live atmospheric reading against an acceptable band and a nested optimal band.
 /// </summary>
-public sealed class AtmosRangeBar : Control
+public sealed partial class AtmosRangeBar : Control
 {
-    private const float TweenInverseHalfLife = 8f;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     // Fraction of the acceptable span shown beyond each end, so the bad thresholds sit inside the gauge.
     private const float DisplayPadding = 0.2f;
 
     private const float LabelMargin = 2f;
+
+    private const float ReadingSnapEpsilon = 0.01f;
 
     private readonly Color _backgroundColor = new(0.1f, 0.1f, 0.1f);
     private readonly Color _acceptableColor = Color.FromHex("#20304a");
@@ -43,8 +45,9 @@ public sealed class AtmosRangeBar : Control
 
     public AtmosRangeBar()
     {
-        var fontResource = IoCManager.Resolve<IResourceCache>()
-            .GetResource<FontResource>("/EngineFonts/NotoSans/NotoSansMono-Regular.ttf");
+        IoCManager.InjectDependencies(this);
+
+        var fontResource = _resourceCache.GetResource<FontResource>("/EngineFonts/NotoSans/NotoSansMono-Regular.ttf");
         _font = new VectorFont(fontResource, 10);
     }
 
@@ -70,9 +73,7 @@ public sealed class AtmosRangeBar : Control
             return;
         }
 
-        var factor = MathHelper.Clamp01(TweenInverseHalfLife * args.DeltaSeconds);
-        var next = MathHelper.Lerp(displayed, target, factor);
-        _displayedCurrent = MathF.Abs(next - target) < 0.01f ? target : next;
+        _displayedCurrent = GaussFabricatorTween.Approach(displayed, target, args.DeltaSeconds, ReadingSnapEpsilon);
     }
 
     protected override void Draw(DrawingHandleScreen handle)

@@ -12,36 +12,40 @@ using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Moffstation.GaussFabricator;
 
 public sealed partial class GaussFabricatorSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
-    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AmbientSoundSystem _ambient = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
-    [Dependency] private AmbientSoundSystem _ambient = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+
+    [Dependency] private EntityQuery<BatteryComponent> _batteryQuery = default!;
+    [Dependency] private EntityQuery<PowerNetworkBatteryComponent> _powerBatteryQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        // Stays here because the attribute can't express ordering.
         UpdatesAfter.Add(typeof(PowerNetSystem));
-
-        SubscribeLocalEvent<GaussFabricatorComponent, AfterActivatableUIOpenEvent>(OnUiOpened);
-        SubscribeLocalEvent<GaussFabricatorComponent, GaussFabricatorAdjustDrawRateMessage>(OnAdjustDrawRate);
-        SubscribeLocalEvent<GaussFabricatorComponent, GaussFabricatorToggleMessage>(OnToggle);
     }
 
+    [SubscribeLocalEvent]
     private void OnUiOpened(Entity<GaussFabricatorComponent> ent, ref AfterActivatableUIOpenEvent args)
     {
         UpdateUi(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnAdjustDrawRate(Entity<GaussFabricatorComponent> ent, ref GaussFabricatorAdjustDrawRateMessage args)
     {
-        if (!TryComp<PowerNetworkBatteryComponent>(ent, out var pnb))
+        if (!_powerBatteryQuery.TryComp(ent, out var pnb))
             return;
 
         if (!float.IsFinite(args.Delta))
@@ -54,9 +58,10 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
         UpdateUi(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnToggle(Entity<GaussFabricatorComponent> ent, ref GaussFabricatorToggleMessage args)
     {
-        if (!TryComp<PowerNetworkBatteryComponent>(ent, out var pnb))
+        if (!_powerBatteryQuery.TryComp(ent, out var pnb))
             return;
 
         if (pnb.Enabled == args.On)
@@ -72,27 +77,22 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<GaussFabricatorComponent, PowerNetworkBatteryComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var fabricator, out var pnb, out var xform))
+        foreach (var ent in EntityQueryEnumerator<GaussFabricatorComponent, PowerNetworkBatteryComponent, TransformComponent>())
         {
-            // Only excite the tile while running, so an idle fabricator doesn't wake atmos every tick.
-            var mixture = _atmosphere.GetContainingMixture((uid, xform), excite: pnb.Enabled);
+            var mixture = _atmosphere.GetContainingMixture((ent.Owner, ent.Comp3), excite: ent.Comp2.Enabled);
 
-            // The solver stores frameTime * CurrentReceiving * Efficiency, so this scales how fast we fill.
-            pnb.Efficiency = GetBandMultiplier(fabricator, fabricator.TemperatureAcceptable, fabricator.TemperatureOptimal, mixture?.Temperature)
-                             * GetBandMultiplier(fabricator, fabricator.PressureAcceptable, fabricator.PressureOptimal, mixture?.Pressure);
+            ent.Comp2.Efficiency =
+                GetBandMultiplier(ent.Comp1, ent.Comp1.TemperatureAcceptable, ent.Comp1.TemperatureOptimal, mixture?.Temperature)
+                * GetBandMultiplier(ent.Comp1, ent.Comp1.PressureAcceptable, ent.Comp1.PressureOptimal, mixture?.Pressure);
 
-            if (_uiSystem.IsUiOpen(uid, GaussFabricatorUiKey.Key))
-                UpdateUi((uid, fabricator));
-
-            if (!pnb.Enabled)
+            if (!ent.Comp2.Enabled)
                 continue;
 
-            var received = pnb.CurrentReceiving;
+            var received = ent.Comp2.CurrentReceiving;
 
             // Add waste heat proportional to power draw to the surrounding atmosphere.
-            if (received > 0f && mixture is not null)
-                _atmosphere.AddHeat(mixture, received * fabricator.HeatMultiplier * frameTime);
+            if (received > 0f && mixture != null)
+                _atmosphere.AddHeat(mixture, received * ent.Comp1.HeatMultiplier * frameTime);
         }
     }
 
@@ -115,8 +115,8 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
 
     private void UpdateUi(Entity<GaussFabricatorComponent> ent)
     {
-        if (!TryComp<PowerNetworkBatteryComponent>(ent, out var pnb)
-            || !TryComp<BatteryComponent>(ent, out var battery))
+        if (!_powerBatteryQuery.TryComp(ent, out var pnb)
+            || !_batteryQuery.TryComp(ent, out var battery))
             return;
 
         // Null when the fabricator is in space or otherwise not in a gas mixture.

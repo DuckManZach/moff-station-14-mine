@@ -4,8 +4,8 @@
 # Right now thats about 300 per minute per thing, seems reasonable enough!
 # TODO: See if this needs to be balanced
 - type: entity
-  id: GaussFabricator
   parent: BaseMachine
+  id: GaussFabricator
   name: gaussian fabrication unit
   description: A high-voltage fabrication unit that channels raw HV current through precision electromagnetic coils, slowly crystallizing dense magnetic alloy as a byproduct. The hum is normal.
   components:
