@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server._Moffstation.Preferences;
 using Content.Server._Moffstation.Station;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;
@@ -14,7 +13,6 @@ namespace Content.Server.Antag;
 /// </summary>
 public sealed partial class AntagSelectionSystem
 {
-    [Dependency] private MoffCharacterSelectionManager _moffCharacterSelection = default!;
     [Dependency] private MoffJobCandidateSystem _moffJobCandidates = default!;
 
     // Resolved on demand; a mutual [Dependency] with MoffCharacterPickerSystem would be circular.
@@ -35,13 +33,11 @@ public sealed partial class AntagSelectionSystem
         if (!PrefsContain(prefs, prefRoles))
             return false;
 
-        // GetMoffPreSelectedAntagPrefRoles skips empty PrefRoles, so nothing constrains these.
-        if (prefRoles.Count == 0)
-            return true;
-
         // Pre-selection runs before the player spawns, so ignore any spawned profile here.
-        return _moffJobCandidates.GetAntagCompatibleProfiles(session, useSpawnedProfile: false)
-            .Any(profile => prefRoles.Any(profile.AntagPreferences.Contains));
+        var compatible = _moffJobCandidates.GetAntagCompatibleProfiles(session, useSpawnedProfile: false)
+                         ?? _moffJobCandidates.GetActiveProfiles(session.UserId);
+
+        return compatible.Any(profile => prefRoles.Any(profile.AntagPreferences.Contains));
     }
 
     /// <summary>
@@ -59,19 +55,8 @@ public sealed partial class AntagSelectionSystem
             return result;
         }
 
-        if (!_pref.TryGetCachedPreferences(session.UserId, out var prefs))
-            return result;
-
-        var state = _moffCharacterSelection.GetState(session.UserId);
-
-        foreach (var (slot, profile) in prefs.Characters)
+        foreach (var profile in _moffJobCandidates.GetActiveProfiles(session.UserId))
         {
-            if (profile == null)
-                continue;
-
-            if (!state.IsSlotEnabled(slot))
-                continue;
-
             result.UnionWith(profile.AntagPreferences);
         }
 

@@ -35,8 +35,13 @@ public sealed class MultiCharacterTest : GameTest
     private const string TestAntagRule = "MoffMultiCharacterTestAntagRule";
     private const string OtherTestAntag = "MoffMultiCharacterOtherTestAntag";
     private const string OtherTestAntagRule = "MoffMultiCharacterOtherTestAntagRule";
+    private const string SelfSpawnAntag = "MoffMultiCharacterSelfSpawnAntag";
+    private const string SelfSpawnRule = "MoffMultiCharacterSelfSpawnAntagRule";
 
     private const string Map = "MoffMultiCharacterTestMap";
+
+    /// A real map, because AntagRandomSpawn needs a tile with breathable atmosphere to spawn on.
+    private const string AtmosMap = "MoffMultiCharacterAtmosMap";
 
     private const string SlotZeroName = "Slot Zero Guy";
     private const string SlotOneName = "Slot One Guy";
@@ -104,6 +109,42 @@ public sealed class MultiCharacterTest : GameTest
     - !type:FixedAntagCount
       proto: {OtherTestAntag}
       count: 1
+
+# Spawns its own body before jobs are assigned, so its antags never reach AssignJobs at all.
+- type: antagSpecifier
+  id: {SelfSpawnAntag}
+  prefRoles:
+  - Nukeops
+
+- type: entity
+  abstract: false
+  parent: BaseUnweightedAntagRule
+  id: {SelfSpawnRule}
+  components:
+  - type: AntagRandomSpawn
+  - type: AntagLoadProfileRule
+    preserveName: true
+  - type: AntagSelection
+    selectionTime: PrePlayerSpawn
+    antags:
+    - !type:FixedAntagCount
+      proto: {SelfSpawnAntag}
+      count: 1
+
+- type: gameMap
+  id: {AtmosMap}
+  mapName: {AtmosMap}
+  mapPath: /Maps/Test/dev_map.yml
+  minPlayers: 0
+  stations:
+    Dev:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: ""Dev""
+        - type: StationJobs
+          availableJobs:
+            {Passenger}: [ -1, -1 ]
 
 - type: gameMap
   id: {Map}
@@ -670,6 +711,82 @@ public sealed class MultiCharacterTest : GameTest
             // Whichever won, the player is in the round holding a job rather than stuck in the lobby.
             Assert.That(ticker.PlayerGameStatuses[pair.Client.User!.Value],
                 Is.EqualTo(PlayerGameStatus.JoinedGame));
+        });
+
+        await EndRound(pair);
+    }
+
+    /// <summary>
+    /// Makes <paramref name="slot"/> the lobby-selected character. SetProfile moves the selection to
+    /// whichever slot it wrote, so re-writing the slot you want selected is how you pin it.
+    /// </summary>
+    private async Task SelectSlot(TestPair pair, int slot)
+    {
+        var prefMan = pair.Server.ResolveDependency<IServerPreferencesManager>();
+        var user = pair.Client.User!.Value;
+
+        var profile = (HumanoidCharacterProfile) prefMan.GetPreferences(user).Characters[slot];
+        await pair.Server.WaitPost(() => prefMan.SetProfile(user, slot, profile).Wait());
+
+        Assert.That(prefMan.GetPreferences(user).SelectedCharacterIndex,
+            Is.EqualTo(slot),
+            "Failed to pin the selected character slot.");
+    }
+
+    /// <summary>The character the player is actually attached to, and whether they hold a job.</summary>
+    private (string Name, ProtoId<JobPrototype>? Job) SpawnedCharacter(TestPair pair)
+    {
+        var jobSys = pair.Server.System<SharedJobSystem>();
+        var mindSys = pair.Server.System<MindSystem>();
+        var user = pair.Client.User!.Value;
+
+        var uid = pair.Server.PlayerMan.SessionsDict.GetValueOrDefault(user)?.AttachedEntity;
+        Assert.That(pair.Server.EntMan.EntityExists(uid), $"{user} is not attached to an entity.");
+
+        var mind = mindSys.GetMind(uid!.Value);
+        var job = jobSys.MindTryGetJobId(mind, out var actualJob) ? actualJob : null;
+
+        return (pair.Server.EntMan.GetComponent<MetaDataComponent>(uid.Value).EntityName, job);
+    }
+
+    /// <summary>
+    /// Antags that spawn their own body (pirates, nukies, stowaways) are pulled out of the player
+    /// pool before jobs are assigned, so none of the job-candidacy narrowing applies to them. The
+    /// character they spawn as still has to be one that opted in to the antag, not whichever
+    /// character happens to be selected in the lobby.
+    /// </summary>
+    [Test]
+    public async Task SelfSpawningAntagUsesCharacterThatWantsIt()
+    {
+        var pair = Pair;
+        pair.Server.CfgMan.SetCVar(CCVars.GameMap, AtmosMap);
+
+        await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
+
+        // Slot zero is the lobby-selected character and wants no antags at all. Only slot one opted
+        // in, so slot one is the only character that may fill the role.
+        await SetupTwoCharactersWithAntags(pair, Passenger, [], Passenger, ["Nukeops"]);
+        await SetGlobalPriorities(pair, (Passenger, JobPriority.High));
+
+        // The whole point: the selected character is the one that does NOT want the antag.
+        await SelectSlot(pair, 0);
+
+        var rule = await AddAntagRule(pair, SelfSpawnRule);
+
+        await StartRound(pair);
+
+        Assert.That(StillPreSelected(pair, rule), Is.True, "The player was not pre-selected for the antag.");
+
+        var (name, job) = SpawnedCharacter(pair);
+
+        Assert.Multiple(() =>
+        {
+            // No job proves this really went down the self-spawn path rather than the normal one,
+            // where the job narrowing would have picked slot one for unrelated reasons.
+            Assert.That(job, Is.Null, "Expected the antag to spawn its own body instead of taking a job.");
+            Assert.That(name,
+                Is.EqualTo(SlotOneName),
+                "The antag spawned as the lobby-selected character, which never opted in to the antag.");
         });
 
         await EndRound(pair);

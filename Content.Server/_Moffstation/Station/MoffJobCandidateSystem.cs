@@ -48,9 +48,10 @@ public sealed partial class MoffJobCandidateSystem : EntitySystem
 
         // Narrowed to the characters that can fill whatever antag they were pre-selected for, so a
         // job can never be assigned that leaves no character able to be both.
-        var active = _player.TryGetSessionById(ev.Player, out var session)
-            ? GetAntagCompatibleProfiles(session)
-            : GetActiveProfiles(ev.Player);
+        var active = (_player.TryGetSessionById(ev.Player, out var session)
+                         ? GetAntagCompatibleProfiles(session)
+                         : null)
+                     ?? GetActiveProfiles(ev.Player);
 
         // Replace rather than add to: the selected character contributes nothing if its slot is
         // inactive, and upstream seeded the list from it unconditionally.
@@ -67,17 +68,6 @@ public sealed partial class MoffJobCandidateSystem : EntitySystem
     }
 
     /// <summary>
-    /// Every antag-compatible character of <paramref name="player"/> willing to take
-    /// <paramref name="job"/>.
-    /// </summary>
-    public List<HumanoidCharacterProfile> GetEligibleProfiles(ICommonSession player, ProtoId<JobPrototype> job)
-    {
-        return GetAntagCompatibleProfiles(player)
-            .Where(profile => profile.JobPriorities.ContainsKey(job))
-            .ToList();
-    }
-
-    /// <summary>
     /// The jobs any antag-compatible character of <paramref name="player"/> will take, at the
     /// player-global priority. <paramref name="fallback"/> covers guests, who have no stored priorities.
     /// </summary>
@@ -87,7 +77,7 @@ public sealed partial class MoffJobCandidateSystem : EntitySystem
     {
         var result = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
 
-        foreach (var profile in GetAntagCompatibleProfiles(player))
+        foreach (var profile in GetAntagCompatibleProfiles(player) ?? GetActiveProfiles(player.UserId))
         {
             foreach (var job in profile.JobPriorities.Keys)
             {
@@ -108,21 +98,23 @@ public sealed partial class MoffJobCandidateSystem : EntitySystem
     /// The active characters that can fill every antag <paramref name="player"/> is pre-selected for,
     /// or just the spawned character once one has been picked. Job candidacy must be drawn from
     /// exactly this set, or a job can be assigned that no antag-capable character wants.
+    /// Null when they are not a pre-selected antag, so a caller can tell "nothing to narrow against"
+    /// apart from "narrowed to nothing" without querying the antag system again.
     /// </summary>
     /// <param name="useSpawnedProfile">
     /// Pass false from anything that runs before the player spawns. Pre-selection is a pre-spawn
     /// question, and a leftover spawned profile would otherwise veto it outright.
     /// </param>
-    public List<HumanoidCharacterProfile> GetAntagCompatibleProfiles(
+    public List<HumanoidCharacterProfile>? GetAntagCompatibleProfiles(
         ICommonSession player,
         bool useSpawnedProfile = true)
     {
         var antagSets = Antag.GetMoffPreSelectedAntagPrefRoles(player);
 
-        // No antag to be compatible with, so don't narrow at all. Notably this keeps a player who
-        // ghosted and re-joined free to pick any of their characters again.
+        // No antag to be compatible with. Notably this keeps a player who ghosted and re-joined free
+        // to pick any of their characters again.
         if (antagSets.Count == 0)
-            return GetActiveProfiles(player.UserId);
+            return null;
 
         // Once they have spawned, the character holding the antag is the only one that can fill it.
         if (useSpawnedProfile && CharacterPicker.GetSpawnedProfile(player.UserId) is { } spawned)

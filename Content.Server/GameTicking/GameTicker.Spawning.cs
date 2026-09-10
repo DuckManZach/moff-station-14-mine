@@ -260,7 +260,7 @@ namespace Content.Server.GameTicking
                 restrictedRoles);
             */
             jobId ??= _stationJobs.PickBestAvailableJobWithPriority(station,
-                _moffCharacterPicker.GetJobPriorities(player, character),
+                _moffJobCandidates.GetJobPriorities(player, character),
                 true,
                 restrictedRoles);
             // Moff end

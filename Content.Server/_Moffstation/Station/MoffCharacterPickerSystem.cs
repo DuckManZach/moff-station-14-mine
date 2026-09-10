@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server.Antag;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
@@ -16,7 +15,6 @@ namespace Content.Server._Moffstation.Station;
 /// </summary>
 public sealed partial class MoffCharacterPickerSystem : EntitySystem
 {
-    [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MoffJobCandidateSystem _candidates = default!;
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
@@ -62,20 +60,20 @@ public sealed partial class MoffCharacterPickerSystem : EntitySystem
     /// </summary>
     public HumanoidCharacterProfile? PickProfile(ICommonSession player, ProtoId<JobPrototype> job)
     {
-        // Already narrowed to the characters that can fill whatever antag they were pre-selected for.
-        var eligible = _candidates.GetEligibleProfiles(player, job);
+        // Null means they are not a pre-selected antag, so nothing narrows their characters.
+        var antagCompatible = _candidates.GetAntagCompatibleProfiles(player);
+        var candidates = antagCompatible ?? _candidates.GetActiveProfiles(player.UserId);
+
+        var eligible = candidates.Where(profile => profile.JobPriorities.ContainsKey(job)).ToList();
 
         if (eligible.Count == 0)
         {
             // A pre-selected antag can be forced onto the overflow job no character enabled, rather
             // than being dropped. Anyone else who wants none of their jobs stays in the lobby.
-            if (_antag.GetMoffPreSelectedAntagPrefRoles(player).Count == 0)
+            if (antagCompatible is not { Count: > 0 })
                 return null;
 
-            eligible = _candidates.GetAntagCompatibleProfiles(player);
-
-            if (eligible.Count == 0)
-                return null;
+            eligible = antagCompatible;
         }
 
         // Drop characters that don't meet the job's own requirements, e.g. age or species. This
@@ -94,12 +92,21 @@ public sealed partial class MoffCharacterPickerSystem : EntitySystem
         return picked;
     }
 
-    /// <summary>For picking a job when the caller has not assigned one, e.g. late joins.</summary>
-    public Dictionary<ProtoId<JobPrototype>, JobPriority> GetJobPriorities(
-        ICommonSession player,
-        HumanoidCharacterProfile fallback)
+    public HumanoidCharacterProfile? PickAntagProfile(ICommonSession player)
     {
-        return _candidates.GetJobPriorities(player, fallback);
+        // AntagSelectEntityEvent is raised more than once per antag, so keep the first answer.
+        if (_spawnedProfiles.TryGetValue(player.UserId, out var already))
+            return already;
+
+        var compatible = _candidates.GetAntagCompatibleProfiles(player);
+
+        if (compatible is not { Count: > 0 })
+            return null;
+
+        var picked = _random.Pick(compatible);
+        _spawnedProfiles[player.UserId] = picked;
+
+        return picked;
     }
 
     /// <summary>Null if they have not spawned this round.</summary>

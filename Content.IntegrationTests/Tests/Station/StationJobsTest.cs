@@ -371,6 +371,7 @@ public sealed class StationJobsTest : GameTest
         var pair = Pair;
         var server = pair.Server;
 
+        var configuration = server.ResolveDependency<IConfigurationManager>();
         var prototypeManager = server.ResolveDependency<IPrototypeManager>();
         var barStationProto = prototypeManager.Index<GameMapPrototype>(SecondStationMapId);
         var entSysMan = server.ResolveDependency<IEntityManager>().EntitySysManager;
@@ -388,48 +389,62 @@ public sealed class StationJobsTest : GameTest
         });
 
         var dummies = await server.AddDummySessions(5);
-        await server.WaitAssertion(() =>
+
+        // This test asserts SameDepartment transmutation specifically, so pin the fallback level
+        // rather than inheriting whatever the server default happens to be.
+        var originalValue = configuration.GetCVar(CCVars.GameMinimumJobFallback);
+        try
         {
-            var fakePlayers = new Dictionary<NetUserId, HumanoidCharacterProfile>
+            await server.WaitAssertion(() =>
             {
-                [dummies[0].UserId] = HumanoidCharacterProfile.Random()
-                    .WithJobPriority("TCaptain", JobPriority.Low)
-                    .WithJobPriority("TChaplain", JobPriority.High)
-                    .WithJobPriority("TMime", JobPriority.Medium),
-                [dummies[1].UserId] = HumanoidCharacterProfile.Random()
-                    .WithJobPriority("TChaplain", JobPriority.High),
-                [dummies[2].UserId] = HumanoidCharacterProfile.Random()
-                    .WithJobPriority("TAssistant", JobPriority.High)
-                    .WithJobPriority("TClown", JobPriority.Low),
-                [dummies[3].UserId] = HumanoidCharacterProfile.Random()
-                    .WithJobPriority("TAssistant", JobPriority.High)
-                    .WithJobPriority("TMime", JobPriority.Low),
-                [dummies[4].UserId] = HumanoidCharacterProfile.Random()
-                    .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>()),
-            };
+                configuration.SetCVar(CCVars.GameMinimumJobFallback, MinimumJobFallback.SameDepartment);
 
-            var stations = new[] { firstStation, secondStation };
-            var assigned = stationJobs.AssignJobs(fakePlayers, stations);
-            stationJobs.AssignOverflowJobs(ref assigned, fakePlayers.Keys, fakePlayers, stations);
+                var fakePlayers = new Dictionary<NetUserId, HumanoidCharacterProfile>
+                {
+                    [dummies[0].UserId] = HumanoidCharacterProfile.Random()
+                        .WithJobPriority("TCaptain", JobPriority.Low)
+                        .WithJobPriority("TChaplain", JobPriority.High)
+                        .WithJobPriority("TMime", JobPriority.Medium),
+                    [dummies[1].UserId] = HumanoidCharacterProfile.Random()
+                        .WithJobPriority("TChaplain", JobPriority.High),
+                    [dummies[2].UserId] = HumanoidCharacterProfile.Random()
+                        .WithJobPriority("TAssistant", JobPriority.High)
+                        .WithJobPriority("TClown", JobPriority.Low),
+                    [dummies[3].UserId] = HumanoidCharacterProfile.Random()
+                        .WithJobPriority("TAssistant", JobPriority.High)
+                        .WithJobPriority("TMime", JobPriority.Low),
+                    [dummies[4].UserId] = HumanoidCharacterProfile.Random()
+                        .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>()),
+                };
 
-            Assert.Multiple(() =>
-            {
-                // Mime is the highest priority, so 0 gets their medium-choice mime
-                Assert.That(assigned[dummies[0].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TMime", secondStation)));
-                // Captain is the second-highest priority, and nobody has it as a preference. 1 has chaplain as their
-                // highest priority, and it's in the same department (in this test) as captain, so it gets transmuted
-                // to that.
-                Assert.That(assigned[dummies[1].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TCaptain", firstStation)));
-                // 2's high preference for assistant is meaningless as there are no round-start assistant slots. Instead,
-                // they get their low preference of Clown.
-                Assert.That(assigned[dummies[2].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TClown", firstStation)));
-                // 3 would get Mime if there were a second slot, but there's not, so they end up getting the
-                // after-round-start assistant slot.
-                Assert.That(assigned[dummies[3].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TAssistant", firstStation)));
-                // `stationJobs.AssignOverflowJobs` assigns Clown here because it's the infinite job available.
-                Assert.That(assigned[dummies[4].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TClown", firstStation)));
+                var stations = new[] { firstStation, secondStation };
+                var assigned = stationJobs.AssignJobs(fakePlayers, stations);
+                stationJobs.AssignOverflowJobs(ref assigned, fakePlayers.Keys, fakePlayers, stations);
+
+                Assert.Multiple(() =>
+                {
+                    // Mime is the highest priority, so 0 gets their medium-choice mime
+                    Assert.That(assigned[dummies[0].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TMime", secondStation)));
+                    // Captain is the second-highest priority, and nobody has it as a preference. 1 has chaplain as their
+                    // highest priority, and it's in the same department (in this test) as captain, so it gets transmuted
+                    // to that.
+                    Assert.That(assigned[dummies[1].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TCaptain", firstStation)));
+                    // 2's high preference for assistant is meaningless as there are no round-start assistant slots. Instead,
+                    // they get their low preference of Clown.
+                    Assert.That(assigned[dummies[2].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TClown", firstStation)));
+                    // 3 would get Mime if there were a second slot, but there's not, so they end up getting the
+                    // after-round-start assistant slot.
+                    Assert.That(assigned[dummies[3].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TAssistant", firstStation)));
+                    // `stationJobs.AssignOverflowJobs` assigns Clown here because it's the infinite job available.
+                    Assert.That(assigned[dummies[4].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) "TClown", firstStation)));
+                });
             });
-        });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+                configuration.SetCVar(CCVars.GameMinimumJobFallback, originalValue));
+        }
     }
 
     [Test]
