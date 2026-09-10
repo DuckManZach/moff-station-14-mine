@@ -155,10 +155,8 @@ public sealed partial class StationJobsSystem
     }
 
     /// <summary>
-    /// Gives the overflow job to any player who was pre-selected as an antag but ended up with no job,
-    /// so they spawn as that antag instead of being dropped to the lobby and having their antag slot
-    /// wiped by <see cref="NoJobsAvailableSpawningEvent"/>. Unlike
-    /// <see cref="AssignOverflowJobs"/> this ignores <see cref="PreferenceUnavailableMode"/> --
+    /// Gives the overflow job to any player who was pre-selected as an antag but ended up with no job.
+    /// Unlike <see cref="AssignOverflowJobs"/> this ignores <see cref="PreferenceUnavailableMode"/> --
     /// holding the antag role is deliberately more important than the character's lobby preference.
     /// </summary>
     /// <param name="assignedJobs">All assigned jobs, mutated in place.</param>

@@ -29,11 +29,9 @@ public sealed partial class AntagSelectionSystem
         List<ProtoId<AntagPrototype>> prefs,
         List<ProtoId<AntagPrototype>> prefRoles)
     {
-        // Upstream's check first, so bans and playtime still filter the pool.
         if (!PrefsContain(prefs, prefRoles))
             return false;
 
-        // Pre-selection runs before the player spawns, so ignore any spawned profile here.
         var compatible = _moffJobCandidates.GetAntagCompatibleProfiles(session, useSpawnedProfile: false)
                          ?? _moffJobCandidates.GetActiveProfiles(session.UserId);
 

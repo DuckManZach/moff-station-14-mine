@@ -60,7 +60,6 @@ public sealed partial class MoffCharacterPickerSystem : EntitySystem
     /// </summary>
     public HumanoidCharacterProfile? PickProfile(ICommonSession player, ProtoId<JobPrototype> job)
     {
-        // Null means they are not a pre-selected antag, so nothing narrows their characters.
         var antagCompatible = _candidates.GetAntagCompatibleProfiles(player);
         var candidates = antagCompatible ?? _candidates.GetActiveProfiles(player.UserId);
 
@@ -68,8 +67,6 @@ public sealed partial class MoffCharacterPickerSystem : EntitySystem
 
         if (eligible.Count == 0)
         {
-            // A pre-selected antag can be forced onto the overflow job no character enabled, rather
-            // than being dropped. Anyone else who wants none of their jobs stays in the lobby.
             if (antagCompatible is not { Count: > 0 })
                 return null;
 

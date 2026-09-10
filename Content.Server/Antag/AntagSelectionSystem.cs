@@ -418,9 +418,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
                 continue;
             }
 
-            // Moff Start - Multi-character selection: require one character that wants this antag
-            // alongside every antag already pre-selected, so no combination is picked that leaves
-            // no character able to take both the antag and an assignable job.
+            // Moff Start - Multi-character selection, do Preference check prior to selecting them as antag.
             /*
             if (!PrefsContain(prefs, antag.Definition.PrefRoles))
                 continue;
