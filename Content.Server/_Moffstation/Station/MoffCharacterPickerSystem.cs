@@ -62,10 +62,21 @@ public sealed partial class MoffCharacterPickerSystem : EntitySystem
     /// </summary>
     public HumanoidCharacterProfile? PickProfile(ICommonSession player, ProtoId<JobPrototype> job)
     {
-        var eligible = _candidates.GetEligibleProfiles(player.UserId, job);
+        // Already narrowed to the characters that can fill whatever antag they were pre-selected for.
+        var eligible = _candidates.GetEligibleProfiles(player, job);
 
         if (eligible.Count == 0)
-            return null;
+        {
+            // A pre-selected antag can be forced onto the overflow job no character enabled, rather
+            // than being dropped. Anyone else who wants none of their jobs stays in the lobby.
+            if (_antag.GetMoffPreSelectedAntagPrefRoles(player).Count == 0)
+                return null;
+
+            eligible = _candidates.GetAntagCompatibleProfiles(player);
+
+            if (eligible.Count == 0)
+                return null;
+        }
 
         // Drop characters that don't meet the job's own requirements, e.g. age or species. This
         // goes through PlayTimeTrackingSystem so that disabled role timers are honored.
@@ -77,21 +88,7 @@ public sealed partial class MoffCharacterPickerSystem : EntitySystem
             allowed = eligible;
         }
 
-        // A preselected antag should be filled by a character that opted in to it.
-        var final = allowed;
-
-        foreach (var antagSet in _antag.GetMoffPreSelectedAntagPrefRoles(player))
-        {
-            final = final.Where(profile => antagSet.Overlaps(profile.AntagPreferences)).ToList();
-        }
-
-        if (final.Count == 0)
-        {
-            Log.Warning($"No active character of {player} wants the antag role they were preselected for.");
-            return null;
-        }
-
-        var picked = _random.Pick(final);
+        var picked = _random.Pick(allowed);
         _spawnedProfiles[player.UserId] = picked;
 
         return picked;
@@ -99,7 +96,7 @@ public sealed partial class MoffCharacterPickerSystem : EntitySystem
 
     /// <summary>For picking a job when the caller has not assigned one, e.g. late joins.</summary>
     public Dictionary<ProtoId<JobPrototype>, JobPriority> GetJobPriorities(
-        NetUserId player,
+        ICommonSession player,
         HumanoidCharacterProfile fallback)
     {
         return _candidates.GetJobPriorities(player, fallback);

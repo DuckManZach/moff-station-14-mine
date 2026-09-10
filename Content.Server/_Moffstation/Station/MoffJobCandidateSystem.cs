@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._Moffstation.Preferences;
+using Content.Server.Antag;
 using Content.Server.Players.JobWhitelist;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Preferences.Managers;
@@ -7,6 +8,7 @@ using Content.Server.Station.Events;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._Moffstation.Station;
@@ -19,7 +21,12 @@ namespace Content.Server._Moffstation.Station;
 public sealed partial class MoffJobCandidateSystem : EntitySystem
 {
     [Dependency] private IServerPreferencesManager _prefs = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private MoffCharacterSelectionManager _selection = default!;
+
+    // Resolved on demand; both of these [Dependency] us, so fields here would be circular.
+    private AntagSelectionSystem Antag => EntityManager.System<AntagSelectionSystem>();
+    private MoffCharacterPickerSystem CharacterPicker => EntityManager.System<MoffCharacterPickerSystem>();
 
     public override void Initialize()
     {
@@ -39,7 +46,11 @@ public sealed partial class MoffJobCandidateSystem : EntitySystem
         if (!_selection.TryGetState(ev.Player, out _))
             return;
 
-        var active = GetActiveProfiles(ev.Player);
+        // Narrowed to the characters that can fill whatever antag they were pre-selected for, so a
+        // job can never be assigned that leaves no character able to be both.
+        var active = _player.TryGetSessionById(ev.Player, out var session)
+            ? GetAntagCompatibleProfiles(session)
+            : GetActiveProfiles(ev.Player);
 
         // Replace rather than add to: the selected character contributes nothing if its slot is
         // inactive, and upstream seeded the list from it unconditionally.
@@ -56,33 +67,34 @@ public sealed partial class MoffJobCandidateSystem : EntitySystem
     }
 
     /// <summary>
-    /// Every active character of <paramref name="player"/> willing to take <paramref name="job"/>.
+    /// Every antag-compatible character of <paramref name="player"/> willing to take
+    /// <paramref name="job"/>.
     /// </summary>
-    public List<HumanoidCharacterProfile> GetEligibleProfiles(NetUserId player, ProtoId<JobPrototype> job)
+    public List<HumanoidCharacterProfile> GetEligibleProfiles(ICommonSession player, ProtoId<JobPrototype> job)
     {
-        return GetActiveProfiles(player)
+        return GetAntagCompatibleProfiles(player)
             .Where(profile => profile.JobPriorities.ContainsKey(job))
             .ToList();
     }
 
     /// <summary>
-    /// The jobs any active character of <paramref name="player"/> will take, at the player-global
-    /// priority. <paramref name="fallback"/> covers guests, who have no stored priorities.
+    /// The jobs any antag-compatible character of <paramref name="player"/> will take, at the
+    /// player-global priority. <paramref name="fallback"/> covers guests, who have no stored priorities.
     /// </summary>
     public Dictionary<ProtoId<JobPrototype>, JobPriority> GetJobPriorities(
-        NetUserId player,
+        ICommonSession player,
         HumanoidCharacterProfile fallback)
     {
         var result = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
 
-        foreach (var profile in GetActiveProfiles(player))
+        foreach (var profile in GetAntagCompatibleProfiles(player))
         {
             foreach (var job in profile.JobPriorities.Keys)
             {
                 if (result.ContainsKey(job))
                     continue;
 
-                var priority = _selection.GetEffectivePriority(player, job, fallback);
+                var priority = _selection.GetEffectivePriority(player.UserId, job, fallback);
 
                 if (priority != JobPriority.Never)
                     result.Add(job, priority);
@@ -90,6 +102,40 @@ public sealed partial class MoffJobCandidateSystem : EntitySystem
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// The active characters that can fill every antag <paramref name="player"/> is pre-selected for,
+    /// or just the spawned character once one has been picked. Job candidacy must be drawn from
+    /// exactly this set, or a job can be assigned that no antag-capable character wants.
+    /// </summary>
+    /// <param name="useSpawnedProfile">
+    /// Pass false from anything that runs before the player spawns. Pre-selection is a pre-spawn
+    /// question, and a leftover spawned profile would otherwise veto it outright.
+    /// </param>
+    public List<HumanoidCharacterProfile> GetAntagCompatibleProfiles(
+        ICommonSession player,
+        bool useSpawnedProfile = true)
+    {
+        var antagSets = Antag.GetMoffPreSelectedAntagPrefRoles(player);
+
+        // No antag to be compatible with, so don't narrow at all. Notably this keeps a player who
+        // ghosted and re-joined free to pick any of their characters again.
+        if (antagSets.Count == 0)
+            return GetActiveProfiles(player.UserId);
+
+        // Once they have spawned, the character holding the antag is the only one that can fill it.
+        if (useSpawnedProfile && CharacterPicker.GetSpawnedProfile(player.UserId) is { } spawned)
+            return [spawned];
+
+        var profiles = GetActiveProfiles(player.UserId);
+
+        foreach (var antagSet in antagSets)
+        {
+            profiles = profiles.Where(profile => antagSet.Overlaps(profile.AntagPreferences)).ToList();
+        }
+
+        return profiles;
     }
 
     /// <summary>Every character of <paramref name="player"/> whose slot is active.</summary>

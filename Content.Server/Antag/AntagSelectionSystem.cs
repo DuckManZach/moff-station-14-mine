@@ -418,8 +418,16 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
                 continue;
             }
 
+            // Moff Start - Multi-character selection: require one character that wants this antag
+            // alongside every antag already pre-selected, so no combination is picked that leaves
+            // no character able to take both the antag and an assignable job.
+            /*
             if (!PrefsContain(prefs, antag.Definition.PrefRoles))
                 continue;
+            */
+            if (!MoffHasCompatibleCharacter(player, prefs, antag.Definition.PrefRoles))
+                continue;
+            // Moff end
 
             // We break it up like this to not log the server trying to make sessions without valid antag prefs into antags.
             if (!CanBeAntag(player, antag.GameRule, antag.Definition, false))

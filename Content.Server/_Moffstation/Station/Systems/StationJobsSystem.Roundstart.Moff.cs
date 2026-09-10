@@ -154,6 +154,60 @@ public sealed partial class StationJobsSystem
         return null;
     }
 
+    /// <summary>
+    /// Gives the overflow job to any player who was pre-selected as an antag but ended up with no job,
+    /// so they spawn as that antag instead of being dropped to the lobby and having their antag slot
+    /// wiped by <see cref="NoJobsAvailableSpawningEvent"/>. Unlike
+    /// <see cref="AssignOverflowJobs"/> this ignores <see cref="PreferenceUnavailableMode"/> --
+    /// holding the antag role is deliberately more important than the character's lobby preference.
+    /// </summary>
+    /// <param name="assignedJobs">All assigned jobs, mutated in place.</param>
+    /// <param name="allPlayersToAssign">All players that might need an overflow assigned.</param>
+    /// <param name="stations">The stations to consider for spawn location.</param>
+    public void MoffAssignOverflowToPreSelectedAntags(
+        ref Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
+        IEnumerable<NetUserId> allPlayersToAssign,
+        IReadOnlyList<EntityUid> stations
+    )
+    {
+        var givenStations = stations.ToList();
+        if (givenStations.Count == 0)
+            return;
+
+        var preSelected = _antag.GetPreSelectedAntagSessions();
+        if (preSelected.Count == 0)
+            return;
+
+        var preSelectedIds = preSelected.Select(session => session.UserId).ToHashSet();
+
+        foreach (var player in allPlayersToAssign)
+        {
+            // AssignOverflowJobs leaves a (null, Invalid) entry behind, so a present key is not
+            // enough -- we have to look at the job itself.
+            if (assignedJobs.TryGetValue(player, out var assigned) && assigned.Item1 != null)
+                continue;
+
+            if (!preSelectedIds.Contains(player))
+                continue;
+
+            _random.Shuffle(givenStations);
+
+            foreach (var station in givenStations)
+            {
+                var overflows = GetOverflowJobs(station).ToList();
+                _random.Shuffle(overflows);
+
+                // Stations with no overflow slots should simply get skipped over.
+                if (overflows.Count == 0)
+                    continue;
+
+                // Overwrite rather than Add; the key may already be here holding a null job.
+                assignedJobs[player] = (overflows[0], station);
+                break;
+            }
+        }
+    }
+
     /// Creates and returns a <see cref="RoundstartJobCandidates"/> from <paramref name="profiles"/>.
     private RoundstartJobCandidates CreateCandidatePool(Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
     {

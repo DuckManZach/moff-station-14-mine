@@ -92,6 +92,11 @@ namespace Content.Server.GameTicking
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
 
+            // Moff Start - a pre-selected antag with no job takes the overflow job regardless of
+            // PreferenceUnavailable, rather than being dropped and having their antag slot wiped.
+            _stationJobs.MoffAssignOverflowToPreSelectedAntags(ref assignedJobs, playerNetIds, spawnableStations);
+            // Moff end
+
             // Calculate extended access for stations.
             var stationJobCounts = spawnableStations.ToDictionary(e => e, _ => 0);
             foreach (var (netUser, (job, station)) in assignedJobs)
@@ -255,7 +260,7 @@ namespace Content.Server.GameTicking
                 restrictedRoles);
             */
             jobId ??= _stationJobs.PickBestAvailableJobWithPriority(station,
-                _moffCharacterPicker.GetJobPriorities(player.UserId, character),
+                _moffCharacterPicker.GetJobPriorities(player, character),
                 true,
                 restrictedRoles);
             // Moff end

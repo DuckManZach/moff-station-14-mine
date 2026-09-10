@@ -15,9 +15,34 @@ namespace Content.Server.Antag;
 public sealed partial class AntagSelectionSystem
 {
     [Dependency] private MoffCharacterSelectionManager _moffCharacterSelection = default!;
+    [Dependency] private MoffJobCandidateSystem _moffJobCandidates = default!;
 
     // Resolved on demand; a mutual [Dependency] with MoffCharacterPickerSystem would be circular.
     private MoffCharacterPickerSystem MoffCharacterPicker => EntityManager.System<MoffCharacterPickerSystem>();
+
+    /// <summary>
+    /// Whether some active character of <paramref name="session"/> wants one of
+    /// <paramref name="prefRoles"/> alongside every antag they are already pre-selected for. Stops a
+    /// combination being picked that no single character can fill, which would otherwise leave the
+    /// player in the lobby with neither a job nor an antag.
+    /// </summary>
+    public bool MoffHasCompatibleCharacter(
+        ICommonSession session,
+        List<ProtoId<AntagPrototype>> prefs,
+        List<ProtoId<AntagPrototype>> prefRoles)
+    {
+        // Upstream's check first, so bans and playtime still filter the pool.
+        if (!PrefsContain(prefs, prefRoles))
+            return false;
+
+        // GetMoffPreSelectedAntagPrefRoles skips empty PrefRoles, so nothing constrains these.
+        if (prefRoles.Count == 0)
+            return true;
+
+        // Pre-selection runs before the player spawns, so ignore any spawned profile here.
+        return _moffJobCandidates.GetAntagCompatibleProfiles(session, useSpawnedProfile: false)
+            .Any(profile => prefRoles.Any(profile.AntagPreferences.Contains));
+    }
 
     /// <summary>
     /// Every antag preference held by any of the player's active characters, or just the spawned
