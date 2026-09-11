@@ -30,7 +30,7 @@
       lull: # Downtime between spicy events.
         duration:
           min: 900 # 15 min
-          max: 1800 # 25 min
+          max: 1500 # 25 min
         nextStates:
           wave: 1
       wave:
@@ -53,19 +53,46 @@
     scheduledGameRules: !type:NestedSelector
       tableId: MoffSpicyEventsTable
     states:
-      lull: # Downtime between spicy events.
+      lull:
         duration:
           min: 900 # 15 min
-          max: 1800 # 25 min
+          max: 1800 # 30 min
         nextStates:
-          wave: 1
-      wave:
+          buildup: 1
+      buildup:
         duration:
+          min: 300 # 5 min
+          max: 480 # 8 min
+        minMaxEventTiming:
           min: 180 # 3 min
+          max: 300 # 5 min
+        nextStates:
+          escalation: 1
+      escalation:
+        duration:
+          min: 300 # 5 min
           max: 420 # 7 min
         minMaxEventTiming:
+          min: 90 # 1.5 min
+          max: 150 # 2.5 min
+        nextStates:
+          surge: 1
+      surge:
+        duration:
+          min: 240 # 4 min
+          max: 360 # 6 min
+        minMaxEventTiming:
           min: 60 # 1 min
-          max: 180 # 3 min
+          max: 90 # 1.5 min
+        nextStates:
+          peak: 1
+      peak: # Everything at once, then it breaks back down to lull.
+        duration:
+          min: 150 # 2.5 min
+          max: 270 # 4.5 min
+        minMaxEventTiming:
+          min: 30 # 0.5 min
+          max: 60 # 1 min
         nextStates:
           lull: 1
         eventOnEnd: true
