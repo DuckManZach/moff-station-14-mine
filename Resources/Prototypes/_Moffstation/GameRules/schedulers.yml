@@ -43,3 +43,29 @@
         nextStates:
           lull: 1
         eventOnEnd: true
+
+- type: entity
+  id: MoffSurvivalSpicyStationEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: MoffStationEventScheduler
+    initialState: lull
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoffSpicyEventsTable
+    states:
+      lull: # Downtime between spicy events.
+        duration:
+          min: 900 # 15 min
+          max: 1800 # 25 min
+        nextStates:
+          wave: 1
+      wave:
+        duration:
+          min: 180 # 3 min
+          max: 420 # 7 min
+        minMaxEventTiming:
+          min: 60 # 1 min
+          max: 180 # 3 min
+        nextStates:
+          lull: 1
+        eventOnEnd: true

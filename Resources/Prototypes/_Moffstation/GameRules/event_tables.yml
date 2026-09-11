@@ -93,25 +93,25 @@
       - !type:NestedSelector
         tableId: WreckEventTable
         prob: 0.05
+      - id: AnomalySpawn
+      - id: BluespaceArtifact
+      - id: BreakerFlip
+      - id: PowerGridCheck
+      - id: SolarFlare
+      - id: VentClog
+      - id: MassHallucinations
+      - id: LightOverloadRule
+      - id: LightOverloadRuleBlinking
 
 # Hostile NPC events
 - type: entityTable
   id: MoffSpicyNonPlayerEventsTable
   table: !type:AllSelector
     children:
-      - id: AnomalySpawn
-      - id: BluespaceArtifact
-      - id: BreakerFlip
-      - id: PowerGridCheck
-      - id: SolarFlare
       - id: GasLeak
       - id: KudzuGrowth
-      - id: VentClog
       - id: GreytideVirus
       - id: IonStorm
-      - id: MassHallucinations
-      - id: LightOverloadRule
-      - id: LightOverloadRuleBlinking
       - id: SyndicateDeadDrop
       - id: LawBreakerVirus
       - id: HellPortalSpawn
