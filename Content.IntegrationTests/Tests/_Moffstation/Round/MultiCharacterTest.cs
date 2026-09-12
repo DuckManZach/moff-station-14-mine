@@ -11,6 +11,7 @@ using Content.Server.Antag;
 using Content.Server.Antag.Components;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
@@ -19,6 +20,7 @@ using Content.Shared.Preferences;
 using Content.Shared.Antag;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
+using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -1090,34 +1092,53 @@ public sealed class MultiCharacterTest : GameTest
     }
 
     /// <summary>
-    /// Naming a character on the joingame command skips the pick that normally applies the roster, so
-    /// the command has to reject a disabled slot itself.
+    /// A late join may take any slot, enabled or not, on any job it can see. The slot-enabled flag
+    /// only governs who is eligible at round start, and the late join window lists every character --
+    /// so the joingame command must not gate on it.
     /// </summary>
     [Test]
-    [Description("A disabled character slot is not offered to a late join, which bypasses the normal pick.")]
-    public async Task LateJoinRejectsDisabledSlot()
+    [Description("A late join can spawn a character whose slot is disabled.")]
+    public async Task LateJoinAcceptsDisabledSlot()
     {
         var pair = Pair;
         pair.Server.CfgMan.SetCVar(CCVars.GameMap, Map);
-        var roster = pair.Server.System<MoffCharacterRosterSystem>();
+        var ticker = pair.Server.System<GameTicker>();
+        var conHost = pair.Server.ResolveDependency<IConsoleHost>();
         var user = pair.Client.User!.Value;
 
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
 
+        // Slot 1 is disabled, so it contributes nothing at round start -- but late joining as it must
+        // still work.
         await SetupTwoCharacters(pair, Passenger, Engineer);
         await SetGlobalPriorities(pair, (Passenger, JobPriority.High), (Engineer, JobPriority.Medium));
         await SetSlotEnabled(pair, 1, false);
 
-        var prefMan = pair.Server.ResolveDependency<IServerPreferencesManager>();
-        var disabled = prefMan.GetPreferences(user).Characters[1];
-        var enabled = prefMan.GetPreferences(user).Characters[0];
+        // Start the round with nobody readied, so the player is left in the lobby to late join from.
+        await pair.Server.WaitPost(() => ticker.ToggleReadyAll(false));
+        await pair.Server.WaitPost(() => ticker.StartRound());
+        await pair.RunTicksSync(10);
 
-        var candidates = roster.Build(user).PreSpawnCandidates;
+        Assert.That(ticker.PlayerGameStatuses[user], Is.Not.EqualTo(PlayerGameStatus.JoinedGame));
 
-        Assert.Multiple(() =>
+        var station = EntityUid.Invalid;
+        await pair.Server.WaitPost(() =>
         {
-            Assert.That(candidates, Does.Not.Contain(disabled), "A disabled slot was offered as a late join character.");
-            Assert.That(candidates, Does.Contain(enabled), "An enabled slot was not offered as a late join character.");
+            var query = pair.Server.EntMan.EntityQueryEnumerator<StationJobsComponent>();
+            if (query.MoveNext(out var uid, out _))
+                station = uid;
         });
+        Assert.That(station, Is.Not.EqualTo(EntityUid.Invalid), "No station to late join to.");
+
+        var session = pair.Server.PlayerMan.SessionsDict[user];
+        var netStation = pair.Server.EntMan.GetNetEntity(station);
+
+        await pair.Server.WaitPost(() =>
+            conHost.ExecuteCommand(session, $"joingame 1 {Engineer} {netStation}"));
+        await pair.RunTicksSync(10);
+
+        AssertJobAndCharacter(pair, Engineer, SlotOneName);
+
+        await EndRound(pair);
     }
 }

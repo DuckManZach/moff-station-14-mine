@@ -15,7 +15,6 @@ moff-character-disabled-label = Inactive
 
 # joingame console command
 moff-join-game-no-character-in-slot = You have no character in slot { $slot }.
-moff-join-game-character-unavailable = The character in slot { $slot } is disabled or cannot hold the role you were selected for.
 
 # Lobby job priority grid
 moff-lobby-lock-priorities-checkbox-label = Unlock priorities
