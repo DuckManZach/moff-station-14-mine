@@ -272,6 +272,10 @@ public sealed partial class StationJobsSystem
         if (givenStations.Count == 0)
             return; // Don't attempt to assign them if there are no stations.
 
+        // Moff - a pre-selected antag dropped to the lobby has their antag slot wiped by
+        // NoJobsAvailableSpawningEvent, so holding the role outranks the character's lobby preference.
+        var moffPreSelectedAntags = _antag.GetPreSelectedAntagSessions().Select(session => session.UserId).ToHashSet();
+
         // For players without jobs, give them the overflow job if they have that set...
         foreach (var player in allPlayersToAssign)
         {
@@ -279,7 +283,8 @@ public sealed partial class StationJobsSystem
                 continue;
 
             var profile = profiles[player];
-            if (profile.PreferenceUnavailable != PreferenceUnavailableMode.SpawnAsOverflow)
+            if (profile.PreferenceUnavailable != PreferenceUnavailableMode.SpawnAsOverflow &&
+                !moffPreSelectedAntags.Contains(player)) // Moff - see above
             {
                 assignedJobs.Add(player, (null, EntityUid.Invalid));
                 continue;
@@ -346,18 +351,8 @@ public sealed partial class StationJobsSystem
 
             foreach (var jobId in profileJobs)
             {
-                // Moff Start - Job priority is a property of the player, not of the character.
-                // Also note that profileJobs may now contain jobs which came from the player's
-                // *other* active characters (see MoffJobCandidateSystem), so indexing this
-                // profile's own priorities would throw.
-                var priority = _moffCharacterSelection.GetEffectivePriority(player, jobId, profile);
-
-                if (priority == JobPriority.Never)
+                if (!profile.JobPriorities.TryGetValue(jobId, out var priority) || priority == JobPriority.Never)
                     continue;
-
-                // if (!profile.JobPriorities.TryGetValue(jobId, out var priority) || priority == JobPriority.Never)
-                //     continue;
-                // Moff end
 
                 if (!ProtoMan.Resolve(jobId, out _))
                     continue;

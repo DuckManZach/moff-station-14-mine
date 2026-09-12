@@ -92,11 +92,6 @@ namespace Content.Server.GameTicking
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
 
-            // Moff Start - a pre-selected antag with no job takes the overflow job regardless of
-            // PreferenceUnavailable, rather than being dropped and having their antag slot wiped.
-            _stationJobs.MoffAssignOverflowToPreSelectedAntags(ref assignedJobs, playerNetIds, spawnableStations);
-            // Moff end
-
             // Calculate extended access for stations.
             var stationJobCounts = spawnableStations.ToDictionary(e => e, _ => 0);
             foreach (var (netUser, (job, station)) in assignedJobs)
@@ -224,7 +219,7 @@ namespace Content.Server.GameTicking
 
             // Moff Start - Multi-character selection: a late join names its character, so apply that
             // before anything downstream reads the profile.
-            var moffExplicit = _moffCharacterPicker.TakeExplicitChoice(player.UserId);
+            var moffExplicit = _moffRoster.TakeRequestedCharacter(player.UserId);
 
             if (moffExplicit != null)
                 character = moffExplicit;
@@ -260,12 +255,12 @@ namespace Content.Server.GameTicking
                 restrictedRoles);
             */
             jobId ??= _stationJobs.PickBestAvailableJobWithPriority(station,
-                _moffJobCandidates.GetJobPriorities(player, character),
+                _moffRoster.Build(player, character).JobPriorities,
                 true,
                 restrictedRoles);
             // Moff end
-            // If no job available, stay in lobby, or if no lobby spawn as observer
-            if (jobId is null)
+            // Moff - hoisted into a local function; the multi-character pick below bails out the same way.
+            void NoJobsAvailable()
             {
                 if (!LobbyEnabled)
                 {
@@ -277,35 +272,28 @@ namespace Content.Server.GameTicking
 
                 _chatManager.DispatchServerMessage(player,
                     Loc.GetString("game-ticker-player-no-jobs-available-when-joining"));
+            }
+
+            // If no job available, stay in lobby, or if no lobby spawn as observer
+            if (jobId is null)
+            {
+                NoJobsAvailable();
                 return;
             }
 
-            // Moff Start - Multi-character selection: spawn whichever active character wants this
-            // job, not whoever is selected in the lobby. Randomized characters are left alone, and
-            // a readied player always spawns, so the lobby-selected character is the last resort.
+            // Moff Start - Multi-character selection: spawn whichever character in play wants this
+            // job, not whoever is selected in the lobby. Randomized characters are left alone, and a
+            // late join already named the one it wants.
             if (!_randomizeCharacters && moffExplicit == null)
             {
-                if (_moffCharacterPicker.PickProfile(player, jobId) is { } picked)
-                {
-                    character = picked;
-                }
-                // This is copied and pasted from above, buuuuut the above stuff is just upstream code so like..
-                // I think not putting it in a function is fine
-                else
+                if (_moffRoster.CommitCharacterForJob(player, jobId) is not { } picked)
                 {
                     Log.Warning($"No active character of {player} will take {jobId}; You staying in the lobby, twin.");
-                    if (!LobbyEnabled)
-                    {
-                        JoinAsObserver(player);
-                    }
-
-                    var evNoJobs = new NoJobsAvailableSpawningEvent(player); // Used by gamerules to wipe their antag slot, if they got one
-                    RaiseLocalEvent(evNoJobs);
-
-                    _chatManager.DispatchServerMessage(player,
-                        Loc.GetString("game-ticker-player-no-jobs-available-when-joining"));
+                    NoJobsAvailable();
                     return;
                 }
+
+                character = picked;
             }
             // Moff end
 

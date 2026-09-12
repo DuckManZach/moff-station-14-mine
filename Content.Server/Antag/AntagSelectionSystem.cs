@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server._Moffstation.Antag;
+using Content.Server._Moffstation.CharacterSelection;
 using Content.Shared._ES.Voting.Components; // Moffstation - enrollment-driven antag rules
 using Content.Server.Administration.Managers;
 using Content.Server.Antag.Components;
@@ -74,6 +75,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private RoleSystem _role = default!;
     [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private MoffCharacterRosterSystem _moffRoster = default!; // Moff - multi-character selection
 
     // arbitrary random number to give late joining some mild interest.
     public const float LateJoinRandomChance = 0.5f;
@@ -418,14 +420,13 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
                 continue;
             }
 
-            // Moff Start - Multi-character selection, do Preference check prior to selecting them as antag.
-            /*
             if (!PrefsContain(prefs, antag.Definition.PrefRoles))
                 continue;
-            */
-            if (!MoffHasCompatibleCharacter(player, prefs, antag.Definition.PrefRoles))
+
+            // Moff - Multi-character selection: some active character has to be able to hold this antag
+            // alongside every one they are already pre-selected for, or they end up with neither a job nor an antag.
+            if (!_moffRoster.HasCharacterFor(player, antag.Definition.PrefRoles))
                 continue;
-            // Moff end
 
             // We break it up like this to not log the server trying to make sessions without valid antag prefs into antags.
             if (!CanBeAntag(player, antag.GameRule, antag.Definition, false))
@@ -810,7 +811,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         // Moffstation - Begin - Use LoadoutAwareEquip function to equip Roleloadout and Starting gear, this allows custom loadouts for antags.
         // _loadout.Equip(antag, gear, prototype.RoleLoadout);
         // Moff - Multi-character selection: prefer the character this player actually spawned as.
-        var profile = MoffCharacterPicker.GetSpawnedProfile(player.UserId)
+        var profile = _moffRoster.TryGetCommittedCharacter(player.UserId)
                       ?? _pref.GetPreferences(player.UserId).SelectedCharacter;
         _loadout.LoadoutAwareEquip(antag, player, gear, prototype.RoleLoadout, profile);
         // Moffstation - End

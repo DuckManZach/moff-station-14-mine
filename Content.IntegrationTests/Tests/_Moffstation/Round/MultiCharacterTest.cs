@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Pair;
+using Content.Server._Moffstation.CharacterSelection;
 using Content.Server._Moffstation.Preferences;
 using Content.Server.GameTicking;
+using Content.Server.Ghost;
 using Content.Server.Antag;
 using Content.Server.Antag.Components;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
+using Content.Server.Station.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
+using Content.Shared.Maps;
 using Content.Shared.Preferences;
 using Content.Shared.Antag;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests._Moffstation.Round;
@@ -24,6 +29,7 @@ namespace Content.IntegrationTests.Tests._Moffstation.Round;
 /// Job selection is per character, job priority is per player, and only active characters spawn.
 /// </summary>
 [TestFixture]
+[TestOf(typeof(MoffCharacterRosterSystem))]
 public sealed class MultiCharacterTest : GameTest
 {
     private static readonly ProtoId<JobPrototype> Passenger = "Passenger";
@@ -31,6 +37,9 @@ public sealed class MultiCharacterTest : GameTest
     private static readonly ProtoId<JobPrototype> Captain = "Captain";
     private const string AgeGated = "MoffMultiCharacterAgeGatedJob";
     private const string OffStationJob = "MoffMultiCharacterOffStationJob";
+    private const string TimeGated = "MoffMultiCharacterTimeGatedJob";
+    private const string DeptJobOffered = "MoffMultiCharacterDeptJobOffered";
+    private const string DeptJobEnabled = "MoffMultiCharacterDeptJobEnabled";
     private const string TestAntag = "MoffMultiCharacterTestAntag";
     private const string TestAntagRule = "MoffMultiCharacterTestAntagRule";
     private const string OtherTestAntag = "MoffMultiCharacterOtherTestAntag";
@@ -39,6 +48,15 @@ public sealed class MultiCharacterTest : GameTest
     private const string SelfSpawnRule = "MoffMultiCharacterSelfSpawnAntagRule";
 
     private const string Map = "MoffMultiCharacterTestMap";
+
+    /// Offers one job the test user can never hold, so a fallback that ignores preferences has
+    /// nothing legitimate to hand them.
+    private const string TimeGatedMap = "MoffMultiCharacterTimeGatedMap";
+
+    /// Offers one job of a test department that the user never enabled, so only a department fallback
+    /// can fill it. Command is deliberately not used: it is not a primary department, so
+    /// SharedJobSystem.TryGetPrimaryDepartment finds nothing for its jobs.
+    private const string DepartmentMap = "MoffMultiCharacterDepartmentMap";
 
     /// A real map, because AntagRandomSpawn needs a tile with breathable atmosphere to spawn on.
     private const string AtmosMap = "MoffMultiCharacterAtmosMap";
@@ -74,6 +92,54 @@ public sealed class MultiCharacterTest : GameTest
   startingGear: PassengerGear
   icon: ""JobIconPassenger""
   supervisors: job-supervisors-everyone
+
+- type: playTimeTracker
+  id: PlayTimeMoffMultiCharacterTimeGated
+
+- type: job
+  id: {TimeGated}
+  name: job-name-passenger
+  description: job-description-passenger
+  playTimeTracker: PlayTimeMoffMultiCharacterTimeGated
+  startingGear: PassengerGear
+  icon: ""JobIconPassenger""
+  supervisors: job-supervisors-everyone
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 36000
+
+- type: playTimeTracker
+  id: PlayTimeMoffMultiCharacterDeptOffered
+
+- type: playTimeTracker
+  id: PlayTimeMoffMultiCharacterDeptEnabled
+
+- type: job
+  id: {DeptJobOffered}
+  name: job-name-passenger
+  description: job-description-passenger
+  playTimeTracker: PlayTimeMoffMultiCharacterDeptOffered
+  startingGear: PassengerGear
+  icon: ""JobIconPassenger""
+  supervisors: job-supervisors-everyone
+
+- type: job
+  id: {DeptJobEnabled}
+  name: job-name-passenger
+  description: job-description-passenger
+  playTimeTracker: PlayTimeMoffMultiCharacterDeptEnabled
+  startingGear: PassengerGear
+  icon: ""JobIconPassenger""
+  supervisors: job-supervisors-everyone
+
+- type: department
+  id: MoffMultiCharacterTestDepartment
+  name: department-Cargo
+  description: department-Cargo-description
+  color: ""#ffffff""
+  roles:
+  - {DeptJobOffered}
+  - {DeptJobEnabled}
 
 - type: antagSpecifier
   id: {TestAntag}
@@ -145,6 +211,36 @@ public sealed class MultiCharacterTest : GameTest
         - type: StationJobs
           availableJobs:
             {Passenger}: [ -1, -1 ]
+
+- type: gameMap
+  id: {TimeGatedMap}
+  mapName: {TimeGatedMap}
+  mapPath: /Maps/Test/empty.yml
+  minPlayers: 0
+  stations:
+    Empty:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: ""Empty""
+        - type: StationJobs
+          availableJobs:
+            {TimeGated}: [ 1, 1 ]
+
+- type: gameMap
+  id: {DepartmentMap}
+  mapName: {DepartmentMap}
+  mapPath: /Maps/Test/empty.yml
+  minPlayers: 0
+  stations:
+    Empty:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: ""Empty""
+        - type: StationJobs
+          availableJobs:
+            {DeptJobOffered}: [ 1, 1 ]
 
 - type: gameMap
   id: {Map}
@@ -275,6 +371,15 @@ public sealed class MultiCharacterTest : GameTest
                 state.EnabledSlots[1] = false;
                 state.JobPriorities.Clear();
             }
+        });
+
+        // SetProfile also pins the selected slot, so writing slot 1 above left the selection on it.
+        // Put it back or the next test to take this pooled pair inherits a selected index of 1 --
+        // which is what JobPriorityTest asserts against.
+        await pair.Server.WaitPost(() =>
+        {
+            if (prefMan.GetPreferences(user).Characters.TryGetValue(0, out var slotZero))
+                prefMan.SetProfile(user, 0, slotZero).Wait();
         });
     }
 
@@ -733,6 +838,22 @@ public sealed class MultiCharacterTest : GameTest
             "Failed to pin the selected character slot.");
     }
 
+    /// <summary>The job the player was assigned, or null when they were left in the lobby.</summary>
+    private ProtoId<JobPrototype>? AssignedJob(TestPair pair)
+    {
+        var jobSys = pair.Server.System<SharedJobSystem>();
+        var mindSys = pair.Server.System<MindSystem>();
+        var user = pair.Client.User!.Value;
+
+        var uid = pair.Server.PlayerMan.SessionsDict.GetValueOrDefault(user)?.AttachedEntity;
+
+        if (!pair.Server.EntMan.EntityExists(uid))
+            return null;
+
+        var mind = mindSys.GetMind(uid!.Value);
+        return jobSys.MindTryGetJobId(mind, out var job) ? job : null;
+    }
+
     /// <summary>The character the player is actually attached to, and whether they hold a job.</summary>
     private (string Name, ProtoId<JobPrototype>? Job) SpawnedCharacter(TestPair pair)
     {
@@ -790,5 +911,213 @@ public sealed class MultiCharacterTest : GameTest
         });
 
         await EndRound(pair);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // The fallback ladder. StationJobsGetCandidatesEvent is subtractive: subscribers narrow the jobs
+    // seeded from the player's roster. When a Moff subscriber instead *replaced* that list, asking it
+    // about one job answered "does this player have any playable job at all", which silently disabled
+    // playtime and whitelist enforcement on the ignoring-preferences fallback.
+    // ---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// Runs job assignment for the test user against a throwaway station built from one of this
+    /// fixture's test maps, and returns the job they were assigned.
+    /// </summary>
+    /// <remarks>
+    /// Deliberately not a whole round: the spawn-side character pick has guards of its own, which
+    /// would hide what the assignment actually decided. The station is deleted again -- leaving it
+    /// behind adds a spawnable station to the pooled server and changes where later tests spawn.
+    /// </remarks>
+    private async Task<ProtoId<JobPrototype>?> AssignJobOnTestStation(
+        TestPair pair,
+        string gameMap,
+        MinimumJobFallback fallback)
+    {
+        var protoMan = pair.Server.ResolveDependency<IPrototypeManager>();
+        var prefMan = pair.Server.ResolveDependency<IServerPreferencesManager>();
+        var stationSys = pair.Server.System<StationSystem>();
+        var stationJobs = pair.Server.System<StationJobsSystem>();
+        var user = pair.Client.User!.Value;
+        var proto = protoMan.Index<GameMapPrototype>(gameMap);
+
+        var originalFallback = pair.Server.CfgMan.GetCVar(CCVars.GameMinimumJobFallback);
+        pair.Server.CfgMan.SetCVar(CCVars.GameMinimumJobFallback, fallback);
+
+        ProtoId<JobPrototype>? assigned = null;
+
+        try
+        {
+            await pair.Server.WaitPost(() =>
+            {
+                var station = stationSys.InitializeNewStation(proto.Stations["Empty"], null, "Empty", proto);
+
+                try
+                {
+                    var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+                    {
+                        [user] = prefMan.GetPreferences(user).SelectedCharacter,
+                    };
+
+                    assigned = stationJobs.AssignJobs(profiles, [station]).GetValueOrDefault(user).Item1;
+                }
+                finally
+                {
+                    pair.Server.EntMan.DeleteEntity(station);
+                }
+            });
+        }
+        finally
+        {
+            pair.Server.CfgMan.SetCVar(CCVars.GameMinimumJobFallback, originalFallback);
+        }
+
+        return assigned;
+    }
+
+    /// <summary>
+    /// <see cref="MinimumJobFallback.AnyEligiblePlayer"/> ignores what a player asked for, never what
+    /// they are allowed to hold. A job they lack the playtime for must stay out of reach.
+    /// </summary>
+    /// <remarks>
+    /// Fails when <c>StationJobsGetCandidatesEvent</c> is answered by replacing the job list rather
+    /// than narrowing it: asking it about one job then means "does this player have any playable job
+    /// at all", which is true for anybody and lets this fallback bypass playtime entirely.
+    /// </remarks>
+    [Test]
+    [Description("The ignoring-preferences job fallback still enforces playtime requirements.")]
+    public async Task AnyEligiblePlayerFallbackRespectsPlaytime()
+    {
+        var pair = Pair;
+
+        await OverrideCVar(Side.Server, CCVars.GameRoleTimers, true);
+
+        // Passenger is deliberately a job this station does not offer. It leaves the player with a
+        // non-empty roster, which is what made the single-job check answer "yes" for the gated job.
+        await SetupTwoCharacters(pair, Passenger, Passenger);
+        await SetGlobalPriorities(pair, (Passenger, JobPriority.High));
+
+        var assigned = await AssignJobOnTestStation(pair, TimeGatedMap, MinimumJobFallback.AnyEligiblePlayer);
+
+        Assert.That(assigned,
+            Is.Not.EqualTo((ProtoId<JobPrototype>?) TimeGated),
+            "A fallback handed out a job the player has no playtime for.");
+    }
+
+    /// <summary>
+    /// <see cref="MinimumJobFallback.SameDepartment"/> has to match on the player-global priority. It
+    /// used to read the selected character's own value -- which the editor flattens to Medium for
+    /// every enabled job -- so a job the player rated Never still dragged them into its department.
+    /// </summary>
+    [Test]
+    [Description("The same-department job fallback matches on the player-global priority, not the character's own.")]
+    public async Task SameDepartmentFallbackUsesGlobalPriority()
+    {
+        var pair = Pair;
+
+        await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
+
+        // Both characters have the sibling job enabled -- same department as the only job this station
+        // offers -- but the player rates it Never, so it cannot be their bridge into the department.
+        await SetupTwoCharacters(pair, DeptJobEnabled, DeptJobEnabled);
+        await SetGlobalPriorities(pair, (Passenger, JobPriority.High));
+
+        var assigned = await AssignJobOnTestStation(pair, DepartmentMap, MinimumJobFallback.SameDepartment);
+
+        Assert.That(assigned,
+            Is.Not.EqualTo((ProtoId<JobPrototype>?) DeptJobOffered),
+            "The department fallback matched on a job the player rated Never.");
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // The committed character. Everything downstream of spawning reads it, so it has to stop being
+    // true the moment the player stops embodying it.
+    // ---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// Ghosting releases the committed character. While it was held for the whole round, a player who
+    /// spawned and then ghosted was stuck offering only their first character's antag preferences, so
+    /// a ghost role their other characters opted in to was unreachable.
+    /// </summary>
+    [Test]
+    [Description("Ghosting releases the committed character, so the player offers every active character again.")]
+    public async Task RejoinAfterGhostingIsNotPinnedToFirstCharacter()
+    {
+        var pair = Pair;
+        pair.Server.CfgMan.SetCVar(CCVars.GameMap, Map);
+        var roster = pair.Server.System<MoffCharacterRosterSystem>();
+        var mindSys = pair.Server.System<MindSystem>();
+        var ghostSys = pair.Server.System<GhostSystem>();
+        var user = pair.Client.User!.Value;
+
+        await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
+
+        // Only slot one opted in to Thief, and slot zero is the one that will spawn.
+        await SetupTwoCharactersWithAntags(pair, Passenger, [], Engineer, ["Thief"]);
+        await SetGlobalPriorities(pair, (Passenger, JobPriority.High), (Engineer, JobPriority.Medium));
+
+        await StartRound(pair);
+
+        AssertJobAndCharacter(pair, Passenger, SlotZeroName);
+
+        var session = pair.Server.PlayerMan.SessionsDict[user];
+
+        Assert.That(roster.TryGetCommittedCharacter(user)?.Name,
+            Is.EqualTo(SlotZeroName),
+            "Spawning did not commit the character that spawned.");
+
+        // While embodying slot zero they can only be the antags slot zero wants.
+        Assert.That(roster.GetAntagPreferences(session), Does.Not.Contain(new ProtoId<AntagPrototype>("Thief")));
+
+        await pair.Server.WaitPost(() =>
+        {
+            var mind = mindSys.GetMind(session.AttachedEntity!.Value);
+            ghostSys.OnGhostAttempt(mind!.Value, canReturnGlobal: false, forced: true);
+        });
+        await pair.RunTicksSync(5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(roster.TryGetCommittedCharacter(user),
+                Is.Null,
+                "Ghosting left the player pinned to the character they had spawned as.");
+            Assert.That(roster.GetAntagPreferences(session),
+                Does.Contain(new ProtoId<AntagPrototype>("Thief")),
+                "A ghost could not offer the antag preferences of their other characters.");
+        });
+
+        await EndRound(pair);
+    }
+
+    /// <summary>
+    /// Naming a character on the joingame command skips the pick that normally applies the roster, so
+    /// the command has to reject a disabled slot itself.
+    /// </summary>
+    [Test]
+    [Description("A disabled character slot is not offered to a late join, which bypasses the normal pick.")]
+    public async Task LateJoinRejectsDisabledSlot()
+    {
+        var pair = Pair;
+        pair.Server.CfgMan.SetCVar(CCVars.GameMap, Map);
+        var roster = pair.Server.System<MoffCharacterRosterSystem>();
+        var user = pair.Client.User!.Value;
+
+        await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
+
+        await SetupTwoCharacters(pair, Passenger, Engineer);
+        await SetGlobalPriorities(pair, (Passenger, JobPriority.High), (Engineer, JobPriority.Medium));
+        await SetSlotEnabled(pair, 1, false);
+
+        var prefMan = pair.Server.ResolveDependency<IServerPreferencesManager>();
+        var disabled = prefMan.GetPreferences(user).Characters[1];
+        var enabled = prefMan.GetPreferences(user).Characters[0];
+
+        var candidates = roster.Build(user).PreSpawnCandidates;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(candidates, Does.Not.Contain(disabled), "A disabled slot was offered as a late join character.");
+            Assert.That(candidates, Does.Contain(enabled), "An enabled slot was not offered as a late join character.");
+        });
     }
 }

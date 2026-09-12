@@ -1,4 +1,4 @@
-using Content.Server._Moffstation.Station; // Moffstation - Multi-character selection
+using Content.Server._Moffstation.CharacterSelection; // Moffstation - Multi-character selection
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -62,8 +62,7 @@ namespace Content.Server.GameTicking
         [Dependency] private MetaDataSystem _metaData = default!;
         [Dependency] private SharedRoleSystem _roles = default!;
         [Dependency] private ServerDbEntryManager _dbEntryManager = default!;
-        [Dependency] private MoffCharacterPickerSystem _moffCharacterPicker = default!; // Moffstation - Multi-character selection
-        [Dependency] private MoffJobCandidateSystem _moffJobCandidates = default!; // Moffstation - Multi-character selection
+        [Dependency] private MoffCharacterRosterSystem _moffRoster = default!; // Moffstation - Multi-character selection
 
         [ViewVariables] private bool _initialized;
         [ViewVariables] private bool _postInitialized;

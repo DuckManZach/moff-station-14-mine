@@ -1,4 +1,4 @@
-using Content.Server._Moffstation.Station;
+using Content.Server._Moffstation.CharacterSelection;
 using Content.Server.Preferences.Managers;
 using Content.Shared._Moffstation.Verbs;
 using Content.Shared.Database;
@@ -11,7 +11,7 @@ namespace Content.Server.Administration.Systems;
 public sealed partial class AdminVerbSystem
 {
     [Dependency] private IServerPreferencesManager _moffPrefsManager = default!;
-    [Dependency] private MoffCharacterPickerSystem _moffCharacterPicker = default!;
+    [Dependency] private MoffCharacterRosterSystem _moffRoster = default!;
 
     /// <summary>
     /// One "spawn here" entry per character the player has, since there is no single selected one.

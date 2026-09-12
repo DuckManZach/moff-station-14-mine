@@ -1,5 +1,4 @@
-using Content.Server._Moffstation.Preferences;
-using Content.Server._Moffstation.Station;
+using Content.Server._Moffstation.CharacterSelection;
 using Content.Server.EUI;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
@@ -19,8 +18,7 @@ public sealed partial class ReadyManifestSystem : EntitySystem
     [Dependency] private EuiManager _euiManager = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IPrototypeManager _protoMan = default!;
-    [Dependency] private MoffCharacterSelectionManager _selection = default!;
-    [Dependency] private MoffJobCandidateSystem _candidates = default!;
+    [Dependency] private MoffCharacterRosterSystem _moffRoster = default!;
 
 
     private readonly Dictionary<ICommonSession, ReadyManifestEui> _openEuis = [];
@@ -80,24 +78,12 @@ public sealed partial class ReadyManifestSystem : EntitySystem
         if (_gameTicker.PlayerGameStatuses[userId] != PlayerGameStatus.ReadyToPlay)
             return;
 
-        // A character only records whether it will take a job, so the priority has to come from the
-        // player-global state, and every active character contributes its jobs.
-        var counted = new HashSet<ProtoId<JobPrototype>>();
-
-        foreach (var profile in _candidates.GetActiveProfiles(userId))
+        // A character only records whether it will take a job; the priority applied to it is
+        // player-global, and every character in play contributes its jobs. The roster resolves both.
+        foreach (var (job, priority) in _moffRoster.Build(userId).JobPriorities)
         {
-            foreach (var job in profile.JobPriorities.Keys)
-            {
-                if (!_jobCounts.ContainsKey(job) || !counted.Add(job))
-                    continue;
-
-                // GetEffectivePriority, not GetPriority: a guest or a player whose database load
-                // has not finished has an empty priority dictionary, and would count as Never.
-                if (_selection.GetEffectivePriority(userId, job, profile) < JobPriority.High)
-                    continue;
-
+            if (priority >= JobPriority.High && _jobCounts.ContainsKey(job))
                 _jobCounts[job]++;
-            }
         }
     }
 

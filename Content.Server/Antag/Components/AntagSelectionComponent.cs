@@ -1,3 +1,4 @@
+using Content.Server._Moffstation.CharacterSelection; // Moff - multi-character selection
 using Content.Server.Administration.Systems;
 using Content.Server.Antag.Selectors;
 using Content.Server.GameTicking;
@@ -8,7 +9,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Antag.Components;
 
-[RegisterComponent, Access(typeof(AntagSelectionSystem), typeof(AdminVerbSystem))]
+[RegisterComponent, Access(typeof(AntagSelectionSystem), typeof(AdminVerbSystem), typeof(MoffCharacterRosterSystem))]
 public sealed partial class AntagSelectionComponent : Component
 {
     /// <summary>

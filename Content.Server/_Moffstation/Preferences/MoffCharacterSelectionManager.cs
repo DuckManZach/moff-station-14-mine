@@ -23,7 +23,6 @@ public sealed partial class MoffCharacterSelectionManager : IPostInjectInit
     [Dependency] private UserDbDataManager _userDb = default!;
     [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private ILogManager _log = default!;
-    [Dependency] private IServerPreferencesManager _prefs = default!;
     [Dependency] private ISharedPlayerManager _playerManager = default!;
 
     private readonly Dictionary<NetUserId, MoffCharacterSelectionState> _cached = new();
@@ -42,59 +41,6 @@ public sealed partial class MoffCharacterSelectionManager : IPostInjectInit
     public bool TryGetState(NetUserId userId, out MoffCharacterSelectionState state)
     {
         return _cached.TryGetValue(userId, out state);
-    }
-
-    /// <summary>
-    /// Returns a throwaway default if nothing is cached, so do not mutate the result.
-    /// </summary>
-    public MoffCharacterSelectionState GetState(NetUserId userId)
-    {
-        return _cached.TryGetValue(userId, out var state) ? state : new MoffCharacterSelectionState();
-    }
-
-    public JobPriority GetPriority(NetUserId userId, ProtoId<JobPrototype> job)
-    {
-        return GetState(userId).GetPriority(job);
-    }
-
-    public bool IsSlotEnabled(NetUserId userId, int slot)
-    {
-        return GetState(userId).IsSlotEnabled(slot);
-    }
-
-    /// <summary>
-    /// Falls back to the per-character priority for guests and not-yet-loaded players, who would
-    /// otherwise be eligible for no jobs at all.
-    /// </summary>
-    public JobPriority GetEffectivePriority(
-        NetUserId userId,
-        ProtoId<JobPrototype> job,
-        HumanoidCharacterProfile fallback)
-    {
-        var state = GetState(userId);
-        
-        if (state.IsAuthoritative || state.JobPriorities.Count > 0)
-            return state.GetPriority(job);
-
-        // The job may have come from an active character other than the caller's fallback, so take
-        // the strongest priority any of them gives it rather than only asking the fallback.
-        var best = fallback.JobPriorities.GetValueOrDefault(job, JobPriority.Never);
-
-        if (!_prefs.TryGetCachedPreferences(userId, out var prefs))
-            return best;
-
-        foreach (var (slot, profile) in prefs.Characters)
-        {
-            if (profile is not HumanoidCharacterProfile humanoid || !state.IsSlotEnabled(slot))
-                continue;
-
-            var priority = humanoid.JobPriorities.GetValueOrDefault(job, JobPriority.Never);
-
-            if (priority > best)
-                best = priority;
-        }
-
-        return best;
     }
 
     /// <summary>

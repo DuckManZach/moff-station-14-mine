@@ -561,7 +561,7 @@ public sealed partial class AntagSelectionSystem
 
         // Moff Start - Multi-character selection: a player opts in to an antag if any of their
         // active characters wants it, not just whichever one happens to be selected.
-        foreach (var antag in GetMoffEnabledAntagPreferences(session))
+        foreach (var antag in _moffRoster.GetAntagPreferences(session))
         // Moff end
         {
             // We also check this in IsSessionValid, but we also check it here since this is public API.

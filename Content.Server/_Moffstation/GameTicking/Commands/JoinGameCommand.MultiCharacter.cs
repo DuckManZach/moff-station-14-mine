@@ -1,4 +1,4 @@
-using Content.Server._Moffstation.Station;
+using Content.Server._Moffstation.CharacterSelection;
 using Content.Server.Preferences.Managers;
 using Content.Shared.Preferences;
 using Robust.Shared.Console;
@@ -51,7 +51,17 @@ internal sealed partial class JoinGameCommand
             return false;
         }
 
-        _entManager.System<MoffCharacterPickerSystem>().SetExplicitChoice(player.UserId, profile);
+        var roster = _entManager.System<MoffCharacterRosterSystem>();
+
+        // Naming a character skips the pick that normally applies these, so a disabled slot -- or one
+        // that cannot hold an antag they were pre-selected for -- has to be rejected here instead.
+        if (!roster.Build(player).PreSpawnCandidates.Contains(profile))
+        {
+            shell.WriteError(Loc.GetString("moff-join-game-character-unavailable", ("slot", slot)));
+            return false;
+        }
+
+        roster.RequestCharacter(player.UserId, profile);
         return true;
     }
 }

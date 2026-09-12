@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Content.Server._Moffstation.Preferences;
+using Content.Server._Moffstation.CharacterSelection;
 using Content.Server._Moffstation.Station.Systems;
 using Content.Server.Station.Events;
 using Content.Shared._Moffstation.Extensions;
@@ -15,7 +15,7 @@ namespace Content.Server.Station.Systems;
 
 public sealed partial class StationJobsSystem
 {
-    [Dependency] private MoffCharacterSelectionManager _moffCharacterSelection = default!;
+    [Dependency] private MoffCharacterRosterSystem _moffRoster = default!;
 
     /// <summary>
     /// Assigns jobs based on the given preferences and list of stations to assign for.
@@ -154,64 +154,17 @@ public sealed partial class StationJobsSystem
         return null;
     }
 
-    /// <summary>
-    /// Gives the overflow job to any player who was pre-selected as an antag but ended up with no job.
-    /// Unlike <see cref="AssignOverflowJobs"/> this ignores <see cref="PreferenceUnavailableMode"/> --
-    /// holding the antag role is deliberately more important than the character's lobby preference.
-    /// </summary>
-    /// <param name="assignedJobs">All assigned jobs, mutated in place.</param>
-    /// <param name="allPlayersToAssign">All players that might need an overflow assigned.</param>
-    /// <param name="stations">The stations to consider for spawn location.</param>
-    public void MoffAssignOverflowToPreSelectedAntags(
-        ref Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
-        IEnumerable<NetUserId> allPlayersToAssign,
-        IReadOnlyList<EntityUid> stations
-    )
-    {
-        var givenStations = stations.ToList();
-        if (givenStations.Count == 0)
-            return;
-
-        var preSelected = _antag.GetPreSelectedAntagSessions();
-        if (preSelected.Count == 0)
-            return;
-
-        var preSelectedIds = preSelected.Select(session => session.UserId).ToHashSet();
-
-        foreach (var player in allPlayersToAssign)
-        {
-            // AssignOverflowJobs leaves a (null, Invalid) entry behind, so a present key is not
-            // enough -- we have to look at the job itself.
-            if (assignedJobs.TryGetValue(player, out var assigned) && assigned.Item1 != null)
-                continue;
-
-            if (!preSelectedIds.Contains(player))
-                continue;
-
-            _random.Shuffle(givenStations);
-
-            foreach (var station in givenStations)
-            {
-                var overflows = GetOverflowJobs(station).ToList();
-                _random.Shuffle(overflows);
-
-                // Stations with no overflow slots should simply get skipped over.
-                if (overflows.Count == 0)
-                    continue;
-
-                // Overwrite rather than Add; the key may already be here holding a null job.
-                assignedJobs[player] = (overflows[0], station);
-                break;
-            }
-        }
-    }
-
     /// Creates and returns a <see cref="RoundstartJobCandidates"/> from <paramref name="profiles"/>.
     private RoundstartJobCandidates CreateCandidatePool(Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
     {
         // Pre-selected antags. Antags status limits which jobs can be assigned, so we'll need this info.
         // It's expensive to calculate, so we calculate it once and reuse it.
         var antags = _antag.GetAntagJobs();
+
+        // Moff - the roster resolves which characters are in play, which of those can hold the antags the
+        // player was pre-selected for, and the player-global priority of every job they offer. Built once
+        // per player here because the pickers below consult it repeatedly.
+        var rosters = profiles.ToDictionary(it => it.Key, it => _moffRoster.Build(it.Key, it.Value));
 
         return new RoundstartJobCandidates(
             _random,
@@ -223,19 +176,30 @@ public sealed partial class StationJobsSystem
                 _jobs.TryGetPrimaryDepartment(job.Id, out var department);
                 return department?.Roles ?? [];
             },
-            profiles.Select(it => (it.Key, it.Value)),
-            filterAllowedJobs: (user, jobs) =>
-            {
-                var ev = new StationJobsGetCandidatesEvent(user, [.. jobs]);
-                RaiseLocalEvent(ref ev);
-                return ev.Jobs;
-            },
-            getEffectivePriorityForMoffMultiCharacterSelection: (user, job, profile) =>
-                _moffCharacterSelection.GetEffectivePriority(user, job, profile)
+            profiles.Keys,
+            offeredJobs: user => FilterAllowedJobs(user, rosters[user].JobPriorities)
         );
+
+        // Narrows the jobs the roster offers down to the ones the player may actually hold. Every
+        // subscriber to StationJobsGetCandidatesEvent is subtractive, so seeding it is what decides
+        // which jobs are on the table in the first place.
+        Dictionary<ProtoId<JobPrototype>, JobPriority> FilterAllowedJobs(
+            NetUserId user,
+            Dictionary<ProtoId<JobPrototype>, JobPriority> offered)
+        {
+            var ev = new StationJobsGetCandidatesEvent(user, [.. offered.Keys]);
+            RaiseLocalEvent(ref ev);
+
+            // Anything a subscriber *added* is by definition not a job this player offers, so it is
+            // dropped rather than indexed into `offered`.
+            return ev.Jobs.Where(offered.ContainsKey).ToDictionary(job => job, job => offered[job]);
+        }
 
         // Below are predicates used to build `isUserAllowedJob` in the candidate pool.
 
+        // Whether the player passes the absolute gates on this job -- playtime and whitelist. Says
+        // nothing about whether any of their characters asked for it; PickCandidateIgnoringPreferences
+        // relies on exactly that distinction.
         bool IsCandidateForJob((NetUserId User, ProtoId<JobPrototype> Job) userAndJob)
         {
             var ev = new StationJobsGetCandidatesEvent(userAndJob.User, [userAndJob.Job]);
