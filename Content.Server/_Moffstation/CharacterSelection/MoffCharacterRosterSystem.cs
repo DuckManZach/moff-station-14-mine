@@ -156,15 +156,10 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     /// <summary>
     /// The jobs <paramref name="candidates"/> will take, priced from the player-global priorities.
     /// </summary>
-    /// <param name="state">
-    /// Their selection state. When it holds no priorities -- guests, fabricated users, a database
-    /// load still in flight -- fall back to the strongest per-character priority across
-    /// <paramref name="active"/>, or the player would be eligible for no job at all.
-    /// </param>
     private static Dictionary<ProtoId<JobPrototype>, JobPriority> ResolveJobPriorities(
         MoffCharacterSelectionState? state,
         List<HumanoidCharacterProfile> candidates,
-        List<HumanoidCharacterProfile> active)
+        List<HumanoidCharacterProfile> activeCharacters)
     {
         var global = state is { IsAuthoritative: true } or { JobPriorities.Count: > 0 } ? state : null;
         var result = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
@@ -178,7 +173,7 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
 
                 var priority = global is { } priorities
                     ? priorities.GetPriority(job)
-                    : BestPerCharacterPriority(job, active, profile);
+                    : BestPerCharacterPriority(job, activeCharacters, profile);
 
                 if (priority != JobPriority.Never)
                     result.Add(job, priority);

@@ -390,8 +390,7 @@ public sealed class StationJobsTest : GameTest
 
         var dummies = await server.AddDummySessions(5);
 
-        // This test asserts SameDepartment transmutation specifically, so pin the fallback level
-        // rather than inheriting whatever the server default happens to be.
+        // We gotta set the cvar here in order to not break the test
         var originalValue = configuration.GetCVar(CCVars.GameMinimumJobFallback);
         try
         {
