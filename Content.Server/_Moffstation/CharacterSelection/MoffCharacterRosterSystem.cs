@@ -22,10 +22,6 @@ namespace Content.Server._Moffstation.CharacterSelection;
 /// play, which of those can hold the antags they were pre-selected for, what job priorities apply to
 /// them, and which one ends up spawning.
 /// </summary>
-/// <remarks>
-/// Everything reads through <see cref="Build(ICommonSession)"/>. Nothing else should re-derive the
-/// active set, re-apply the antag narrowing, or reach for the committed character directly.
-/// </remarks>
 public sealed partial class MoffCharacterRosterSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _proto = default!;
@@ -34,12 +30,9 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private MoffCharacterSelectionManager _selection = default!;
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
-    [Dependency] private EntityQuery<EndedGameRuleComponent> _endedRuleQuery = default!;
 
-    /// <summary>
-    /// The character each player actually spawned as, so antag loadouts, briefings and admin tools
-    /// all act on the body that exists rather than whichever slot is selected in the lobby.
-    /// </summary>
+    [Dependency] private EntityQuery<EndedGameRuleComponent> _endedRuleQuery;
+
     private readonly Dictionary<NetUserId, HumanoidCharacterProfile> _committed = new();
     private readonly Dictionary<NetUserId, HumanoidCharacterProfile> _requested = new();
 
@@ -59,17 +52,14 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
 
     #region Roster
 
-    /// <summary>Resolves everything multi-character selection needs to know about a player.</summary>
-    /// <param name="assumeSelected">
-    /// The profile to fall back to when their selection state is not cached -- a guest, a fabricated
-    /// user id, or a database load still in flight. See <see cref="GetActiveCharacters"/>.
-    /// </param>
+    /// <summary>
+    /// Resolves everything multi-character selection needs to know about a player.
+    /// </summary>
     public MoffPlayerRoster Build(ICommonSession player, HumanoidCharacterProfile? assumeSelected = null)
     {
         return Build(player.UserId, player, assumeSelected);
     }
 
-    /// <inheritdoc cref="Build(ICommonSession, HumanoidCharacterProfile?)"/>
     public MoffPlayerRoster Build(NetUserId player, HumanoidCharacterProfile? assumeSelected = null)
     {
         _player.TryGetSessionById(player, out var session);
@@ -102,11 +92,13 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
             Active = active,
             AntagCompatible = antagCompatible,
             Committed = committed,
-            JobPriorities = ResolveJobPriorities(state, candidates, active),
+            JobPriorities = ResolveJobPriorities(state, candidates),
         };
     }
 
-    /// <summary>Every character of the player with their slot enabled.</summary>
+    /// <summary>
+    /// Every character of the player with their slot enabled.
+    /// </summary>
     private List<HumanoidCharacterProfile> GetActiveCharacters(
         NetUserId player,
         MoffCharacterSelectionState? state,
@@ -127,7 +119,7 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     }
 
     /// <summary>
-    /// Filters <paramref name="active"/> to every antag that the player has been pre-selected for
+    /// Filters a list of character profiles to every antag that a session has been selected for
     /// </summary>
     private List<HumanoidCharacterProfile>? NarrowToAntags(
         ICommonSession session,
@@ -149,12 +141,11 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     }
 
     /// <summary>
-    /// The jobs <paramref name="candidates"/> will take, priced from the player-global priorities.
+    /// The jobs the character candidates will take, alongside their job priority
     /// </summary>
     private static Dictionary<ProtoId<JobPrototype>, JobPriority> ResolveJobPriorities(
         MoffCharacterSelectionState? state,
-        List<HumanoidCharacterProfile> candidates,
-        List<HumanoidCharacterProfile> activeCharacters)
+        List<HumanoidCharacterProfile> candidates)
     {
         var result = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
 
@@ -165,9 +156,7 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
                 if (result.ContainsKey(job))
                     continue;
 
-                var priority = state is { HasPlayerPriorities: true } player
-                    ? player.GetPriority(job)
-                    : BestPerCharacterPriority(job, activeCharacters, profile);
+                var priority = state?.GetPriority(job) ?? JobPriority.Never;
 
                 if (priority != JobPriority.Never)
                     result.Add(job, priority);
@@ -177,33 +166,9 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
         return result;
     }
 
-    /// <summary>The strongest priority any character in play gives <paramref name="job"/>.</summary>
-    private static JobPriority BestPerCharacterPriority(
-        ProtoId<JobPrototype> job,
-        List<HumanoidCharacterProfile> active,
-        HumanoidCharacterProfile candidate)
-    {
-        var best = candidate.JobPriorities.GetValueOrDefault(job, JobPriority.Never);
-
-        foreach (var profile in active)
-        {
-            var priority = profile.JobPriorities.GetValueOrDefault(job, JobPriority.Never);
-
-            if (priority > best)
-                best = priority;
-        }
-
-        return best;
-    }
-
     /// <summary>
-    /// Per antag <paramref name="session"/> is pre-selected for, the prototypes a character must have
-    /// enabled to fill that slot.
+    /// Gets the per-character preferences a session needs to fulfill the antag roles it's pre-selected for.
     /// </summary>
-    /// <remarks>
-    /// Reads <see cref="AntagSelectionComponent.PreSelectedSessions"/> directly rather than going
-    /// through AntagSelectionSystem, which depends on this system.
-    /// </remarks>
     private List<HashSet<ProtoId<AntagPrototype>>> GetPreSelectedAntagPrefRoles(ICommonSession session)
     {
         var result = new List<HashSet<ProtoId<AntagPrototype>>>();
@@ -234,23 +199,17 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     #region Antag queries
 
     /// <summary>
-    /// Whether some character of <paramref name="session"/> can take one of <paramref name="prefRoles"/>
-    /// alongside every antag they are already pre-selected for. Stops a combination being picked that
-    /// no single character can fill, which would leave the player in the lobby with neither a job nor
-    /// an antag.
+    /// Whether a session has a character that can take at least on of the prefRoles, alongside every other antag they've already been selected for.
     /// </summary>
     public bool HasCharacterFor(ICommonSession session, IReadOnlyCollection<ProtoId<AntagPrototype>> prefRoles)
     {
-        // PreSpawnCandidates, not Candidates: pre-selection is a pre-spawn question and a leftover
-        // commit would veto it outright.
         var roster = Build(session);
 
         return roster.PreSpawnCandidates.Any(profile => prefRoles.Any(profile.AntagPreferences.Contains));
     }
 
     /// <summary>
-    /// Every antag preference held by any character still in the running. A player opts in to an
-    /// antag if any of their active characters wants it, not just whichever one is selected.
+    /// Every antag preference held by any character still available.
     /// </summary>
     public HashSet<ProtoId<AntagPrototype>> GetAntagPreferences(ICommonSession session)
     {
