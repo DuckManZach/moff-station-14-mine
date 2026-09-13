@@ -61,7 +61,7 @@ public sealed partial class RoundstartJobCandidates(
                              _candidatesByJobAndPriority.Values.Sum(usersByPriority =>
                                  usersByPriority.Values.Sum(users => users.Count)) == 0;
 
-    /// Removes a candidate from this pool, meaning it cannot be selected by <see cref="GetCandidate"/> or similar
+    /// Removes a candidate from this pool, meaning it cannot be selected by <see cref="PickCandidate"/> or similar
     /// functions.
     public bool Remove(NetUserId candidate)
     {
