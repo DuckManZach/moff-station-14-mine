@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Server.Station.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
@@ -10,11 +10,9 @@ using Robust.Shared.Random;
 namespace Content.Server._Moffstation.Station.Systems;
 
 /// <summary>
-/// A collection ("pool") of <see cref="NetUserId"/>s (called "Candidates") and the jobs they can be
-/// assigned, organized to make <see cref="StationJobsSystem.AssignJobs">picking candidates for
-/// roundstart jobs</see> easier.
-/// Add candidates with <see cref="SetCandidates"/>, pick candidates with <see cref="PickCandidate"/>
-/// and its variants.
+/// A collection ("pool") of <see cref="NetUserId"/>s (called "Candidates") and their job preferences organized to make
+/// <see cref="StationJobsSystem.AssignJobs">picking candidates for roundstart jobs</see> easier.
+/// Add candidates with <see cref="SetCandidates"/>, pick candidates with <see cref="Pick"/> and its variants.
 /// </summary>
 /// <param name="random">The RNG to use when picking candidates. The RNG is used to choose between two candidates which
 /// are otherwise indistinguishable to the pool.</param>
@@ -26,7 +24,7 @@ namespace Content.Server._Moffstation.Station.Systems;
 /// This function is used to retrieve alternate jobs allowed when using <see cref="PickSameDepartmentCandidate"/>.
 /// Although the name specifically mentions "department", this function could be used to return any alternate jobs.
 /// </param>
-public sealed class RoundstartJobCandidates(
+public sealed partial class RoundstartJobCandidates(
     IRobustRandom random,
     Predicate<(NetUserId, ProtoId<JobPrototype>)> isUserAllowedJob,
     Func<ProtoId<JobPrototype>, IEnumerable<ProtoId<JobPrototype>>> sameDepartmentJobs
@@ -63,7 +61,7 @@ public sealed class RoundstartJobCandidates(
                              _candidatesByJobAndPriority.Values.Sum(usersByPriority =>
                                  usersByPriority.Values.Sum(users => users.Count)) == 0;
 
-    /// Removes a candidate from this pool, meaning it cannot be selected by <see cref="PickCandidate"/> or similar
+    /// Removes a candidate from this pool, meaning it cannot be selected by <see cref="GetCandidate"/> or similar
     /// functions.
     public bool Remove(NetUserId candidate)
     {
@@ -103,7 +101,7 @@ public sealed class RoundstartJobCandidates(
     /// given <paramref name="job"/>.
     public NetUserId? PickSameDepartmentCandidate(ProtoId<JobPrototype> job, JobPriority priority)
     {
-        var jobsInSameDept = sameDepartmentJobs(job).ToHashSet();
+        var jobsInSameDept = sameDepartmentJobs(job);
         var matching = _candidates.Where(user =>
             _offeredJobs.TryGetValue(user, out var offered) &&
             offered.Any(pair => pair.Value == priority && jobsInSameDept.Contains(pair.Key))

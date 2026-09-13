@@ -423,8 +423,8 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             if (!PrefsContain(prefs, antag.Definition.PrefRoles))
                 continue;
 
-            // Moff - Multi-character selection: some active character has to be able to hold this antag
-            // alongside every one they are already pre-selected for, or they end up with neither a job nor an antag.
+            // Moff - Multi-character selection
+            // This makes sure that they have a character to play the antag
             if (!_moffRoster.HasCharacterFor(player, antag.Definition.PrefRoles))
                 continue;
 

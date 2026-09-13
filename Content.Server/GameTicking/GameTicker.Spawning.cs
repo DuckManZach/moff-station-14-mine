@@ -259,7 +259,8 @@ namespace Content.Server.GameTicking
                 true,
                 restrictedRoles);
             // Moff end
-            // Moff - hoisted into a local function; the multi-character pick below bails out the same way.
+            // Moff start - We do this otherwise we get the exact same code twice
+            // it's gross but not as gross as DUPLICATE ass code
             void NoJobsAvailable()
             {
                 if (!LobbyEnabled)
@@ -280,6 +281,7 @@ namespace Content.Server.GameTicking
                 NoJobsAvailable();
                 return;
             }
+            // Moff end
 
             // Moff Start - Multi-character selection: spawn whichever character in play wants this
             // job, not whoever is selected in the lobby. Randomized characters are left alone, and a
@@ -289,7 +291,7 @@ namespace Content.Server.GameTicking
                 if (_moffRoster.CommitCharacterForJob(player, jobId) is not { } picked)
                 {
                     Log.Warning($"No active character of {player} will take {jobId}; You staying in the lobby, twin.");
-                    NoJobsAvailable();
+                    NoJobsAvailable(); // Moff - multichar - moved to NoJobsAvailable Function
                     return;
                 }
 
