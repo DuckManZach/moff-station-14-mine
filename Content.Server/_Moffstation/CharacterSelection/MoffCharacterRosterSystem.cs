@@ -41,15 +41,12 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     /// all act on the body that exists rather than whichever slot is selected in the lobby.
     /// </summary>
     private readonly Dictionary<NetUserId, HumanoidCharacterProfile> _committed = new();
-
-    /// <summary>A late join names the character it wants, so nothing should pick one at random for it.</summary>
     private readonly Dictionary<NetUserId, HumanoidCharacterProfile> _requested = new();
 
     public override void Initialize()
     {
         base.Initialize();
 
-        // A C# event rather than the event bus, so it has to be unsubscribed in Shutdown.
         _player.PlayerStatusChanged += OnPlayerStatusChanged;
     }
 
@@ -62,7 +59,7 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
 
     #region Roster
 
-    /// <summary>Resolves everything multi-character selection knows about <paramref name="player"/>.</summary>
+    /// <summary>Resolves everything multi-character selection needs to know about a player.</summary>
     /// <param name="assumeSelected">
     /// The profile to fall back to when their selection state is not cached -- a guest, a fabricated
     /// user id, or a database load still in flight. See <see cref="GetActiveCharacters"/>.
@@ -84,15 +81,20 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
         ICommonSession? session,
         HumanoidCharacterProfile? assumeSelected)
     {
-        MoffCharacterSelectionState? state = _selection.TryGetState(player, out var cached) ? cached : null;
+        _selection.TryGetState(player, out var state);
         var active = GetActiveCharacters(player, state, assumeSelected);
 
-        // Only a live session can hold an antag pre-selection, so there is nothing to narrow against
-        // for a fabricated user id.
-        var antagCompatible = session is null ? null : NarrowToAntags(session, active);
+        // List compatible with any antags they've been selected for
+        // The same as active if they haven't been selected for any
+        var antagCompatible =
+            session == null
+                ? null
+                : NarrowToAntags(session, active);
 
+        // If they are spawned already, get their character
         var committed = _committed.GetValueOrDefault(player);
-        var candidates = committed is not null ? [committed] : antagCompatible ?? active;
+
+        var candidates = committed != null ? [committed] : antagCompatible ?? active;
 
         return new MoffPlayerRoster
         {
@@ -104,13 +106,7 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
         };
     }
 
-    /// <summary>Every character of <paramref name="player"/> whose slot is enabled.</summary>
-    /// <param name="state">
-    /// Their selection state, or null when nothing is cached. With nothing cached we have no idea
-    /// which slots are on, so <paramref name="assumeSelected"/> -- the one profile the caller already
-    /// has -- is the only honest answer. An <i>empty</i> result with the state loaded is a different
-    /// thing entirely: it means they deliberately disabled every slot, and must produce no candidates.
-    /// </param>
+    /// <summary>Every character of the player with their slot enabled.</summary>
     private List<HumanoidCharacterProfile> GetActiveCharacters(
         NetUserId player,
         MoffCharacterSelectionState? state,
@@ -131,8 +127,7 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     }
 
     /// <summary>
-    /// Narrows <paramref name="active"/> to the characters that can fill every antag
-    /// <paramref name="session"/> is pre-selected for. Null when they hold no pre-selection.
+    /// Filters <paramref name="active"/> to every antag that the player has been pre-selected for
     /// </summary>
     private List<HumanoidCharacterProfile>? NarrowToAntags(
         ICommonSession session,
@@ -161,7 +156,6 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
         List<HumanoidCharacterProfile> candidates,
         List<HumanoidCharacterProfile> activeCharacters)
     {
-        var global = state is { IsAuthoritative: true } or { JobPriorities.Count: > 0 } ? state : null;
         var result = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
 
         foreach (var profile in candidates)
@@ -171,8 +165,8 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
                 if (result.ContainsKey(job))
                     continue;
 
-                var priority = global is { } priorities
-                    ? priorities.GetPriority(job)
+                var priority = state is { HasPlayerPriorities: true } player
+                    ? player.GetPriority(job)
                     : BestPerCharacterPriority(job, activeCharacters, profile);
 
                 if (priority != JobPriority.Never)

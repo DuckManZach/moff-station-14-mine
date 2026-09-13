@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
@@ -38,9 +39,18 @@ public sealed partial class MoffCharacterSelectionManager : IPostInjectInit
         _netManager.RegisterNetMessage<MsgSetMoffCharacterEnabled>(HandleSetCharacterEnabled);
     }
 
-    public bool TryGetState(NetUserId userId, out MoffCharacterSelectionState state)
+    /// <summary>
+    /// Gets a player's <see cref="MoffCharacterSelectionState"/>.
+    /// </summary>
+    public bool TryGetState(NetUserId userId, [NotNullWhen(true)] out MoffCharacterSelectionState? state)
     {
-        return _cached.TryGetValue(userId, out state);
+        if (_cached.TryGetValue(userId, out var currentState))
+        {
+            state = currentState;
+            return true;
+        }
+        state = null;
+        return false;
     }
 
     /// <summary>

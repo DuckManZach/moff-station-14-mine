@@ -31,6 +31,12 @@ public readonly record struct MoffCharacterSelectionState
     /// </summary>
     public bool IsAuthoritative { get; init; }
 
+    /// <summary>
+    /// Whether these priorities speak for the player. A guest, or a player whose database load has not
+    /// finished, has neither and must fall back to per-character priorities to be eligible for a job.
+    /// </summary>
+    public bool HasPlayerPriorities => IsAuthoritative || JobPriorities is { Count: > 0 };
+
     public MoffCharacterSelectionState()
     {
     }

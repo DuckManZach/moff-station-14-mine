@@ -189,11 +189,11 @@ public sealed class MultiCharacterTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            if (!_selection.TryGetState(User, out var state))
-                return;
-
-            state.EnabledSlots.Clear();
-            state.JobPriorities.Clear();
+            if (_selection.TryGetState(User, out var state) && state is { } selection)
+            {
+                selection.EnabledSlots.Clear();
+                selection.JobPriorities.Clear();
+            }
         });
     }
 
@@ -205,12 +205,12 @@ public sealed class MultiCharacterTest : GameTest
         // Deactivating is what isolates: an inactive slot contributes no candidates.
         await Server.WaitPost(() =>
         {
-            if (!_selection.TryGetState(User, out var state))
-                return;
-
-            state.EnabledSlots.Clear();
-            state.EnabledSlots[1] = false;
-            state.JobPriorities.Clear();
+            if (_selection.TryGetState(User, out var state) && state is { } selection)
+            {
+                selection.EnabledSlots.Clear();
+                selection.EnabledSlots[1] = false;
+                selection.JobPriorities.Clear();
+            }
         });
 
         // SetProfile also pins the selected slot, so writing slot 1 above left the selection on it.
@@ -274,9 +274,8 @@ public sealed class MultiCharacterTest : GameTest
     {
         await Server.WaitPost(() =>
         {
-            // GetState hands back a throwaway default when nothing is cached.
             Assert.That(_selection.TryGetState(User, out var state), Is.True, "Selection state was not loaded.");
-            state.EnabledSlots[slot] = enabled;
+            state!.Value.EnabledSlots[slot] = enabled;
         });
     }
 
