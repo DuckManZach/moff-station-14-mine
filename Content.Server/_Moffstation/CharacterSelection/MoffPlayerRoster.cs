@@ -18,39 +18,29 @@ public readonly record struct MoffPlayerRoster
     public required List<HumanoidCharacterProfile> Active { get; init; }
 
     /// <summary>
-    /// <see cref="Active"/> narrowed to the characters that can fill every antag the player is
-    /// pre-selected for. Null when they hold no pre-selection, which is what lets a caller tell
-    /// "nothing to narrow against" apart from "narrowed to nothing".
+    /// Active characters filtered to the characters that can take every antag the player is pre-selected for.
     /// </summary>
     public required List<HumanoidCharacterProfile>? AntagCompatible { get; init; }
 
-    /// <summary>The character they actually spawned as, once one has been committed.</summary>
+    /// <summary>The character the player has spawned as</summary>
     public required HumanoidCharacterProfile? Committed { get; init; }
 
     /// <summary>
-    /// The jobs <see cref="Candidates"/> will take, priced from the player-global priorities.
-    /// Never-priority jobs are absent, so these are exactly the jobs that can be assigned.
+    /// The jobs which can be assigned according to both eligible characters and their priorities
     /// </summary>
     public required Dictionary<ProtoId<JobPrototype>, JobPriority> JobPriorities { get; init; }
 
     /// <summary>
-    /// The characters still in the running. Once one has been committed it is the only answer --
-    /// nothing else can be holding the job or antag it was picked for.
+    /// The characters either eligible to be picked for spawn (with antag selection taken into account), or the one which ended up getting spawned in
     /// </summary>
     public List<HumanoidCharacterProfile> Candidates => Committed is { } committed ? [committed] : PreSpawnCandidates;
 
     /// <summary>
-    /// As <see cref="Candidates"/>, but ignoring <see cref="Committed"/>. Anything asking a
-    /// pre-spawn question wants this, or a leftover commit would veto it outright.
+    /// Candidates, but ignoring whether the player is already spawned
+    /// Anything asking a pre-spawn question wants this, in order to not be thrown off by a spawned player.
     /// </summary>
     public List<HumanoidCharacterProfile> PreSpawnCandidates => AntagCompatible ?? Active;
 
-    public IEnumerable<ProtoId<JobPrototype>> JobsOffered => JobPriorities.Keys;
-
-    public JobPriority GetPriority(ProtoId<JobPrototype> job)
-    {
-        return JobPriorities.GetValueOrDefault(job, JobPriority.Never);
-    }
 
     /// <summary>Every antag any candidate has opted in to.</summary>
     public HashSet<ProtoId<AntagPrototype>> AntagPreferences()
@@ -63,12 +53,6 @@ public readonly record struct MoffPlayerRoster
         }
 
         return result;
-    }
-
-    /// <summary>Whether any candidate has opted in to one of <paramref name="antags"/>.</summary>
-    public bool WantsAny(IReadOnlyCollection<ProtoId<AntagPrototype>> antags)
-    {
-        return Candidates.Any(profile => antags.Any(profile.AntagPreferences.Contains));
     }
 
     /// <summary>The candidates willing to take <paramref name="job"/>.</summary>
