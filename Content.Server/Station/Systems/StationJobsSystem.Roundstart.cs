@@ -272,8 +272,7 @@ public sealed partial class StationJobsSystem
         if (givenStations.Count == 0)
             return; // Don't attempt to assign them if there are no stations.
 
-        // Moff - a pre-selected antag dropped to the lobby has their antag slot wiped by
-        // NoJobsAvailableSpawningEvent, so holding the role outranks the character's lobby preference.
+        // Moff - Multi char selection
         var moffPreSelectedAntags = _antag.GetPreSelectedAntagSessions().Select(session => session.UserId).ToHashSet();
 
         // For players without jobs, give them the overflow job if they have that set...

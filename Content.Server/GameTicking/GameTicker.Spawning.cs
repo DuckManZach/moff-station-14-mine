@@ -283,9 +283,7 @@ namespace Content.Server.GameTicking
             }
             // Moff end
 
-            // Moff Start - Multi-character selection: spawn whichever character in play wants this
-            // job, not whoever is selected in the lobby. Randomized characters are left alone, and a
-            // late join already named the one it wants.
+            // Moff Start - Multi-character selection
             if (!_randomizeCharacters && moffExplicit == null)
             {
                 if (_moffRoster.CommitCharacterForJob(player, jobId) is not { } picked)

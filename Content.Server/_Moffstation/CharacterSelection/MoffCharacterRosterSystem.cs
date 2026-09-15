@@ -36,20 +36,6 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     private readonly Dictionary<NetUserId, HumanoidCharacterProfile> _committed = new();
     private readonly Dictionary<NetUserId, HumanoidCharacterProfile> _requested = new();
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        _player.PlayerStatusChanged += OnPlayerStatusChanged;
-    }
-
-    public override void Shutdown()
-    {
-        base.Shutdown();
-
-        _player.PlayerStatusChanged -= OnPlayerStatusChanged;
-    }
-
     #region Roster
 
     /// <summary>
@@ -218,19 +204,12 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
 
     #endregion
 
-    #region Committing a character
+    #region Spawning
 
-    /// <summary>
-    /// Picks and records the character that will spawn as <paramref name="job"/>. Null only when the
-    /// player has no character able to take it at all; the caller is expected to keep them in the
-    /// lobby rather than spawn someone arbitrary.
-    /// </summary>
     public HumanoidCharacterProfile? CommitCharacterForJob(ICommonSession session, ProtoId<JobPrototype> job)
     {
         var roster = Build(session);
 
-        // In order of preference: a character that asked for this job, then -- only when they are
-        // holding an antag we must not drop -- any antag-compatible character at all.
         List<List<HumanoidCharacterProfile>> tiers = [roster.CharactersFor(job)];
 
         if (roster.AntagCompatible is { Count: > 0 } forced)
@@ -241,8 +220,6 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
             if (tier.Count == 0)
                 continue;
 
-            // Drop characters that don't meet the job's own requirements, e.g. age or species. This
-            // goes through PlayTimeTrackingSystem so that disabled role timers are honored.
             var qualified = tier.Where(profile => _playTime.IsAllowed(session, job, profile)).ToList();
 
             if (qualified.Count == 0)
@@ -257,15 +234,10 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
         return null;
     }
 
-    /// <summary>
-    /// Picks and records the character a rule that builds its own body should use. Null when the
-    /// player holds no antag pre-selection to pick against.
-    /// </summary>
     public HumanoidCharacterProfile? CommitCharacterForAntag(ICommonSession session)
     {
-        // AntagSelectEntityEvent is raised more than once per antag, so keep the first answer.
-        if (_committed.TryGetValue(session.UserId, out var already))
-            return already;
+        if (_committed.TryGetValue(session.UserId, out var committed))
+            return committed;
 
         if (Build(session).AntagCompatible is not { Count: > 0 } compatible)
             return null;
@@ -315,28 +287,6 @@ public sealed partial class MoffCharacterRosterSystem : EntitySystem
     {
         _committed.Clear();
         _requested.Clear();
-    }
-
-    /// <summary>
-    /// Ghosting means they are no longer embodying the committed character, so a ghost role or a late
-    /// rejoin must be free to pick a different one.
-    /// </summary>
-    [SubscribeLocalEvent]
-    private void OnGhostAttached(Entity<GhostComponent> ent, ref PlayerAttachedEvent args)
-    {
-        Forget(args.Player.UserId);
-    }
-
-    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
-    {
-        if (args.NewStatus == SessionStatus.Disconnected)
-            Forget(args.Session.UserId);
-    }
-
-    private void Forget(NetUserId player)
-    {
-        _committed.Remove(player);
-        _requested.Remove(player);
     }
 
     #endregion
