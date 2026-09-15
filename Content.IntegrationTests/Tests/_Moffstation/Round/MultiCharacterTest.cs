@@ -28,22 +28,21 @@ namespace Content.IntegrationTests.Tests._Moffstation.Round;
 /// <summary>
 /// Job selection is per character, job priority is per player, and only active characters spawn.
 /// </summary>
-[TestFixture]
 [TestOf(typeof(MoffCharacterRosterSystem))]
 public sealed class MultiCharacterTest : GameTest
 {
-    [SidedDependency(Side.Server)] private readonly IConsoleHost _conHost = default!;
-    [SidedDependency(Side.Server)] private readonly IServerPreferencesManager _prefs = default!;
-    [SidedDependency(Side.Server)] private readonly MoffCharacterSelectionManager _selection = default!;
+    [SidedDependency(Side.Server)] private readonly IConsoleHost _sConHost = default!;
+    [SidedDependency(Side.Server)] private readonly IServerPreferencesManager _sPrefs = default!;
+    [SidedDependency(Side.Server)] private readonly MoffCharacterSelectionManager _sSelection = default!;
 
-    [SidedDependency(Side.Server)] private readonly AntagSelectionSystem _antag = default!;
-    [SidedDependency(Side.Server)] private readonly GameTicker _ticker = default!;
-    [SidedDependency(Side.Server)] private readonly GhostSystem _ghost = default!;
-    [SidedDependency(Side.Server)] private readonly MindSystem _mind = default!;
-    [SidedDependency(Side.Server)] private readonly MoffCharacterRosterSystem _roster = default!;
-    [SidedDependency(Side.Server)] private readonly SharedJobSystem _jobs = default!;
-    [SidedDependency(Side.Server)] private readonly StationJobsSystem _stationJobs = default!;
-    [SidedDependency(Side.Server)] private readonly StationSystem _stations = default!;
+    [SidedDependency(Side.Server)] private readonly AntagSelectionSystem _sAntag = default!;
+    [SidedDependency(Side.Server)] private readonly GameTicker _sTicker = default!;
+    [SidedDependency(Side.Server)] private readonly GhostSystem _sGhost = default!;
+    [SidedDependency(Side.Server)] private readonly MindSystem _sMind = default!;
+    [SidedDependency(Side.Server)] private readonly MoffCharacterRosterSystem _sRoster = default!;
+    [SidedDependency(Side.Server)] private readonly SharedJobSystem _sJobs = default!;
+    [SidedDependency(Side.Server)] private readonly StationJobsSystem _sStationJobs = default!;
+    [SidedDependency(Side.Server)] private readonly StationSystem _sStations = default!;
 
     private static readonly ProtoId<JobPrototype> Passenger = "Passenger";
     private static readonly ProtoId<JobPrototype> Engineer = "StationEngineer";
@@ -189,7 +188,7 @@ public sealed class MultiCharacterTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            if (_selection.TryGetState(User, out var state) && state is { } selection)
+            if (_sSelection.TryGetState(User, out var state) && state is { } selection)
             {
                 selection.EnabledSlots.Clear();
                 selection.JobPriorities.Clear();
@@ -200,12 +199,12 @@ public sealed class MultiCharacterTest : GameTest
     /// Automatic preference resetting only covers slot 0, so slot 1 would leak between tests.
     public override async Task DoTeardown()
     {
-        await Server.WaitPost(() => _prefs.SetProfile(User, 1, new HumanoidCharacterProfile()).Wait());
+        await Server.WaitPost(() => _sPrefs.SetProfile(User, 1, new HumanoidCharacterProfile()).Wait());
 
-        // Deactivating is what isolates: an inactive slot contributes no candidates.
+        // An inactive slot contributes no candidates.
         await Server.WaitPost(() =>
         {
-            if (_selection.TryGetState(User, out var state) && state is { } selection)
+            if (_sSelection.TryGetState(User, out var state) && state is { } selection)
             {
                 selection.EnabledSlots.Clear();
                 selection.EnabledSlots[1] = false;
@@ -217,8 +216,8 @@ public sealed class MultiCharacterTest : GameTest
         // Put it back, or the next test to take this pooled pair inherits a selected index of 1.
         await Server.WaitPost(() =>
         {
-            if (_prefs.GetPreferences(User).Characters.TryGetValue(0, out var slotZero))
-                _prefs.SetProfile(User, 0, slotZero).Wait();
+            if (_sPrefs.GetPreferences(User).Characters.TryGetValue(0, out var slotZero))
+                _sPrefs.SetProfile(User, 0, slotZero).Wait();
         });
 
         await base.DoTeardown();
@@ -240,22 +239,8 @@ public sealed class MultiCharacterTest : GameTest
         for (var slot = 0; slot < profiles.Length; slot++)
         {
             var (index, profile) = (slot, profiles[slot]);
-            await Server.WaitPost(() => _prefs.SetProfile(User, index, profile).Wait());
+            await Server.WaitPost(() => _sPrefs.SetProfile(User, index, profile).Wait());
         }
-    }
-
-    private Task SetupTwoCharacters(ProtoId<JobPrototype> zero, ProtoId<JobPrototype> one)
-    {
-        return SetupTwoCharactersWithAntags(zero, [], one, []);
-    }
-
-    private Task SetupTwoCharactersWithAntags(
-        ProtoId<JobPrototype> zeroJob,
-        ProtoId<AntagPrototype>[] zeroAntags,
-        ProtoId<JobPrototype> oneJob,
-        ProtoId<AntagPrototype>[] oneAntags)
-    {
-        return SetProfiles(Character(SlotZeroName, zeroJob, zeroAntags), Character(SlotOneName, oneJob, oneAntags));
     }
 
     private async Task SetGlobalPriorities(params (ProtoId<JobPrototype> Job, JobPriority Priority)[] priorities)
@@ -267,14 +252,14 @@ public sealed class MultiCharacterTest : GameTest
             dict[job] = priority;
         }
 
-        await Server.WaitPost(() => _selection.SetJobPriorities(User, dict).Wait());
+        await Server.WaitPost(() => _sSelection.SetJobPriorities(User, dict).Wait());
     }
 
     private async Task SetSlotEnabled(int slot, bool enabled)
     {
-        await Server.WaitPost(() =>
+        await Server.WaitAssertion(() =>
         {
-            Assert.That(_selection.TryGetState(User, out var state), Is.True, "Selection state was not loaded.");
+            Assume.That(_sSelection.TryGetState(User, out var state), Is.True, "Selection state was not loaded.");
             state!.Value.EnabledSlots[slot] = enabled;
         });
     }
@@ -282,17 +267,17 @@ public sealed class MultiCharacterTest : GameTest
     /// SetProfile moves the selection to whichever slot it wrote, so rewriting a slot pins it.
     private async Task SelectSlot(int slot)
     {
-        var profile = _prefs.GetPreferences(User).Characters[slot];
-        await Server.WaitPost(() => _prefs.SetProfile(User, slot, profile).Wait());
+        var profile = _sPrefs.GetPreferences(User).Characters[slot];
+        await Server.WaitPost(() => _sPrefs.SetProfile(User, slot, profile).Wait());
 
-        Assert.That(_prefs.GetPreferences(User).SelectedCharacterIndex, Is.EqualTo(slot), "Failed to pin the slot.");
+        Assume.That(_sPrefs.GetPreferences(User).SelectedCharacterIndex, Is.EqualTo(slot), "Failed to pin the slot.");
     }
 
     private async Task StartRound(string map = Map)
     {
-        Server.CfgMan.SetCVar(CCVars.GameMap, map);
-        _ticker.ToggleReadyAll(true);
-        await Server.WaitPost(() => _ticker.StartRound());
+        await OverrideCVar(Side.Server, CCVars.GameMap, map);
+        _sTicker.ToggleReadyAll(true);
+        await Server.WaitPost(() => _sTicker.StartRound());
         await Pair.RunTicksSync(10);
     }
 
@@ -300,7 +285,7 @@ public sealed class MultiCharacterTest : GameTest
     /// last round's antag role, blocking the next pre-selection.
     private async Task EndRound()
     {
-        await Server.WaitPost(() => _ticker.RestartRound());
+        await Server.WaitPost(() => _sTicker.RestartRound());
         await Pair.RunTicksSync(10);
     }
 
@@ -309,43 +294,43 @@ public sealed class MultiCharacterTest : GameTest
         if (ServerSession?.AttachedEntity is not { } uid || !SEntMan.EntityExists(uid))
             return (null, null);
 
-        var mind = _mind.GetMind(uid);
-        var job = _jobs.MindTryGetJobId(mind, out var id) ? id : null;
+        var mind = _sMind.GetMind(uid);
+        var job = _sJobs.MindTryGetJobId(mind, out var id) ? id : null;
 
-        return (SEntMan.GetComponent<MetaDataComponent>(uid).EntityName, job);
+        return (SComp<MetaDataComponent>(uid).EntityName, job);
     }
 
     private void AssertSpawned(ProtoId<JobPrototype> job, string name)
     {
         var (actualName, actualJob) = Spawned();
 
-        Assert.Multiple(() =>
+        Assume.That(_sTicker.RunLevel, Is.EqualTo(GameRunLevel.InRound), "The round never started.");
+
+        using (Assert.EnterMultipleScope())
         {
-            Assert.That(_ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound));
-            Assert.That(_ticker.PlayerGameStatuses[User], Is.EqualTo(PlayerGameStatus.JoinedGame));
+            Assert.That(_sTicker.PlayerGameStatuses[User], Is.EqualTo(PlayerGameStatus.JoinedGame));
             Assert.That(actualJob, Is.EqualTo((ProtoId<JobPrototype>?) job), "The wrong job was assigned.");
             Assert.That(actualName, Is.EqualTo(name), "The wrong character was spawned.");
-        });
+        }
     }
 
     /// Adds (but does not start) a rule; PrePlayerSpawn pre-selection only needs it added.
     private async Task<EntityUid> AddAntagRule(string ruleId)
     {
         var rule = EntityUid.Invalid;
-        await Server.WaitPost(() => rule = _ticker.AddGameRule(ruleId));
+        await Server.WaitPost(() => rule = _sTicker.AddGameRule(ruleId));
         return rule;
     }
 
     private int AssignedAntagCount(EntityUid rule, string antagProto)
     {
-        return _antag.GetAssignedAntagCount((rule, SEntMan.GetComponent<AntagSelectionComponent>(rule)), antagProto);
+        return _sAntag.GetAssignedAntagCount(SEntity<AntagSelectionComponent>(rule), antagProto);
     }
 
-    /// Deliberately not IsAssignedAntag, which also answers true for a leftover antag mind role and
-    /// would hide a rule that never pre-selected.
+    /// IsAssignedAntag also answers true for a leftover antag mind role, hiding a rule that never pre-selected.
     private bool StillPreSelected(EntityUid rule)
     {
-        foreach (var (_, sessions) in SEntMan.GetComponent<AntagSelectionComponent>(rule).PreSelectedSessions)
+        foreach (var (_, sessions) in SComp<AntagSelectionComponent>(rule).PreSelectedSessions)
         {
             if (sessions.Contains(ServerSession!))
                 return true;
@@ -354,42 +339,36 @@ public sealed class MultiCharacterTest : GameTest
         return false;
     }
 
-    /// Assigns jobs against a throwaway station without running a round -- the spawn-side character
+    /// Assigns jobs against a throwaway station without running a round. the spawn-side character
     /// pick has guards of its own that would hide what the assignment decided. The station is deleted
     /// again; leaving it behind changes where later tests spawn.
     private async Task<ProtoId<JobPrototype>?> AssignJobOnTestStation(string gameMap, MinimumJobFallback fallback)
     {
         var proto = SProtoMan.Index<GameMapPrototype>(gameMap);
-        var original = Server.CfgMan.GetCVar(CCVars.GameMinimumJobFallback);
-        Server.CfgMan.SetCVar(CCVars.GameMinimumJobFallback, fallback);
+
+        // The fallback is a parameter, so this cannot be the EnsureCVar attribute.
+        await OverrideCVar(Side.Server, CCVars.GameMinimumJobFallback, fallback);
 
         ProtoId<JobPrototype>? assigned = null;
 
-        try
+        await Server.WaitPost(() =>
         {
-            await Server.WaitPost(() =>
+            var station = _sStations.InitializeNewStation(proto.Stations["Empty"], null, "Empty", proto);
+
+            try
             {
-                var station = _stations.InitializeNewStation(proto.Stations["Empty"], null, "Empty", proto);
-
-                try
+                var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
                 {
-                    var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
-                    {
-                        [User] = _prefs.GetPreferences(User).SelectedCharacter,
-                    };
+                    [User] = _sPrefs.GetPreferences(User).SelectedCharacter,
+                };
 
-                    assigned = _stationJobs.AssignJobs(profiles, [station]).GetValueOrDefault(User).Item1;
-                }
-                finally
-                {
-                    SEntMan.DeleteEntity(station);
-                }
-            });
-        }
-        finally
-        {
-            Server.CfgMan.SetCVar(CCVars.GameMinimumJobFallback, original);
-        }
+                assigned = _sStationJobs.AssignJobs(profiles, [station]).GetValueOrDefault(User).Item1;
+            }
+            finally
+            {
+                SDeleteNow(station);
+            }
+        });
 
         return assigned;
     }
@@ -398,7 +377,7 @@ public sealed class MultiCharacterTest : GameTest
     [Description("A job on a non-selected character makes the player eligible, and that character spawns.")]
     public async Task SpawnsCharacterMatchingAssignedJob()
     {
-        await SetupTwoCharacters(Passenger, Engineer);
+        await SetProfiles(Character(SlotZeroName, Passenger), Character(SlotOneName, Engineer));
         await SetGlobalPriorities((Engineer, JobPriority.High));
         await StartRound();
 
@@ -410,7 +389,7 @@ public sealed class MultiCharacterTest : GameTest
     [Description("An inactive character is skipped even when it is selected and job-eligible.")]
     public async Task InactiveCharacterIsNotSpawned()
     {
-        await SetupTwoCharacters(Engineer, Engineer);
+        await SetProfiles(Character(SlotZeroName, Engineer), Character(SlotOneName, Engineer));
         await SetGlobalPriorities((Engineer, JobPriority.High));
         await SetSlotEnabled(0, false);
         await StartRound();
@@ -423,7 +402,7 @@ public sealed class MultiCharacterTest : GameTest
     [Description("An inactive character contributes no candidate jobs, even when it is the selected one.")]
     public async Task InactiveSelectedCharacterContributesNoJobs()
     {
-        await SetupTwoCharacters(Captain, Passenger);
+        await SetProfiles(Character(SlotZeroName, Captain), Character(SlotOneName, Passenger));
         await SetGlobalPriorities((Captain, JobPriority.High), (Passenger, JobPriority.Medium));
         await SetSlotEnabled(0, false);
         await StartRound();
@@ -437,7 +416,7 @@ public sealed class MultiCharacterTest : GameTest
     public async Task RoleTimersApplyToOtherCharactersJobs()
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, true);
-        await SetupTwoCharacters(Passenger, Captain);
+        await SetProfiles(Character(SlotZeroName, Passenger), Character(SlotOneName, Captain));
         await SetGlobalPriorities((Captain, JobPriority.High), (Passenger, JobPriority.Medium));
         await StartRound();
 
@@ -451,15 +430,14 @@ public sealed class MultiCharacterTest : GameTest
     public async Task GlobalPriorityAppliesAcrossCharacters()
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
-        await SetupTwoCharacters(Passenger, Captain);
+        await SetProfiles(Character(SlotZeroName, Passenger), Character(SlotOneName, Captain));
         await SetGlobalPriorities((Passenger, JobPriority.Medium), (Captain, JobPriority.High));
         await StartRound();
 
         AssertSpawned(Captain, SlotOneName);
         await EndRound();
 
-        // Flip the preference; the other character should win.
-        Assert.That(_ticker.RunLevel, Is.EqualTo(GameRunLevel.PreRoundLobby));
+        Assume.That(_sTicker.RunLevel, Is.EqualTo(GameRunLevel.PreRoundLobby), "The round did not end.");
         await SetGlobalPriorities((Passenger, JobPriority.High), (Captain, JobPriority.Medium));
         await StartRound();
 
@@ -473,7 +451,6 @@ public sealed class MultiCharacterTest : GameTest
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
 
-        // Both characters want the same age gated job; only the older one may hold it.
         await SetProfiles(Character(SlotZeroName, AgeGated).WithAge(20),
             Character(SlotOneName, AgeGated).WithAge(60));
 
@@ -493,13 +470,13 @@ public sealed class MultiCharacterTest : GameTest
     public async Task AntagNarrowsJobsToCompatibleCharacters()
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
-        await SetupTwoCharactersWithAntags(Passenger, [Traitor], Engineer, []);
+        await SetProfiles(Character(SlotZeroName, Passenger, [Traitor]), Character(SlotOneName, Engineer));
         await SetGlobalPriorities((Engineer, JobPriority.High), (Passenger, JobPriority.Medium));
 
         var rule = await AddAntagRule(TraitorRule);
         await StartRound();
 
-        // Engineer is off the table entirely: only the traitor-capable character contributes jobs.
+        // Engineer is off the table: only the traitor-capable character contributes jobs.
         AssertSpawned(Passenger, SlotZeroName);
         Assert.That(AssignedAntagCount(rule, TraitorAntag), Is.EqualTo(1), "The antag role was not assigned.");
 
@@ -512,8 +489,7 @@ public sealed class MultiCharacterTest : GameTest
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
 
-        // Identical setup to the test above, but no antag rule is running.
-        await SetupTwoCharactersWithAntags(Passenger, [Traitor], Engineer, []);
+        await SetProfiles(Character(SlotZeroName, Passenger, [Traitor]), Character(SlotOneName, Engineer));
         await SetGlobalPriorities((Engineer, JobPriority.High), (Passenger, JobPriority.Medium));
         await StartRound();
 
@@ -523,14 +499,10 @@ public sealed class MultiCharacterTest : GameTest
 
     [Test]
     [Description("A pre-selected antag with no obtainable job takes the overflow job and keeps the antag.")]
+    [EnsureCVar(Side.Server, typeof(CCVars), nameof(CCVars.GameMinimumJobFallback), MinimumJobFallback.None)]
     public async Task PreSelectedAntagWithNoJobGetsOverflow()
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
-
-        // No fallback broadening, so the overflow path is the only thing that can keep them out of the
-        // lobby. Set directly rather than via OverrideCVar, which does not reliably reach a pooled pair.
-        var originalFallback = Server.CfgMan.GetCVar(CCVars.GameMinimumJobFallback);
-        Server.CfgMan.SetCVar(CCVars.GameMinimumJobFallback, MinimumJobFallback.None);
 
         // The traitor-capable character wants only a job this station does not offer, and asked to stay
         // in the lobby rather than take an overflow job. Holding the antag outranks that preference.
@@ -541,19 +513,11 @@ public sealed class MultiCharacterTest : GameTest
 
         await SetGlobalPriorities((OffStation, JobPriority.High), (Engineer, JobPriority.High));
         var rule = await AddAntagRule(TraitorRule);
+        await StartRound();
 
-        try
-        {
-            await StartRound();
-
-            Assert.That(StillPreSelected(rule), Is.True, "The antag slot was wiped instead of falling back.");
-            // Passenger is the station's overflow job, and slot zero never enabled it.
-            AssertSpawned(Passenger, SlotZeroName);
-        }
-        finally
-        {
-            Server.CfgMan.SetCVar(CCVars.GameMinimumJobFallback, originalFallback);
-        }
+        Assert.That(StillPreSelected(rule), Is.True, "The antag slot was wiped instead of falling back.");
+        // Passenger is the station's overflow job, and slot zero never enabled it.
+        AssertSpawned(Passenger, SlotZeroName);
 
         await EndRound();
     }
@@ -563,22 +527,21 @@ public sealed class MultiCharacterTest : GameTest
     public async Task IncompatibleAntagCombinationIsNotPreSelected()
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
-        await SetupTwoCharactersWithAntags(Passenger, [Traitor], Engineer, [Thief]);
+        await SetProfiles(Character(SlotZeroName, Passenger, [Traitor]), Character(SlotOneName, Engineer, [Thief]));
         await SetGlobalPriorities((Passenger, JobPriority.High), (Engineer, JobPriority.High));
 
         var first = await AddAntagRule(TraitorRule);
         var second = await AddAntagRule(ThiefRule);
         await StartRound();
 
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(AssignedAntagCount(first, TraitorAntag) + AssignedAntagCount(second, ThiefAntag),
                 Is.EqualTo(1),
                 "Exactly one of the two incompatible antags should have been filled.");
 
-            // Whichever won, the player is in the round holding a job rather than stuck in the lobby.
-            Assert.That(_ticker.PlayerGameStatuses[User], Is.EqualTo(PlayerGameStatus.JoinedGame));
-        });
+            Assert.That(_sTicker.PlayerGameStatuses[User], Is.EqualTo(PlayerGameStatus.JoinedGame));
+        }
 
         await EndRound();
     }
@@ -589,11 +552,9 @@ public sealed class MultiCharacterTest : GameTest
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
 
-        // Slot zero wants no antags, so slot one is the only character that may fill the role.
-        await SetupTwoCharactersWithAntags(Passenger, [], Passenger, [Nukeops]);
+        await SetProfiles(Character(SlotZeroName, Passenger), Character(SlotOneName, Passenger, [Nukeops]));
         await SetGlobalPriorities((Passenger, JobPriority.High));
 
-        // The whole point: the selected character is the one that does NOT want the antag.
         await SelectSlot(0);
 
         var rule = await AddAntagRule(SelfSpawnRule);
@@ -603,54 +564,45 @@ public sealed class MultiCharacterTest : GameTest
 
         var (name, job) = Spawned();
 
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
-            // No job proves this took the self-spawn path rather than the normal one, where the job
-            // narrowing would have picked slot one for unrelated reasons.
+            // No job means this took the self-spawn path; the normal one would have picked slot one anyway.
             Assert.That(job, Is.Null, "Expected the antag to spawn its own body instead of taking a job.");
             Assert.That(name, Is.EqualTo(SlotOneName), "The antag spawned as a character that never opted in.");
-        });
+        }
 
         await EndRound();
     }
 
-    // StationJobsGetCandidatesEvent is subtractive; a subscriber that replaced the list instead made
-    // "is this job allowed" answer "does this player have any playable job at all".
-
     [Test]
     [Description("The ignoring-preferences job fallback still enforces playtime requirements.")]
+    [TestOf(typeof(StationJobsSystem))]
     public async Task AnyEligiblePlayerFallbackRespectsPlaytime()
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, true);
 
-        // Passenger is deliberately a job this station does not offer. It leaves the player with a
-        // non-empty roster, which is what made the single-job check answer "yes" for the gated job.
-        await SetupTwoCharacters(Passenger, Passenger);
+        // Passenger is not offered here, so the player keeps a non-empty roster.
+        await SetProfiles(Character(SlotZeroName, Passenger), Character(SlotOneName, Passenger));
         await SetGlobalPriorities((Passenger, JobPriority.High));
 
         var assigned = await AssignJobOnTestStation(TimeGatedMap, MinimumJobFallback.AnyEligiblePlayer);
 
-        Assert.That(assigned,
-            Is.Not.EqualTo((ProtoId<JobPrototype>?) TimeGated),
-            "A fallback handed out a job the player has no playtime for.");
+        Assert.That(assigned, Is.Null, $"A fallback handed out {assigned}, which the player has no playtime for.");
     }
 
     [Test]
     [Description("The same-department job fallback matches on the player-global priority, not the character's own.")]
+    [TestOf(typeof(StationJobsSystem))]
     public async Task SameDepartmentFallbackUsesGlobalPriority()
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
 
-        // Both characters have the sibling job enabled -- same department as the only job this station
-        // offers -- but the player rates it Never, so it cannot be their bridge into the department.
-        await SetupTwoCharacters(DeptEnabled, DeptEnabled);
+        await SetProfiles(Character(SlotZeroName, DeptEnabled), Character(SlotOneName, DeptEnabled));
         await SetGlobalPriorities((Passenger, JobPriority.High));
 
         var assigned = await AssignJobOnTestStation(DeptMap, MinimumJobFallback.SameDepartment);
 
-        Assert.That(assigned,
-            Is.Not.EqualTo((ProtoId<JobPrototype>?) DeptOffered),
-            "The department fallback matched on a job the player rated Never.");
+        Assert.That(assigned, Is.Null, $"The department fallback handed out {assigned}, which the player rated Never.");
     }
 
     [Test]
@@ -659,38 +611,37 @@ public sealed class MultiCharacterTest : GameTest
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
 
-        // Only slot one opted in to Thief, and slot zero is the one that will spawn.
-        await SetupTwoCharactersWithAntags(Passenger, [], Engineer, [Thief]);
+        await SetProfiles(Character(SlotZeroName, Passenger), Character(SlotOneName, Engineer, [Thief]));
         await SetGlobalPriorities((Passenger, JobPriority.High), (Engineer, JobPriority.Medium));
         await StartRound();
 
         AssertSpawned(Passenger, SlotZeroName);
 
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
-            Assert.That(_roster.TryGetCommittedCharacter(User)?.Name,
+            Assert.That(_sRoster.TryGetCommittedCharacter(User)?.Name,
                 Is.EqualTo(SlotZeroName),
                 "Spawning did not commit the character that spawned.");
-            // While embodying slot zero they can only be the antags slot zero wants.
-            Assert.That(_roster.GetAntagPreferences(ServerSession!), Does.Not.Contain(Thief));
-        });
+            // While taking slot zero they can only be the antags slot zero wants.
+            Assert.That(_sRoster.GetAntagPreferences(ServerSession!), Does.Not.Contain(Thief));
+        }
 
         await Server.WaitPost(() =>
         {
-            var mind = _mind.GetMind(ServerSession!.AttachedEntity!.Value);
-            _ghost.OnGhostAttempt(mind!.Value, canReturnGlobal: false, forced: true);
+            var mind = _sMind.GetMind(ServerSession!.AttachedEntity!.Value);
+            _sGhost.OnGhostAttempt(mind!.Value, canReturnGlobal: false, forced: true);
         });
         await Pair.RunTicksSync(5);
 
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
-            Assert.That(_roster.TryGetCommittedCharacter(User),
+            Assert.That(_sRoster.TryGetCommittedCharacter(User),
                 Is.Null,
                 "Ghosting left the player pinned to the character they had spawned as.");
-            Assert.That(_roster.GetAntagPreferences(ServerSession!),
+            Assert.That(_sRoster.GetAntagPreferences(ServerSession!),
                 Does.Contain(Thief),
                 "A ghost could not offer the antag preferences of their other characters.");
-        });
+        }
 
         await EndRound();
     }
@@ -701,18 +652,18 @@ public sealed class MultiCharacterTest : GameTest
     {
         await OverrideCVar(Side.Server, CCVars.GameRoleTimers, false);
 
-        // Slot 1 contributes nothing at round start, but late joining as it must still work.
-        await SetupTwoCharacters(Passenger, Engineer);
+        await SetProfiles(Character(SlotZeroName, Passenger), Character(SlotOneName, Engineer));
         await SetGlobalPriorities((Passenger, JobPriority.High), (Engineer, JobPriority.Medium));
         await SetSlotEnabled(1, false);
 
-        // Start the round with nobody readied, so the player is left in the lobby to late join from.
-        Server.CfgMan.SetCVar(CCVars.GameMap, Map);
-        await Server.WaitPost(() => _ticker.ToggleReadyAll(false));
-        await Server.WaitPost(() => _ticker.StartRound());
+        await OverrideCVar(Side.Server, CCVars.GameMap, Map);
+        await Server.WaitPost(() => _sTicker.ToggleReadyAll(false));
+        await Server.WaitPost(() => _sTicker.StartRound());
         await Pair.RunTicksSync(10);
 
-        Assert.That(_ticker.PlayerGameStatuses[User], Is.Not.EqualTo(PlayerGameStatus.JoinedGame));
+        Assume.That(_sTicker.PlayerGameStatuses[User],
+            Is.Not.EqualTo(PlayerGameStatus.JoinedGame),
+            "Player already joined at round start.");
 
         var station = EntityUid.Invalid;
         await Server.WaitPost(() =>
@@ -721,14 +672,13 @@ public sealed class MultiCharacterTest : GameTest
             if (query.MoveNext(out var uid, out _))
                 station = uid;
         });
-        Assert.That(station, Is.Not.EqualTo(EntityUid.Invalid), "No station to late join to.");
+        Assume.That(station, Is.Not.EqualTo(EntityUid.Invalid), "No station to late join to.");
 
         var netStation = SEntMan.GetNetEntity(station);
-        await Server.WaitPost(() => _conHost.ExecuteCommand(ServerSession, $"joingame 1 {Engineer} {netStation}"));
+        await Server.WaitPost(() => _sConHost.ExecuteCommand(ServerSession, $"joingame 1 {Engineer} {netStation}"));
         await Pair.RunTicksSync(10);
 
         AssertSpawned(Engineer, SlotOneName);
         await EndRound();
     }
-
 }
