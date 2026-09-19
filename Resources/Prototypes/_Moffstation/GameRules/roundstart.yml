@@ -13,6 +13,10 @@
     - id: SubWizard
       orGroup: SubGamemodes
       prob: 0.10
+    #begin DeltaV additions - add hitman
+    - id: Hitman
+      prob: 0.2 #as requested
+    # end deltaV additions - add hitman
 
 - type: entity
   parent: BaseGameRule
@@ -26,6 +30,10 @@
     - id: BloodBrothers
       orGroup: SubGamemodes
       prob: 0.5
+    #begin DeltaV additions - add hitman
+    - id: Hitman
+      prob: 0.2 #as requested
+    # end deltaV additions - add hitman
 
 - type: entity
   parent: BaseGameRule

@@ -1,5 +1,6 @@
 using Content.Server._Moffstation.GameTicking.Rules.Components; // Moffstation
 using Content.Server._Harmony.GameTicking.Rules.Components; // Harmony
+using Content.Server._DV.GameTicking.Rules.Components; // DeltaV - Hitman
 using Content.Server.Antag;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
@@ -34,6 +35,7 @@ public sealed partial class AdminVerbSystem
     private static readonly EntProtoId ParadoxCloneRuleId = "ParadoxCloneSpawn";
     private static readonly EntProtoId DefaultWizardRule = "Wizard";
     private static readonly EntProtoId DefaultNinjaRule = "NinjaSpawn";
+    private static readonly EntProtoId DefaultHitmanRule = "HitmanRule";
     private static readonly EntProtoId DefaultBloodBrotherRule = "BloodBrothers"; // Harmony
     private static readonly EntProtoId DefaultConspiratorRule = "Conspirators"; // Harmony
     private static readonly ProtoId<StartingGearPrototype> PirateGearId = "PirateGear";
@@ -230,6 +232,23 @@ public sealed partial class AdminVerbSystem
 
         if (HasComp<HumanoidProfileComponent>(args.Target)) // only humanoids can be cloned
             args.Verbs.Add(paradox);
+
+        // start DeltaV Additions - add hitman
+        var hitmanName = Loc.GetString("admin-verb-make-hitman");
+        Verb hitman = new()
+        {
+            Text = hitmanName,
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DV/Interface/Misc/job_icons.rsi"), "Hitman"),
+            Act = () =>
+            {
+                _antag.ForceMakeAntag<HitmanRuleComponent>(targetPlayer, DefaultHitmanRule);
+            },
+            Impact = LogImpact.High,
+            Message = string.Join(": ", hitmanName, Loc.GetString("admin-verb-text-make-hitman")),
+        };
+        args.Verbs.Add(hitman);
+        // end DeltaV additions - add hitman
 
         // Harmony start
         var bloodBrotherName = Loc.GetString("admin-verb-text-make-blood-brother");
