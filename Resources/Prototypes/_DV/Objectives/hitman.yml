@@ -24,7 +24,7 @@
     difficulty: 1
     unique: true
   - type: TargetObjective
-    title: objective-condition-teach-person-title
+    title: objective-condition-teach-lesson
   - type: KillPersonCondition
     requireDead: true
 
