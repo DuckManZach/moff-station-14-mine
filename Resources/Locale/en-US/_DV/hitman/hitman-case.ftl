@@ -13,7 +13,7 @@ hitman-assassin-kit-name = Assassin kit
 hitman-assassin-kit-description =
     A kit for the quiet killers.
     Provides a Cobra with an extra magazine and armor piercing throwing knives.
-    alongside night vision goggles and a radio jammer.
+    alongside a radio jammer.
 
 hitman-poisoner-kit-name = Poisoner kit
 hitman-poisoner-kit-description =
@@ -41,4 +41,4 @@ hitman-tracker-kit-name = Tracker kit
 hitman-tracker-kit-description =
     A kit for those who wish to know everything.
     Provides a station master encryption key and universal pinpointer.
-    Plus a spy monitor.
+    Plus a handheld crew monitor.

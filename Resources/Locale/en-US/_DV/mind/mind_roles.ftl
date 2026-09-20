@@ -1,1 +1,1 @@
-role-subtype-hitman = Hitman
+role-subtype-hitman = Assassin

@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleHitman
-  name: Hitman
+  name: Assassin
   components:
   - type: MindRole
     subtype: role-subtype-hitman
