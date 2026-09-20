@@ -18,7 +18,7 @@
 - type: entity
   parent: [BaseHitmanObjective, BaseKillRandomObjective]
   id: HitmanTeachLessonRandomPersonObjective
-  description: Your client wants this person to be killed. Murder them once to fulfill your contract
+  description: SolGov wants this person to be killed. Murder them once to fulfill your contract
   components:
   - type: Objective
     difficulty: 1
@@ -69,7 +69,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanNiceObjective
   name: Kill them nicely
-  description: Your client wants you to be respectful to your target. Try to be nice and courteous to them even as you kill them.
+  description: SolGov wants you to be respectful to your target. Try to be nice and courteous to them even as you kill them.
   components:
   - type: Objective
     icon:
@@ -82,7 +82,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanDramaticObjective
   name: Kill them dramatically
-  description: Your client wants to make their death a performance. Give it the show it deserves.
+  description: SolGov wants to make their death a performance. Give it the show it deserves.
   components:
   - type: Objective
     icon:
@@ -95,7 +95,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanHumorousObjective
   name: Kill them in a funny way
-  description: Your client wants to make their death a joke. Make their death funny.
+  description: SolGov wants to make their death a joke. Make their death funny.
   components:
   - type: Objective
     icon:
@@ -108,7 +108,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanAccidentObjective
   name: Make their death look like a accident
-  description: Your client would rather others not realize your targets death was a assassination. Try to frame it as a accident.
+  description: SolGov would rather others not realize your targets death was a assassination. Try to frame it as a accident.
   components:
   - type: Objective
     icon:
@@ -122,7 +122,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanIndirectlyObjective
   name: Kill them indirectly
-  description: Your client wants you to take no chances with getting spotted near the body. They request you kill them indirectly.
+  description: SolGov wants you to take no chances with getting spotted near the body. They request you kill them indirectly.
   components:
   - type: Objective
     icon:
@@ -136,7 +136,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanCleanObjective
   name: Kill them cleanly
-  description: Your client does not want this death making a mess. Try to do as little damage to the person as you can.
+  description: SolGov does not want this death making a mess. Try to do as little damage to the person as you can.
   components:
   - type: Objective
     icon:
@@ -149,7 +149,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanSufferObjective
   name: Draw-out the kill
-  description: Your client would like that your target suffers as they die. Your client requests you draw out their death.
+  description: SolGov would like that your target suffers as they die. SolGov requests you draw out their death.
   components:
   - type: Objective
     icon:
@@ -162,7 +162,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanPublicObjective
   name: Kill them in a public space
-  description: Your client would like to send a message. Kill your target in public, in front of as many witnesses as you can.
+  description: SolGov would like to send a message. Kill your target in public, in front of as many witnesses as you can.
   components:
   - type: Objective
     icon:
@@ -175,7 +175,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanNoticeObjective
   name: Inform them about the assassination long before it happens
-  description: Your client wants your target to know what's gonna happen to them. Inform your target about their inevitable demise long before it happens.
+  description: SolGov wants your target to know what's gonna happen to them. Inform your target about their inevitable demise long before it happens.
   components:
   - type: Objective
     icon:
@@ -189,7 +189,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanTraumaObjective
   name: Kill someone close to them and make sure they know
-  description: Your client wants your target to be broken mentally and physically. Find someone close to your target and kill them once. Make sure your target knows about their friend's death.
+  description: SolGov wants your target to be broken mentally and physically. Find someone close to your target and kill them once. Make sure your target knows about their friend's death.
   components:
   - type: Objective
     icon:
@@ -202,7 +202,7 @@
   parent: [BaseHitmanObjective, BaseFreeObjective]
   id: HitmanTrustObjective
   name: Gain their trust
-  description: Your client wants your target to feel betrayed when you kill them. Spend a lot of time hanging out with them.
+  description: SolGov wants your target to feel betrayed when you kill them. Spend a lot of time hanging out with them.
   components:
   - type: Objective
     icon:
