@@ -9,9 +9,11 @@
     - EscapeShuttleObjectiveHitman
     - HitmanTeachLessonRandomPersonObjective
   - type: AntagRandomObjectives
+    maxOptions: 5
+    maxChoices: 2
+    minChoices: 1
     sets:
     - groups: HitmanObjectiveGroup
-      maxPicks: 2
   - type: AntagSelection
     agentName: hitman-round-end-agent-name
     antags:
