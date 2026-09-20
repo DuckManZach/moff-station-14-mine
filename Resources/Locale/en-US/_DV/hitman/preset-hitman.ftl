@@ -12,3 +12,5 @@ objective-issuer-hitman = [color=#746694]Criminal[/color]
 hitman-round-end-name = Hitman
 
 hitman-round-end-agent-name = Hitman
+
+guide-entry-hitman = Hitman

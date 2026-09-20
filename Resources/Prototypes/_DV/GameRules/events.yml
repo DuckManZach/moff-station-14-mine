@@ -15,14 +15,9 @@
     maxDifficulty: 300
   - type: AntagSelection
     agentName: hitman-round-end-agent-name
-    definitions:
-    - min: 1
-      max: 2
-      pickPlayer: true
-      startingGear: HitmanGear
-      briefing:
-        text: hitman-role-greeting-human
-        color: yellow
-        sound: /Audio/_DV/Ambience/Antag/hitman_briefing_piano_between.ogg
-      mindRoles:
-      - MindRoleHitman
+    antags:
+    - !type:LinearAntagCount
+      proto: Hitman
+      range:
+        min: 1
+        max: 2

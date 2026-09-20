@@ -2,7 +2,6 @@ hitman-sharpshooter-kit-name = Sharpshooter kit
 hitman-sharpshooter-kit-description =
     A kit for those who prefer killing from afar.
     Provides a Hristov with ammo along with an outfit in a briefcase.
-    it also provides thermal goggles to find your targets.
 
 hitman-loud-kit-name = Loud kit
 hitman-loud-kit-description =

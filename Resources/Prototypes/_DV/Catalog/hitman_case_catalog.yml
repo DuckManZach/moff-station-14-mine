@@ -7,8 +7,7 @@
     state: base
   content:
   - BriefcaseSyndieSniperBundleFilled
-  - ClothingEyesThermalVisionGogglesSyndie
-
+  - ClothingEyesGlassesThermal
 - type: thiefBackpackSet
   id: HitmanLoudKit
   name: hitman-loud-kit-name
@@ -34,7 +33,6 @@
   - WeaponPistolCobra
   - MagazinePistolCaselessRifle
   - ThrowingKnivesKit
-  - ClothingEyesNightVisionGoggles
   - RadioJammer
 
 - type: thiefBackpackSet
@@ -57,10 +55,10 @@
   name: hitman-infiltration-kit-name
   description: hitman-infiltration-kit-description
   sprite:
-    sprite: _DV/Objects/Tools/doorjack.rsi
+    sprite: Objects/Tools/emag.rsi
     state: icon
   content:
-  - Emag
+  - AccessBreaker
   - SyndicateJawsOfLife
   - StealthBox
 
@@ -77,7 +75,7 @@
   - ClothingOuterChameleon
   - ClothingHandsChameleon
   - ClothingShoesChameleon
-  - BionicVoiceMaskImplanter
+  - VoiceMaskImplanter
   - FakeMindShieldImplanter
 
 - type: thiefBackpackSet
@@ -102,4 +100,4 @@
   content:
   - PinpointerUniversal #todo: make this a version to find the hitmans target later
   - EncryptionKeyStationMaster
-  - SpyCrewMonitor
+  - CameraBug
