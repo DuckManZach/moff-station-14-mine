@@ -9,7 +9,7 @@
     - EscapeShuttleObjectiveHitman
     - HitmanTeachLessonRandomPersonObjective
   - type: AntagRandomObjectives
-    maxOptions: 5
+    maxOptions: 6
     maxChoices: 2
     minChoices: 1
     sets:
