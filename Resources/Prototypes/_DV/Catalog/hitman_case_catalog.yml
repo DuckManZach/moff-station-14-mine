@@ -8,6 +8,7 @@
   content:
   - BriefcaseSyndieSniperBundleFilled
   - ClothingEyesGlassesThermal
+
 - type: thiefBackpackSet
   id: HitmanLoudKit
   name: hitman-loud-kit-name
@@ -16,9 +17,9 @@
     sprite: Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi
     state: icon
   content:
-  - WeaponRevolverPythonAP
-  - SpeedLoaderMagnumAP
-  - SpeedLoaderMagnumAP
+  - WeaponPistolViper
+  - MagazinePistolHighCapacity
+  - MagazinePistolHighCapacity
   - ClothingOuterArmorBasic
   - ClothingShoesChameleonNoSlips
 
@@ -59,7 +60,7 @@
     state: icon
   content:
   - AccessBreaker
-  - SyndicateJawsOfLife
+  - JawsOfLife
   - StealthBox
 
 - type: thiefBackpackSet

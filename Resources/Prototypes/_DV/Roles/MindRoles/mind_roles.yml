@@ -4,9 +4,10 @@
   name: Assassin
   components:
   - type: MindRole
-    subtype: role-subtype-hitman
+    subtype: role-subtype-solgov
     antagPrototype: Hitman
     exclusiveAntag: true
+    subtypeColor: '#cc6106'
   - type: HitmanRole
   - type: RoleBriefing
     briefing: hitman-briefing

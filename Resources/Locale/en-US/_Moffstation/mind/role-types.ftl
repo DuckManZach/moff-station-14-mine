@@ -16,6 +16,7 @@ role-subtype-faction-central-command = Central Command
 role-subtype-xenoborg-faction = Xenoborgs
 role-subtype-replicators = The Hive
 role-subtype-eep = Space Sheep
+role-subtype-solgov = SolGov
 
 role-subtype-dragon-faction = Space Dragons
 role-subtype-silicon = Silicon Law Matrix
