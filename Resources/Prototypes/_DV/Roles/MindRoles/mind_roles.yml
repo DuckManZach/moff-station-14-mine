@@ -7,7 +7,7 @@
     subtype: role-subtype-solgov
     antagPrototype: Hitman
     exclusiveAntag: true
-    subtypeColor: '#cc6106'
+    subtypeColor: darkorange
   - type: HitmanRole
   - type: RoleBriefing
     briefing: hitman-briefing

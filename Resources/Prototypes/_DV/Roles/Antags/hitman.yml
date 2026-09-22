@@ -20,7 +20,7 @@
   - MindRoleHitman
   briefing:
     text: hitman-role-greeting-human
-    color: yellow
+    color: darkorange
     sound: /Audio/_DV/Ambience/Antag/hitman_briefing_piano_between.ogg
 
 - type: startingGear
