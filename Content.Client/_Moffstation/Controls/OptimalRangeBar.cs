@@ -1,17 +1,16 @@
 using System.Numerics;
-using Content.Shared._Moffstation.GaussFabricator;
 using Content.Shared.Destructible.Thresholds;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Shared.Timing;
 
-namespace Content.Client._Moffstation.GaussFabricator;
+namespace Content.Client._Moffstation.Controls;
 
 /// <summary>
 /// Vertical gauge plotting a live atmospheric reading against an acceptable band and a nested optimal band.
 /// </summary>
-public sealed partial class AtmosRangeBar : Control
+public sealed partial class OptimalRangeBar : Control
 {
     [Dependency] private IResourceCache _resourceCache = default!;
 
@@ -19,8 +18,6 @@ public sealed partial class AtmosRangeBar : Control
     private const float DisplayPadding = 0.2f;
 
     private const float LabelMargin = 2f;
-
-    private const float ReadingSnapEpsilon = 0.01f;
 
     private readonly Color _backgroundColor = new(0.1f, 0.1f, 0.1f);
     private readonly Color _acceptableColor = Color.FromHex("#20304a");
@@ -40,7 +37,7 @@ public sealed partial class AtmosRangeBar : Control
 
     public string NoDataText { get; set; } = string.Empty;
 
-    public AtmosRangeBar()
+    public OptimalRangeBar()
     {
         IoCManager.InjectDependencies(this);
 
@@ -48,11 +45,11 @@ public sealed partial class AtmosRangeBar : Control
         _font = new VectorFont(fontResource, 10);
     }
 
-    public void SetValue(GaussFabricatorGauge gauge)
+    public void SetValue(float? current, MinMax acceptable, MinMax optimal)
     {
-        _acceptable = gauge.Acceptable;
-        _optimal = gauge.Optimal;
-        _targetCurrent = gauge.Current;
+        _acceptable = acceptable;
+        _optimal = optimal;
+        _targetCurrent = current;
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -70,7 +67,7 @@ public sealed partial class AtmosRangeBar : Control
             return;
         }
 
-        _displayedCurrent = GaussFabricatorTween.Approach(displayed, target, args.DeltaSeconds, ReadingSnapEpsilon);
+        _displayedCurrent = MathHelper.Lerp(displayed, target, MathHelper.Clamp01(8f * args.DeltaSeconds));
     }
 
     protected override void Draw(DrawingHandleScreen handle)
