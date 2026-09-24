@@ -72,7 +72,7 @@ public sealed partial class GaussFabricatorSystem : SharedGaussFabricatorSystem
     }
 
     /// <summary>
-    /// Multiplier for one reading. No atmos counts as bad.
+    /// Multiplier for the progress for a specific band. No atmos counts as bad.
     /// </summary>
     private static float GetBandMultiplier(
         GaussFabricatorComponent comp,
