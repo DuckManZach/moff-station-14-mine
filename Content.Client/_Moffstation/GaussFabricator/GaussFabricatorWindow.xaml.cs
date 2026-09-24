@@ -42,6 +42,8 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
         TemperatureBar.NoDataText = _loc.GetString("gauss-fabricator-window-no-data");
         PressureBar.NoDataText = _loc.GetString("gauss-fabricator-window-no-data");
 
+        OutputProgressBar.ForegroundStyleBoxOverride = _progressStyle;
+
         OnButton.Group = _toggleGroup;
         OffButton.Group = _toggleGroup;
         OnButton.OnPressed += _ => OnToggle?.Invoke(true);
@@ -91,11 +93,13 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     {
         base.FrameUpdate(args);
 
-        _displayedProgress = MathHelper.Lerp(_displayedProgress, _targetProgress, MathHelper.Clamp01(8f * args.DeltaSeconds));
+        // It only goes backwards when it resets, so we dont want to lerp backwards.
+        _displayedProgress = _targetProgress < _displayedProgress
+            ? _targetProgress
+            : MathHelper.Lerp(_displayedProgress, _targetProgress, MathHelper.Clamp01(8f * args.DeltaSeconds));
 
         _progressStyle.BackgroundColor = ProgressColor(_displayedProgress);
         OutputProgressBar.Value = _displayedProgress;
-        OutputProgressBar.ForegroundStyleBoxOverride = _progressStyle;
     }
 
     private void PopulateButtons()
