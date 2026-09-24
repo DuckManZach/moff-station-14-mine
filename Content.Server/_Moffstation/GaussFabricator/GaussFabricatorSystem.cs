@@ -32,7 +32,6 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
     {
         base.Initialize();
 
-        // Stays here because the attribute can't express ordering.
         UpdatesAfter.Add(typeof(PowerNetSystem));
     }
 
@@ -90,14 +89,13 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
 
             var received = ent.Comp2.CurrentReceiving;
 
-            // Add waste heat proportional to power draw to the surrounding atmosphere.
             if (received > 0f && mixture != null)
                 _atmosphere.AddHeat(mixture, received * ent.Comp1.HeatMultiplier * frameTime);
         }
     }
 
     /// <summary>
-    /// Multiplier for one reading. A missing mixture counts as bad, same as being outside the acceptable range.
+    /// Multiplier for one reading. No atmos counts as bad.
     /// </summary>
     private static float GetBandMultiplier(
         GaussFabricatorComponent comp,
@@ -119,10 +117,9 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
             || !_batteryQuery.TryComp(ent, out var battery))
             return;
 
-        // Null when the fabricator is in space or otherwise not in a gas mixture.
         var mixture = _atmosphere.GetContainingMixture(ent.Owner);
 
-        // One output is spawned per full battery, so outputs per minute is just how fast we fill it.
+        // One thingy is spawned per full battery.
         var outputRate = battery.MaxCharge > 0f
             ? pnb.CurrentReceiving * pnb.Efficiency * 60f / battery.MaxCharge
             : 0f;

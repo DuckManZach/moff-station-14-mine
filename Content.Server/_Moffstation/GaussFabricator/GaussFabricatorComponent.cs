@@ -9,8 +9,7 @@ namespace Content.Server._Moffstation.GaussFabricator;
 public sealed partial class GaussFabricatorComponent : Component
 {
     /// <summary>
-    /// Fraction of received electrical power (W) added as heat (J/s) to the
-    /// surrounding atmosphere. 0.05 = 5% of draw becomes waste heat.
+    /// Fraction of received power (W) added as heat (J/s) to the surrounding atmosphere.
     /// </summary>
     [DataField]
     public float HeatMultiplier = 0.05f;

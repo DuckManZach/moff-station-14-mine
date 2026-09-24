@@ -13,8 +13,7 @@ public static class GaussFabricatorTween
     private const float InverseHalfLife = 8f;
 
     /// <summary>
-    /// Eases <paramref name="displayed"/> toward <paramref name="target"/>, snapping onto it once the
-    /// remaining gap is under <paramref name="epsilon"/> so it doesn't creep forever.
+    /// Eases the displayed value toward the target, snapping onto it once the gap is under epsilon.
     /// </summary>
     public static float Approach(float displayed, float target, float deltaSeconds, float epsilon)
     {

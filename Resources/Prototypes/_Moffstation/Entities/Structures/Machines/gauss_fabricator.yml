@@ -1,8 +1,4 @@
-# Thingy that makes engi money
-# When the battery becomes full, it pops out a thingy that's worth money, and the capacity resets
-# right now at max (250KW) it takes 40 seconds to fill, and produces one thingy
-# Right now thats about 300 per minute per thing, seems reasonable enough!
-# TODO: See if this needs to be balanced
+# TODO: Balance draw rate, capacity and price
 - type: entity
   parent: BaseMachine
   id: GaussFabricator

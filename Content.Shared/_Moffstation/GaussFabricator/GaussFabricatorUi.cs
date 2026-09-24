@@ -9,10 +9,6 @@ public enum GaussFabricatorUiKey : byte
     Key,
 }
 
-/// <summary>
-/// One atmospheric readout: the live value (null when the fabricator isn't in any gas mixture), the band
-/// outside which it counts as bad, and the nested band inside which it counts as optimal.
-/// </summary>
 [Serializable, NetSerializable]
 public partial record struct GaussFabricatorGauge(float? Current, MinMax Acceptable, MinMax Optimal)
 {
@@ -39,7 +35,7 @@ public sealed class GaussFabricatorBuiState(
     public readonly float Progress = progress;
 
     /// <summary>
-    /// Finished outputs produced per minute at the current charge rate.
+    /// The rate of how many things are produced per minute.
     /// </summary>
     public readonly float OutputRate = outputRate;
 

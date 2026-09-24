@@ -36,9 +36,6 @@ public sealed partial class AtmosRangeBar : Control
     private float? _targetCurrent;
     private float? _displayedCurrent;
 
-    /// <summary>
-    /// Numeric format for the values drawn inside the gauge.
-    /// </summary>
     public string ValueFormat { get; set; } = "F0";
 
     public string NoDataText { get; set; } = "N/A";

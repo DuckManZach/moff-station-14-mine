@@ -9,10 +9,10 @@ namespace Content.Client._Moffstation.GaussFabricator;
 
 public sealed class PowerDrawBar : Control
 {
-    // watt interval between small notches (minecraft)
+    // Minecraft
     private const float NotchInterval = 10_000f;
 
-    // interval of big notches measured in small notches
+    // Big notch interval, in small notches
     private const int BigNotchDivisor = 5;
 
     private const float WattSnapEpsilon = 0.5f;
@@ -20,7 +20,7 @@ public sealed class PowerDrawBar : Control
     private const float SmallNotchHeight = 0.15f;
     private const float MediumNotchHeight = 0.35f;
 
-    // Adjusting in case the notches are too crowded, probably not needed but may be useful if we change shit in the future
+    // Notch interval is scaled up until small notches are at least this many pixels apart
     private const int MinSmallNotchScreenDistance = 3;
     private const int ScaleMultiplier = 5;
 
