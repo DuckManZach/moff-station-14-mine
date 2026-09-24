@@ -14,8 +14,17 @@ public sealed class GaussFabricatorBoundUserInterface(EntityUid owner, Enum uiKe
         base.Open();
 
         _window = this.CreateWindow<GaussFabricatorWindow>();
-        _window.OnAdjustDrawRate += delta => SendMessage(new GaussFabricatorAdjustDrawRateMessage(delta));
-        _window.OnToggle += on => SendMessage(new GaussFabricatorToggleMessage(on));
+        _window.OnAdjustDrawRate += delta => SendPredictedMessage(new GaussFabricatorAdjustDrawRateMessage(delta));
+        _window.OnToggle += on => SendPredictedMessage(new GaussFabricatorToggleMessage(on));
+        Update();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (_window != null && EntMan.TryGetComponent<GaussFabricatorComponent>(Owner, out var comp))
+            _window.UpdateSettings(comp);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

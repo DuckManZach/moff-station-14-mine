@@ -27,6 +27,8 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     // Draw adjustment button increments in watts, from largest to smallest
     private readonly float[] _increments = [50000f, 10000f, 1000f];
 
+    private float _drawRate;
+    private float _received;
     private float _targetProgress;
     private float _displayedProgress;
 
@@ -46,9 +48,25 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
         OffButton.OnPressed += _ => OnToggle?.Invoke(false);
     }
 
+    public void UpdateSettings(GaussFabricatorComponent comp)
+    {
+        _drawRate = comp.DrawRate;
+        DrawRateLabel.Text = FormatPower(comp.DrawRate);
+        DrawLevelBar.Capacity = comp.MaxDrawRate;
+        TemperatureBar.SetRanges(comp.TemperatureAcceptable, comp.TemperatureOptimal);
+        PressureBar.SetRanges(comp.PressureAcceptable, comp.PressureOptimal);
+
+        if (comp.Enabled)
+            OnButton.Pressed = true;
+        else
+            OffButton.Pressed = true;
+
+        UpdateDrawLevel();
+    }
+
     public void UpdateState(GaussFabricatorBuiState state)
     {
-        DrawRateLabel.Text = FormatPower(state.ConfiguredDrawRate);
+        _received = state.ReceivedPower;
         ReceivedLabel.Text = FormatPower(state.ReceivedPower);
         OutputRateLabel.Text = _loc.GetString(
             "gauss-fabricator-window-output-rate",
@@ -56,17 +74,17 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
 
         _targetProgress = Math.Clamp(state.Progress, 0f, 1f);
 
-        DrawLevelBar.Capacity = state.MaxChargeRate;
-        DrawLevelBar.Clear();
-        DrawLevelBar.SetEntry("received", state.ReceivedPower, ReceivedColor);
-        DrawLevelBar.SetEntry("gap", Math.Max(0f, state.ConfiguredDrawRate - state.ReceivedPower), DrawGapColor);
-        TemperatureBar.SetValue(state.Temperature.Current, state.Temperature.Acceptable, state.Temperature.Optimal);
-        PressureBar.SetValue(state.Pressure.Current, state.Pressure.Acceptable, state.Pressure.Optimal);
+        TemperatureBar.SetCurrent(state.Temperature);
+        PressureBar.SetCurrent(state.Pressure);
 
-        if (state.IsOn)
-            OnButton.Pressed = true;
-        else
-            OffButton.Pressed = true;
+        UpdateDrawLevel();
+    }
+
+    private void UpdateDrawLevel()
+    {
+        DrawLevelBar.Clear();
+        DrawLevelBar.SetEntry("received", _received, ReceivedColor);
+        DrawLevelBar.SetEntry("gap", Math.Max(0f, _drawRate - _received), DrawGapColor);
     }
 
     protected override void FrameUpdate(FrameEventArgs args)

@@ -1,4 +1,3 @@
-using Content.Shared.Destructible.Thresholds;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._Moffstation.GaussFabricator;
@@ -10,28 +9,15 @@ public enum GaussFabricatorUiKey : byte
 }
 
 [Serializable, NetSerializable]
-public partial record struct GaussFabricatorGauge(float? Current, MinMax Acceptable, MinMax Optimal)
-{
-    public readonly float? Current = Current;
-    public readonly MinMax Acceptable = Acceptable;
-    public readonly MinMax Optimal = Optimal;
-}
-
-[Serializable, NetSerializable]
 public sealed class GaussFabricatorBuiState(
-    float configuredDrawRate,
     float receivedPower,
-    float maxChargeRate,
     float progress,
     float outputRate,
-    GaussFabricatorGauge temperature,
-    GaussFabricatorGauge pressure,
-    bool isOn)
+    float? temperature,
+    float? pressure)
     : BoundUserInterfaceState
 {
-    public readonly float ConfiguredDrawRate = configuredDrawRate;
     public readonly float ReceivedPower = receivedPower;
-    public readonly float MaxChargeRate = maxChargeRate;
     public readonly float Progress = progress;
 
     /// <summary>
@@ -39,34 +25,28 @@ public sealed class GaussFabricatorBuiState(
     /// </summary>
     public readonly float OutputRate = outputRate;
 
-    public readonly GaussFabricatorGauge Temperature = temperature;
-    public readonly GaussFabricatorGauge Pressure = pressure;
-    public readonly bool IsOn = isOn;
+    // Null when the fabricator isn't in a gas mixture.
+    public readonly float? Temperature = temperature;
+    public readonly float? Pressure = pressure;
 
     public override bool Equals(object? obj)
     {
         return obj is GaussFabricatorBuiState other
-            && ConfiguredDrawRate.Equals(other.ConfiguredDrawRate)
             && ReceivedPower.Equals(other.ReceivedPower)
-            && MaxChargeRate.Equals(other.MaxChargeRate)
             && Progress.Equals(other.Progress)
             && OutputRate.Equals(other.OutputRate)
             && Temperature.Equals(other.Temperature)
-            && Pressure.Equals(other.Pressure)
-            && IsOn == other.IsOn;
+            && Pressure.Equals(other.Pressure);
     }
 
     public override int GetHashCode()
     {
         return HashCode.Combine(
-            ConfiguredDrawRate,
             ReceivedPower,
-            MaxChargeRate,
             Progress,
             OutputRate,
             Temperature,
-            Pressure,
-            IsOn);
+            Pressure);
     }
 }
 

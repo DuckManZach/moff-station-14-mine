@@ -1,10 +1,7 @@
-using Content.Server.Administration.Logs;
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Audio;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared._Moffstation.GaussFabricator;
-using Content.Shared.Database;
 using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Examine;
 using Content.Shared.Power.Components;
@@ -14,10 +11,8 @@ using Robust.Server.GameObjects;
 
 namespace Content.Server._Moffstation.GaussFabricator;
 
-public sealed partial class GaussFabricatorSystem : EntitySystem
+public sealed partial class GaussFabricatorSystem : SharedGaussFabricatorSystem
 {
-    [Dependency] private IAdminLogManager _adminLog = default!;
-    [Dependency] private AmbientSoundSystem _ambient = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
@@ -38,54 +33,15 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
         UpdateUi(ent);
     }
 
-    [SubscribeLocalEvent]
-    private void OnAdjustDrawRate(Entity<GaussFabricatorComponent> ent, ref GaussFabricatorAdjustDrawRateMessage args)
-    {
-        if (!_powerBatteryQuery.TryComp(ent, out var pnb))
-            return;
-
-        if (!float.IsFinite(args.Delta))
-            return;
-
-        pnb.MaxChargeRate = Math.Clamp(pnb.MaxChargeRate + args.Delta, ent.Comp.MinDrawRate, ent.Comp.MaxDrawRate);
-
-        _adminLog.Add(LogType.Action, $"{ToPrettyString(args.Actor):actor} set draw rate to {pnb.MaxChargeRate} W on {ToPrettyString(ent):target}");
-
-        UpdateUi(ent);
-    }
-
-    [SubscribeLocalEvent]
-    private void OnToggle(Entity<GaussFabricatorComponent> ent, ref GaussFabricatorToggleMessage args)
-    {
-        if (!_powerBatteryQuery.TryComp(ent, out var pnb))
-            return;
-
-        if (pnb.Enabled == args.On)
-            return;
-
-        pnb.Enabled = args.On;
-        _ambient.SetAmbience(ent.Owner, args.On);
-        _adminLog.Add(LogType.Action, $"{ToPrettyString(args.Actor):actor} toggled {ToPrettyString(ent):target} {(args.On ? "on" : "off")}");
-        UpdateUi(ent);
-    }
-
     // I imagine people will have big arrays of these things in cooling boxes. Maybe this is QoL slop but idk
-    [SubscribeLocalEvent]
-    private void OnExamined(Entity<GaussFabricatorComponent> ent, ref ExaminedEvent args)
+    protected override void ExamineAtmosphere(Entity<GaussFabricatorComponent> ent, ExaminedEvent args)
     {
-        if (!args.IsInDetailsRange || !_powerBatteryQuery.TryComp(ent, out var pnb))
-            return;
-
         var mixture = _atmosphere.GetContainingMixture(ent.Owner);
         var temperature = GetBand(ent.Comp.TemperatureAcceptable, ent.Comp.TemperatureOptimal, mixture?.Temperature);
         var pressure = GetBand(ent.Comp.PressureAcceptable, ent.Comp.PressureOptimal, mixture?.Pressure);
 
-        using (args.PushGroup(nameof(GaussFabricatorComponent)))
-        {
-            args.PushMarkup(Loc.GetString("gauss-fabricator-examine-draw-rate", ("rate", pnb.MaxChargeRate)));
-            args.PushMarkup(Loc.GetString("gauss-fabricator-examine-temperature", ("band", temperature.ToString())));
-            args.PushMarkup(Loc.GetString("gauss-fabricator-examine-pressure", ("band", pressure.ToString())));
-        }
+        args.PushMarkup(Loc.GetString("gauss-fabricator-examine-temperature", ("band", temperature.ToString())));
+        args.PushMarkup(Loc.GetString("gauss-fabricator-examine-pressure", ("band", pressure.ToString())));
     }
 
     public override void Update(float frameTime)
@@ -94,6 +50,9 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
 
         foreach (var ent in EntityQueryEnumerator<GaussFabricatorComponent, PowerNetworkBatteryComponent, TransformComponent>())
         {
+            ent.Comp2.MaxChargeRate = ent.Comp1.DrawRate;
+            ent.Comp2.Enabled = ent.Comp1.Enabled;
+
             var mixture = _atmosphere.GetContainingMixture((ent.Owner, ent.Comp3), excite: ent.Comp2.Enabled);
 
             ent.Comp2.Efficiency =
@@ -139,7 +98,7 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
             : Band.Acceptable;
     }
 
-    private void UpdateUi(Entity<GaussFabricatorComponent> ent)
+    protected override void UpdateUi(Entity<GaussFabricatorComponent> ent)
     {
         if (!_uiSystem.IsUiOpen(ent.Owner, GaussFabricatorUiKey.Key)
             || !_powerBatteryQuery.TryComp(ent, out var pnb)
@@ -157,14 +116,11 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
             ent.Owner,
             GaussFabricatorUiKey.Key,
             new GaussFabricatorBuiState(
-                pnb.MaxChargeRate,
                 pnb.CurrentReceiving,
-                ent.Comp.MaxDrawRate,
                 _battery.GetChargeLevel((ent.Owner, battery)),
                 outputRate,
-                new GaussFabricatorGauge(mixture?.Temperature, ent.Comp.TemperatureAcceptable, ent.Comp.TemperatureOptimal),
-                new GaussFabricatorGauge(mixture?.Pressure, ent.Comp.PressureAcceptable, ent.Comp.PressureOptimal),
-                pnb.Enabled));
+                mixture?.Temperature,
+                mixture?.Pressure));
     }
 
     private enum Band : byte

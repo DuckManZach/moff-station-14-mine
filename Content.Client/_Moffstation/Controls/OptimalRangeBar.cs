@@ -8,13 +8,12 @@ using Robust.Shared.Timing;
 namespace Content.Client._Moffstation.Controls;
 
 /// <summary>
-/// Vertical gauge plotting a live atmospheric reading against an acceptable band and a nested optimal band.
+/// Vertical gauge plotting a good, acceptable, and bad (inferred) range, as well as a current value
 /// </summary>
 public sealed partial class OptimalRangeBar : Control
 {
     [Dependency] private IResourceCache _resourceCache = default!;
 
-    // Fraction of the acceptable span shown beyond each end, so the bad thresholds sit inside the gauge.
     private const float DisplayPadding = 0.2f;
 
     private const float LabelMargin = 2f;
@@ -45,10 +44,14 @@ public sealed partial class OptimalRangeBar : Control
         _font = new VectorFont(fontResource, 10);
     }
 
-    public void SetValue(float? current, MinMax acceptable, MinMax optimal)
+    public void SetRanges(MinMax acceptable, MinMax optimal)
     {
         _acceptable = acceptable;
         _optimal = optimal;
+    }
+
+    public void SetCurrent(float? current)
+    {
         _targetCurrent = current;
     }
 
@@ -60,7 +63,6 @@ public sealed partial class OptimalRangeBar : Control
             return;
         }
 
-        // Snap rather than tween up from zero the first time we get a reading.
         if (_displayedCurrent is not { } displayed)
         {
             _displayedCurrent = target;
@@ -74,7 +76,7 @@ public sealed partial class OptimalRangeBar : Control
     {
         handle.DrawRect(PixelSizeBox, _backgroundColor);
 
-        float span = _acceptable.Max - _acceptable.Min;
+        var span = _acceptable.Max - _acceptable.Min;
         if (span <= 0f)
             return;
 
@@ -106,7 +108,6 @@ public sealed partial class OptimalRangeBar : Control
         var currentY = ValueToY(current, displayMin, displayMax);
         DrawThreshold(handle, currentY, _currentColor);
 
-        // Right-aligned so it can never collide with the left-aligned optimal bounds.
         DrawLabel(handle, current.ToString(ValueFormat), currentY, _currentColor, above: currentY > PixelHeight / 2f, right: true);
     }
 

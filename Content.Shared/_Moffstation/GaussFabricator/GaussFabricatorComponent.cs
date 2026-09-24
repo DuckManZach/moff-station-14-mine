@@ -1,13 +1,21 @@
 using Content.Shared.Destructible.Thresholds;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Robust.Shared.GameStates;
 
-namespace Content.Server._Moffstation.GaussFabricator;
+namespace Content.Shared._Moffstation.GaussFabricator;
 
-[RegisterComponent]
-[Access(typeof(GaussFabricatorSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[Access(typeof(SharedGaussFabricatorSystem))]
 public sealed partial class GaussFabricatorComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public bool Enabled = true;
+
+    /// <summary>
+    /// Configured draw rate in watts, applied to the power network battery by the server.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float DrawRate = 10000f;
+
     /// <summary>
     /// Fraction of received power (W) added as heat (J/s) to the surrounding atmosphere.
     /// </summary>
@@ -27,25 +35,25 @@ public sealed partial class GaussFabricatorComponent : Component
     public float MaxDrawRate = 250000f;
 
     /// <summary>
-    /// Ambient temperature outside which the reading counts as bad, in kelvin.
+    /// Atmos temperature where the reading is considered bad, in kelvin.
     /// </summary>
     [DataField]
     public MinMax TemperatureAcceptable = new(20, 200);
 
     /// <summary>
-    /// Ambient temperature inside which the reading counts as optimal, in kelvin.
+    /// Atmos temperature where the reading counts as optimal, in kelvin.
     /// </summary>
     [DataField]
     public MinMax TemperatureOptimal = new(60, 130);
 
     /// <summary>
-    /// Ambient pressure outside which the reading counts as bad, in kPa.
+    /// Atmos pressure where the reading counts as bad, in kPa.
     /// </summary>
     [DataField]
     public MinMax PressureAcceptable = new(20, 300);
 
     /// <summary>
-    /// Ambient pressure inside which the reading counts as optimal, in kPa.
+    /// Atmos pressure where the reading counts as optimal, in kPa.
     /// </summary>
     [DataField]
     public MinMax PressureOptimal = new(80, 120);

@@ -18,7 +18,6 @@
   - type: BatteryCharger
     voltage: High
   - type: PowerNetworkBattery
-    maxChargeRate: 10000
     canDischarge: false
   - type: Battery
     maxCharge: 10000000
