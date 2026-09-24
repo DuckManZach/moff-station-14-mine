@@ -26,7 +26,7 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     private readonly StyleBoxFlat _progressStyle = new();
 
     // Draw adjustment button increments, from smallest to largest
-    private readonly IEnumerable<float> _increments = [1000f, 10000f, 50000f];
+    private readonly float[] _increments = [1000f, 10000f, 50000f];
 
     private float _targetProgress;
     private float _displayedProgress;
@@ -86,11 +86,11 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
     {
         AdjustmentButtons.Children.Clear();
 
-        AdjustmentButtons.AddChild(BuildRow(_increments.Select(i => -i)));
+        AdjustmentButtons.AddChild(BuildRow(_increments.Select(i => -i).ToArray()));
         AdjustmentButtons.AddChild(BuildRow(_increments));
     }
 
-    private BoxContainer BuildRow(IEnumerable<float> increments)
+    private BoxContainer BuildRow(float[] deltas)
     {
         var row = new BoxContainer
         {
@@ -98,8 +98,7 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
             HorizontalExpand = true,
         };
 
-        var deltas = increments.ToList();
-        for (var i = 0; i < deltas.Count; i++)
+        for (var i = 0; i < deltas.Length; i++)
         {
             var delta = deltas[i];
             // Sign lives in the locale string because FormatPower doesn't support negative numbers
@@ -113,7 +112,7 @@ public sealed partial class GaussFabricatorWindow : FancyWindow
 
             if (i == 0)
                 button.StyleClasses.Add("OpenRight");
-            else if (i == deltas.Count - 1)
+            else if (i == deltas.Length - 1)
                 button.StyleClasses.Add("OpenLeft");
             else
                 button.StyleClasses.Add("OpenBoth");

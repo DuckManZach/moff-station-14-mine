@@ -38,7 +38,7 @@ public sealed partial class AtmosRangeBar : Control
 
     public string ValueFormat { get; set; } = "F0";
 
-    public string NoDataText { get; set; } = "N/A";
+    public string NoDataText { get; set; } = string.Empty;
 
     public AtmosRangeBar()
     {

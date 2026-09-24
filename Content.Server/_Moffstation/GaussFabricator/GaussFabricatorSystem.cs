@@ -3,23 +3,19 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Audio;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Server.Sound;
 using Content.Shared._Moffstation.GaussFabricator;
-using Content.Shared.Atmos;
 using Content.Shared.Database;
 using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
-using Robust.Shared.Timing;
 
 namespace Content.Server._Moffstation.GaussFabricator;
 
 public sealed partial class GaussFabricatorSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private AmbientSoundSystem _ambient = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
@@ -84,6 +80,8 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
                 GetBandMultiplier(ent.Comp1, ent.Comp1.TemperatureAcceptable, ent.Comp1.TemperatureOptimal, mixture?.Temperature)
                 * GetBandMultiplier(ent.Comp1, ent.Comp1.PressureAcceptable, ent.Comp1.PressureOptimal, mixture?.Pressure);
 
+            UpdateUi((ent.Owner, ent.Comp1));
+
             if (!ent.Comp2.Enabled)
                 continue;
 
@@ -113,7 +111,8 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
 
     private void UpdateUi(Entity<GaussFabricatorComponent> ent)
     {
-        if (!_powerBatteryQuery.TryComp(ent, out var pnb)
+        if (!_uiSystem.IsUiOpen(ent.Owner, GaussFabricatorUiKey.Key)
+            || !_powerBatteryQuery.TryComp(ent, out var pnb)
             || !_batteryQuery.TryComp(ent, out var battery))
             return;
 
