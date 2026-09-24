@@ -1,0 +1,538 @@
+# Mini-anomalies: listed first in `parent` so these fields win over the full anomaly's.
+- type: entity
+  abstract: true
+  id: BaseMiniAnomaly
+  name: mini anomaly
+  description: A small, flickering anomaly. It looks like it could fizzle out at any moment.
+  components:
+  - type: Anomaly
+    minPointsPerSecond: 3
+    maxPointsPerSecond: 18
+    initialSeverityRange: [0.05, 0.2]
+    initialStabilityRange: [0.45, 0.55]
+    severityGrowthCoefficient: 0.02
+    decayhreshold: 0.35
+    healthChangePerSecond: -0.1
+    corePrototype: EffectSparks
+    coreInertPrototype: EffectSparks
+  - type: Sprite
+    scale: 0.5, 0.5
+  - type: AmbientSound
+    range: 3
+    volume: -10
+  - type: DamageOnInteract
+    damage:
+      types:
+        Radiation: 3
+    popupText: anomaly-component-contact-damage
+  - type: DamageOnAttacked
+    damage:
+      types:
+        Radiation: 3
+
+- type: entity
+  id: MiniAnomalyPyroclastic
+  parent: [ BaseMiniAnomaly, AnomalyPyroclastic ]
+  suffix: Mini, Pyroclastic
+  components:
+  - type: PyroclasticAnomaly
+    maximumIgnitionRadius: 2
+  - type: TempAffectingAnomaly
+    tempChangePerSecond: 5
+    hotspotExposeTemperature: 400
+  - type: GasProducerAnomaly
+    criticalMoleAmount: 30
+    spawnRadius: 1
+    tileCount: 1
+    tempChange: 100
+  - type: ProjectileAnomaly
+    minProjectiles: 1
+    maxProjectiles: 2
+  - type: DamageOnInteract
+    damage:
+      types:
+        Heat: 3
+  - type: DamageOnAttacked
+    damage:
+      types:
+        Heat: 3
+
+- type: entity
+  id: MiniAnomalyGravity
+  parent: [ BaseMiniAnomaly, AnomalyGravity ]
+  suffix: Mini, Gravity
+  components:
+  - type: GravityAnomaly
+    maxGravityWellRange: 3
+    maxThrowRange: 2
+    maxThrowStrength: 3
+    maxRadiationIntensity: 0.5
+    maxAccel: 2
+    maxRadialAccel: 2
+    spaceRange: 1
+  - type: GravityWell
+    maxRange: 0.7
+  - type: SingularityDistortion
+    intensity: 100
+
+- type: entity
+  id: MiniAnomalyElectricity
+  parent: [ BaseMiniAnomaly, AnomalyElectricity ]
+  suffix: Mini, Electricity
+  components:
+  - type: ElectricityAnomaly
+    minBoltCount: 1
+    maxBoltCount: 2
+    maxElectrocuteRange: 3
+    maxElectrocuteDamage: 5
+    maxElectrocuteDuration: 2
+    passiveElectrocutionChance: 0.01
+    empEnergyConsumption: 20000
+    empDisabledDuration: 10
+  - type: Electrified
+    shockDamage: 2
+    shockTime: 1
+
+- type: entity
+  id: MiniAnomalyFlesh
+  parent: [ BaseMiniAnomaly, AnomalyFlesh ]
+  suffix: Mini, Flesh
+  components:
+  - type: TileSpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        spawnOnStabilityChanged: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 2
+      floor: FloorFlesh
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 3
+        maxAmount: 6
+        maxRange: 3
+      floor: FloorFlesh
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        maxAmount: 1
+        minRange: 1.5
+        maxRange: 2.5
+      spawns:
+      - FleshBlocker
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 2
+        maxAmount: 4
+        minRange: 2
+        maxRange: 4
+      spawns:
+      - FleshBlocker
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 3
+      spawns:
+      - MobFleshJared
+      - MobFleshGolem
+      - MobFleshClamp
+      - MobFleshLover
+
+- type: entity
+  id: MiniAnomalyBluespace
+  parent: [ BaseMiniAnomaly, AnomalyBluespace ]
+  suffix: Mini, Bluespace
+  components:
+  - type: BluespaceAnomaly
+    maxShuffleRadius: 3
+    maxPortalRadius: 5
+    minPortalRadius: 2
+    superCriticalTeleportRadius: 10
+
+- type: entity
+  id: MiniAnomalyIce
+  parent: [ BaseMiniAnomaly, AnomalyIce ]
+  suffix: Mini, Ice
+  components:
+  - type: ExplosionAnomaly
+    explosionTotalIntensity: 30
+    explosionDropoff: 4
+    explosionMaxTileIntensity: 5
+  - type: ProjectileAnomaly
+    minProjectiles: 1
+    maxProjectiles: 2
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnStabilityChanged: true
+        minAmount: 1
+        maxAmount: 3
+        maxRange: 1.5
+      spawns:
+      - IceCrust
+  - type: TempAffectingAnomaly
+    tempChangePerSecond: -5
+    hotspotExposeTemperature: -250
+  - type: GasProducerAnomaly
+    criticalMoleAmount: 20
+  - type: DamageOnInteract
+    damage:
+      types:
+        Cold: 3
+  - type: DamageOnAttacked
+    damage:
+      types:
+        Cold: 3
+
+- type: entity
+  abstract: true
+  id: BaseMiniAnomalyRock
+  components:
+  - type: TileSpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 2
+        maxAmount: 4
+        maxRange: 2
+      floor: FloorAsteroidTile
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 6
+        maxAmount: 10
+        maxRange: 4
+      floor: FloorAsteroidTile
+
+- type: entity
+  id: MiniAnomalyRockUranium
+  parent: [ BaseMiniAnomaly, BaseMiniAnomalyRock, AnomalyRockUranium ]
+  suffix: Mini, Rock, Uranium
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        minRange: 2.5
+        maxRange: 4
+      spawns:
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidUranium
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 6
+        maxAmount: 10
+        minRange: 3
+        maxRange: 6
+      spawns:
+      - CrystalGreen
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidUraniumCrab
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 3
+      spawns:
+      - MobSpawnCrabUranium
+
+- type: entity
+  id: MiniAnomalyRockQuartz
+  parent: [ BaseMiniAnomaly, BaseMiniAnomalyRock, AnomalyRockQuartz ]
+  suffix: Mini, Rock, Quartz
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        minRange: 2.5
+        maxRange: 4
+      spawns:
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidQuartz
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 6
+        maxAmount: 10
+        minRange: 3
+        maxRange: 6
+      spawns:
+      - CrystalGrey
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidQuartzCrab
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 3
+      spawns:
+      - MobSpawnCrabQuartz
+
+- type: entity
+  id: MiniAnomalyRockSilver
+  parent: [ BaseMiniAnomaly, BaseMiniAnomalyRock, AnomalyRockSilver ]
+  suffix: Mini, Rock, Silver
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        minRange: 2.5
+        maxRange: 4
+      spawns:
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidSilver
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 6
+        maxAmount: 10
+        minRange: 3
+        maxRange: 6
+      spawns:
+      - CrystalCyan
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidSilverCrab
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 3
+      spawns:
+      - MobSpawnCrabSilver
+
+- type: entity
+  id: MiniAnomalyRockGold
+  parent: [ BaseMiniAnomaly, BaseMiniAnomalyRock, AnomalyRockGold ]
+  suffix: Mini, Rock, Gold
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        minRange: 2.5
+        maxRange: 4
+      spawns:
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidGold
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 6
+        maxAmount: 10
+        minRange: 3
+        maxRange: 6
+      spawns:
+      - CrystalYellow
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidGoldCrab
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 3
+      spawns:
+      - MobSpawnCrabGold
+
+- type: entity
+  id: MiniAnomalyRockIron
+  parent: [ BaseMiniAnomaly, BaseMiniAnomalyRock, AnomalyRockIron ]
+  suffix: Mini, Rock, Iron
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        minRange: 2.5
+        maxRange: 4
+      spawns:
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidIron
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 6
+        maxAmount: 10
+        minRange: 3
+        maxRange: 6
+      spawns:
+      - CrystalOrange
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidIronCrab
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 3
+      spawns:
+      - MobSpawnCrabIron
+
+- type: entity
+  id: MiniAnomalyRockCoal
+  parent: [ BaseMiniAnomaly, BaseMiniAnomalyRock, AnomalyRockCoal ]
+  suffix: Mini, Rock, Coal
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        minRange: 2.5
+        maxRange: 4
+      spawns:
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidCoal
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 6
+        maxAmount: 10
+        minRange: 3
+        maxRange: 6
+      spawns:
+      - CrystalBlack
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidCoalCrab
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 3
+      spawns:
+      - MobSpawnCrabCoal
+
+- type: entity
+  id: RandomMiniRockAnomalySpawner
+  name: random mini rock anomaly spawner
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: Structures/Specific/anomaly.rsi
+      state: anom6
+  - type: RandomSpawner
+    prototypes:
+    - MiniAnomalyRockIron
+    - MiniAnomalyRockCoal
+    - MiniAnomalyRockSilver
+    - MiniAnomalyRockGold
+    - MiniAnomalyRockQuartz
+    - MiniAnomalyRockUranium
+    chance: 1
+    offset: 0.15
+
+- type: entity
+  id: MiniAnomalyFlora
+  parent: [ BaseMiniAnomaly, AnomalyFlora ]
+  suffix: Mini, Flora
+  components:
+  - type: TileSpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        maxRange: 2
+      floor: FloorAstroGrass
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 4
+        maxAmount: 8
+        maxRange: 4
+      floor: FloorAstroGrass
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 1
+      spawns:
+      - KudzuFlowerFriendly
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 2
+      spawns:
+      - KudzuFlowerAngry
+
+- type: entity
+  id: MiniAnomalyLiquid
+  parent: [ BaseMiniAnomaly, AnomalyLiquid ]
+  suffix: Mini, Liquid
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnSuperCritical: true
+        maxAmount: 1
+        maxRange: 1
+      spawns:
+      - ReagentSlimeSpawner
+  - type: PuddleCreateAnomaly
+    maxPuddleSize: 20
+    superCriticalPuddleSize: 100
+  - type: InjectionAnomaly
+    maxSolutionInjection: 3
+    superCriticalSolutionInjection: 10
+    injectRadius: 1.5
+    superCriticalInjectRadius: 3
+  - type: ReagentProducerAnomaly
+    maxReagentProducing: 0.3
+    supercriticalReagentProducingModifier: 10
+
+- type: entity
+  id: MiniAnomalyShadow
+  parent: [ BaseMiniAnomaly, AnomalyShadow ]
+  suffix: Mini, Shadow
+  components:
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        spawnOnSuperCritical: true
+        minAmount: 2
+        maxAmount: 4
+        maxRange: 2
+      spawns:
+      - ShadowKudzuWeak
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 3
+        maxAmount: 6
+        maxRange: 6
+      spawns:
+      - ShadowKudzu
+  - type: DamageOnInteract
+    damage:
+      types:
+        Cold: 3
+  - type: DamageOnAttacked
+    damage:
+      types:
+        Cold: 3
+
+- type: entity
+  id: MiniAnomalyTech
+  parent: [ BaseMiniAnomaly, AnomalyTech ]
+  suffix: Mini, Tech
+  components:
+  - type: TechAnomaly
+    linkRadius:
+      min: 2
+      max: 4
+    linkCountPerPulse:
+      min: 1
+      max: 2
+    linkCountSupercritical: 5

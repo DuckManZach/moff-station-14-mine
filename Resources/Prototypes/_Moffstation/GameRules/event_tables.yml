@@ -100,6 +100,8 @@
   table: !type:AllSelector
     children:
       - id: AnomalySpawn
+      - id: MiniAnomalySwarmSameType
+      - id: MiniAnomalySwarmVariety
       - id: BluespaceArtifact
       - id: BreakerFlip
       - id: PowerGridCheck

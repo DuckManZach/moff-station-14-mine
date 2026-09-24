@@ -1,0 +1,280 @@
+- type: entity
+  parent: AnomalyInjectionPyroclastic
+  id: MiniAnomalyInjectionPyroclastic
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: PyroclasticAnomaly
+    maximumIgnitionRadius: 1
+  - type: TempAffectingAnomaly
+    tempChangePerSecond: 3
+    hotspotExposeTemperature: 300
+  - type: GasProducerAnomaly
+    criticalMoleAmount: 20
+    spawnRadius: 1
+    tileCount: 1
+    tempChange: 100
+  - type: ProjectileAnomaly
+    minProjectiles: 0
+    maxProjectiles: 1
+
+- type: entity
+  parent: AnomalyInjectionElectric
+  id: MiniAnomalyInjectionElectric
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: ElectricityAnomaly
+    minBoltCount: 0
+    maxBoltCount: 1
+    maxElectrocuteRange: 2
+    maxElectrocuteDamage: 3
+    maxElectrocuteDuration: 1
+    empEnergyConsumption: 20000
+    empDisabledDuration: 10
+
+- type: entity
+  parent: AnomalyInjectionShadow
+  id: MiniAnomalyInjectionShadow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 3
+        maxRange: 2
+      spawns:
+      - ShadowKudzuWeak
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 2
+        maxAmount: 4
+        maxRange: 5
+      spawns:
+      - ShadowKudzu
+
+- type: entity
+  parent: AnomalyInjectionIce
+  id: MiniAnomalyInjectionIce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: ExplosionAnomaly
+    explosionTotalIntensity: 20
+    explosionDropoff: 4
+    explosionMaxTileIntensity: 5
+  - type: ProjectileAnomaly
+    minProjectiles: 0
+    maxProjectiles: 1
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnStabilityChanged: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 1.5
+      spawns:
+      - IceCrust
+  - type: TempAffectingAnomaly
+    tempChangePerSecond: -3
+    hotspotExposeTemperature: -150
+  - type: GasProducerAnomaly
+    criticalMoleAmount: 15
+
+- type: entity
+  parent: AnomalyInjectionFlora
+  id: MiniAnomalyInjectionFlora
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: TileSpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 1
+      floor: FloorAstroGrass
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 2
+        maxAmount: 5
+        maxRange: 3
+      floor: FloorAstroGrass
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        maxAmount: 1
+        maxRange: 1
+      spawns:
+      - KudzuFlowerFriendly
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 2
+        maxRange: 2
+      spawns:
+      - KudzuFlowerAngry
+
+- type: entity
+  parent: AnomalyInjectionBluespace
+  id: MiniAnomalyInjectionBluespace
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: BluespaceAnomaly
+    maxShuffleRadius: 2
+    maxPortalRadius: 4
+    minPortalRadius: 2
+    superCriticalTeleportRadius: 8
+
+- type: entity
+  parent: AnomalyInjectionFlesh
+  id: MiniAnomalyInjectionFlesh
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: TileSpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        spawnOnStabilityChanged: true
+        maxAmount: 1
+        maxRange: 1
+      floor: FloorFlesh
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 2
+        maxAmount: 5
+        maxRange: 3
+      floor: FloorFlesh
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 1
+        maxAmount: 3
+        minRange: 1.5
+        maxRange: 4
+      spawns:
+      - FleshBlocker
+    - settings:
+        spawnOnSuperCritical: true
+        maxAmount: 1
+        maxRange: 3
+      spawns:
+      - MobFleshJared
+      - MobFleshGolem
+      - MobFleshClamp
+      - MobFleshLover
+
+- type: entity
+  parent: AnomalyInjectionGravity
+  id: MiniAnomalyInjectionGravity
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: GravityAnomaly
+    maxGravityWellRange: 2
+    maxThrowRange: 1.5
+    maxThrowStrength: 2
+    maxRadiationIntensity: 0.25
+    spaceRange: 0.5
+  - type: GravityWell
+    maxRange: 0.5
+  - type: SingularityDistortion
+    intensity: 50
+
+- type: entity
+  parent: AnomalyInjectionTech
+  id: MiniAnomalyInjectionTech
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: TechAnomaly
+    linkRadius:
+      min: 1
+      max: 3
+    linkCountPerPulse:
+      min: 1
+      max: 1
+    linkCountSupercritical: 4
+
+- type: entity
+  parent: AnomalyInjectionRock
+  id: MiniAnomalyInjectionRock
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1
+    energy: 1.5
+  - type: TileSpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        minAmount: 1
+        maxAmount: 3
+        maxRange: 2
+      floor: FloorAsteroidTile
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 4
+        maxAmount: 8
+        maxRange: 3
+      floor: FloorAsteroidTile
+  - type: EntitySpawnAnomaly
+    entries:
+    - settings:
+        spawnOnPulse: true
+        maxAmount: 2
+        minRange: 1.5
+        maxRange: 3
+      spawns:
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidSilver
+      - WallSpawnAsteroidIron
+      - WallSpawnAsteroidQuartz
+    - settings:
+        spawnOnSuperCritical: true
+        minAmount: 4
+        maxAmount: 6
+        minRange: 2
+        maxRange: 4
+      spawns:
+      - CrystalPink
+      - CrystalCyan
+      - WallSpawnAsteroid
+      - WallSpawnAsteroidSilverCrab
+      - WallSpawnAsteroidIronCrab
+      - WallSpawnAsteroidQuartzCrab
+    - settings:
+        spawnOnSuperCritical: true
+        maxAmount: 1
+        maxRange: 2
+      spawns:
+      - MobSpawnCrabSilver
+      - MobSpawnCrabIron
+      - MobSpawnCrabQuartz

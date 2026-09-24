@@ -1,0 +1,46 @@
+- type: entity
+  abstract: true
+  parent: BaseStationEventShortDelay
+  id: BaseMiniAnomalySwarm
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-mini-anomaly-swarm-announcement
+    startAnnouncementColor: "#18abf5"
+    startAudio:
+      path: /Audio/Announcements/announce.ogg
+    weight: 4
+    duration: 0
+  - type: MiniAnomalySwarmRule
+    entries:
+    - anomaly: MiniAnomalyPyroclastic
+      infection: MiniAnomalyTrapPyroclastic
+    - anomaly: MiniAnomalyGravity
+      infection: MiniAnomalyTrapGravity
+    - anomaly: MiniAnomalyElectricity
+      infection: MiniAnomalyTrapElectricity
+    - anomaly: MiniAnomalyFlesh
+      infection: MiniAnomalyTrapFlesh
+    - anomaly: MiniAnomalyBluespace
+      infection: MiniAnomalyTrapBluespace
+    - anomaly: MiniAnomalyIce
+      infection: MiniAnomalyTrapIce
+    - anomaly: RandomMiniRockAnomalySpawner
+      infection: MiniAnomalyTrapRock
+    - anomaly: MiniAnomalyLiquid
+    - anomaly: MiniAnomalyFlora
+      infection: MiniAnomalyTrapFlora
+    - anomaly: MiniAnomalyShadow
+      infection: MiniAnomalyTrapShadow
+    - anomaly: MiniAnomalyTech
+      infection: MiniAnomalyTrapTech
+
+- type: entity
+  parent: BaseMiniAnomalySwarm
+  id: MiniAnomalySwarmSameType
+  components:
+  - type: MiniAnomalySwarmRule
+    sameType: true
+
+- type: entity
+  parent: BaseMiniAnomalySwarm
+  id: MiniAnomalySwarmVariety

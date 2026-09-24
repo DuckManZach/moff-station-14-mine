@@ -1,0 +1,1 @@
+station-event-mini-anomaly-swarm-announcement = Our readings have detected a cluster of minor interspacial anomalies scattered across the station. They appear unstable and should be easy to neutralise. Please inform the research team.

@@ -1,0 +1,381 @@
+# injectionComponents replaces the parent's entirely, so each trap repeats the full mini Anomaly block.
+- type: entity
+  parent: AnomalyTrapPyroclastic
+  id: MiniAnomalyTrapPyroclastic
+  suffix: Mini, Pyroclastic
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyPyroSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionPyroclastic
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-pyro
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: fire
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: fire_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: fire_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: fire_MOTH
+
+- type: entity
+  parent: AnomalyTrapElectricity
+  id: MiniAnomalyTrapElectricity
+  suffix: Mini, Electricity
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyElectricitySupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionElectric
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-shock
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: shock
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: shock_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: shock_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: shock_MOTH
+
+- type: entity
+  parent: AnomalyTrapShadow
+  id: MiniAnomalyTrapShadow
+  suffix: Mini, Shadow
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyShadowSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionShadow
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-shadow
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: shadow
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: shadow_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: shadow_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: shadow_MOTH
+
+- type: entity
+  parent: AnomalyTrapIce
+  id: MiniAnomalyTrapIce
+  suffix: Mini, Ice
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyIceSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionIce
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-frost
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: frost
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: frost_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: frost_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: frost_MOTH
+
+- type: entity
+  parent: AnomalyTrapFlora
+  id: MiniAnomalyTrapFlora
+  suffix: Mini, Flora
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyFloraSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionFlora
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-flora
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: flora
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: flora_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: flora_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: flora_MOTH
+
+- type: entity
+  parent: AnomalyTrapBluespace
+  id: MiniAnomalyTrapBluespace
+  suffix: Mini, Bluespace
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyBluespaceSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionBluespace
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-bluespace
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: bluespace
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: bluespace_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: bluespace_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: bluespace_MOTH
+
+- type: entity
+  parent: AnomalyTrapFlesh
+  id: MiniAnomalyTrapFlesh
+  suffix: Mini, Flesh
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyFleshSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionFlesh
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-flesh
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: flesh
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: flesh_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: flesh_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: flesh_MOTH
+
+- type: entity
+  parent: AnomalyTrapGravity
+  id: MiniAnomalyTrapGravity
+  suffix: Mini, Gravity
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyGravitySupercritical
+        supercriticalDuration: 15
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionGravity
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-grav
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: grav
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: grav_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: grav_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: grav_MOTH
+
+- type: entity
+  parent: AnomalyTrapTech
+  id: MiniAnomalyTrapTech
+  suffix: Mini, Tech
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyTechSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionTech
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-tech
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: tech
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: tech_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: tech_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: tech_MOTH
+
+- type: entity
+  parent: AnomalyTrapRock
+  id: MiniAnomalyTrapRock
+  suffix: Mini, Rock
+  components:
+  - type: InnerBodyAnomalyInjector
+    injectionComponents:
+      - type: Anomaly
+        deleteEntity: false
+        minPointsPerSecond: 3
+        maxPointsPerSecond: 25
+        initialSeverityRange: [0.05, 0.2]
+        initialStabilityRange: [0.45, 0.55]
+        severityGrowthCoefficient: 0.02
+        decayhreshold: 0.35
+        healthChangePerSecond: -0.1
+        corePrototype: EffectSparks
+        coreInertPrototype: EffectSparks
+        supercriticalSoundAtAnimationStart:
+          collection: AnomalyRockSupercritical
+      - type: InnerBodyAnomaly
+        injectionProto: MiniAnomalyInjectionRock
+        stunDuration: 1.5
+        startMessage: inner-anomaly-start-message-rock
+        fallbackSprite:
+          sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+          state: rock
+        speciesSprites:
+          Vox:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: rock_VOX
+          Arachnid:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: rock_ARACHNID
+          Moth:
+            sprite: Structures/Specific/Anomalies/inner_anom_layer.rsi
+            state: rock_MOTH
