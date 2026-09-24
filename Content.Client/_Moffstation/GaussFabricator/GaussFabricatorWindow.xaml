@@ -36,12 +36,12 @@
                             Text="{Loc 'gauss-fabricator-window-draw-rate'}"
                             StyleClasses="highlight"
                             HorizontalExpand="True"/>
-                        <Label Name="DrawRateLabel" Text="0 W"/>
+                        <Label Name="DrawRateLabel" Text="0 W" MinWidth="72" Align="Right"/>
                         <Label
                             Text="{Loc 'gauss-fabricator-window-received'}"
                             StyleClasses="highlight"
                             HorizontalExpand="True"/>
-                        <Label Name="ReceivedLabel" Text="0 W"/>
+                        <Label Name="ReceivedLabel" Text="0 W" MinWidth="72" Align="Right"/>
                     </GridContainer>
                     <controls:SegmentedBarChart Name="DrawLevelBar"
                         MinSize="0 22"

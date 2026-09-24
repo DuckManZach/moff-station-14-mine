@@ -6,6 +6,7 @@ using Content.Server.Power.EntitySystems;
 using Content.Shared._Moffstation.GaussFabricator;
 using Content.Shared.Database;
 using Content.Shared.Destructible.Thresholds;
+using Content.Shared.Examine;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.UserInterface;
@@ -68,6 +69,25 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
         UpdateUi(ent);
     }
 
+    // I imagine people will have big arrays of these things in cooling boxes. Maybe this is QoL slop but idk
+    [SubscribeLocalEvent]
+    private void OnExamined(Entity<GaussFabricatorComponent> ent, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange || !_powerBatteryQuery.TryComp(ent, out var pnb))
+            return;
+
+        var mixture = _atmosphere.GetContainingMixture(ent.Owner);
+        var temperature = GetBand(ent.Comp.TemperatureAcceptable, ent.Comp.TemperatureOptimal, mixture?.Temperature);
+        var pressure = GetBand(ent.Comp.PressureAcceptable, ent.Comp.PressureOptimal, mixture?.Pressure);
+
+        using (args.PushGroup(nameof(GaussFabricatorComponent)))
+        {
+            args.PushMarkup(Loc.GetString("gauss-fabricator-examine-draw-rate", ("rate", pnb.MaxChargeRate)));
+            args.PushMarkup(Loc.GetString("gauss-fabricator-examine-temperature", ("band", temperature.ToString())));
+            args.PushMarkup(Loc.GetString("gauss-fabricator-examine-pressure", ("band", pressure.ToString())));
+        }
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -101,12 +121,22 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
         MinMax optimal,
         float? value)
     {
+        return GetBand(acceptable, optimal, value) switch
+        {
+            Band.Optimal => comp.OptimalMultiplier,
+            Band.Acceptable => comp.NormalMultiplier,
+            _ => comp.BadMultiplier,
+        };
+    }
+
+    private static Band GetBand(MinMax acceptable, MinMax optimal, float? value)
+    {
         if (value is not { } reading || reading < acceptable.Min || reading > acceptable.Max)
-            return comp.BadMultiplier;
+            return Band.Bad;
 
         return reading >= optimal.Min && reading <= optimal.Max
-            ? comp.OptimalMultiplier
-            : comp.NormalMultiplier;
+            ? Band.Optimal
+            : Band.Acceptable;
     }
 
     private void UpdateUi(Entity<GaussFabricatorComponent> ent)
@@ -135,5 +165,12 @@ public sealed partial class GaussFabricatorSystem : EntitySystem
                 new GaussFabricatorGauge(mixture?.Temperature, ent.Comp.TemperatureAcceptable, ent.Comp.TemperatureOptimal),
                 new GaussFabricatorGauge(mixture?.Pressure, ent.Comp.PressureAcceptable, ent.Comp.PressureOptimal),
                 pnb.Enabled));
+    }
+
+    private enum Band : byte
+    {
+        Bad,
+        Acceptable,
+        Optimal,
     }
 }
