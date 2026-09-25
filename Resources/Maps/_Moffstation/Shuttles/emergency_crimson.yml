@@ -4,8 +4,8 @@ meta:
   engineVersion: 289.0.3
   forkId: ""
   forkVersion: ""
-  time: 09/25/2026 06:53:12
-  entityCount: 523
+  time: 09/25/2026 18:02:39
+  entityCount: 524
 maps: []
 grids:
 - 1
@@ -440,11 +440,21 @@ entities:
       pos: -1.5,-3.5
 - proto: ArrivalsSpawnPointGeneral
   entities:
+  - uid: 376
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,3.5
   - uid: 498
     components:
     - type: Transform
       parent: 1
       pos: -1.5,1.5
+  - uid: 499
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,2.5
   - uid: 500
     components:
     - type: Transform
@@ -470,6 +480,16 @@ entities:
     - type: Transform
       parent: 1
       pos: -5.5,3.5
+  - uid: 505
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,2.5
+  - uid: 506
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,3.5
   - uid: 507
     components:
     - type: Transform
@@ -1438,6 +1458,30 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: -5.5,3.5
+  - uid: 362
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -1.5,3.5
+  - uid: 372
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -3.5,2.5
+  - uid: 396
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -3.5,3.5
+  - uid: 400
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -1.5,2.5
 - proto: ChunkEntity
   entities:
   - uid: 494
@@ -1945,18 +1989,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -6.620076,10.550344
-- proto: ClosetEmergencyFilledRandom
-  entities:
-  - uid: 195
-    components:
-    - type: Transform
-      parent: 1
-      pos: -6.5,-1.5
-  - uid: 196
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-1.5
 - proto: ClosetWallEmergencyFilledRandom
   entities:
   - uid: 199
@@ -3284,11 +3316,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,3.5
-  - uid: 372
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,3.5
   - uid: 373
     components:
     - type: Transform
@@ -3304,11 +3331,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,6.5
-  - uid: 376
-    components:
-    - type: Transform
-      parent: 1
-      pos: -4.5,1.5
   - uid: 377
     components:
     - type: Transform
@@ -3404,11 +3426,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,-1.5
-  - uid: 396
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,1.5
   - uid: 397
     components:
     - type: Transform
@@ -3424,11 +3441,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -4.5,2.5
-  - uid: 400
-    components:
-    - type: Transform
-      parent: 1
-      pos: -4.5,3.5
   - uid: 401
     components:
     - type: Transform
@@ -3577,11 +3589,11 @@ entities:
       pos: 2.5,14.5
 - proto: VendingMachineClothing
   entities:
-  - uid: 197
+  - uid: 195
     components:
     - type: Transform
       parent: 1
-      pos: -3.5,3.5
+      pos: -4.5,3.5
 - proto: VendingMachineMedical
   entities:
   - uid: 424
@@ -3591,23 +3603,18 @@ entities:
       pos: -0.5,10.5
 - proto: VendingMachineSwimsuits
   entities:
-  - uid: 499
+  - uid: 196
     components:
     - type: Transform
       parent: 1
-      pos: -1.5,2.5
-  - uid: 537
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-2.5
+      pos: -0.5,1.5
 - proto: VendingMachineTheater
   entities:
-  - uid: 362
+  - uid: 197
     components:
     - type: Transform
       parent: 1
-      pos: -3.5,2.5
+      pos: -4.5,1.5
 - proto: VendingMachineWallMedical
   entities:
   - uid: 425
@@ -3622,7 +3629,7 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: -1.5,3.5
+      pos: -0.5,3.5
 - proto: WallShuttle
   entities:
   - uid: 426
