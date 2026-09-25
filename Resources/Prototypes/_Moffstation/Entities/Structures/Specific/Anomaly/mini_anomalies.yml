@@ -1,9 +1,8 @@
-# Mini-anomalies: listed first in `parent` so these fields win over the full anomaly's.
 - type: entity
   abstract: true
   id: BaseMiniAnomaly
-  name: mini anomaly
-  description: A small, flickering anomaly. It looks like it could fizzle out at any moment.
+  name: anomaly
+  description: A teensy tiny impossible object. It's almost cute.
   components:
   - type: Anomaly
     minPointsPerSecond: 3
