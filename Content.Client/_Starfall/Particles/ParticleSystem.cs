@@ -177,7 +177,10 @@ public sealed partial class ParticleSystem : EntitySystem
         _emitters.Add(emitter);
 
         if (proto.Burst)
+        {
             BurstEmit(emitter);
+            emitter.Exhausted = true;
+        }
 
         return emitter;
     }
@@ -305,10 +308,8 @@ public sealed partial class ParticleSystem : EntitySystem
         }
 
         var eye = _eye.CurrentEye;
-        var eyePos = eye.Position.Position;
         var eyeAngle = (float)eye.Rotation;
-        var halfSize = new Vector2(eye.Zoom.X > 0 ? 20f / eye.Zoom.X : 20f, eye.Zoom.Y > 0 ? 15f / eye.Zoom.Y : 15f) * 1.5f;
-        var viewBounds = new Box2(eyePos - halfSize, eyePos + halfSize);
+        var viewBounds = _eye.GetWorldViewport().Scale(1.5f);
         var currentMapId = eye.Position.MapId;
 
         _pendingSubEmitters.Clear();
@@ -325,6 +326,12 @@ public sealed partial class ParticleSystem : EntitySystem
                 emitter.Exhausted = true;
                 emitter.AttachedEntity = null;
             }
+
+            // Age and expire every emitter
+            emitter.Age += TimeSpan.FromSeconds(frameTime);
+            var duration = emitter.Overrides?.Duration ?? emitter.Proto.Duration;
+            if (duration > TimeSpan.Zero && emitter.Age >= duration)
+                emitter.Exhausted = true;
 
             var inView = emitter.MapCoords.MapId == currentMapId
                 && viewBounds.Contains(emitter.MapCoords.Position);
@@ -493,11 +500,6 @@ public sealed partial class ParticleSystem : EntitySystem
         var dragMul     = drag > 0f ? MathF.Exp(-drag * dt) : 1f;
         var termSpeedSq = termSpeed > 0f ? termSpeed * termSpeed : float.MaxValue;
 
-        // Advance age and check duration
-        emitter.Age += TimeSpan.FromSeconds(dt);
-        if (!emitter.Exhausted && duration > 0f && emitter.Age.TotalSeconds >= duration)
-            emitter.Exhausted = true;
-
         // RSI animation
         if (emitter.Delays.Length > 0 && emitter.Frames.Length > 0)
         {
@@ -601,9 +603,6 @@ public sealed partial class ParticleSystem : EntitySystem
                     EmitParticle(emitter, eyeAngle);
             }
         }
-
-        if (proto.Burst && !emitter.Exhausted)
-            emitter.Exhausted = true;
     }
 
     private void BurstEmit(ActiveEmitter emitter)
@@ -811,7 +810,6 @@ public sealed partial class ParticleSystem : EntitySystem
     /// </summary>
     private void AgeOffScreenParticles(ActiveEmitter emitter, float dt)
     {
-        emitter.Age += TimeSpan.FromSeconds(dt);
         foreach (var p in emitter.Particles)
         {
             if (!p.Alive) continue;
