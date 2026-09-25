@@ -1,10 +1,14 @@
 using System.Linq;
+using Content.Server._Moffstation.Shuttles.Systems;
 using Content.Server._Moffstation.Spawners;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Preferences.Managers;
+using Content.Server.Shuttles.Components;
 using Content.Shared._Moffstation.CCVar;
+using Content.Shared.Buckle;
+using Content.Shared.Buckle.Components;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
@@ -27,6 +31,11 @@ public sealed partial class ArrivalsSpawnPointSystem : EntitySystem
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IServerPreferencesManager _pref = default!;
+    [Dependency] private EvacArrivalSystem _evacArrival = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+
+    private const float SeatRange = 0.4f;
 
     public override void Initialize()
     {
@@ -62,6 +71,11 @@ public sealed partial class ArrivalsSpawnPointSystem : EntitySystem
         if (job.IgnoreArrivals)
             return;
 
+        if (!TryComp<StationEmergencyShuttleComponent>(args.Station, out var stationEvac) ||
+            stationEvac.EmergencyShuttle is not { } shuttle ||
+            !_evacArrival.IsArrivalPhase(shuttle))
+            return;
+
         var manager = GetManager();
         // Check if they're gonna be in the opening shift
         if (manager != null
@@ -82,6 +96,9 @@ public sealed partial class ArrivalsSpawnPointSystem : EntitySystem
         // Get them in a list so we can do list things
         while (query.MoveNext(out var spawnUid, out var spawnPoint))
         {
+            if (Transform(spawnUid).GridUid != shuttle)
+                continue;
+
             spawnsList.Add((spawnUid, spawnPoint));
         }
 
@@ -103,7 +120,7 @@ public sealed partial class ArrivalsSpawnPointSystem : EntitySystem
             {
                 if (job.ID == jobId)
                 {
-                    _transform.SetCoordinates(args.Mob, Transform(spawn.Owner).Coordinates);
+                    MoveToSpawn(args.Mob, spawn);
                     return;
                 }
             }
@@ -114,9 +131,22 @@ public sealed partial class ArrivalsSpawnPointSystem : EntitySystem
         {
             if (spawn.Comp.JobIds.Count == 0)
             {
-                _transform.SetCoordinates(args.Mob, Transform(spawn.Owner).Coordinates);
+                MoveToSpawn(args.Mob, spawn);
                 return;
             }
+        }
+    }
+
+    // Buckles into a seat on the spawn so FTL doesn't knock them down.
+    private void MoveToSpawn(EntityUid mob, EntityUid spawn)
+    {
+        var coords = Transform(spawn).Coordinates;
+        _transform.SetCoordinates(mob, coords);
+
+        foreach (var strap in _lookup.GetEntitiesInRange<StrapComponent>(coords, SeatRange))
+        {
+            if (_buckle.TryBuckle(mob, mob, strap, popup: false))
+                return;
         }
     }
 

@@ -113,6 +113,18 @@ public sealed class MoffCCVars
     public static readonly CVarDef<float> ArrivalsRange =
         CVarDef.Create("shuttle.arrivals_range", 50f, CVar.SERVERONLY);
 
+    /// <summary>
+    ///     How long the evac shuttle spends in FTL when bringing the crew in at round start
+    /// </summary>
+    public static readonly CVarDef<float> EvacArrivalFTLTime =
+        CVarDef.Create("shuttle.evac_arrival_ftl_time", 20f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     How long the evac shuttle stays docked after bringing the crew in before returning to CentComm
+    /// </summary>
+    public static readonly CVarDef<float> EvacArrivalDockTime =
+        CVarDef.Create("shuttle.evac_arrival_dock_time", 60f, CVar.SERVERONLY);
+
     /*
      * Patreon
      */
