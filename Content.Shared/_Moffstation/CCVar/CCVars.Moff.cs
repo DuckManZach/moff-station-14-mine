@@ -117,7 +117,7 @@ public sealed class MoffCCVars
     ///     How long the evac shuttle spends in FTL when bringing the crew in at round start
     /// </summary>
     public static readonly CVarDef<float> EvacArrivalFTLTime =
-        CVarDef.Create("shuttle.evac_arrival_ftl_time", 20f, CVar.SERVERONLY);
+        CVarDef.Create("shuttle.evac_arrival_ftl_time", 150f, CVar.SERVERONLY);
 
     /// <summary>
     ///     How long the evac shuttle stays docked after bringing the crew in before returning to CentComm

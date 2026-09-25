@@ -71,6 +71,7 @@ public sealed partial class ArrivalsSpawnPointSystem : EntitySystem
         if (job.IgnoreArrivals)
             return;
 
+        // So the arrivals shuttle is the evac shuttle now right, so if its not the evac shuttle just spawn them normally.
         if (!TryComp<StationEmergencyShuttleComponent>(args.Station, out var stationEvac) ||
             stationEvac.EmergencyShuttle is not { } shuttle ||
             !_evacArrival.IsArrivalPhase(shuttle))

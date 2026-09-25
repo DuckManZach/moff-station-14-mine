@@ -21,7 +21,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Moffstation.Shuttles.Systems;
 
-/// Starts the round with the crew aboard the evac shuttle as it FTLs to the station, then sends it back to CentComm.
+/// Starts the round with the crew aboard the evac shuttle as it FTLs to the station
 public sealed partial class EvacArrivalSystem : EntitySystem
 {
     [Dependency] private IChatManager _chat = default!;
@@ -34,8 +34,8 @@ public sealed partial class EvacArrivalSystem : EntitySystem
     [Dependency] private ShuttleSystem _shuttle = default!;
     [Dependency] private StationSystem _station = default!;
 
-    [Dependency] private EntityQuery<ArrivalsBlacklistComponent> _blacklistQuery = default!;
-    [Dependency] private EntityQuery<MobStateComponent> _mobQuery = default!;
+    [Dependency] private EntityQuery<ArrivalsBlacklistComponent> _blacklistQuery;
+    [Dependency] private EntityQuery<MobStateComponent> _mobQuery;
 
     private static readonly ProtoId<TagPrototype> DockTag = "DockEmergency";
     private static readonly LocId DumpedMessage = "evac-arrival-dumped-from-shuttle";
