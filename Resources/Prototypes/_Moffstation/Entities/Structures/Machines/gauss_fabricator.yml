@@ -6,8 +6,8 @@
   description: A high-voltage fabrication unit that channels raw HV current through precision electromagnetic coils, slowly crystallizing dense magnetic alloy as a byproduct. The hum is normal.
   components:
   - type: Sprite
-    sprite: Structures/Power/power.rsi
-    state: wiredmachine
+    sprite: _Moffstation/Structures/Machines/gauss_fabricator.rsi
+    state: icon
     snapCardinals: true
   - type: NodeContainer
     examinable: true
@@ -51,9 +51,8 @@
   description: A dense magnet crystallized by intense electromagnetic fields. Highly sought after for its unusual magnetic properties.
   components:
   - type: Sprite
-    sprite: Objects/Materials/ingots.rsi
-    state: silver_3
-    color: "#9fc8e8"
+    sprite: _Moffstation/Objects/Materials/gaussian_hypermagnet.rsi
+    state: icon
   - type: Item
     size: Small
     heldPrefix: silver
