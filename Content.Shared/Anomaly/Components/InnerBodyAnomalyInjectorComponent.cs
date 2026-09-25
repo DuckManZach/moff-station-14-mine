@@ -17,5 +17,6 @@ public sealed partial class InnerBodyAnomalyInjectorComponent : Component
     /// components that will be automatically removed after “curing”
     /// </summary>
     [DataField(required: true)]
+    [AlwaysPushInheritance] // Moff - Mini anomalies
     public ComponentRegistry InjectionComponents = default!;
 }

@@ -3,9 +3,6 @@
   id: MiniAnomalyInjectionPyroclastic
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: PyroclasticAnomaly
     maximumIgnitionRadius: 1
   - type: TempAffectingAnomaly
@@ -25,9 +22,6 @@
   id: MiniAnomalyInjectionElectric
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: ElectricityAnomaly
     minBoltCount: 0
     maxBoltCount: 1
@@ -42,9 +36,6 @@
   id: MiniAnomalyInjectionShadow
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: EntitySpawnAnomaly
     entries:
     - settings:
@@ -68,9 +59,6 @@
   id: MiniAnomalyInjectionIce
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: ExplosionAnomaly
     explosionTotalIntensity: 20
     explosionDropoff: 4
@@ -98,9 +86,6 @@
   id: MiniAnomalyInjectionFlora
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: TileSpawnAnomaly
     entries:
     - settings:
@@ -136,9 +121,6 @@
   id: MiniAnomalyInjectionBluespace
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: BluespaceAnomaly
     maxShuffleRadius: 2
     maxPortalRadius: 4
@@ -150,9 +132,6 @@
   id: MiniAnomalyInjectionFlesh
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: TileSpawnAnomaly
     entries:
     - settings:
@@ -192,9 +171,6 @@
   id: MiniAnomalyInjectionGravity
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: GravityAnomaly
     maxGravityWellRange: 2
     maxThrowRange: 1.5
@@ -211,9 +187,6 @@
   id: MiniAnomalyInjectionTech
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: TechAnomaly
     linkRadius:
       min: 1
@@ -228,9 +201,6 @@
   id: MiniAnomalyInjectionRock
   categories: [ HideSpawnMenu ]
   components:
-  - type: PointLight
-    radius: 1
-    energy: 1.5
   - type: TileSpawnAnomaly
     entries:
     - settings:

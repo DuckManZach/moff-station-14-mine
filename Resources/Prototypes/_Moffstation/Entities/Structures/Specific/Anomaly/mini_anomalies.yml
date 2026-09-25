@@ -24,7 +24,6 @@
     damage:
       types:
         Radiation: 3
-    popupText: anomaly-component-contact-damage
   - type: DamageOnAttacked
     damage:
       types:
