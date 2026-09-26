@@ -1,13 +1,17 @@
 using Content.Server._Moffstation.Shuttles.Components;
 using Content.Server._Moffstation.Spawners;
 using Content.Server.Communications;
+using Content.Server.DeviceNetwork.Systems;
 using Content.Server.GameTicking.Events;
+using Content.Server.Screens.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
 using Content.Shared._Moffstation.CCVar;
 using Content.Shared.CCVar;
+using Content.Shared.DeviceNetwork;
+using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Shuttles.Components;
@@ -24,7 +28,9 @@ public sealed partial class EvacArrivalSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ArrivalsSystem _arrivals = default!;
+    [Dependency] private DeviceNetworkSystem _deviceNetwork = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ShuttleSystem _shuttle = default!;
     [Dependency] private StationSystem _station = default!;
 
@@ -74,6 +80,10 @@ public sealed partial class EvacArrivalSystem : EntitySystem
                 startupTime: 0f,
                 hyperspaceTime: _cfg.GetCVar(MoffCCVars.EvacArrivalFTLTime),
                 priorityTag: DockTag);
+
+            // So people don't start on the ground, but will end on the ground if they don't buckle up later.
+            if (TryComp<FTLComponent>(shuttle, out var ftl))
+                ftl.KnockdownOnStart = false;
         }
     }
 
@@ -109,8 +119,28 @@ public sealed partial class EvacArrivalSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnFTLStarted(Entity<EvacArrivalComponent> ent, ref FTLStartedEvent args)
     {
-        if (ent.Comp.State == EvacArrivalState.Returning && args.FromMapUid != null)
-            _arrivals.DumpChildren(ent, ref args);
+        switch (ent.Comp.State)
+        {
+            case EvacArrivalState.InTransit when TryComp<FTLComponent>(ent, out var ftl):
+                // Set knockdown back to normal
+                ftl.KnockdownOnStart = true;
+
+                var eta = TimeSpan.FromSeconds(ftl.TravelTime);
+                var payload = new NetworkPayload
+                {
+                    [ShuttleTimerMasks.ShuttleMap] = ent.Owner,
+                    [ShuttleTimerMasks.ShuttleTime] = eta,
+                    [ShuttleTimerMasks.DestMap] = _transform.GetMap(args.TargetCoordinates),
+                    [ShuttleTimerMasks.DestTime] = eta,
+                    [ScreenMasks.Text] = ShuttleTimerMasks.ETA,
+                };
+
+                SendShuttleTimer(ent, payload);
+                break;
+            case EvacArrivalState.Returning when args.FromMapUid != null:
+                _arrivals.DumpChildren(ent, ref args);
+                break;
+        }
     }
 
     [SubscribeLocalEvent]
@@ -119,9 +149,21 @@ public sealed partial class EvacArrivalSystem : EntitySystem
         switch (ent.Comp.State)
         {
             case EvacArrivalState.InTransit:
+                var dockTime = TimeSpan.FromSeconds(_cfg.GetCVar(MoffCCVars.EvacArrivalDockTime));
                 ent.Comp.State = EvacArrivalState.Docked;
-                ent.Comp.DepartTime = _timing.CurTime + TimeSpan.FromSeconds(_cfg.GetCVar(MoffCCVars.EvacArrivalDockTime));
+                ent.Comp.DepartTime = _timing.CurTime + dockTime;
                 RefillStationBatteries(ent.Comp.Station);
+
+                var payload = new NetworkPayload
+                {
+                    [ShuttleTimerMasks.ShuttleMap] = ent.Owner,
+                    [ShuttleTimerMasks.ShuttleTime] = dockTime,
+                    [ShuttleTimerMasks.SourceMap] = args.MapUid,
+                    [ShuttleTimerMasks.SourceTime] = dockTime,
+                    [ShuttleTimerMasks.Docked] = true,
+                    [ScreenMasks.Text] = ShuttleTimerMasks.ETD,
+                };
+                SendShuttleTimer(ent, payload);
                 break;
             case EvacArrivalState.Returning:
                 if (TryComp<ShuttleComponent>(ent, out var shuttle))
@@ -148,13 +190,19 @@ public sealed partial class EvacArrivalSystem : EntitySystem
         RemCompDeferred<EvacArrivalComponent>(ent);
     }
 
+    private void SendShuttleTimer(EntityUid shuttle, NetworkPayload payload)
+    {
+        if (TryComp<DeviceNetworkComponent>(shuttle, out var net))
+            _deviceNetwork.QueuePacket(shuttle, null, payload, net.TransmitFrequency);
+    }
+
     // Engineering has to wait for the shuttle before they can get the power running.
     private void RefillStationBatteries(EntityUid station)
     {
-        foreach (var battery in EntityQueryEnumerator<BatteryComponent>())
+        foreach (var battery in EntityQueryEnumerator<BatteryRefillOnArrivalComponent, BatteryComponent>())
         {
             if (_station.GetOwningStation(battery) == station)
-                _battery.SetCharge(battery.AsNullable(), battery.Comp.MaxCharge);
+                _battery.SetCharge((battery.Owner, battery.Comp2), battery.Comp2.MaxCharge);
         }
     }
 }
