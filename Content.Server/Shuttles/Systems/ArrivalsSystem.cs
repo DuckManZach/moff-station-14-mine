@@ -312,7 +312,7 @@ public sealed partial class ArrivalsSystem : EntitySystem
         // Moffstation - End
     }
 
-    private void DumpChildren(EntityUid uid, ref FTLStartedEvent args)
+    public void DumpChildren(EntityUid uid, ref FTLStartedEvent args) // Moff - Made public
     {
         var toDump = new List<Entity<TransformComponent>>();
         FindDumpChildren(uid, toDump);

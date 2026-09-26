@@ -35,3 +35,7 @@ public enum EvacArrivalState : byte
     Docked,
     Returning,
 }
+
+/// Raised on the emergency shuttle when it FTLs; cancels if the trip isn't the evac departure that ends the round.
+[ByRefEvent]
+public record struct EmergencyShuttleEvacDepartureCheckEvent(bool Cancelled = false);

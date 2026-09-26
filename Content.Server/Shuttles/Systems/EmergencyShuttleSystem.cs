@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading;
-using Content.Server._Moffstation.Shuttles.Components;
 using Content.Server.Access.Systems;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -205,7 +204,7 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
     /// </summary>
     private void OnEmergencyFTL(EntityUid uid, EmergencyShuttleComponent component, ref FTLStartedEvent args)
     {
-        if (HasComp<EvacArrivalComponent>(uid)) // Moff - Evac arrivals
+        if (!IsEvacDeparture(uid)) // Moff - Evac arrivals
             return;
 
         var ftlTime = TimeSpan.FromSeconds
@@ -234,8 +233,11 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
     /// </summary>
     private void OnEmergencyFTLComplete(EntityUid uid, EmergencyShuttleComponent component, ref FTLCompletedEvent args)
     {
-        if (HasComp<EvacArrivalComponent>(uid)) // Moff - Evac arrivals
+        // Moff start - Evac arrivals
+        // Probably not the best way, but you know what, upstream tieing it to this event isn't the best way either.
+        if (!IsEvacDeparture(uid))
             return;
+        // Moff end
 
         var countdownTime = TimeSpan.FromSeconds(ConfigManager.GetCVar(CCVars.RoundRestartTime));
         var shuttle = args.Entity;
