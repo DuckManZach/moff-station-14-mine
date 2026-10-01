@@ -19,8 +19,8 @@ public sealed class DiegeticDigitalSearchBarSheetlet<T> : Sheetlet<T> where T : 
     {
         var box = new StyleBoxFlat
         {
-            BackgroundColor = DiegeticDigitalSearchBarSheetlet.ScreenBackground,
-            BorderColor = DiegeticDigitalSearchBarSheetlet.ScreenBorder,
+            BackgroundColor = MoffDiegeticColors.ScreenBackground,
+            BorderColor = MoffDiegeticColors.ScreenBorder,
             BorderThickness = new Thickness(2),
         };
         box.SetContentMarginOverride(StyleBox.Margin.Horizontal, 6);
@@ -31,20 +31,12 @@ public sealed class DiegeticDigitalSearchBarSheetlet<T> : Sheetlet<T> where T : 
             E<LineEdit>()
                 .Class(StyleClassDiegeticSearchBar)
                 .Prop(LineEdit.StylePropertyStyleBox, box)
-                .FontColor(DiegeticDigitalSearchBarSheetlet.ScreenText)
-                .Prop(LineEdit.StylePropertyCursorColor, DiegeticDigitalSearchBarSheetlet.ScreenText),
+                .FontColor(MoffDiegeticColors.ScreenText)
+                .Prop(LineEdit.StylePropertyCursorColor, MoffDiegeticColors.ScreenText),
             E<LineEdit>()
                 .Class(StyleClassDiegeticSearchBar)
                 .Pseudo(LineEdit.StylePseudoClassPlaceholder)
-                .FontColor(DiegeticDigitalSearchBarSheetlet.ScreenTextDim),
+                .FontColor(MoffDiegeticColors.ScreenTextDim),
         ];
     }
-}
-
-static file class DiegeticDigitalSearchBarSheetlet
-{
-    public static readonly Color ScreenBackground = Color.FromHex("#0a120a");
-    public static readonly Color ScreenBorder = Color.FromHex("#1a331a");
-    public static readonly Color ScreenText = Color.FromHex("#33ff33");
-    public static readonly Color ScreenTextDim = Color.FromHex("#1a551a");
 }

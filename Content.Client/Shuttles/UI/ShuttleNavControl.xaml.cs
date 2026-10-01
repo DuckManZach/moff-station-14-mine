@@ -131,6 +131,12 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         base.Draw(handle);
 
         DrawBacking(handle);
+
+        // Moff Start - FTL rework
+        if (ShowParallax && _coordinates != null && _rotation != null)
+            DrawParallax(handle, _coordinates.Value, _rotation.Value);
+        // Moff end
+
         DrawCircles(handle);
 
         // No data
@@ -157,6 +163,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         Matrix3x2.Invert(shuttleToWorld, out var worldToShuttle);
         var shuttleToView = Matrix3x2.CreateScale(new Vector2(MinimapScale, -MinimapScale)) * Matrix3x2.CreateTranslation(MidPointVector);
 
+        DrawRift(handle, xform.MapUid, worldToShuttle * shuttleToView); // Moff - FTL rework
+
         // Draw our grid in detail
         var ourGridId = xform.GridUid;
         if (EntManager.TryGetComponent<MapGridComponent>(ourGridId, out var ourGrid) &&
@@ -167,7 +175,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             var ourGridToView = ourGridToShuttle * shuttleToView;
             var color = _shuttles.GetIFFColor(ourGridId.Value, self: true);
 
-            DrawGrid(handle, ourGridToView, (ourGridId.Value, ourGrid), color);
+            DrawGrid(handle, ourGridToView, (ourGridId.Value, ourGrid), color, fillColor: GetGridFill(color)); // Moff - FTL rework
+            DrawThrusters(handle, ourGridId.Value, ourGridToView); // Moff - FTL rework
             DrawDocks(handle, ourGridId.Value, ourGridToView);
         }
 
@@ -274,7 +283,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             if (!gridAABB.Intersects(viewAABB))
                 continue;
 
-            DrawGrid(handle, curGridToView, grid, labelColor);
+            DrawGrid(handle, curGridToView, grid, labelColor, fillColor: GetGridFill(labelColor)); // Moff - FTL rework
+            DrawThrusters(handle, gUid, curGridToView); // Moff - FTL rework
             DrawDocks(handle, gUid, curGridToView);
         }
 

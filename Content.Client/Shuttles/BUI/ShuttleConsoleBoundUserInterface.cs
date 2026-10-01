@@ -1,4 +1,5 @@
 using Content.Client.Shuttles.UI;
+using Content.Shared._Moffstation.Shuttles.Events;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
 using JetBrains.Annotations;
@@ -22,8 +23,11 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         base.Open();
         _window = this.CreateWindow<ShuttleConsoleWindow>();
 
-        _window.RequestFTL += OnFTLRequest;
-        _window.RequestBeaconFTL += OnFTLBeaconRequest;
+        // Moff Start - FTL rework
+        // _window.RequestFTL += OnFTLRequest;
+        // _window.RequestBeaconFTL += OnFTLBeaconRequest;
+        _window.RequestSectorFTL += map => SendMessage(new ShuttleConsoleFTLSectorMessage(map));
+        // Moff end
         _window.DockRequest += OnDockRequest;
         _window.UndockRequest += OnUndockRequest;
     }

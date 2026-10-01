@@ -35,17 +35,33 @@ public sealed partial class NavScreen : BoxContainer
 
         ArrivalDockToggle.OnToggled += OnArrivalDockTogglePressed;
         ArrivalDockToggle.Pressed = NavRadar.ShowArrivalDocks;
+
+        // Moff Start - FTL rework
+        NavRadar.ShowParallax = true;
+        ThrusterToggle.OnToggled += OnThrusterTogglePressed;
+        ThrusterToggle.Pressed = NavRadar.ShowThrusters;
+        // Moff end
     }
 
     public void SetShuttle(EntityUid? shuttle)
     {
         _shuttleEntity = shuttle;
+        IFFDisplay.SetShuttle(shuttle); // Moff - FTL rework
     }
+
+    // Moff Start - FTL rework
+    private void OnThrusterTogglePressed(BaseButton.ButtonEventArgs args)
+    {
+        NavRadar.ShowThrusters ^= true;
+        args.Button.Pressed = NavRadar.ShowThrusters;
+    }
+    // Moff end
 
     public void SetConsole(EntityUid? console)
     {
         _consoleEntity = console;
         NavRadar.SetConsole(console);
+        IFFDisplay.SetConsole(console); // Moff - FTL rework
     }
 
     private void OnIFFTogglePressed(BaseButton.ButtonEventArgs args)

@@ -248,7 +248,11 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             return;
         }
 
-        DrawParallax(handle);
+        // Moff Start - FTL rework
+        // DrawParallax(handle);
+        DrawBacking(handle);
+        DrawMapParallax(handle, ViewingMap, Offset, Angle.Zero, zoom: WorldMaxRange / WorldRange);
+        // Moff end
 
         var viewedMapUid = _mapSystem.GetMapOrInvalid(ViewingMap);
         var matty = Matrix3Helpers.CreateInverseTransform(Offset, Angle.Zero);
@@ -304,6 +308,8 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
 
             _viewportExclusions.Add(exclusion);
         }
+
+        DrawRift(handle, viewedMapUid, matty); // Moff - FTL rework
 
         _verts.Clear();
         _edges.Clear();
@@ -366,7 +372,10 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             var gridUiPos = ScalePosition(gridRelativePos);
 
             var mapObject = GetMapObject(gridRelativePos, Angle.Zero, scalePosition: true);
-            AddMapObject(existingEdges, existingVerts, mapObject);
+            // Moff Start - FTL rework
+            if (!TryDrawGridShape(handle, grid, matty, gridColor))
+                AddMapObject(existingEdges, existingVerts, mapObject);
+            // Moff end
 
             // Text
             if (iffComp != null && (iffComp.Flags & IFFFlags.HideLabel) != 0x0)
@@ -404,6 +413,8 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
                 handle.DrawString(_font, gridUiPos + textWidth with { X = -textWidth.X / 2f, Y = textWidth.Y * UIScale }, iffText, adjustedColor);
             }
         }
+
+        DrawOffscreenLabels(handle, mapObjects, viewportObjects, matty); // Moff - FTL rework
 
         var mousePos = _inputs.MouseScreenPosition;
         var mouseLocalPos = GetLocalPosition(mousePos);

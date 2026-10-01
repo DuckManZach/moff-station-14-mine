@@ -1,0 +1,17 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                xmlns:moff="clr-namespace:Content.Client._Moffstation.Shuttles.UI"
+                StyleClasses="MoffDiegeticScreen"
+                Margin="0 0 0 5">
+    <BoxContainer Orientation="Vertical">
+        <Label Text="{Loc 'shuttle-console-iff-display'}"
+               StyleClasses="MoffDiegeticScreenTextDim"/>
+        <Label Name="IFFLabel"
+               StyleClasses="MoffDiegeticScreenText"
+               ClipText="True"
+               HorizontalExpand="True"
+               Align="Center"/>
+        <moff:ShuttleIFFPreviewControl Name="Preview"
+                                       HorizontalAlignment="Center"
+                                       Margin="0 4 0 0"/>
+    </BoxContainer>
+</PanelContainer>

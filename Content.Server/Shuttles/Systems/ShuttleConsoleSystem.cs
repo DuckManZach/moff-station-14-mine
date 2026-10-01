@@ -50,8 +50,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         SubscribeLocalEvent<ShuttleConsoleComponent, AfterActivatableUIOpenEvent>(OnConsoleUIOpenAttempt);
         Subs.BuiEvents<ShuttleConsoleComponent>(ShuttleConsoleUiKey.Key, subs =>
         {
-            subs.Event<ShuttleConsoleFTLBeaconMessage>(OnBeaconFTLMessage);
-            subs.Event<ShuttleConsoleFTLPositionMessage>(OnPositionFTLMessage);
+            // Moff Start - FTL rework
+            // subs.Event<ShuttleConsoleFTLBeaconMessage>(OnBeaconFTLMessage);
+            // subs.Event<ShuttleConsoleFTLPositionMessage>(OnPositionFTLMessage);
+            // Moff end
             subs.Event<BoundUIClosedEvent>(OnConsoleUIClose);
         });
 

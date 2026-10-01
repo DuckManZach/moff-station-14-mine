@@ -17,8 +17,11 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     private ShuttleConsoleMode _mode = ShuttleConsoleMode.Nav;
 
-    public event Action<MapCoordinates, Angle>? RequestFTL;
-    public event Action<NetEntity, Angle>? RequestBeaconFTL;
+    // Moff Start - FTL rework
+    // public event Action<MapCoordinates, Angle>? RequestFTL;
+    // public event Action<NetEntity, Angle>? RequestBeaconFTL;
+    public event Action<NetEntity>? RequestSectorFTL;
+    // Moff end
 
     public event Action<NetEntity, NetEntity>? DockRequest;
     public event Action<NetEntity>? UndockRequest;
@@ -43,15 +46,21 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         NavModeButton.Pressed = true;
         SetupMode(_mode);
 
-        MapContainer.RequestFTL += (coords, angle) =>
+        // Moff Start - FTL rework
+        // MapContainer.RequestFTL += (coords, angle) =>
+        // {
+        //     RequestFTL?.Invoke(coords, angle);
+        // };
+        //
+        // MapContainer.RequestBeaconFTL += (ent, angle) =>
+        // {
+        //     RequestBeaconFTL?.Invoke(ent, angle);
+        // };
+        MapContainer.RequestSectorFTL += map =>
         {
-            RequestFTL?.Invoke(coords, angle);
+            RequestSectorFTL?.Invoke(map);
         };
-
-        MapContainer.RequestBeaconFTL += (ent, angle) =>
-        {
-            RequestBeaconFTL?.Invoke(ent, angle);
-        };
+        // Moff end
 
         DockContainer.DockRequest += (entity, netEntity) =>
         {

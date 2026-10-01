@@ -1,0 +1,9 @@
+shuttle-console-outside-rift = Outside hyperspace rift
+shuttle-console-warp-unavailable = FTL drive not ready
+shuttle-console-hyperspace-rift = Hyperspace rift
+shuttle-console-sectors = Sectors
+shuttle-console-sector-current = {$name} (current)
+shuttle-console-no-sectors = No other sectors in range
+shuttle-console-warp = Warp
+shuttle-console-iff-display = IFF
+shuttle-console-nav-thrusters = Thrusters

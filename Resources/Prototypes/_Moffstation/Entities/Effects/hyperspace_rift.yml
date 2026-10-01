@@ -1,0 +1,18 @@
+- type: entity
+  id: HyperspaceRift
+  name: hyperspace rift
+  description: A tear in space thin enough for a shuttle to jump through. Shuttles must be within its reach to FTL.
+  components:
+  - type: Sprite
+    sprite: /Textures/Effects/portal.rsi
+    layers:
+    - state: portal-blue
+      shader: unshaded
+    scale: 6, 6
+  - type: Clickable
+  - type: PointLight
+    radius: 12
+    energy: 3
+    color: "#7b4fff"
+    netsync: false
+  - type: HyperspaceRift

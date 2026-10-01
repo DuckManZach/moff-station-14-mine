@@ -115,7 +115,8 @@ public partial class BaseShuttleControl : MapGridControl
         }
     }
 
-    protected void DrawGrid(DrawingHandleScreen handle, Matrix3x2 gridToView, Entity<MapGridComponent> grid, Color color, float alpha = 0.01f)
+    protected void DrawGrid(DrawingHandleScreen handle, Matrix3x2 gridToView, Entity<MapGridComponent> grid, Color color, float alpha = 0.01f,
+        Color? fillColor = null) // Moff - FTL rework
     {
         var rator = Maps.GetAllTiles(grid.Owner, grid.Comp);
         var tileSize = grid.Comp.TileSize;
@@ -273,7 +274,7 @@ public partial class BaseShuttleControl : MapGridControl
             var start = (int) (i * BatchSize);
             var end = (int) Math.Min(triCount, start + BatchSize);
             var count = end - start;
-            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, new Span<Vector2>(_allVertices, start, count), color.WithAlpha(alpha));
+            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, new Span<Vector2>(_allVertices, start, count), fillColor ?? color.WithAlpha(alpha)); // Moff - FTL rework
         }
 
         handle.DrawPrimitives(DrawPrimitiveTopology.LineList, new Span<Vector2>(_allVertices, gridData.EdgeIndex, edgeCount), color);
