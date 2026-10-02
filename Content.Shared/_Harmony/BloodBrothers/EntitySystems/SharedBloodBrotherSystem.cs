@@ -22,14 +22,12 @@ public abstract partial class SharedBloodBrotherSystem : EntitySystem
     private void OnInitialBloodBrotherMapInit(Entity<InitialBloodBrotherComponent> entity, ref MapInitEvent args)
     {
         _actionsSystem.AddAction(entity, ref entity.Comp.ConvertActionEntity, entity.Comp.ConvertAction);
-        _actionsSystem.AddAction(entity, ref entity.Comp.CheckConvertActionEntity, entity.Comp.CheckConvertAction);
         Dirty(entity);
     }
 
     private void OnInitialBloodBrotherShutdown(Entity<InitialBloodBrotherComponent> entity, ref ComponentShutdown args)
     {
         _actionsSystem.RemoveAction(entity.Comp.ConvertActionEntity);
-        _actionsSystem.RemoveAction(entity.Comp.CheckConvertActionEntity);
     }
 
     private void OnBloodBrotherAttemptGetState(
@@ -46,5 +44,14 @@ public abstract partial class SharedBloodBrotherSystem : EntitySystem
             return true;
 
         return HasComp<BloodBrotherComponent>(uid) || HasComp<ShowAntagIconsComponent>(uid);
+    }
+
+    public void SetConvertible(Entity<InitialBloodBrotherComponent?> entity, HashSet<EntityUid> convertible)
+    {
+        if (!Resolve(entity, ref entity.Comp) || convertible.SetEquals(entity.Comp.Convertible))
+            return;
+
+        entity.Comp.Convertible = convertible;
+        DirtyField(entity.Owner, entity.Comp, nameof(InitialBloodBrotherComponent.Convertible));
     }
 }

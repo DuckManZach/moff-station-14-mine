@@ -11,6 +11,17 @@
     state: BloodBrother
 
 - type: factionIcon
+  id: BloodBrotherConvertible
+  isShaded: true
+  priority: 11
+  showTo:
+    components:
+    - InitialBloodBrother
+  icon:
+    sprite: /Textures/_Moffstation/Interface/Misc/blood_brother_convertible.rsi
+    state: convertible
+
+- type: factionIcon
   id: ConspiratorFaction
   isShaded: true
   priority: 11

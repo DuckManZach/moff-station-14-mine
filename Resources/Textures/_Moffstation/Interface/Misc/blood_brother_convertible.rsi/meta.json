@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Copied from BloodBrother in _Harmony/Interface/Misc/job_icons.rsi, made by Ermucat (GitHub), edited by duckmanzach (github)",
+    "size": {
+        "x": 8,
+        "y": 8
+    },
+    "states": [
+        {
+            "name": "convertible"
+        }
+    ]
+}
