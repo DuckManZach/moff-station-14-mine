@@ -14,14 +14,7 @@ public sealed partial class BloodBrotherSystem : SharedBloodBrotherSystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private EntityQuery<InitialBloodBrotherComponent> _initialBloodBrotherQuery = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<BloodBrotherComponent, GetStatusIconsEvent>(OnBloodBrotherGetIcons);
-        SubscribeLocalEvent<HumanoidProfileComponent, GetStatusIconsEvent>(OnConvertibleGetIcons);
-    }
-
+    [SubscribeLocalEvent]
     private void OnBloodBrotherGetIcons(Entity<BloodBrotherComponent> entity, ref GetStatusIconsEvent args)
     {
         if (_playerManager.LocalSession?.AttachedEntity is { } playerEntity)
@@ -36,6 +29,7 @@ public sealed partial class BloodBrotherSystem : SharedBloodBrotherSystem
             args.StatusIcons.Add(iconPrototype);
     }
 
+    [SubscribeLocalEvent]
     private void OnConvertibleGetIcons(Entity<HumanoidProfileComponent> entity, ref GetStatusIconsEvent args)
     {
         if (!_initialBloodBrotherQuery.TryComp(_playerManager.LocalEntity, out var initial)
