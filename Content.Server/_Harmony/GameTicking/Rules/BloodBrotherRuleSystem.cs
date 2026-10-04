@@ -24,7 +24,6 @@ using Content.Shared.Mindshield;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
 using Content.Shared.Roles.RoleCodeword;
@@ -76,7 +75,8 @@ public sealed partial class BloodBrotherRuleSystem : GameRuleSystem<BloodBrother
         base.Update(frameTime);
 
         if (!TryGetRule(out var rule)
-            || Timing.CurTime < rule.Comp.NextConvertibleUpdate)
+            || Timing.CurTime < rule.Comp.NextConvertibleUpdate
+            || Count<InitialBloodBrotherComponent>() == 0)
             return;
 
         rule.Comp.NextConvertibleUpdate = Timing.CurTime + rule.Comp.ConvertibleUpdateInterval;
@@ -142,6 +142,124 @@ public sealed partial class BloodBrotherRuleSystem : GameRuleSystem<BloodBrother
                 ("brotherName", MetaData(brotherRole.Brother.Value).EntityName),
                 ("brotherUsername", (brotherUsername)));
         }
+    }
+
+    [SubscribeLocalEvent]
+    private void OnBloodBrotherConvert(Entity<InitialBloodBrotherComponent> entity,
+        ref BloodBrotherConvertActionEvent args)
+    {
+        // Check if convertible
+        if (!TryComp<BloodBrotherComponent>(entity, out var originalComponent))
+            return;
+
+        if (!CanConvert(entity.AsNullable(), args.Target, out var failureMessage))
+        {
+            _popupSystem.PopupEntity(
+                Loc.GetString(failureMessage,
+                    ("converter", Identity.Entity(entity, _entityManager)),
+                    ("converted", Identity.Entity(args.Target, _entityManager))),
+                args.Target,
+                entity,
+                PopupType.MediumCaution);
+            return;
+        }
+
+        if (!_mindSystem.TryGetMind(entity, out var mindId, out _))
+            return;
+
+        if (!_mindSystem.TryGetMind(args.Target, out var targetMindId, out var targetMind))
+            return;
+
+        // Actual conversion logic
+        var convertedComp = CopyComp(entity, args.Target, originalComponent);
+
+        _npcFactionSystem.AddFaction(args.Target, entity.Comp.BloodBrotherFaction);
+
+        _adminLogManager.Add(LogType.Mind,
+            LogImpact.Medium,
+            $"{ToPrettyString(entity)} converted {ToPrettyString(args.Target)} into their Blood Brother");
+
+        originalComponent.Brother = args.Target;
+        if (_roleSystem.MindHasRole<BloodBrotherRoleComponent>(mindId, out var role))
+            role.Value.Comp2.Brother = args.Target;
+
+        if (!_roleSystem.MindHasRole(targetMindId, out Entity<MindRoleComponent, BloodBrotherRoleComponent>? targetRole))
+        {
+            _roleSystem.MindAddRole(targetMindId, entity.Comp.BloodBrotherMindRole, targetMind);
+            _roleSystem.MindHasRole(targetMindId, out targetRole);
+        }
+
+        DebugTools.AssertNotNull(targetRole, "Blood brother role was null after assigning it.");
+
+        convertedComp.Brother = entity;
+        targetRole!.Value.Comp2.Brother = entity;
+
+        if (!_objectivesSystem.TryCreateObjective((targetMindId, targetMind),
+                entity.Comp.ConvertedBrotherObjective,
+                out var newObjective))
+            return;
+
+        var targetObjective = EnsureComp<TargetObjectiveComponent>(newObjective.Value);
+
+        _targetObjectiveSystem.SetTarget(newObjective.Value, mindId, targetObjective);
+
+        _mindSystem.AddObjective(targetMindId, targetMind, newObjective.Value);
+
+        // Visuals
+        _antagSystem.SendBriefing(args.Target,
+            Loc.GetString(entity.Comp.BriefingText),
+            entity.Comp.BriefingColor,
+            entity.Comp.BriefingSound);
+
+        _popupSystem.PopupEntity(
+            Loc.GetString(
+                entity.Comp.ConvertPopupText,
+                ("converter", Identity.Entity(entity, _entityManager)),
+                ("converted", Identity.Entity(args.Target, _entityManager))),
+            args.Target,
+            PopupType.LargeCaution);
+
+        if (entity.Comp.ConvertStunTime != null)
+            _stunSystem.TryAddParalyzeDuration(args.Target, entity.Comp.ConvertStunTime.Value);
+
+        // Cleanup the data
+        RemCompDeferred<InitialBloodBrotherComponent>(entity);
+
+        Dirty(entity, originalComponent);
+        Dirty(args.Target, convertedComp);
+    }
+
+    public bool CanConvert(
+        Entity<InitialBloodBrotherComponent?> entity,
+        EntityUid target,
+        [NotNullWhen(false)] out string? errorMessage)
+    {
+        if (!Resolve(entity, ref entity.Comp) || !_mindSystem.TryGetMind(entity, out _, out var converterMind))
+        {
+            DebugTools.Assert("Blood brother tried to convert but had no mind.");
+            Log.Error("Blood brother tried to convert but had no mind.");
+            errorMessage = FailedNoMind;
+            return false;
+        }
+
+        if (!TryGetRule(out var rule))
+        {
+            Log.Error($"{ToPrettyString(entity)} tried to convert with no {nameof(BloodBrotherRuleComponent)} in the round.");
+            errorMessage = FailedPreference;
+            return false;
+        }
+
+        if (!CanBeConverted(target, rule.Comp.RequiredAntagPreference, out errorMessage))
+            return false;
+
+        if (_mindSystem.TryGetMind(target, out var targetMindId, out _)
+            && GetObjectiveTargets(converterMind).Contains(targetMindId))
+        {
+            errorMessage = FailedTarget;
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -218,10 +336,9 @@ public sealed partial class BloodBrotherRuleSystem : GameRuleSystem<BloodBrother
 
     private bool TryGetRule(out Entity<BloodBrotherRuleComponent> rule)
     {
-        var query = QueryAllRules();
-        if (query.MoveNext(out var uid, out var comp, out _))
+        foreach (var ent in QueryAllRules())
         {
-            rule = (uid, comp);
+            rule = (ent.Owner, ent.Comp1);
             return true;
         }
 
