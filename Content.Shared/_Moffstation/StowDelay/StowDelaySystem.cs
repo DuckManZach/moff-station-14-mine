@@ -1,0 +1,285 @@
+using Content.Shared.Clothing.Components;
+using Content.Shared.DoAfter;
+using Content.Shared.Examine;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
+using Content.Shared.Item;
+using Content.Shared.Storage;
+using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Strip.Components;
+using Robust.Shared.Containers;
+
+namespace Content.Shared._Moffstation.StowDelay;
+
+/// <summary>
+/// Delays moving an item between your hands and storage or your inventory slots, scaled by the item's size.
+/// </summary>
+public sealed partial class StowDelaySystem : EntitySystem
+{
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+
+    [Dependency] private EntityQuery<ClothingComponent> _clothingQuery = default!;
+    [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!;
+    [Dependency] private EntityQuery<StorageComponent> _storageQuery = default!;
+    [Dependency] private EntityQuery<StowDelayMultiplierComponent> _multiplierQuery = default!;
+
+    private static readonly LocId ExamineMultiplierLoc = "stow-delay-examine-multiplier";
+
+    [SubscribeLocalEvent]
+    private void OnExamined(Entity<StowDelayMultiplierComponent> ent, ref ExaminedEvent args)
+    {
+        var multiplier = ent.Comp.Multiplier;
+        if (multiplier <= 0 || MathHelper.CloseTo(multiplier, 1))
+            return;
+
+        var faster = multiplier < 1;
+        args.PushMarkup(Loc.GetString(ExamineMultiplierLoc,
+            ("name", Name(ent)),
+            ("faster", faster),
+            ("mul", MathF.Round(faster ? 1f / multiplier : multiplier, 1))));
+    }
+
+    [SubscribeLocalEvent]
+    private void OnStorageDoAfter(Entity<StorageComponent> ent, ref StowStorageDoAfterEvent args)
+    {
+        if (args.Handled
+            || args.Cancelled
+            || args.Used is not { } item
+            || !_hands.IsHolding(args.User, item)
+            || !_hands.CanDrop(args.User, item))
+            return;
+
+        args.Handled = args.Location is { } location
+            ? _storage.InsertAt(ent.AsNullable(), item, location, out _, args.User, stackAutomatically: false)
+            : _storage.PlayerInsertEntityInWorld(ent.AsNullable(), args.User, item);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnStorageRemoveDoAfter(Entity<StorageComponent> ent, ref UnstowStorageDoAfterEvent args)
+    {
+        if (args.Handled
+            || args.Cancelled
+            || args.Used is not { } item
+            || !ent.Comp.Container.Contains(item))
+            return;
+
+        if (args.TransferStorage is not { } netTransfer || args.Location is not { } location)
+        {
+            args.Handled = _storage.PlayerTakeOutItem(ent, args.User, item);
+            return;
+        }
+
+        if (!TryGetEntity(netTransfer, out var transfer)
+            || !_hands.TryPickup(args.User, item, animate: false))
+            return;
+
+        args.Handled = _storage.InsertAt(transfer.Value, item, location, out _, args.User, stackAutomatically: false);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnEquipDoAfter(Entity<ItemComponent> ent, ref StowEquipDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled || !_hands.IsHolding(args.User, ent))
+            return;
+
+        EntityUid? swapped = null;
+        if (args.Swap && _inventory.TryUnequip(args.User, args.Slot, out var removed, silent: true, predicted: true))
+            swapped = removed;
+
+        args.Handled = _inventory.TryEquip(args.User, ent, args.Slot, predicted: true, triggerHandContact: true);
+
+        if (swapped != null)
+            _hands.PickupOrDrop(args.User, swapped.Value);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnUnequipDoAfter(Entity<ItemComponent> ent, ref UnstowEquipDoAfterEvent args)
+    {
+        if (args.Handled
+            || args.Cancelled
+            || !_inventory.TryGetSlotEntity(args.User, args.Slot, out var current)
+            || current != ent.Owner
+            || !_inventory.TryUnequip(args.User, args.Slot, predicted: true, triggerHandContact: true))
+            return;
+
+        _hands.PickupOrDrop(args.User, ent);
+        args.Handled = true;
+    }
+
+    /// <summary>
+    /// Starts a doafter to put the held item into storage. True means the caller must not insert it now.
+    /// </summary>
+    public bool TryStartStorageDelay(EntityUid storage, EntityUid user, EntityUid item, ItemStorageLocation? location = null)
+    {
+        if (!_hands.IsHolding(user, item) || !_itemQuery.TryComp(item, out var itemComp))
+            return false;
+
+        var delay = GetStorageDelay(storage, itemComp);
+        if (delay <= TimeSpan.Zero)
+            return false;
+
+        StartDoAfter(user, delay, new StowStorageDoAfterEvent(location), storage, storage, item, breakOnMove: false);
+        return true;
+    }
+
+    /// <summary>
+    /// Starts a doafter to take an item out of storage into the user's hand. True means the caller must not take it out now.
+    /// </summary>
+    public bool TryStartStorageRemoveDelay(EntityUid storage, EntityUid user, EntityUid item)
+    {
+        if (!_storageQuery.TryComp(storage, out var storageComp)
+            || !storageComp.Container.Contains(item)
+            || !_itemQuery.TryComp(item, out var itemComp)
+            || !_hands.CanPickupAnyHand(user, item, item: itemComp))
+            return false;
+
+        var delay = GetStorageDelay(storage, itemComp);
+        if (delay <= TimeSpan.Zero)
+            return false;
+
+        StartDoAfter(user, delay, new UnstowStorageDoAfterEvent(null, null), storage, storage, item, breakOnMove: false);
+        return true;
+    }
+
+    /// <summary>
+    /// Starts a doafter to move an item from one storage to another, taking as long as removing and inserting it.
+    /// True means the caller must not move it now.
+    /// </summary>
+    public bool TryStartStorageTransferDelay(
+        EntityUid source,
+        EntityUid target,
+        EntityUid user,
+        EntityUid item,
+        ItemStorageLocation location)
+    {
+        if (!_itemQuery.TryComp(item, out var itemComp)
+            || !_hands.CanPickupAnyHand(user, item, item: itemComp))
+            return false;
+
+        var delay = GetStorageDelay(source, itemComp) + GetStorageDelay(target, itemComp);
+        if (delay <= TimeSpan.Zero)
+            return false;
+
+        StartDoAfter(user, delay, new UnstowStorageDoAfterEvent(GetNetEntity(target), location), source, source, item, breakOnMove: false);
+        return true;
+    }
+
+    /// <summary>
+    /// Starts a doafter to equip the held item on the user. With swap, whatever is in the slot is taken off first
+    /// and its unequip time is added. True means the caller must not equip it now.
+    /// </summary>
+    public bool TryStartEquipDelay(EntityUid user, EntityUid target, EntityUid item, string slot, bool swap = false)
+    {
+        if (user != target
+            || !_hands.IsHolding(user, item)
+            || !_itemQuery.TryComp(item, out var itemComp)
+            || !_inventory.TryGetSlot(target, slot, out var slotDefinition))
+            return false;
+
+        var delay = GetSlotDelay((item, itemComp), slotDefinition, unequip: false);
+        if (swap && _inventory.TryGetSlotEntity(target, slot, out var occupant))
+        {
+            if (!_itemQuery.TryComp(occupant, out var occupantComp)
+                || !_inventory.CanUnequip(user, slot, out _))
+                return false;
+
+            delay += GetSlotDelay((occupant.Value, occupantComp), slotDefinition, unequip: true);
+        }
+
+        if (delay <= TimeSpan.Zero)
+            return false;
+
+        StartDoAfter(user, delay, new StowEquipDoAfterEvent(slot, swap), item, target, item, BreakOnMove(item, slotDefinition));
+        return true;
+    }
+
+    /// <summary>
+    /// Starts a doafter to take an item out of one of the user's slots into their hand. True means the caller must not unequip it now.
+    /// </summary>
+    public bool TryStartUnequipDelay(EntityUid user, EntityUid target, string slot)
+    {
+        if (user != target
+            || !_inventory.TryGetSlotEntity(target, slot, out var item)
+            || !_itemQuery.TryComp(item, out var itemComp)
+            || !_inventory.TryGetSlot(target, slot, out var slotDefinition))
+            return false;
+
+        var delay = GetSlotDelay((item.Value, itemComp), slotDefinition, unequip: true);
+        if (delay <= TimeSpan.Zero)
+            return false;
+
+        StartDoAfter(user, delay, new UnstowEquipDoAfterEvent(slot), item.Value, target, item.Value, BreakOnMove(item.Value, slotDefinition));
+        return true;
+    }
+
+    /// <summary>
+    /// Starts the removal or unequip doafter for picking up an item that sits in storage or one of the user's slots.
+    /// True means the caller must not pick it up now.
+    /// </summary>
+    public bool TryStartPickupDelay(EntityUid user, EntityUid item)
+    {
+        if (!_container.TryGetContainingContainer(item, out var container))
+            return false;
+
+        if (_storageQuery.HasComp(container.Owner))
+            return TryStartStorageRemoveDelay(container.Owner, user, item);
+
+        return container.Owner == user
+            && _inventory.TryGetSlot(user, container.ID, out _)
+            && TryStartUnequipDelay(user, user, container.ID);
+    }
+
+    private TimeSpan GetStorageDelay(EntityUid storage, ItemComponent item)
+    {
+        var delay = _item.GetSizePrototype(item.Size).StowDelay;
+        if (_multiplierQuery.TryComp(storage, out var multiplier))
+            delay *= multiplier.Multiplier;
+
+        return delay;
+    }
+
+    private TimeSpan GetSlotDelay(Entity<ItemComponent> item, SlotDefinition slot, bool unequip)
+    {
+        var delay = _item.GetSizePrototype(item.Comp.Size).StowDelay;
+        if (!_clothingQuery.TryComp(item, out var clothing) || (clothing.Slots & slot.SlotFlags) == 0)
+            return delay;
+
+        var clothingDelay = unequip ? clothing.UnequipDelay : clothing.EquipDelay;
+        return clothingDelay > delay ? clothingDelay : delay;
+    }
+
+    private bool BreakOnMove(EntityUid item, SlotDefinition slot)
+    {
+        if ((slot.SlotFlags & SlotFlags.POCKET) != 0)
+            return false;
+
+        return !_clothingQuery.TryComp(item, out var clothing) || !clothing.EquipWhileMoving;
+    }
+
+    private void StartDoAfter(
+        EntityUid user,
+        TimeSpan delay,
+        DoAfterEvent ev,
+        EntityUid eventTarget,
+        EntityUid target,
+        EntityUid item,
+        bool breakOnMove)
+    {
+        // Same stealth check as stripping, so stealthy thieves get hidden doafters here too.
+        var stealthEv = new BeforeStripEvent(delay);
+        RaiseLocalEvent(user, ref stealthEv);
+
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, delay, ev, eventTarget, target, item)
+        {
+            Hidden = stealthEv.Stealth,
+            BreakOnMove = breakOnMove,
+            NeedHand = true,
+            DuplicateCondition = DuplicateConditions.SameEvent,
+        });
+    }
+}
