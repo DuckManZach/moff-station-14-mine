@@ -54,7 +54,7 @@ public abstract partial class ClothingSystem : EntitySystem
                     continue;
 
                 // Moff Start - Stow delay
-                if (_stowDelay.TryStartEquipDelay(userEnt, userEnt, toEquipEnt, slotDef.Name, swap: true))
+                if (_stowDelay.TryStartEquipDelay(userEnt, userEnt, toEquipEnt, slotDef.Name))
                     break;
                 // Moff end
 

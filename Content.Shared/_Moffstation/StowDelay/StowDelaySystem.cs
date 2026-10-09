@@ -65,7 +65,7 @@ public sealed partial class StowDelaySystem : EntitySystem
 
         if (args.TransferStorage is not { } netTransfer || args.Location is not { } location)
         {
-            args.Handled = _storage.PlayerTakeOutItem(ent.AsNullable(), args.User, item);
+            args.Handled = _storage.GrabItem(ent.AsNullable(), args.User, item);
             return;
         }
 
@@ -84,7 +84,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             return;
 
         EntityUid? swapped = null;
-        if (args.Swap && _inventory.TryUnequip(args.User, args.Slot, out var removed, silent: true, predicted: true))
+        if (_inventory.TryUnequip(args.User, args.Slot, out var removed, silent: true, predicted: true))
             swapped = removed;
 
         args.Handled = _inventory.TryEquip(args.User, ent, args.Slot, predicted: true, triggerHandContact: true);
@@ -116,17 +116,14 @@ public sealed partial class StowDelaySystem : EntitySystem
             return false;
 
         var delay = GetStorageDelay(storage, itemComp);
-        if (delay <= TimeSpan.Zero)
-            return false;
-
-        StartDoAfter(user, delay, new StowStorageDoAfterEvent(location), storage, storage, item, breakOnMove: false);
-        return true;
+        return TryStartDoAfter(user, delay, new StowStorageDoAfterEvent(location), storage, storage, item, breakOnMove: false);
     }
 
-    /// <summary>
-    /// Starts a doafter to take an item out of storage into the user's hand. True means the caller must not take it out now.
-    /// </summary>
-    public bool TryStartStorageRemoveDelay(Entity<StorageComponent?> storage, EntityUid user, EntityUid item)
+    public bool TryStartStorageTransferDelay(
+        Entity<StorageComponent?> storage,
+        EntityUid user,
+        EntityUid item,
+        (EntityUid Storage, ItemStorageLocation Location)? transfer = null)
     {
         if (!Resolve(storage, ref storage.Comp, false)
             || !storage.Comp.Container.Contains(item)
@@ -135,41 +132,18 @@ public sealed partial class StowDelaySystem : EntitySystem
             return false;
 
         var delay = GetStorageDelay(storage, itemComp);
-        if (delay <= TimeSpan.Zero)
-            return false;
+        if (transfer is { } t)
+            delay += GetStorageDelay(t.Storage, itemComp);
 
-        StartDoAfter(user, delay, new UnstowStorageDoAfterEvent(null, null), storage, storage, item, breakOnMove: false);
-        return true;
+        var ev = new UnstowStorageDoAfterEvent(GetNetEntity(transfer?.Storage), transfer?.Location);
+        return TryStartDoAfter(user, delay, ev, storage, storage, item, breakOnMove: false);
     }
 
     /// <summary>
-    /// Starts a doafter to move an item from one storage to another, taking as long as removing and inserting it.
-    /// True means the caller must not move it now.
-    /// </summary>
-    public bool TryStartStorageTransferDelay(
-        EntityUid source,
-        EntityUid target,
-        EntityUid user,
-        EntityUid item,
-        ItemStorageLocation location)
-    {
-        if (!_itemQuery.TryComp(item, out var itemComp)
-            || !_hands.CanPickupAnyHand(user, item, item: itemComp))
-            return false;
-
-        var delay = GetStorageDelay(source, itemComp) + GetStorageDelay(target, itemComp);
-        if (delay <= TimeSpan.Zero)
-            return false;
-
-        StartDoAfter(user, delay, new UnstowStorageDoAfterEvent(GetNetEntity(target), location), source, source, item, breakOnMove: false);
-        return true;
-    }
-
-    /// <summary>
-    /// Starts a doafter to equip the held item on the user. With swap, whatever is in the slot is taken off first
+    /// Starts a doafter to equip the held item on the user. Whatever is in the slot is taken off first
     /// and its unequip time is added. True means the caller must not equip it now.
     /// </summary>
-    public bool TryStartEquipDelay(EntityUid user, EntityUid target, EntityUid item, string slot, bool swap = false)
+    public bool TryStartEquipDelay(EntityUid user, EntityUid target, EntityUid item, string slot)
     {
         if (user != target
             || !_hands.IsHolding(user, item)
@@ -178,7 +152,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             return false;
 
         var delay = GetSlotDelay((item, itemComp), slotDefinition, unequip: false);
-        if (swap && _inventory.TryGetSlotEntity(target, slot, out var occupant))
+        if (_inventory.TryGetSlotEntity(target, slot, out var occupant))
         {
             if (!_itemQuery.TryComp(occupant, out var occupantComp)
                 || !_inventory.CanUnequip(user, slot, out _))
@@ -187,11 +161,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             delay += GetSlotDelay((occupant.Value, occupantComp), slotDefinition, unequip: true);
         }
 
-        if (delay <= TimeSpan.Zero)
-            return false;
-
-        StartDoAfter(user, delay, new StowEquipDoAfterEvent(slot, swap), item, target, item, BreakOnMove(item, slotDefinition));
-        return true;
+        return TryStartDoAfter(user, delay, new StowEquipDoAfterEvent(slot), item, target, item, BreakOnMove(item, slotDefinition));
     }
 
     /// <summary>
@@ -206,11 +176,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             return false;
 
         var delay = GetSlotDelay((item.Value, itemComp), slotDefinition, unequip: true);
-        if (delay <= TimeSpan.Zero)
-            return false;
-
-        StartDoAfter(user, delay, new UnstowEquipDoAfterEvent(slot), item.Value, target, item.Value, BreakOnMove(item.Value, slotDefinition));
-        return true;
+        return TryStartDoAfter(user, delay, new UnstowEquipDoAfterEvent(slot), item.Value, target, item.Value, BreakOnMove(item.Value, slotDefinition));
     }
 
     /// <summary>
@@ -223,7 +189,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             return false;
 
         if (_storageQuery.HasComp(container.Owner))
-            return TryStartStorageRemoveDelay(container.Owner, user, item);
+            return TryStartStorageTransferDelay(container.Owner, user, item);
 
         return container.Owner == user
             && _inventory.TryGetSlot(user, container.ID, out _)
@@ -257,7 +223,7 @@ public sealed partial class StowDelaySystem : EntitySystem
         return !_clothingQuery.TryComp(item, out var clothing) || !clothing.EquipWhileMoving;
     }
 
-    private void StartDoAfter(
+    private bool TryStartDoAfter(
         EntityUid user,
         TimeSpan delay,
         DoAfterEvent ev,
@@ -266,7 +232,9 @@ public sealed partial class StowDelaySystem : EntitySystem
         EntityUid item,
         bool breakOnMove)
     {
-        // Same stealth check as stripping, so stealthy thieves get hidden doafters here too.
+        if (delay <= TimeSpan.Zero)
+            return false;
+
         var stealthEv = new BeforeStripEvent(TimeSpan.Zero);
         RaiseLocalEvent(user, ref stealthEv);
 
@@ -277,5 +245,6 @@ public sealed partial class StowDelaySystem : EntitySystem
             NeedHand = true,
             DuplicateCondition = DuplicateConditions.SameEvent,
         });
+        return true;
     }
 }

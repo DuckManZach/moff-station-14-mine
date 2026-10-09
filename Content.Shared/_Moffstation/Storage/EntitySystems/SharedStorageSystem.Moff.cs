@@ -5,9 +5,9 @@ namespace Content.Shared.Storage.EntitySystems;
 public abstract partial class SharedStorageSystem
 {
     /// <summary>
-    /// Puts an item stored in this storage into the player's hand, playing the storage's remove sound.
+    /// Places an item stored in this storage into a player's hand.
     /// </summary>
-    public bool PlayerTakeOutItem(Entity<StorageComponent?> storage, Entity<HandsComponent?> player, EntityUid item)
+    public bool GrabItem(Entity<StorageComponent?> storage, Entity<HandsComponent?> player, EntityUid item)
     {
         if (!Resolve(storage, ref storage.Comp, false)
             || !storage.Comp.Container.Contains(item)

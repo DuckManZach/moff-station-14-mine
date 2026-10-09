@@ -54,12 +54,9 @@ public sealed partial class StowEquipDoAfterEvent : DoAfterEvent
 {
     public string Slot;
 
-    public bool Swap;
-
-    public StowEquipDoAfterEvent(string slot, bool swap)
+    public StowEquipDoAfterEvent(string slot)
     {
         Slot = slot;
-        Swap = swap;
     }
 
     public override DoAfterEvent Clone() => this;

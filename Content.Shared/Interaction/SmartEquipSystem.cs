@@ -157,7 +157,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
                 case null:
                     var removing = storage.Container.ContainedEntities[^1];
                     // Moff Start - Stow delay
-                    if (_stowDelay.TryStartStorageRemoveDelay(slotItem, uid, removing))
+                    if (_stowDelay.TryStartStorageTransferDelay(slotItem, uid, removing))
                         return;
                     // Moff end
                     _container.RemoveEntity(slotItem, removing);

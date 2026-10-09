@@ -808,8 +808,8 @@ public abstract partial class SharedStorageSystem : EntitySystem
                 $"{ToPrettyString(player):player} is attempting to take {ToPrettyString(item):item} out of {ToPrettyString(storage):storage}");
 
             // Moff Start - Stow delay
-            if (!_stowDelay.TryStartStorageRemoveDelay(storage.AsNullable(), player, item))
-                PlayerTakeOutItem(storage.AsNullable(), player.AsNullable(), item);
+            if (!_stowDelay.TryStartStorageTransferDelay(storage.AsNullable(), player, item))
+                GrabItem(storage.AsNullable(), player.AsNullable(), item);
             /*
             if (_sharedHandsSystem.TryPickupAnyHand(player, item, handsComp: player.Comp)
                 && storage.Comp.StorageRemoveSound != null
@@ -898,7 +898,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
         // Moff Start - Stow delay
         if (ValidateInput(args, msg.StorageEnt, out var transferPlayer, out var transferStorage)
-            && _stowDelay.TryStartStorageTransferDelay(container.Owner, transferStorage, transferPlayer, itemUid.Value, msg.Location))
+            && _stowDelay.TryStartStorageTransferDelay(container.Owner, transferPlayer, itemUid.Value, (transferStorage, msg.Location)))
         {
             _adminLog.Add(
                 LogType.Storage,
