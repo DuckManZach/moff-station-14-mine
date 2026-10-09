@@ -23,10 +23,10 @@ public sealed partial class StowDelaySystem : EntitySystem
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private SharedStorageSystem _storage = default!;
 
-    [Dependency] private EntityQuery<ClothingComponent> _clothingQuery = default!;
-    [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!;
-    [Dependency] private EntityQuery<StorageComponent> _storageQuery = default!;
-    [Dependency] private EntityQuery<StowDelayMultiplierComponent> _multiplierQuery = default!;
+    [Dependency] private EntityQuery<ClothingComponent> _clothingQuery;
+    [Dependency] private EntityQuery<ItemComponent> _itemQuery;
+    [Dependency] private EntityQuery<StorageComponent> _storageQuery;
+    [Dependency] private EntityQuery<StowDelayMultiplierComponent> _multiplierQuery;
 
     [SubscribeLocalEvent]
     private void OnExamined(Entity<StowDelayMultiplierComponent> ent, ref ExaminedEvent args)
@@ -60,19 +60,17 @@ public sealed partial class StowDelaySystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnStorageRemoveDoAfter(Entity<StorageComponent> ent, ref UnstowStorageDoAfterEvent args)
     {
-        if (args.Handled
-            || args.Cancelled
-            || args.Used is not { } item
-            || !ent.Comp.Container.Contains(item))
+        if (args.Handled || args.Cancelled || args.Used is not { } item)
             return;
 
         if (args.TransferStorage is not { } netTransfer || args.Location is not { } location)
         {
-            args.Handled = _storage.PlayerTakeOutItem(ent, args.User, item);
+            args.Handled = _storage.PlayerTakeOutItem(ent.AsNullable(), args.User, item);
             return;
         }
 
-        if (!TryGetEntity(netTransfer, out var transfer)
+        if (!ent.Comp.Container.Contains(item)
+            || !TryGetEntity(netTransfer, out var transfer)
             || !_hands.TryPickup(args.User, item, animate: false))
             return;
 

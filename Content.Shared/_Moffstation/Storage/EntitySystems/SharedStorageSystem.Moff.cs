@@ -1,13 +1,17 @@
+using Content.Shared.Hands.Components;
+
 namespace Content.Shared.Storage.EntitySystems;
 
 public abstract partial class SharedStorageSystem
 {
     /// <summary>
-    /// Puts a stored item into the player's hand, playing the storage's remove sound.
+    /// Puts an item stored in this storage into the player's hand, playing the storage's remove sound.
     /// </summary>
-    public bool PlayerTakeOutItem(Entity<StorageComponent> storage, EntityUid player, EntityUid item)
+    public bool PlayerTakeOutItem(Entity<StorageComponent?> storage, Entity<HandsComponent?> player, EntityUid item)
     {
-        if (!_sharedHandsSystem.TryPickupAnyHand(player, item))
+        if (!Resolve(storage, ref storage.Comp, false)
+            || !storage.Comp.Container.Contains(item)
+            || !_sharedHandsSystem.TryPickupAnyHand(player, item, handsComp: player.Comp))
             return false;
 
         if (storage.Comp.StorageRemoveSound != null

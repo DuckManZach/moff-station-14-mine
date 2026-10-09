@@ -809,7 +809,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
             // Moff Start - Stow delay
             if (!_stowDelay.TryStartStorageRemoveDelay(storage.AsNullable(), player, item))
-                PlayerTakeOutItem(storage, player, item);
+                PlayerTakeOutItem(storage.AsNullable(), player.AsNullable(), item);
             /*
             if (_sharedHandsSystem.TryPickupAnyHand(player, item, handsComp: player.Comp)
                 && storage.Comp.StorageRemoveSound != null
