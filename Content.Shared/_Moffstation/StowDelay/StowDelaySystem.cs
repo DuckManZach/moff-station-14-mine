@@ -28,8 +28,6 @@ public sealed partial class StowDelaySystem : EntitySystem
     [Dependency] private EntityQuery<StorageComponent> _storageQuery = default!;
     [Dependency] private EntityQuery<StowDelayMultiplierComponent> _multiplierQuery = default!;
 
-    private static readonly LocId ExamineMultiplierLoc = "stow-delay-examine-multiplier";
-
     [SubscribeLocalEvent]
     private void OnExamined(Entity<StowDelayMultiplierComponent> ent, ref ExaminedEvent args)
     {
@@ -38,7 +36,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             return;
 
         var faster = multiplier < 1;
-        args.PushMarkup(Loc.GetString(ExamineMultiplierLoc,
+        args.PushMarkup(Loc.GetString(ent.Comp.ExamineText,
             ("name", Name(ent)),
             ("faster", faster),
             ("mul", MathF.Round(faster ? 1f / multiplier : multiplier, 1))));
@@ -130,10 +128,10 @@ public sealed partial class StowDelaySystem : EntitySystem
     /// <summary>
     /// Starts a doafter to take an item out of storage into the user's hand. True means the caller must not take it out now.
     /// </summary>
-    public bool TryStartStorageRemoveDelay(EntityUid storage, EntityUid user, EntityUid item)
+    public bool TryStartStorageRemoveDelay(Entity<StorageComponent?> storage, EntityUid user, EntityUid item)
     {
-        if (!_storageQuery.TryComp(storage, out var storageComp)
-            || !storageComp.Container.Contains(item)
+        if (!Resolve(storage, ref storage.Comp, false)
+            || !storage.Comp.Container.Contains(item)
             || !_itemQuery.TryComp(item, out var itemComp)
             || !_hands.CanPickupAnyHand(user, item, item: itemComp))
             return false;
@@ -271,7 +269,7 @@ public sealed partial class StowDelaySystem : EntitySystem
         bool breakOnMove)
     {
         // Same stealth check as stripping, so stealthy thieves get hidden doafters here too.
-        var stealthEv = new BeforeStripEvent(delay);
+        var stealthEv = new BeforeStripEvent(TimeSpan.Zero);
         RaiseLocalEvent(user, ref stealthEv);
 
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, delay, ev, eventTarget, target, item)

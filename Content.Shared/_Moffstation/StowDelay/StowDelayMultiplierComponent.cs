@@ -5,13 +5,16 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._Moffstation.StowDelay;
 
 /// <summary>
-/// Scales how long it takes to put a held item into this storage.
+/// Scales how long it takes to move items in and out of this storage.
 /// </summary>
 [RegisterComponent, Access(typeof(StowDelaySystem))]
 public sealed partial class StowDelayMultiplierComponent : Component
 {
     [DataField]
     public float Multiplier = 1f;
+
+    [DataField]
+    public LocId ExamineText = "stow-delay-examine-multiplier";
 }
 
 [Serializable, NetSerializable]

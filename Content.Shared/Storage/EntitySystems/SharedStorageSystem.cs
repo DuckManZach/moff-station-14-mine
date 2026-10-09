@@ -808,8 +808,16 @@ public abstract partial class SharedStorageSystem : EntitySystem
                 $"{ToPrettyString(player):player} is attempting to take {ToPrettyString(item):item} out of {ToPrettyString(storage):storage}");
 
             // Moff Start - Stow delay
-            if (!_stowDelay.TryStartStorageRemoveDelay(storage, player, item))
+            if (!_stowDelay.TryStartStorageRemoveDelay(storage.AsNullable(), player, item))
                 PlayerTakeOutItem(storage, player, item);
+            /*
+            if (_sharedHandsSystem.TryPickupAnyHand(player, item, handsComp: player.Comp)
+                && storage.Comp.StorageRemoveSound != null
+                && !_tag.HasTag(player, storage.Comp.SilentStorageUserTag))
+            {
+                Audio.PlayPredicted(storage.Comp.StorageRemoveSound, storage, player, _audioParams);
+            }
+            */
             // Moff end
 
             return;
@@ -831,25 +839,6 @@ public abstract partial class SharedStorageSystem : EntitySystem
         var failedEv = new StorageInsertFailedEvent((storage, storage.Comp), (player, player.Comp));
         RaiseLocalEvent(storage, ref failedEv);
     }
-
-    // Moff Start - Stow delay
-    /// <summary>
-    /// Puts a stored item into the player's hand, playing the storage's remove sound.
-    /// </summary>
-    public bool PlayerTakeOutItem(Entity<StorageComponent> storage, EntityUid player, EntityUid item)
-    {
-        if (!_sharedHandsSystem.TryPickupAnyHand(player, item))
-            return false;
-
-        if (storage.Comp.StorageRemoveSound != null
-            && !_tag.HasTag(player, storage.Comp.SilentStorageUserTag))
-        {
-            Audio.PlayPredicted(storage.Comp.StorageRemoveSound, storage, player, _audioParams);
-        }
-
-        return true;
-    }
-    // Moff end
 
     private void OnSetItemLocation(StorageSetItemLocationEvent msg, EntitySessionEventArgs args)
     {
@@ -910,7 +899,13 @@ public abstract partial class SharedStorageSystem : EntitySystem
         // Moff Start - Stow delay
         if (ValidateInput(args, msg.StorageEnt, out var transferPlayer, out var transferStorage)
             && _stowDelay.TryStartStorageTransferDelay(container.Owner, transferStorage, transferPlayer, itemUid.Value, msg.Location))
+        {
+            _adminLog.Add(
+                LogType.Storage,
+                LogImpact.Low,
+                $"{ToPrettyString(transferPlayer):player} is inserting {ToPrettyString(itemUid.Value):item} into {ToPrettyString(transferStorage):storage}");
             return;
+        }
         // Moff end
 
         if (!TryComp(localPlayer, out HandsComponent? handsComp) || !_sharedHandsSystem.TryPickup(localPlayer.Value, itemEnt, handsComp: handsComp, animate: false))
