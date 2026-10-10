@@ -1,7 +1,9 @@
+using Content.Shared._ST.Interaction;
 using Content.Shared.Clothing.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Content.Shared.Storage;
@@ -19,6 +21,7 @@ public sealed partial class StowDelaySystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private SharedStorageSystem _storage = default!;
@@ -136,7 +139,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             delay += GetStorageDelay(t.Storage, itemComp);
 
         var ev = new UnstowStorageDoAfterEvent(GetNetEntity(transfer?.Storage), transfer?.Location);
-        return TryStartDoAfter(user, delay, ev, storage, storage, item, breakOnMove: false);
+        return TryStartDoAfter(user, delay, ev, storage, storage, item, breakOnMove: false, interactionParticles: true);
     }
 
     /// <summary>
@@ -161,7 +164,7 @@ public sealed partial class StowDelaySystem : EntitySystem
             delay += GetSlotDelay((occupant.Value, occupantComp), slotDefinition, unequip: true);
         }
 
-        return TryStartDoAfter(user, delay, new StowEquipDoAfterEvent(slot), item, target, item, BreakOnMove(item, slotDefinition));
+        return TryStartDoAfter(user, delay, new StowEquipDoAfterEvent(slot), item, target, item, BreakOnMove(item, slotDefinition), interactionParticles: true);
     }
 
     /// <summary>
@@ -230,7 +233,8 @@ public sealed partial class StowDelaySystem : EntitySystem
         EntityUid eventTarget,
         EntityUid target,
         EntityUid item,
-        bool breakOnMove)
+        bool breakOnMove,
+        bool interactionParticles = false)
     {
         if (delay <= TimeSpan.Zero)
             return false;
@@ -238,13 +242,17 @@ public sealed partial class StowDelaySystem : EntitySystem
         var stealthEv = new BeforeStripEvent(TimeSpan.Zero);
         RaiseLocalEvent(user, ref stealthEv);
 
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, delay, ev, eventTarget, target, item)
+        var started = _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, delay, ev, eventTarget, target, item)
         {
             Hidden = stealthEv.Stealth,
             BreakOnMove = breakOnMove,
             NeedHand = true,
             DuplicateCondition = DuplicateConditions.SameEvent,
         });
+
+        if (started && interactionParticles && !stealthEv.Stealth)
+            _interaction.DoContactInteraction(user, eventTarget, item, true, interactionParticleType: StellarInteractionParticleType.InHand);
+
         return true;
     }
 }
