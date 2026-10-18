@@ -500,14 +500,16 @@ public abstract partial class SharedGunSystem : EntitySystem
         Shoot(gun, new List<(EntityUid? Entity, IShootable Shootable)>(1) { (ammo, shootable) }, fromCoordinates, toCoordinates, out userImpulse, user, throwItems);
     }
 
-    public abstract void Shoot(
-        Entity<GunComponent> gun,
-        List<(EntityUid? Entity, IShootable Shootable)> ammo,
-        EntityCoordinates fromCoordinates,
-        EntityCoordinates toCoordinates,
-        out bool userImpulse,
-        EntityUid? user = null,
-        bool throwItems = false);
+    // Moff Start - Gun prediction: moved to SharedGunSystem.Shoot.Moff.cs
+    // public abstract void Shoot(
+    //     Entity<GunComponent> gun,
+    //     List<(EntityUid? Entity, IShootable Shootable)> ammo,
+    //     EntityCoordinates fromCoordinates,
+    //     EntityCoordinates toCoordinates,
+    //     out bool userImpulse,
+    //     EntityUid? user = null,
+    //     bool throwItems = false);
+    // Moff end
 
     public void ShootProjectile(EntityUid uid, Vector2 direction, Vector2 gunVelocity, EntityUid? gunUid, EntityUid? user = null, float speed = ProjectileSpeed)
     {
@@ -708,7 +710,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
     protected abstract void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? user = null);
 
-    public abstract void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound);
+    // public abstract void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound); // Moff - Gun prediction: moved to SharedGunSystem.Shoot.Moff.cs
 
     /// <summary>
     /// Used for animated effects on the client.

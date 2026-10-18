@@ -15,7 +15,7 @@ public sealed partial class BatteryAmmoProviderComponent : AmmoProviderComponent
     /// <summary>
     /// The projectile or hitscan entity to spawn when firing.
     /// </summary>
-    [DataField("proto", required: true)]
+    [DataField("proto", required: true), AutoNetworkedField] // Moff - Gun prediction
     public EntProtoId Prototype;
 
     /// <summary>

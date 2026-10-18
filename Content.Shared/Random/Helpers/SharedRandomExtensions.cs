@@ -196,7 +196,18 @@ namespace Content.Shared.Random.Helpers
             {
                 hash = (hash << 5) + hash + value;
             }
-            return hash;
+            // return hash; // Moff - Predicted random seed mixing
+
+            // Moff Start - Predicted random seed mixing
+            // Murmur3's finalizer: a seeded System.Random's first roll barely changes between nearby seeds.
+            var mixed = (uint) hash;
+            mixed ^= mixed >> 16;
+            mixed *= 0x85EBCA6Bu;
+            mixed ^= mixed >> 13;
+            mixed *= 0xC2B2AE35u;
+            mixed ^= mixed >> 16;
+            return (int) mixed;
+            // Moff end
         }
 
         // TODO: REPLACE ALL OF THIS WITH PREDICTED RANDOM WHEN ENGINE PR IS MERGED

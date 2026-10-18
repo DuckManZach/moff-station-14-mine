@@ -11,6 +11,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Projectiles;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
 
@@ -41,13 +42,27 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
             || component.ProjectileSpent || component is { Weapon: null, OnlyCollideWhenShot: true })
             return;
 
-        var target = args.OtherEntity;
+        ProjectileCollide((uid, component, args.OurBody), args.OtherEntity); // Moff - Gun prediction
+    }
+
+    // Moff Start - Gun prediction
+    /// <summary>
+    /// Hits the target with the projectile. A hit reported by the shooter's client leaves the projectile flying
+    /// instead of deleting it, so other players see it reach the target.
+    /// </summary>
+    public void ProjectileCollide(Entity<ProjectileComponent, PhysicsComponent> projectile, EntityUid target, bool clientReported = false)
+    {
+        var (uid, component, ourBody) = projectile;
+        var predictingShooter = GetPredictingShooter(uid);
+    // Moff end
+        // var target = args.OtherEntity; // Moff - Gun prediction
         // it's here so this check is only done once before possible hit
         var attemptEv = new ProjectileReflectAttemptEvent(uid, component, false);
         RaiseLocalEvent(target, ref attemptEv);
         if (attemptEv.Cancelled)
         {
             SetShooter(uid, component, target);
+            StopPredicting(uid); // Moff - Gun prediction
             return;
         }
 
@@ -68,7 +83,7 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
         {
             if (!Deleted(target))
             {
-                _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, Filter.Pvs(target, entityManager: EntityManager));
+                _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, ExcludePredicting(Filter.Pvs(target, entityManager: EntityManager), predictingShooter)); // Moff - Gun prediction
             }
 
             var shotByString = Exists(component.Shooter)
@@ -94,23 +109,32 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
 
         if (!Deleted(target))
         {
-            _guns.PlayImpactSound(target, damage, component.SoundHit, component.ForceSound);
+            _guns.PlayImpactSound(target, damage, component.SoundHit, component.ForceSound, predictingShooter); // Moff - Gun prediction
 
             // ES START
             // shake + lower recoil
             var otherShakeTranslation = new ESScreenshakeParameters { Trauma = 0.30f, DecayRate = 1.1f, Frequency = 0.04f };
-            if (!args.OurBody.LinearVelocity.IsLengthZero())
-                _sharedCameraRecoil.KickCamera(target, args.OurBody.LinearVelocity.Normalized() * 0.08f);
+            if (!ourBody.LinearVelocity.IsLengthZero()) // Moff - Gun prediction
+                _sharedCameraRecoil.KickCamera(target, ourBody.LinearVelocity.Normalized() * 0.08f); // Moff - Gun prediction
             _shake.Screenshake(target, otherShakeTranslation, null);
             // ES END
         }
 
+        // Moff Start - Gun prediction
         if (component.DeleteOnCollide && component.ProjectileSpent)
-            QueueDel(uid);
+        {
+            if (!clientReported)
+                QueueDel(uid);
+        }
+        else
+        {
+            StopPredicting(uid);
+        }
+        // Moff end
 
         if (component.ImpactEffect != null && TryComp(uid, out TransformComponent? xform))
         {
-            RaiseNetworkEvent(new ImpactEffectEvent(component.ImpactEffect, GetNetCoordinates(xform.Coordinates)), Filter.Pvs(xform.Coordinates, entityMan: EntityManager));
+            RaiseNetworkEvent(new ImpactEffectEvent(component.ImpactEffect, GetNetCoordinates(xform.Coordinates)), ExcludePredicting(Filter.Pvs(xform.Coordinates, entityMan: EntityManager), predictingShooter)); // Moff - Gun prediction
         }
     }
 

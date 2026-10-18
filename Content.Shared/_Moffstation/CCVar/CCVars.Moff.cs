@@ -92,6 +92,34 @@ public sealed class MoffCCVars
         CVarDef.Create("moff.screenshake_intensity", 1.0f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
+     * Gun prediction
+     */
+
+    /// <summary>
+    /// Whether the shooter's client spawns and simulates its own projectiles and reports their hits to the server.
+    /// </summary>
+    public static readonly CVarDef<bool> GunPrediction =
+        CVarDef.Create("moff.gun_prediction", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// How far a reported target position may be from its lag-compensated position and still be trusted.
+    /// </summary>
+    public static readonly CVarDef<float> GunPredictionCoordinateDeviation =
+        CVarDef.Create("moff.gun_prediction_coordinate_deviation", 0.75f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// How far a reported target position may be from its oldest position within the shooter's ping and still be trusted.
+    /// </summary>
+    public static readonly CVarDef<float> GunPredictionLowestCoordinateDeviation =
+        CVarDef.Create("moff.gun_prediction_lowest_coordinate_deviation", 0.5f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// How much the target's bounds are enlarged when checking a reported hit.
+    /// </summary>
+    public static readonly CVarDef<float> GunPredictionAabbEnlargement =
+        CVarDef.Create("moff.gun_prediction_aabb_enlargement", 0.3f, CVar.SERVERONLY);
+
+    /*
      * Arrivals
      */
 
