@@ -33,6 +33,22 @@ public sealed partial class PredictedProjectileClientComponent : Component
 }
 
 /// <summary>
+/// A server projectile hidden because the local player's own copy stands in for it, with what was switched off.
+/// </summary>
+[RegisterComponent, Access(typeof(ClientGunPredictionSystem))]
+public sealed partial class HiddenServerProjectileComponent : Component
+{
+    [DataField]
+    public bool Sprite;
+
+    [DataField]
+    public bool Light;
+
+    [DataField]
+    public bool Ambience;
+}
+
+/// <summary>
 /// Shots the local player fired from this gun whose server projectile hasn't arrived yet.
 /// </summary>
 [RegisterComponent, Access(typeof(ClientGunPredictionSystem))]

@@ -179,8 +179,11 @@ namespace Content.Shared.Random.Helpers
             return HashCodeCombine((IReadOnlyCollection<int>)values);
         }
 
+        // Moff Start - Predicted random seed mixing
+        // /// <summary>
+        // /// A very simple, deterministic djb2 hash function for generating a combined seed for the random number generator.
         /// <summary>
-        /// A very simple, deterministic djb2 hash function for generating a combined seed for the random number generator.
+        /// A deterministic djb2 hash, scrambled so nearby inputs give unrelated seeds, for generating a combined seed for the random number generator.
         /// We can't use HashCode.Combine because that is initialized with a random value, creating different results on the server and client.
         /// </summary>
         /// <example>
@@ -189,6 +192,7 @@ namespace Content.Shared.Random.Helpers
         /// var seed = SharedRandomExtensions.HashCodeCombine((int)_timing.CurTick.Value, GetNetEntity(ent).Id);
         /// </code>
         /// </example>
+        // Moff end
         public static int HashCodeCombine(IReadOnlyCollection<int> values)
         {
             int hash = 5381;

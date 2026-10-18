@@ -166,6 +166,10 @@ public abstract partial class SharedGunSystem
                     {
                         Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
                         Recoil(user, recoil, gun.Comp.CameraRecoilScalarModified);
+
+                        if (ent != null && IsClientSide(ent.Value))
+                            Del(ent.Value);
+
                         break;
                     }
 
@@ -243,7 +247,7 @@ public abstract partial class SharedGunSystem
             shotProjectiles.Add(projectile);
 
             if (isProjectile)
-                _gunPrediction.OnProjectileFired(projectile, gun, user, projectileIndex);
+                _gunPrediction.MarkFired(projectile, gun, user, projectileIndex);
         }
     }
 

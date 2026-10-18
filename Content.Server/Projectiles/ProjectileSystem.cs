@@ -53,7 +53,7 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
     public void ProjectileCollide(Entity<ProjectileComponent, PhysicsComponent> projectile, EntityUid target, bool clientReported = false)
     {
         var (uid, component, ourBody) = projectile;
-        var predictingShooter = GetPredictingShooter(uid);
+        var predictingShooter = clientReported ? GetPredictingShooter(uid) : null;
     // Moff end
         // var target = args.OtherEntity; // Moff - Gun prediction
         // it's here so this check is only done once before possible hit

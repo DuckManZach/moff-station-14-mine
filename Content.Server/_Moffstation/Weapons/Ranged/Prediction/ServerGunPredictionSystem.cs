@@ -44,7 +44,7 @@ public sealed partial class ServerGunPredictionSystem : GunPredictionSystem
         return false;
     }
 
-    public override void OnProjectileFired(EntityUid projectile, EntityUid gun, EntityUid? user, int index)
+    public override void MarkFired(EntityUid projectile, EntityUid gun, EntityUid? user, int index)
     {
         if (!Enabled || user == null || !_actorQuery.HasComp(user))
             return;

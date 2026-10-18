@@ -8,7 +8,7 @@ public sealed partial class ProjectileSystem
     [Dependency] private EntityQuery<PredictedProjectileServerComponent> _predictedQuery;
 
     /// <summary>
-    /// The player whose client is showing its own copy of this projectile, and its hits.
+    /// The player whose client is showing its own copy of this projectile, and so already showed a hit it reported.
     /// </summary>
     private EntityUid? GetPredictingShooter(EntityUid projectile)
     {

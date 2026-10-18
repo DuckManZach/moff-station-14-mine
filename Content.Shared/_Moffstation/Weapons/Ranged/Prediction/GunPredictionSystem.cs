@@ -26,5 +26,8 @@ public abstract partial class GunPredictionSystem : EntitySystem
     /// </summary>
     public abstract bool ShouldPredictShot(EntityUid? user);
 
-    public abstract void OnProjectileFired(EntityUid projectile, EntityUid gun, EntityUid? user, int index);
+    /// <summary>
+    /// Records a projectile the user just fired, so this side can match it with the other side's copy.
+    /// </summary>
+    public abstract void MarkFired(EntityUid projectile, EntityUid gun, EntityUid? user, int index);
 }

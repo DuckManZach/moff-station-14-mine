@@ -1,5 +1,6 @@
 using Content.Client.Projectiles;
 using Content.Shared._Moffstation.Weapons.Ranged.Prediction;
+using Content.Shared.Audio;
 using Content.Shared.Projectiles;
 using Robust.Client.GameObjects;
 using Robust.Client.Physics;
@@ -17,7 +18,11 @@ public sealed partial class ClientGunPredictionSystem : GunPredictionSystem
     [Dependency] private Robust.Client.Physics.PhysicsSystem _physics = default!;
     [Dependency] private ProjectileSystem _projectile = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambience = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private EntityQuery<AmbientSoundComponent> _ambienceQuery;
+    [Dependency] private EntityQuery<HiddenServerProjectileComponent> _hiddenQuery;
     [Dependency] private EntityQuery<ProjectileComponent> _projectileQuery;
     [Dependency] private EntityQuery<SpriteComponent> _spriteQuery;
 
@@ -31,7 +36,7 @@ public sealed partial class ClientGunPredictionSystem : GunPredictionSystem
         return Enabled && _timing.IsFirstTimePredicted && user != null && user == _player.LocalEntity;
     }
 
-    public override void OnProjectileFired(EntityUid projectile, EntityUid gun, EntityUid? user, int index)
+    public override void MarkFired(EntityUid projectile, EntityUid gun, EntityUid? user, int index)
     {
         var xform = Transform(projectile);
         var predicted = AddComp<PredictedProjectileClientComponent>(projectile);
@@ -104,21 +109,50 @@ public sealed partial class ClientGunPredictionSystem : GunPredictionSystem
 
         // The server fires in the order the client did, so earlier shots that are still pending never got a match.
         ForgetShotsBefore(shots, ent.Comp.ShotTick);
-        if (shots.Shots.Remove((ent.Comp.ShotTick, ent.Comp.Index)) && _spriteQuery.TryComp(ent, out var sprite))
-            _sprite.SetVisible((ent, sprite), false);
+        if (shots.Shots.Remove((ent.Comp.ShotTick, ent.Comp.Index)))
+            Hide(ent);
     }
 
+    // Runs while server state is applied, not during prediction, so the hiding isn't rolled back with predicted state.
     [SubscribeLocalEvent]
     private void OnServerProjectileShutdown(Entity<PredictedProjectileServerComponent> ent, ref ComponentShutdown args)
     {
-        if (ent.Comp.Shooter != _player.LocalEntity ||
-            TerminatingOrDeleted(ent) ||
-            !_spriteQuery.TryComp(ent, out var sprite))
-        {
+        if (TerminatingOrDeleted(ent) || !_hiddenQuery.TryComp(ent, out var hidden))
             return;
+
+        if (hidden.Sprite && _spriteQuery.TryComp(ent, out var sprite))
+            _sprite.SetVisible((ent, sprite), true);
+
+        if (hidden.Light)
+            _lights.SetEnabled(ent, true);
+
+        if (hidden.Ambience)
+            _ambience.SetAmbience(ent, true);
+
+        RemComp<HiddenServerProjectileComponent>(ent);
+    }
+
+    private void Hide(EntityUid uid)
+    {
+        var hidden = EnsureComp<HiddenServerProjectileComponent>(uid);
+
+        if (_spriteQuery.TryComp(uid, out var sprite) && sprite.Visible)
+        {
+            hidden.Sprite = true;
+            _sprite.SetVisible((uid, sprite), false);
         }
 
-        _sprite.SetVisible((ent, sprite), true);
+        if (_lights.TryGetLight(uid, out var light) && light.Enabled)
+        {
+            hidden.Light = true;
+            _lights.SetEnabled(uid, false, light);
+        }
+
+        if (_ambienceQuery.TryComp(uid, out var ambience) && ambience.Enabled)
+        {
+            hidden.Ambience = true;
+            _ambience.SetAmbience(uid, false, ambience);
+        }
     }
 
     private void RestorePose(Entity<PredictedProjectileClientComponent, TransformComponent> ent)
