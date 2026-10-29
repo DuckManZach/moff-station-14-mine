@@ -32,3 +32,11 @@
   offset: -0.05, 0.1
   typingState: gray0
   idleState: gray1
+
+# Placeholder until there's a PDA sprite.
+- type: typingIndicator
+  id: pda
+  spritePath: /Textures/_Moffstation/Effects/speech.rsi
+  offset: -0.05, 0.1
+  typingState: gray0
+  idleState: gray1

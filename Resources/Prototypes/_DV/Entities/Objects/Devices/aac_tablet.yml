@@ -53,3 +53,5 @@
     - Species
     - Safety
     - Keyboard
+  - type: UiTypingIndicator
+    indicator: aac

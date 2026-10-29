@@ -5,8 +5,19 @@
         "y": 32
     },
     "license": "CC-BY-SA-3.0",
-    "copyright": "Thaven sprites made by kushbreth, thaven3 based on thaven sprites made by combustibletoast (github) for Impstation.",
+    "copyright": "Thaven sprites made by kushbreth, thaven3 based on thaven sprites made by combustibletoast (github) for Impstation. AAC sprites by _.requiem._ (Discord), taken from DeltaV at https://github.com/DeltaV-Station/Delta-v/commit/04c7e4d6336c2a1d3010abaf5c403b127eef0d6d",
     "states": [
+        {
+            "name": "aac0",
+            "delays": [
+                [
+                    0.2,
+                    0.3,
+                    0.3,
+                    0.5
+                ]
+            ]
+        },
         {
             "name": "thaven1"
         },

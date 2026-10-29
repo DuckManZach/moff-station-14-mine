@@ -132,6 +132,10 @@
     proto: robot
   - type: Speech
     speechVerb: Robotic
+  # Moff Start - UI typing indicators
+  - type: UiTypingIndicator
+    indicator: pda
+  # Moff end
 
 - type: entity
   parent: BasePDA
