@@ -69,7 +69,7 @@ public partial class ChatBox : UIWidget, IEntityLinkClickHandler
 
         var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
 
-        AddLine(msg.WrappedMessage, color);
+        AddStackedLine(msg, color); // Moff - Chat stacking
     }
 
     private void OnHighlightsUpdated(string highlights)
@@ -85,6 +85,7 @@ public partial class ChatBox : UIWidget, IEntityLinkClickHandler
     public void Repopulate()
     {
         Contents.Clear();
+        _stackedLines.Clear(); // Moff - Chat stacking
 
         foreach (var message in _controller.History)
         {
@@ -109,6 +110,7 @@ public partial class ChatBox : UIWidget, IEntityLinkClickHandler
     private void OnChannelFilter(ChatChannel channel, bool active)
     {
         Contents.Clear();
+        _stackedLines.Clear(); // Moff - Chat stacking
 
         foreach (var message in _controller.History)
         {

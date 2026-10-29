@@ -110,6 +110,14 @@ public sealed class MoffCCVars
         CVarDef.Create("moff.screenshake_intensity", 1.0f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
+     * Chat
+     */
+
+    /// How many of the latest chat lines a repeated message can merge into; 0 turns stacking off.
+    public static readonly CVarDef<int> ChatStackLookback =
+        CVarDef.Create("moff.chat_stack_lookback", 4, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /*
      * Arrivals
      */
 

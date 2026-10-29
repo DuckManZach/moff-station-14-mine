@@ -14,6 +14,8 @@ public sealed partial class ForkSpecificTab : Control
 {
     [Dependency] private IConfigurationManager _cfg = default!;
 
+    private const int MaxChatStackLookback = 4;
+
     public ForkSpecificTab()
     {
         IoCManager.InjectDependencies(this);
@@ -22,6 +24,14 @@ public sealed partial class ForkSpecificTab : Control
         Control.AddOptionCheckBox(DCCVars.EsScreenshakeDisabled, DisableScreenshakeCheckBox);
         Control.AddOptionPercentSlider(MoffCCVars.MoffScreenShakeIntensity, ScreenShakeIntensitySlider, max: 1.5f);
         Control.AddOption(new OptionParticleQuality(Control, _cfg, DropDownParticleQuality)); // _Starfall: Particle quality.
+
+        var chatStackEntries = new List<OptionDropDownCVar<int>.ValueOption>();
+        for (var lines = 0; lines <= MaxChatStackLookback; lines++)
+        {
+            chatStackEntries.Add(new OptionDropDownCVar<int>.ValueOption(lines, Loc.GetString("ui-options-chat-stack-count", ("count", lines))));
+        }
+
+        Control.AddOptionDropDown(MoffCCVars.ChatStackLookback, DropDownChatStack, chatStackEntries);
     }
 
 
