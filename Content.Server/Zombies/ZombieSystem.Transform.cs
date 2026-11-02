@@ -47,6 +47,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared._Friedmed.Wounds;
 
 namespace Content.Server.Zombies;
 
@@ -87,6 +88,8 @@ public sealed partial class ZombieSystem
     private static readonly List<ProtoId<AntagPrototype>> BannableZombiePrototypes = ["Zombie"];
     private static readonly EntProtoId<StatusEffectComponent> ClumsyZombieStatus = "StatusEffectClumsyZombie";
     internal static readonly HashSet<HumanoidVisualLayers> AdditionalZombieLayers = [HumanoidVisualLayers.Tail, HumanoidVisualLayers.HeadSide, HumanoidVisualLayers.HeadTop, HumanoidVisualLayers.Snout];
+    private static readonly EntProtoId AddOnWoundableZombified = "AddOnWoundableZombified"; // Friedmed
+    private static readonly EntProtoId AddOnAnyZombified = "AddOnAnyZombified"; // Friedmed
 
     /// <summary>
     /// Handles an entity turning into a zombie when they die or go into crit
@@ -159,6 +162,13 @@ public sealed partial class ZombieSystem
         {
             RemComp<MetabolizerComponent>(organ);
         }
+
+        // Friedmed Start
+        if (RemComp<WoundableBodyComponent>(target))
+        {
+            throw new InvalidOperationException("Just don't use zombies with Offmed.");
+        }
+        // Friedmed end
 
         //funny voice
         var accentType = "zombie";
@@ -268,6 +278,12 @@ public sealed partial class ZombieSystem
         //The zombie gets the assigned damage weaknesses and strengths
         _damageable.SetDamageModifierSetId(target, "Zombie");
 
+        // Friedmed Start
+        var allProto = ProtoMan.Index(AddOnAnyZombified);
+        EntityManager.RemoveComponents(target, allProto.Components);
+        EntityManager.AddComponents(target, allProto.Components);
+        // Friedmed end
+
         //This makes it so the zombie doesn't take bloodloss damage.
         //NOTE: they are supposed to bleed, just not take damage
         _bloodstream.SetBloodLossThreshold(target, 0f);
@@ -276,6 +292,7 @@ public sealed partial class ZombieSystem
         //Stop their blood from automatically regenerating
         _bloodstream.ChangeBloodRefreshAmount(target, 0f);
         _bloodstream.ChangeBloodIncreaseEnabled(target, false);
+        _bloodstream.FlushChemicals(target, 100); // Friedmed
 
         //This is specifically here to combat insuls, because frying zombies on grilles is funny as shit.
         _inventory.TryUnequip(target, "gloves", true, true);
@@ -301,6 +318,11 @@ public sealed partial class ZombieSystem
 
         _faction.ClearFactions(target, dirty: false);
         _faction.AddFaction(target, ZombieFaction);
+
+        // Friedmed Start
+        var rejuv = new Content.Shared.Rejuvenate.RejuvenateEvent();
+        RaiseLocalEvent(target, rejuv);
+        // Friedmed end
 
         //gives it the funny "Zombie ___" name.
         _nameMod.RefreshNameModifiers(target);

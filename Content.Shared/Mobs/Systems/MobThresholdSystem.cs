@@ -21,6 +21,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
     {
         SubscribeLocalEvent<MobThresholdsComponent, ComponentGetState>(OnGetState);
         SubscribeLocalEvent<MobThresholdsComponent, ComponentHandleState>(OnHandleState);
+        SubscribeLocalEvent<MobThresholdsComponent, MapInitEvent>(MobThresholdMapInit); // Friedmed
 
         SubscribeLocalEvent<MobThresholdsComponent, ComponentShutdown>(MobThresholdShutdown);
         SubscribeLocalEvent<MobThresholdsComponent, ComponentStartup>(MobThresholdStartup);
@@ -430,6 +431,14 @@ public sealed partial class MobThresholdSystem : EntitySystem
         CheckThresholds(target, mobState, thresholds, damageable);
         UpdateAllEffects((target, thresholds, mobState, damageable), mobState.CurrentState);
     }
+
+    // Friedmed Start
+    private void MobThresholdMapInit(Entity<MobThresholdsComponent> ent, ref MapInitEvent args)
+    {
+        var overlayUpdate = new Content.Shared._Friedmed.Wounds.PotentiallyUpdateDamageOverlayEvent(ent);
+        RaiseLocalEvent(ent, ref overlayUpdate);
+    }
+    // Friedmed end
 
     private void MobThresholdShutdown(EntityUid target, MobThresholdsComponent component, ComponentShutdown args)
     {

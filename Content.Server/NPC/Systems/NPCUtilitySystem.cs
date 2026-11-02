@@ -34,6 +34,7 @@ using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared._Friedmed.Wounds;
 
 namespace Content.Server.NPC.Systems;
 
@@ -61,6 +62,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     [Dependency] private SatiationSystem _satiation = default!;
     [Dependency] private SharedStealthSystem _stealth = default!;
     [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
+    [Dependency] private HealthRankingSystem _healthRanking = default!; // Friedmed
 
     private ObjectPool<HashSet<EntityUid>> _entPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>(), 256);
@@ -313,7 +315,8 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             {
                 if (!TryComp(targetUid, out DamageableComponent? damage) || !TryComp(targetUid, out MobThresholdsComponent? threshold))
                     return 0f;
-
+                if (_healthRanking.RankHealth(targetUid, con.TargetState) is { } ranking) // Friedmed
+                    return ranking; // Friedmed
                 var totalDamage = _damageable.GetTotalDamage((targetUid, damage));
                 if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, totalDamage, out var percentage, threshold))
                     return Math.Clamp((float)(1 - percentage), 0f, 1f);
@@ -346,11 +349,11 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             }
             case TargetIsAliveCon:
             {
-                return _mobState.IsAlive(targetUid) ? 1f : 0f;
+                return _mobState.IsAlive(targetUid) && !_healthRanking.IsCritical(targetUid) ? 1f : 0f; // Friedmed
             }
             case TargetIsCritCon:
             {
-                return _mobState.IsCritical(targetUid) ? 1f : 0f;
+                return _healthRanking.IsCritical(targetUid) ? 1f : 0f; // Friedmed
             }
             case TargetIsDeadCon:
             {

@@ -48,6 +48,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private ExamineSystemShared _examineSystem = default!;
     [Dependency] private EntityQuery<GhostHearingComponent> _ghostHearingQuery = default!;
+    [Dependency] private Content.Shared.StatusEffectNew.StatusEffectsSystem _statusEffects = default!; // Friedmed
 
     [Dependency] private CollectiveMindUpdateSystem _collectiveMind = default!; // Starlight - Collective Minds
 
@@ -200,6 +201,13 @@ public sealed partial class ChatSystem : SharedChatSystem
             checkRadioPrefix = false;
             message = message[1..];
         }
+
+        // Friedmed Start
+        if (desiredType == InGameICChatType.Speak && _statusEffects.HasEffectComp<Content.Shared._Friedmed.StatusEffects.SilencedStatusEffectComponent>(source))
+        {
+            desiredType = InGameICChatType.Whisper;
+        }
+        // Friedmed end
 
         bool shouldCapitalize = (desiredType != InGameICChatType.Emote);
         bool shouldPunctuate = _configurationManager.GetCVar(CCVars.ChatPunctuation);

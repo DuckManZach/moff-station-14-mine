@@ -12,7 +12,7 @@
   startingGear: ChemistGear
   icon: "JobIconChemist"
   supervisors: job-supervisors-cmo
-  guides: [ Chemist ]
+  guides: [ OffbrandChemist ] # Friedmed
   access:
   - Medical
   - Chemistry

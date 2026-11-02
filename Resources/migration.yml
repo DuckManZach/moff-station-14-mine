@@ -743,12 +743,6 @@ BibleSatanic: null
 ClothingBeltAssault: ClothingBeltMilitaryWebbing
 WarpPointBombing: null
 
-# Moffstation - 2025-10-14 - Remove Offmed
-CrateFreezerIVBag: null
-IVStand: null
-TourniquetOffbrand: Tourniquet
-IVBagBlood: Bloodpack
-
 # 2025-10-13
 ToyGriffin: ToyFigurineGriffin
 ToyOwlman: ToyFigurineOwlman
@@ -1329,3 +1323,6 @@ VendingMachineSwimsuits: MoffVendingMachineSwimsuits
 
 # Moff - 2026-10-28 - Remove arrivals E-gates
 EnergyGateAirtight: AirlockExternalGlass
+
+# Friedmed
+Tourniquet: TourniquetOffbrand # Friedmed

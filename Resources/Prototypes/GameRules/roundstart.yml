@@ -475,6 +475,7 @@
   components:
   - type: RoundstartStationVariationRule
     rules:
+    - id: SupplyOffbrandItemsVariationPass # Friedmed
     - id: BasicPoweredLightVariationPass
     - id: BasicTrashVariationPass
     - id: SolidWallRustingVariationPass

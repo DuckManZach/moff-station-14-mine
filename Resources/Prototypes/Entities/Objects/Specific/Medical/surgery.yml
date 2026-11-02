@@ -11,6 +11,14 @@
   - type: Tag
     tags:
     - SurgeryTool
+  # Friedmed Start
+  - type: SurgeryTool
+    slotsToCheck: [INNERCLOTHING, OUTERCLOTHING]
+    slotsDenialPopup: surgery-must-be-stripped
+    downDenialPopup: surgery-must-be-down
+    whitelist:
+      tags: [OperatableClothing]
+  # Friedmed end
 
 # Cautery
 
@@ -21,10 +29,11 @@
   description: A surgical tool used to cauterize open wounds.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/Surgery/cautery.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
     state: cautery
   - type: Item
-    sprite: Objects/Specific/Medical/Surgery/cautery.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
+    heldPrefix: cautery # Friedmed
     storedRotation: 90
   - type: MeleeWeapon
     damage:
@@ -32,6 +41,13 @@
         Heat: 5
     soundHit:
       path: /Audio/Effects/lightburn.ogg
+  - type: Tool # Friedmed
+    # Friedmed Start
+    qualities:
+    - Cauterizing
+    useSound:
+      collection: Cautery
+    # Friedmed end
 
 # Drill
 
@@ -42,13 +58,14 @@
   description: A surgical drill for making holes into hard material.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/Surgery/drill.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
     state: drill
   - type: Item
-    sprite: Objects/Specific/Medical/Surgery/drill.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
+    heldPrefix: drill # Friedmed
     shape:
     - 0,0,1,0
-    - 1,1,1,1
+    - 0,1,0,1 # Friedmed
   - type: MeleeWeapon
     damage:
       types:
@@ -57,6 +74,11 @@
       path: /Audio/Items/drill_hit.ogg
   - type: StaticPrice
     price: 40
+  - type: Tool # Friedmed
+    # Friedmed Start
+    qualities:
+    - Drilling
+    # Friedmed end
 
 # Scalpel
 
@@ -68,16 +90,23 @@
   components:
   - type: Tool
     qualities:
-    - Slicing
-    speedModifier: 0.66 # pretend the sixes go on forever :)
-  - type: Utensil
-    types:
-      - Knife
+    # - Slicing # Friedmed
+    - Incising # Friedmed
+    speedModifier: 1 # Friedmed
+    # Friedmed Start
+    useSound:
+      collection: Scalpel
+  # Friedmed
+  # - type: Utensil
+  #   types:
+  #     - Knife
+    # Friedmed end
   - type: Sprite
-    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
     state: scalpel
   - type: Item
-    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
+    heldPrefix: scalpel # Friedmed
     storedRotation: 90
   - type: MeleeWeapon
     wideAnimationRotation: 90
@@ -96,8 +125,10 @@
   description: A pointy piece of glass, abraded to an edge and wrapped in tape for a handle. # Could become a decent tool or weapon with right tool mods.
   components:
   - type: Sprite
+    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi # Friedmed
     state: shiv
   - type: Item
+    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi # Friedmed
     heldPrefix: shiv
   - type: Fixtures
     fixtures:
@@ -118,9 +149,9 @@
   description: Made of more expensive materials, sharper and generally more reliable.
   components:
   - type: Sprite
-    state: advanced
+    state: e_scalpel # Friedmed
   - type: Item
-    heldPrefix: advanced
+    heldPrefix: e_scalpel # Friedmed
   - type: MeleeWeapon
     damage:
       types:
@@ -133,8 +164,10 @@
   description: A scalpel which uses a directed laser to slice instead of a blade, for more precise surgery while also cauterizing as it cuts.
   components:
   - type: Sprite
+    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi # Friedmed
     state: laser
   - type: Item
+    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi # Friedmed
     heldPrefix: laser
 
 # Scissors
@@ -146,11 +179,19 @@
   description: A surgical tool used to hold open incisions.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
     state: retractor
   - type: Item
-    sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    sprite: _Friedmed/surgery_tools.rsi # Friedmed
+    heldPrefix: retractor # Friedmed
     storedRotation: 90
+  - type: Tool # Friedmed
+    # Friedmed Start
+    qualities:
+    - Retracting
+    useSound:
+      collection: Retractor
+    # Friedmed end
 
 - type: entity
   name: hemostat
@@ -159,10 +200,17 @@
   description: A surgical tool used to compress blood vessels to prevent bleeding.
   components:
   - type: Sprite
-    state: hemostat
+    state: hemostat # Friedmed
   - type: Item
     heldPrefix: hemostat
     storedRotation: 90
+  - type: Tool # Friedmed
+    # Friedmed Start
+    qualities:
+    - Clamping
+    useSound:
+      collection: Hemostat
+    # Friedmed end
 
   # - type: entity
   #   name: bone setter
@@ -178,9 +226,12 @@
   parent: BaseToolSurgery
   description: For cutting wood and other objects to pieces. Or sawing bones, in case of emergency.
   components:
-  - type: Utensil
-    types:
-      - Knife
+  # Friedmed removals
+  # Friedmed Start
+  # - type: Utensil
+  #   types:
+  #     - Knife
+  # Friedmed end
   - type: Sprite
     sprite: Objects/Specific/Medical/Surgery/saw.rsi
     state: saw

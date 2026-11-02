@@ -18,7 +18,11 @@
   id: OrganBase
   name: organ
   abstract: true
-  parent: BaseItem
+  # Friedmed Start
+  parent:
+  - BaseItem
+  # Friedmed end
+  - BaseSpeciesLayers # Friedmed - layers
   components:
   - type: Organ
 
@@ -45,8 +49,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseParent
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableLarge # Friedmed
+  - OffbrandOrganWoundableTorso # Friedmed
   id: OrganBaseTorso
   name: torso
   abstract: true
@@ -73,8 +77,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseParent
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableMedium # Friedmed
+  - OffbrandOrganWoundableHead # Friedmed
   id: OrganBaseHead
   name: head
   abstract: true
@@ -106,8 +110,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseParent
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableMedium # Friedmed
+  - OffbrandOrganWoundableArmLeft # Friedmed
   id: OrganBaseArmLeft
   name: left arm
   abstract: true
@@ -128,8 +132,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseParent
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableMedium # Friedmed
+  - OffbrandOrganWoundableArmRight # Friedmed
   id: OrganBaseArmRight
   name: right arm
   abstract: true
@@ -150,7 +154,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableSmall # Friedmed
+  - OffbrandOrganWoundableHandLeft # Friedmed
   id: OrganBaseHandLeft
   name: left hand
   abstract: true
@@ -175,7 +180,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableSmall # Friedmed
+  - OffbrandOrganWoundableHandRight # Friedmed
   id: OrganBaseHandRight
   name: right hand
   abstract: true
@@ -200,8 +206,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseParent
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableMedium # Friedmed
+  - OffbrandOrganWoundableLegLeft # Friedmed
   id: OrganBaseLegLeft
   name: left leg
   abstract: true
@@ -222,8 +228,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseParent
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableMedium # Friedmed
+  - OffbrandOrganWoundableLegRight # Friedmed
   id: OrganBaseLegRight
   name: right leg
   abstract: true
@@ -244,7 +250,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableSmall # Friedmed
+  - OffbrandOrganWoundableFootLeft # Friedmed
   id: OrganBaseFootLeft
   name: left foot
   abstract: true
@@ -265,7 +272,8 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildExternal
+  - OffbrandOrganWoundableSmall # Friedmed
+  - OffbrandOrganWoundableFootRight # Friedmed
   id: OrganBaseFootRight
   name: right foot
   abstract: true
@@ -286,7 +294,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseBrain # Friedmed
   id: OrganBaseBrain
   name: brain
   abstract: true
@@ -321,7 +329,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseEyes # Friedmed
   id: OrganBaseEyes
   name: eyes
   abstract: true
@@ -347,7 +355,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseTongue # Friedmed
   id: OrganBaseTongue
   name: tongue
   abstract: true
@@ -362,7 +370,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseAppendix # Friedmed
   id: OrganBaseAppendix
   name: appendix
   abstract: true
@@ -377,7 +385,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseEars # Friedmed
   id: OrganBaseEars
   name: ears
   abstract: true
@@ -392,7 +400,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseLungs # Friedmed
   id: OrganBaseLungs
   name: lungs
   abstract: true
@@ -427,7 +435,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseHeart # Friedmed
   id: OrganBaseHeart
   name: heart
   abstract: true
@@ -445,7 +453,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseStomach # Friedmed
   id: OrganBaseStomach
   name: stomach
   abstract: true
@@ -479,7 +487,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseLiver # Friedmed
   id: OrganBaseLiver
   name: liver
   abstract: true
@@ -499,7 +507,7 @@
 - type: entity
   parent:
   - OrganBase
-  - OrganBaseChildInternal
+  - OffbrandOrganBaseKidneys # Friedmed
   id: OrganBaseKidneys
   name: kidneys
   abstract: true

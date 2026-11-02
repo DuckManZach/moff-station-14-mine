@@ -75,9 +75,14 @@ public sealed partial class BloodstreamSystem : EntitySystem
                 if (bloodPercentage < bloodstream.BloodlossThreshold)
                 {
                     // bloodloss damage is based on the base value, and modified by how low your blood level is.
-                    var amt = bloodstream.BloodlossDamage / (0.1f + bloodPercentage);
+                    // Friedmed Start - optional bloodloss
+                    if (bloodstream.BloodlossDamage is { } damage)
+                    {
+                        var amt = bloodstream.BloodlossDamage / (0.1f + bloodPercentage);
 
-                    _damageableSystem.TryChangeDamage(uid, amt, ignoreResistances: false, interruptsDoAfters: false);
+                        _damageableSystem.TryChangeDamage(uid, amt, ignoreResistances: false, interruptsDoAfters: false);
+                    }
+                    // Friedmed end
 
                     // Apply dizziness as a symptom of bloodloss.
                     // The effect is applied in a way that it will never be cleared without being healthy.
@@ -87,7 +92,12 @@ public sealed partial class BloodstreamSystem : EntitySystem
                 else
                 {
                     // If they're healthy, we'll try and heal some bloodloss instead.
-                    _damageableSystem.TryChangeDamage(uid, bloodstream.BloodlossHealDamage * bloodPercentage, ignoreResistances: true, interruptsDoAfters: false);
+                    // Friedmed Start - optional bloodloss
+                    if (bloodstream.BloodlossHealDamage is { } damage)
+                    {
+                        _damageableSystem.TryChangeDamage(uid, damage * bloodPercentage, ignoreResistances: true, interruptsDoAfters: false);
+                    }
+                    // Friedmed end
 
                     _status.TryRemoveStatusEffect(uid, Bloodloss);
                 }
@@ -256,26 +266,28 @@ public sealed partial class BloodstreamSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnHealthBeingExamined(Entity<BloodstreamComponent> ent, ref HealthBeingExaminedEvent args)
     {
+        var bleedLevel = EffectiveBleedLevel(ent); // Friedmed
+
         // Shows massively bleeding at 0.75x the max bleed rate.
-        if (ent.Comp.BleedAmount > ent.Comp.MaxBleedAmount * 0.75f)
+        if (bleedLevel > ent.Comp.MaxBleedAmount * 0.75f) // Friedmed
         {
             args.Message.PushNewline();
             args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-massive-bleeding", ("target", ent.Owner)));
         }
         // Shows bleeding message when bleeding above half the max rate, but less than massively.
-        else if (ent.Comp.BleedAmount > ent.Comp.MaxBleedAmount * 0.5f)
+        else if (bleedLevel > ent.Comp.MaxBleedAmount * 0.5f) // Friedmed
         {
             args.Message.PushNewline();
             args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-strong-bleeding", ("target", ent.Owner)));
         }
         // Shows bleeding message when bleeding above 0.25x the max rate, but less than half the max.
-        else if (ent.Comp.BleedAmount > ent.Comp.MaxBleedAmount * 0.25f)
+        else if (bleedLevel > ent.Comp.MaxBleedAmount * 0.25f) // Friedmed
         {
             args.Message.PushNewline();
             args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-bleeding", ("target", ent.Owner)));
         }
         // Shows bleeding message when bleeding below 0.25x the max cap
-        else if (ent.Comp.BleedAmount > 0)
+        else if (bleedLevel > 0) // Friedmed
         {
             args.Message.PushNewline();
             args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-slight-bleeding", ("target", ent.Owner)));
@@ -486,12 +498,14 @@ public sealed partial class BloodstreamSystem : EntitySystem
 
     public void TickBleed(Entity<BloodstreamComponent> entity)
     {
+        var bleedLevel = EffectiveBleedLevel(entity); // Friedmed
+
         // Removes blood from the bloodstream based on bleed amount (bleed rate)
         // as well as stop their bleeding to a certain extent.
-        if (entity.Comp.BleedAmount <= 0)
+        if (bleedLevel <= 0) // Friedmed
             return;
 
-        var ev = new BleedModifierEvent(entity.Comp.BleedAmount, entity.Comp.BleedReductionAmount);
+        var ev = new BleedModifierEvent(bleedLevel, entity.Comp.BleedReductionAmount); // Friedmed
         RaiseLocalEvent(entity, ref ev);
 
         // Blood is removed from the bloodstream at a 1-1 rate with the bleed amount
@@ -549,6 +563,19 @@ public sealed partial class BloodstreamSystem : EntitySystem
         return true;
     }
 
+    // Friedmed Start
+    public float EffectiveBleedLevel(Entity<BloodstreamComponent> ent)
+    {
+        var evt = new Content.Shared._Friedmed.Wounds.GetBleedLevelEvent(ent.Comp.BleedAmount);
+        RaiseLocalEvent(ent, ref evt);
+
+        var modifiers = new Content.Shared._Friedmed.Wounds.ModifyBleedLevelEvent(evt.BleedLevel);
+        RaiseLocalEvent(ent, ref modifiers);
+
+        return modifiers.BleedLevel;
+    }
+    // Friedmed end
+
     /// <summary>
     /// Tries to make an entity bleed more or less.
     /// </summary>
@@ -562,13 +589,17 @@ public sealed partial class BloodstreamSystem : EntitySystem
 
         DirtyField(ent, ent.Comp, nameof(BloodstreamComponent.BleedAmount));
 
-        if (ent.Comp.BleedAmount == 0)
+        // Friedmed Start
+        var bleedLevel = EffectiveBleedLevel((ent, ent.Comp));
+
+        if (bleedLevel == 0)
             _alertsSystem.ClearAlert(ent.Owner, ent.Comp.BleedingAlert);
         else
         {
-            var severity = (short)Math.Clamp(Math.Round(ent.Comp.BleedAmount, MidpointRounding.ToZero), 0, 10);
+            var severity = (short)Math.Clamp(Math.Round(bleedLevel, MidpointRounding.ToZero), 0, 10);
             _alertsSystem.ShowAlert(ent.Owner, ent.Comp.BleedingAlert, severity);
         }
+        // Friedmed end
 
         return true;
     }
@@ -744,8 +775,8 @@ public sealed partial class BloodstreamSystem : EntitySystem
         cloneComp.BleedReductionAmount = source.Comp.BleedReductionAmount;
         cloneComp.MaxBleedAmount = source.Comp.MaxBleedAmount;
         cloneComp.BloodlossThreshold = source.Comp.BloodlossThreshold;
-        cloneComp.BloodlossDamage = new DamageSpecifier(source.Comp.BloodlossDamage);
-        cloneComp.BloodlossHealDamage = new DamageSpecifier(source.Comp.BloodlossHealDamage);
+        cloneComp.BloodlossDamage = source.Comp.BloodlossDamage is { } bloodlossDamage ? new DamageSpecifier(bloodlossDamage) : null; // Friedmed
+        cloneComp.BloodlossHealDamage = source.Comp.BloodlossHealDamage is { } bloodlossHealDamage ? new DamageSpecifier(bloodlossHealDamage) : null; // Friedmed
         cloneComp.BloodRefreshAmount =  source.Comp.BloodRefreshAmount;
         cloneComp.BleedPuddleThreshold = source.Comp.BleedPuddleThreshold;
         cloneComp.DamageBleedModifiers = source.Comp.DamageBleedModifiers;

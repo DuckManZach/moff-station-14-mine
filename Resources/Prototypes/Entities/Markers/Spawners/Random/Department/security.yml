@@ -20,7 +20,7 @@
         - Handcuffs
         - Zipties
         - FlashlightSeclite
-        - Tourniquet
+        - TourniquetOffbrand # Friedmed
       chance: 0.85
 
 - type: entity
@@ -48,7 +48,7 @@
         - FlashlightSeclite
         - GrenadeFlashBang
         - SecurityWhistle
-        - Tourniquet
+        - TourniquetOffbrand # Friedmed
       chance: 0.85
 
 # Armory loot spawner

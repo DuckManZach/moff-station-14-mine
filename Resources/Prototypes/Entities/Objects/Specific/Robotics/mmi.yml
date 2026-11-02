@@ -76,6 +76,11 @@
       whitelist:
         components:
         - Brain
+  - type: MMIExtractor # Friedmed
+    # Friedmed Start
+    whitelist:
+      components: [WoundableBody]
+    # Friedmed end
   - type: NameIdentifier
     group: MMI
   - type: ItemSlots

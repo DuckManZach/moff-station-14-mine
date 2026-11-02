@@ -651,6 +651,15 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         RaiseLocalEvent(gun, ref ev);
 
+        // Friedmed Start
+        if (Containers.TryGetContainingContainer(gun.Owner, out var container))
+        {
+            var relayed = new Content.Shared._Friedmed.Weapons.RelayedGunRefreshModifiersEvent(ev);
+            RaiseLocalEvent(container.Owner, ref relayed);
+            ev = relayed.Args;
+        }
+        // Friedmed end
+
         if (comp.SoundGunshotModified != ev.SoundGunshot)
         {
             comp.SoundGunshotModified = ev.SoundGunshot;

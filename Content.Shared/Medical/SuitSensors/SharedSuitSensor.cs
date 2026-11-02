@@ -4,6 +4,7 @@ using Content.Shared.DoAfter;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes; // Moffstation - Borg sensors
 using Robust.Shared.Serialization;
+using Content.Shared._Friedmed.Analyzers;
 
 namespace Content.Shared.Medical.SuitSensors;
 
@@ -38,9 +39,12 @@ public partial struct SuitSensorStatus : IEquatable<SuitSensorStatus>
     public string JobIcon;
     public List<string> JobDepartments;
     public bool IsAlive;
-    public int? TotalDamage;
-    public int? TotalDamageThreshold;
-    public float? DamagePercentage => TotalDamageThreshold == null || TotalDamage == null ? null : TotalDamage / (float) TotalDamageThreshold;
+    // Friedmed Start - Changes
+    // public int? TotalDamage;
+    // public int? TotalDamageThreshold;
+    // public float? DamagePercentage => TotalDamageThreshold == null || TotalDamage == null ? null : TotalDamage / (float) TotalDamageThreshold;
+    public VitalsData? VitalsData;
+    // Friedmed end
     public NetCoordinates? Coordinates;
 
     public bool Equals(SuitSensorStatus other)
@@ -52,8 +56,7 @@ public partial struct SuitSensorStatus : IEquatable<SuitSensorStatus>
                && Job == other.Job
                && JobIcon == other.JobIcon
                && IsAlive == other.IsAlive
-               && TotalDamage == other.TotalDamage
-               && TotalDamageThreshold == other.TotalDamageThreshold
+               && Equals(VitalsData, other.VitalsData) // Friedmed
                && Nullable.Equals(Coordinates, other.Coordinates);
     }
 
@@ -72,8 +75,7 @@ public partial struct SuitSensorStatus : IEquatable<SuitSensorStatus>
         hashCode.Add(Job);
         hashCode.Add(JobIcon);
         hashCode.Add(IsAlive);
-        hashCode.Add(TotalDamage);
-        hashCode.Add(TotalDamageThreshold);
+        hashCode.Add(VitalsData); // Friedmed
         hashCode.Add(Coordinates);
         return hashCode.ToHashCode();
     }

@@ -36,7 +36,7 @@ public sealed partial class StatusEffectsSystem
     {
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerAttachedEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerDetachedEvent>(RelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, RejuvenateEvent>(RelayStatusEffectEvent);
+        // SubscribeLocalEvent<StatusEffectContainerComponent, RejuvenateEvent>(RelayStatusEffectEvent); // Friedmed
 
         SubscribeLocalEvent<StatusEffectContainerComponent, RefreshMovementSpeedModifiersEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, ModifySlowOnDamageSpeedEvent>(RefRelayStatusEffectEvent);
@@ -77,6 +77,30 @@ public sealed partial class StatusEffectsSystem
 
         SubscribeLocalEvent<StatusEffectContainerComponent, TargetHandcuffedEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, BeforeTargetHandcuffedEvent>(RefRelayStatusEffectEvent);
+
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.WoundGetDamageEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.GetWoundsWithSpaceEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.GetPainEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.HealWoundsEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.GetBleedLevelEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.PainSuppressionEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Organs.BeforeDealOrganOxygenDamage>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Organs.BeforeDepleteOrganOxygen>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Organs.BeforeHealOrganOxygenDamage>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedVascularToneEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedLungFunctionEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedMetabolicRateEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedCardiacOutputEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedRespiratoryRateEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Weapons.RelayedGetMeleeDamageEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Weapons.RelayedGetMeleeAttackRateEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Weapons.RelayedGunRefreshModifiersEvent>(RefRelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared.Eye.Blinding.Systems.GetBlurEvent>(RelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared.IdentityManagement.Components.SeeIdentityAttemptEvent>(RelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared.Movement.Pulling.Events.PullStartedMessage>(RelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared.Movement.Pulling.Events.PullStoppedMessage>(RelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, DamageChangedEvent>(RelayStatusEffectEvent); // Friedmed
+        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared.Verbs.GetVerbsEvent<Content.Shared.Verbs.AlternativeVerb>>(RelayStatusEffectEvent); // Friedmed
     }
 
     private void RefRelayStatusEffectEvent<T>(EntityUid uid, StatusEffectContainerComponent component, ref T args) where T : struct

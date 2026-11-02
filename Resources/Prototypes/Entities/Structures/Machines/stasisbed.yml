@@ -55,6 +55,6 @@
         - LowImpassable
   - type: GuideHelp
     guides:
-    - MedicalDoctor
+    - OffbrandCryostasis # Friedmed
   - type: PowerSwitch
   - type: AmbientMusicMarkerMedical

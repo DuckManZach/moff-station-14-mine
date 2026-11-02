@@ -39,6 +39,14 @@ public sealed partial class StatusEffectComponent : Component
     [DataField]
     public bool Applied;
 
+    // Friedmed Start
+    /// <summary>
+    /// Friedmed - When the status effect started
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField, AutoNetworkedField]
+    public TimeSpan? StartedAt;
+    // Friedmed end
+
     /// <summary>
     /// Whitelist, by which it is determined whether this status effect can be imposed on a particular entity.
     /// </summary>

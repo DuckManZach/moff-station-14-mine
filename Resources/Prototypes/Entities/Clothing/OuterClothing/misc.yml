@@ -322,6 +322,12 @@
     sprite: Clothing/OuterClothing/Misc/hospitalgown.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Misc/hospitalgown.rsi
+  - type: Tag # Friedmed
+    # Friedmed Start
+    tags:
+    - OperatableClothing
+    - WhitelistChameleon
+    # Friedmed end
 
 - type: entity
   parent: ClothingOuterJacketBase

@@ -46,6 +46,13 @@ namespace Content.Shared.Construction.Steps
                 return typeof(PartAssemblyConstructionGraphStep);
             }
 
+            // Friedmed Start
+            if (node.Has("whitelist") || node.Has("blacklist"))
+            {
+                return typeof(Content.Shared._Friedmed.Surgery.WhitelistConstructionGraphStep);
+            }
+            // Friedmed end
+
             // See Read below if you are adding new types
             return null;
         }
@@ -81,6 +88,11 @@ namespace Content.Shared.Construction.Steps
 
             if (type == typeof(PartAssemblyConstructionGraphStep))
                 return serializationManager.Read<PartAssemblyConstructionGraphStep>(node, hookCtx, context, notNullableOverride: true);
+
+            // Friedmed Start
+            if (type == typeof(Content.Shared._Friedmed.Surgery.WhitelistConstructionGraphStep))
+                return serializationManager.Read<Content.Shared._Friedmed.Surgery.WhitelistConstructionGraphStep>(node, hookCtx, context, notNullableOverride: true);
+            // Friedmed end
 
             // See GetType above if you are adding new types
             throw new NotImplementedException();

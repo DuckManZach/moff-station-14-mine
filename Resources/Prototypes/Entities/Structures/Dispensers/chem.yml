@@ -21,7 +21,7 @@
   - type: GuideHelp
     guides:
     - Chemicals
-    - Chemist
+    - OffbrandChemist # Friedmed
   - type: StealTarget
     stealGroup:
     - ChemDispenser

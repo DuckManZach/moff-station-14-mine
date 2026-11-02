@@ -5,6 +5,10 @@
   id: BaseAlertOrder
   order:
     - category: Health
+    - category: Pain # Friedmed
+    - category: BrainDamage # Friedmed
+    - category: BrainOxygen # Friedmed
+    - category: LungDamage # Friedmed
     - category: Stamina
     - alertType: SuitPower
     - category: Internals

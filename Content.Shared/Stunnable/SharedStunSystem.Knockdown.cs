@@ -298,6 +298,11 @@ public abstract partial class SharedStunSystem
 
         if (!_crawlerQuery.TryComp(entity, out var crawler) || !_cfgManager.GetCVar(CCVars.MovementCrawling))
         {
+            // Friedmed Start - respect the code if it forces us down
+            if (!CanStand((entity, entity.Comp)))
+                return false;
+            // Friedmed end
+
             // If we can't crawl then just have us sit back up...
             // In case you're wondering, the KnockdownOverCheck, returns if we're able to move, so if next update is null.
             // An entity that can't crawl will stand up the next time they can move, which should prevent moving while knocked down.

@@ -71,6 +71,11 @@
     size: Normal # Make smaller than typical outer clothing
     shape:
     - 0, 0, 0, 1
+  - type: Tag # Friedmed
+    # Friedmed Start
+    tags:
+    - OperatableClothing
+    # Friedmed end
 
 # Reporter unlockable PRESS vest
 - type: entity

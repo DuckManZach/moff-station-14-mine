@@ -1,3 +1,4 @@
+using Content.Shared._Friedmed.Analyzers;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
@@ -133,6 +134,7 @@ public sealed class CryoPodUserMessage : BoundUserInterfaceMessage
     public List<ReagentQuantity>? Beaker;
     public List<ReagentQuantity>? Injecting;
     public bool HasDamage;
+    public VitalsData? Vitals; // Friedmed
 
     public CryoPodUserMessage(
         GasMixEntry gasMix,
@@ -140,7 +142,8 @@ public sealed class CryoPodUserMessage : BoundUserInterfaceMessage
         FixedPoint2? beakerCapacity,
         List<ReagentQuantity>? beaker,
         List<ReagentQuantity>? injecting,
-        bool hasDamage)
+        bool hasDamage, // Friedmed
+        VitalsData? vitals) // Friedmed
     {
         GasMix = gasMix;
         Health = health;
@@ -148,6 +151,7 @@ public sealed class CryoPodUserMessage : BoundUserInterfaceMessage
         Beaker = beaker;
         Injecting = injecting;
         HasDamage = hasDamage;
+        Vitals = vitals; // Friedmed
     }
 }
 

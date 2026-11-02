@@ -214,6 +214,19 @@ public sealed partial class RevenantComponent : Component
     #endregion
 
     /// <summary>
+    /// Friedmed - how much cold damage to deal on harvest
+    // Friedmed Start
+    /// </summary>
+    [DataField]
+    public Content.Shared.Damage.DamageSpecifier HarvestDamage = new()
+    {
+        DamageDict = new()
+        {
+            { "Cold", 200 },
+        }
+    };
+    // Friedmed end
+    
     /// The scaling for passively chilling surroundings.
     /// </summary>
     [DataField]

@@ -1,3 +1,4 @@
+using Content.Shared.Body;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
@@ -32,7 +33,7 @@ public sealed partial class HealthExaminableSystem : EntitySystem
             Act = () =>
             {
                 var markup = CreateMarkup(uid, component, damage);
-                _examineSystem.SendExamineTooltip(args.User, uid, markup, false, false);
+                _examineSystem.SendExamineTooltip(args.User, uid, markup, false, false, true); // Friedmed
             },
             Text = Loc.GetString("health-examinable-verb-text"),
             Category = VerbCategory.Examine,
@@ -95,13 +96,17 @@ public sealed partial class HealthExaminableSystem : EntitySystem
             msg.AddMarkupOrThrow(chosenLocStr);
         }
 
-        if (msg.IsEmpty)
-        {
-            msg.AddMarkupOrThrow(Loc.GetString($"health-examinable-{component.LocPrefix}-none"));
-        }
+        // Friedmed - reordered the empty placeholder to after people have added to health examinable
 
         // Anything else want to add on to this?
         RaiseLocalEvent(uid, new HealthBeingExaminedEvent(msg), true);
+
+        if (msg.IsEmpty && !HasComp<BodyComponent>(uid)) // Friedmed - we dgaf about bodies
+        // Friedmed Start
+        {
+            msg.AddMarkupOrThrow(Loc.GetString($"health-examinable-{component.LocPrefix}-none"));
+        }
+        // Friedmed end
 
         return msg;
     }

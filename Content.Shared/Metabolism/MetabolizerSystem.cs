@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._Friedmed.EntityEffects;
 using Content.Shared.Body.Events;
 using Content.Shared.Body;
 using Content.Shared.Chemistry.Components;
@@ -29,6 +30,7 @@ public sealed partial class MetabolizerSystem : EntitySystem
     [Dependency] private SharedEntityConditionsSystem _entityConditions = default!;
     [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private Content.Shared.StatusEffectNew.StatusEffectsSystem _statusEffects = default!; // Friedmed
 
     [Dependency] private EntityQuery<OrganComponent> _organQuery = default!;
     [Dependency] private EntityQuery<SolutionManagerComponent> _solutionQuery = default!;
@@ -89,7 +91,7 @@ public sealed partial class MetabolizerSystem : EntitySystem
         RaiseLocalEvent(uid, ref applyEv);
     }
 
-    private bool LookupSolution(
+    public bool LookupSolution( // Friedmed - we need this public
         Entity<MetabolizerComponent, OrganComponent?, SolutionManagerComponent?> ent,
         MetabolismSolutionEntry solutionData,
         bool lookupTransfer,
@@ -98,6 +100,8 @@ public sealed partial class MetabolizerSystem : EntitySystem
         [NotNullWhen(true)] out EntityUid? solutionOwner
     )
     {
+        Resolve(ent, ref ent.Comp2, false); // Friedmed
+
         solution = null;
         solutionEntity = null;
         solutionOwner = null;
@@ -153,6 +157,7 @@ public sealed partial class MetabolizerSystem : EntitySystem
 
         var isDead = _mobStateSystem.IsDead(solutionOwner.Value);
 
+        var metabolized = new HashSet<ProtoId<ReagentPrototype>>(); // Friedmed
         int reagents = 0;
         foreach (var (reagent, quantity) in list)
         {
@@ -166,13 +171,17 @@ public sealed partial class MetabolizerSystem : EntitySystem
             if (proto.Metabolisms is null || !proto.Metabolisms.Metabolisms.TryGetValue(stage, out var entry))
             {
                 var mostToTransfer = FixedPoint2.Clamp(solutionData.TransferRate, 0, quantity);
+                var remove = ShouldRemove(ent, solutionData, reagent); // Friedmed
 
                 if (transferSolution is not null)
                 {
-                    solution.RemoveReagent(reagent, mostToTransfer);
+                    // Friedmed Start
+                    if (remove)
+                        solution.RemoveReagent(reagent, mostToTransfer);
+                    // Friedmed end
                     transferSolution.AddReagent(reagent, mostToTransfer * solutionData.TransferEfficacy);
                 }
-                else
+                else if (remove) // Friedmed
                 {
                     solution.RemoveReagent(reagent, FixedPoint2.New(1));
                 }
@@ -185,9 +194,11 @@ public sealed partial class MetabolizerSystem : EntitySystem
             // Remove $rate, as long as there's enough reagent there to actually remove that much
             var mostToRemove = FixedPoint2.Clamp(rate, 0, quantity);
 
+            // Friedmed Start - Removals - No
             // we're done here entirely if this is true
-            if (reagents >= ent.Comp1.MaxReagentsProcessable)
-                return;
+            // if (reagents >= ent.Comp1.MaxReagentsProcessable)
+            //     return;
+            // Friedmed end
 
             var scale = (float) mostToRemove;
             if (!solutionData.MetabolizeAll)
@@ -200,6 +211,16 @@ public sealed partial class MetabolizerSystem : EntitySystem
                 continue;
 
             var actualEntity = ent.Comp2?.Body ?? solutionOwner.Value;
+
+            // Friedmed Start - status effects
+            foreach (var effect in entry.StatusEffects)
+            {
+                if (!_entityConditions.TryConditions(actualEntity, effect.Conditions))
+                    _statusEffects.TryRemoveStatusEffect(actualEntity, effect.StatusEffect);
+                else
+                    _statusEffects.TryUpdateStatusEffectDuration(actualEntity, effect.StatusEffect, out _);
+            }
+            // Friedmed end
 
             // do all effects, if conditions apply
             foreach (var effect in entry.Effects)
@@ -238,7 +259,12 @@ public sealed partial class MetabolizerSystem : EntitySystem
             // remove a certain amount of reagent
             if (mostToRemove > FixedPoint2.Zero)
             {
-                solution.RemoveReagent(reagent, mostToRemove);
+                // Friedmed Start
+                if (ShouldRemove(ent, solutionData, reagent))
+                {
+                    solution.RemoveReagent(reagent, mostToRemove);
+                }
+                // Friedmed end
 
                 // We have processed a reagant, so count it towards the cap
                 reagents += 1;
@@ -250,8 +276,43 @@ public sealed partial class MetabolizerSystem : EntitySystem
                         transferSolution.AddReagent(metabolite, mostToRemove * ratio);
                     }
                 }
+                // Friedmed Start
+                else if (transferSolution is not null && solutionData.TransferMetabolized)
+                {
+                    transferSolution.AddReagent(reagent, mostToRemove);
+                }
+                // Friedmed end
             }
         }
+
+        // Friedmed Start
+        var dirtied = false;
+        foreach (var reagent in ent.Comp1.MetabolizingReagents[stage])
+        {
+            if (metabolized.Contains(reagent))
+                continue;
+
+            dirtied = true;
+            var proto = ProtoMan.Index(reagent);
+            var actualEntity = ent.Comp2?.Body ?? solutionOwner.Value;
+
+            if (proto.Metabolisms is null)
+                continue;
+
+            if (!proto.Metabolisms.Metabolisms.TryGetValue(stage, out var entry))
+                continue;
+
+            foreach (var effect in entry.StatusEffects)
+            {
+                _statusEffects.TryRemoveStatusEffect(actualEntity, effect.StatusEffect);
+            }
+        }
+        if (dirtied)
+        {
+            ent.Comp1.MetabolizingReagents[stage] = metabolized;
+            Dirty(ent, ent.Comp1);
+        }
+        // Friedmed end
 
         _solutionContainerSystem.UpdateChemicals(solutionEntity.Value);
         if (transferSolutionEntity is not null)
@@ -259,6 +320,43 @@ public sealed partial class MetabolizerSystem : EntitySystem
             _solutionContainerSystem.UpdateChemicals(transferSolutionEntity.Value);
         }
     }
+
+    // Friedmed Start
+    /// <summary>
+    /// Friedmed - Whether the reagent should be removed based on the previous-stage condition
+    /// </summary>
+    private bool ShouldRemove(Entity<MetabolizerComponent, OrganComponent?, SolutionManagerComponent?> ent,
+        MetabolismSolutionEntry solutionData,
+        ReagentId reagent)
+    {
+        if (solutionData.PreviousStage is not { } oldStage ||
+            !ent.Comp1.Solutions.TryGetValue(oldStage, out var oldStageData))
+            return true;
+
+        if (!LookupSolution(ent, oldStageData, false, out var previousSolution, out _, out _))
+            return true;
+
+        foreach (var (oldReagent, _) in previousSolution.Contents)
+        {
+            if (oldReagent == reagent)
+                return false;
+
+            if (!ProtoMan.TryIndex<ReagentPrototype>(oldReagent.Prototype, out var oldProto))
+                continue;
+
+            if (oldProto.Metabolisms is null || !oldProto.Metabolisms.Metabolisms.TryGetValue(oldStage, out var oldEntry) || oldEntry.Metabolites is null)
+                continue;
+
+            foreach (var (metabolite, ratio) in oldEntry.Metabolites)
+            {
+                if (metabolite == reagent.Prototype)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+    // Friedmed end
 
     private void TryMetabolize(Entity<MetabolizerComponent, OrganComponent?, SolutionManagerComponent?> ent)
     {
@@ -289,6 +387,7 @@ public sealed partial class MetabolizerSystem : EntitySystem
                 // Need specific handling of specific conditions since Metabolism is funny like that.
                 // TODO: MetabolizerTypes should be handled well before this stage by metabolism itself.
                 case MetabolizerTypeCondition:
+                case MetaboliteThresholdCondition: // Friedmed - this is an organ condition
                     if (_entityConditions.TryCondition(organ, condition))
                         continue;
                     break;

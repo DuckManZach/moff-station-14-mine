@@ -1,0 +1,31 @@
+using Content.Shared._Friedmed.Organs;
+using Content.Shared._Friedmed.Wounds;
+using Content.Shared.StatusEffectNew.Components;
+using Content.Shared.StatusEffectNew;
+
+namespace Content.Shared._Friedmed.StatusEffects;
+
+public sealed partial class ModifyOrganOxygenDamageChanceStatusEffectSystem : EntitySystem
+{
+    [Dependency] private PerfusionSystem _perfusion = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<ModifyOrganOxygenDamageChanceStatusEffectComponent, StatusEffectRelayedEvent<BeforeDealOrganOxygenDamage>>(OnBeforeDealOrganOxygenDamage);
+    }
+
+    private void OnBeforeDealOrganOxygenDamage(Entity<ModifyOrganOxygenDamageChanceStatusEffectComponent> ent, ref StatusEffectRelayedEvent<BeforeDealOrganOxygenDamage> args)
+    {
+        if (Comp<StatusEffectComponent>(ent).AppliedTo is not { } target)
+            return;
+
+        var oxygenation = _perfusion.Spo2(target);
+
+        if (ent.Comp.OxygenationModifierThresholds.LowestMatch(oxygenation) is not { } modifier)
+            return;
+
+        args.Args = args.Args with { Chance = args.Args.Chance * modifier };
+    }
+}

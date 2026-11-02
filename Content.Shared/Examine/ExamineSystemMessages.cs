@@ -23,6 +23,21 @@ namespace Content.Shared.Examine
             }
         }
 
+        // Friedmed Start - examine elaboration
+        [Serializable, NetSerializable]
+        public sealed class ElaborateExamineTooltipMessage : EntityEventArgs
+        {
+            public readonly Enum Key;
+            public readonly FormattedMessage Message;
+
+            public ElaborateExamineTooltipMessage(Enum key, FormattedMessage message)
+            {
+                Key = key;
+                Message = message;
+            }
+        }
+        // Friedmed end
+
         [Serializable, NetSerializable]
         public sealed class ExamineInfoResponseMessage : EntityEventArgs
         {
@@ -34,11 +49,12 @@ namespace Content.Shared.Examine
 
             public readonly bool CenterAtCursor;
             public readonly bool OpenAtOldTooltip;
+            public readonly bool ShowBody; // Friedmed
 
             public readonly bool KnowTarget;
 
             public ExamineInfoResponseMessage(NetEntity entityUid, int id, FormattedMessage message, List<Verb>? verbs=null,
-                bool centerAtCursor=true, bool openAtOldTooltip=true, bool knowTarget = true)
+                bool centerAtCursor=true, bool openAtOldTooltip=true, bool knowTarget = true, bool showBody = false) // Friedmed
             {
                 EntityUid = entityUid;
                 Id = id;
@@ -47,6 +63,7 @@ namespace Content.Shared.Examine
                 CenterAtCursor = centerAtCursor;
                 OpenAtOldTooltip = openAtOldTooltip;
                 KnowTarget = knowTarget;
+                ShowBody = showBody; // Friedmed
             }
         }
     }

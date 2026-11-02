@@ -93,5 +93,5 @@
   - type: GuideHelp
     guides:
     - Chemicals
-    - Chemist
+    - OffbrandChemist # Friedmed
   - type: AmbientMusicMarkerMedical

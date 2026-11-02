@@ -425,6 +425,8 @@
     solution: injector
   - type: TrashOnSolutionEmpty
     solution: injector
+  - type: RefillableSolution # Friedmed
+    solution: injector # Friedmed
   - type: Appearance
   - type: SolutionContainerVisuals
     maxFillLevels: 2
@@ -600,6 +602,7 @@
         acts: [ "Destruction" ]
   - type: SolutionSpiker
     sourceSolution: food
+    ignoreEmpty: true # Friedmed
   - type: Extractable
     grindableSolutionName: food
   - type: StaticPrice

@@ -30,6 +30,14 @@ namespace Content.Shared.Construction
         [DataField(customTypeSerializer: typeof(GraphNodeEntitySerializer))]
         public IGraphNodeEntity Entity { get; private set; } = new NullNodeEntity();
 
+        // Friedmed Start
+        [DataField]
+        public LocId? LocalizedName;
+
+        [DataField]
+        public LocId Header = "construction-component-to-create-header";
+        // Friedmed end
+
         /// <summary>
         ///     Ignore requests to change the entity if the entity's current prototype inherits from specified replacement
         /// </summary>

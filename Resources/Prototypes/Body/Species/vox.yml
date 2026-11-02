@@ -256,6 +256,13 @@
       types:
         Slash: 5 # Reduce?
   - type: Wagging
+  # Friedmed Start - Additions
+  - type: Perfusion
+    etco2Name: etco2-ammonia
+    etco2GasName: reagent-name-ammonia
+    spo2Name: spo2-nitrogen
+    spo2GasName: reagent-name-nitrogen
+  # Friedmed end
 
 - type: entity
   parent: OrganBaseOrganic

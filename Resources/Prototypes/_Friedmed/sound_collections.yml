@@ -1,0 +1,37 @@
+- type: soundCollection
+  id: Cautery
+  files:
+  - /Audio/_Friedmed/Surgery/cautery1.ogg
+  - /Audio/_Friedmed/Surgery/cautery2.ogg
+
+- type: soundCollection
+  id: Hemostat
+  files:
+  - /Audio/_Friedmed/Surgery/hemostat1.ogg
+
+- type: soundCollection
+  id: Retractor
+  files:
+  - /Audio/_Friedmed/Surgery/retractor1.ogg
+  - /Audio/_Friedmed/Surgery/retractor2.ogg
+
+- type: soundCollection
+  id: Scalpel
+  files:
+  - /Audio/_Friedmed/Surgery/scalpel1.ogg
+  - /Audio/_Friedmed/Surgery/scalpel2.ogg
+
+- type: soundCollection
+  id: VitalsAsystole
+  files:
+  - /Audio/_Friedmed/Vitals/asystole.ogg
+
+- type: soundCollection
+  id: VitalsPulseNormal
+  files:
+  - /Audio/_Friedmed/Vitals/pulse.ogg
+
+- type: soundCollection
+  id: VitalsPulseDouble
+  files:
+  - /Audio/_Friedmed/Vitals/pulse_double.ogg

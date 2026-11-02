@@ -1,13 +1,18 @@
 using Content.Shared.Bed.Sleep;
+using Content.Shared._Friedmed.Organs;
+using Content.Shared._Friedmed.Wounds;
 using Content.Shared.Body.Events;
 using Content.Shared.Chat;
 using Content.Shared.Cloning.Events;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Eye.Blinking;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Gibbing;
 using Content.Shared.Humanoid;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Medical;
 using Content.Shared.Mobs;
+using Content.Shared.Rejuvenate;
 using JetBrains.Annotations;
 
 namespace Content.Shared.Body;
@@ -33,6 +38,26 @@ public sealed partial class BodySystem
 
         SubscribeLocalEvent<BodyComponent, ToggleEyesActionEvent>(RelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, CanSeeAttemptEvent>(RelayBodyEvent);
+        // Friedmed Start
+        SubscribeLocalEvent<BodyComponent, SuicideEvent>(RelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, RejuvenateEvent>(RelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, BeforeInhaledGasEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, BeforeBreathEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, BaseLungFunctionEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, DamageChangedEvent>(RelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, BaseCardiacOutputEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, CardiacCompensationEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, HeartBeatEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, TargetDefibrillatedEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, BaseVascularToneEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, WoundableOrganWeightsEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, WoundGetDamageEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, GetWoundsWithSpaceEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, GetPainEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, HealWoundsEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, GetBleedLevelEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, ClampWoundsEvent>(RefRelayBodyEvent);
+        // Friedmed end
     }
 
     private void RefRelayBodyEvent<T>(EntityUid uid, BodyComponent component, ref T args) where T : struct

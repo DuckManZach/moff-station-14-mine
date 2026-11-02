@@ -109,6 +109,8 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      enum.SurgeryGuideUiKey.Key: # Friedmed
+        type: SurgeryGuideBoundUserInterface # Friedmed
   - type: UseDelay
     delay: 0.5
   - type: Speech
@@ -185,6 +187,13 @@
       types:
         Asphyxiation: -1.0
     maxSaturation: 15
+  # Friedmed Start - Additions
+  - type: Perfusion
+    etco2Name: etco2-nitrous-oxide
+    etco2GasName: reagent-name-nitrous-oxide
+    spo2Name: spo2-nitrogen
+    spo2GasName: reagent-name-nitrogen
+  # Friedmed end
 
 - type: entity
   parent: OrganBaseOrganic
@@ -287,7 +296,7 @@
   - type: Appearance
 
 - type: entity
-  parent: [ OrganBaseLungs, OrganSlimePersonInternal, OrganSlimePersonMetabolizer ]
+  parent: [ OrganBaseLungs, OrganBaseHeart, OrganSlimePersonInternal, OrganSlimePersonMetabolizer ] # Friedmed
   id: OrganSlimePersonLungs
   name: gas sacs
   components:

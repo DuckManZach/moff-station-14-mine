@@ -12,6 +12,7 @@ public sealed partial class HeadsetSystem : SharedHeadsetSystem
 {
     [Dependency] private INetManager _netMan = default!;
     [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private Content.Shared.StatusEffectNew.StatusEffectsSystem _statusEffects = default!; // Friedmed
 
     public override void Initialize()
     {
@@ -45,6 +46,7 @@ public sealed partial class HeadsetSystem : SharedHeadsetSystem
     private void OnSpeak(EntityUid uid, WearingHeadsetComponent component, EntitySpokeEvent args)
     {
         if (args.Channel != null
+            && !_statusEffects.HasEffectComp<Content.Shared._Friedmed.StatusEffects.CannotUseHeadsetStatusEffectComponent>(uid) // Friedmed
             && TryComp(component.Headset, out EncryptionKeyHolderComponent? keys)
             // Moffstation - Start - Remove common from headsets
             && keys.Channels.Contains(args.Channel.ID)

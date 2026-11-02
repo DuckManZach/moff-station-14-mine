@@ -1,11 +1,9 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Emp;
 using Content.Shared.Interaction;
 using Content.Shared.Medical.SuitSensors;
-using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Station;
@@ -25,8 +23,6 @@ public abstract partial class SharedBorgSensorSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedTransformSystem _transform =  default!;
-    [Dependency] private MobThresholdSystem _threshold = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
 
     [Dependency] private EntityQuery<BorgSensorComponent> _sensorQuery = default!;
     [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery = default!;
@@ -115,14 +111,6 @@ public abstract partial class SharedBorgSensorSystem : EntitySystem
         // get health mob state
         var isAlive = _mobState.IsAlive(ent, mobState);
 
-        // get mob total damage
-        var totalDamage = _damageable.GetTotalDamage(ent.Owner).Int();
-
-        // Get mob total damage crit threshold
-        int? totalDamageThreshold = null;
-        if (_threshold.TryGetThresholdForState(ent, MobState.Critical, out var critThreshold))
-            totalDamageThreshold = critThreshold.Value.Int();
-
         // finally, form suit sensor status
         var status = new SuitSensorStatus(GetNetEntity(ent), GetNetEntity(ent.Owner), userName, userJob, userJobIcon, userJobDepartments)
         {
@@ -135,13 +123,9 @@ public abstract partial class SharedBorgSensorSystem : EntitySystem
                 break;
             case SuitSensorMode.SensorVitals:
                 status.IsAlive = isAlive;
-                status.TotalDamage = totalDamage;
-                status.TotalDamageThreshold = totalDamageThreshold;
                 break;
             case SuitSensorMode.SensorCords:
                 status.IsAlive = isAlive;
-                status.TotalDamage = totalDamage;
-                status.TotalDamageThreshold = totalDamageThreshold;
                 EntityCoordinates coordinates;
 
                 if (transform.GridUid != null)

@@ -94,8 +94,24 @@ public sealed partial class CryoPodWindow : FancyWindow
         HealthSection.Visible = hasPatient;
         EjectPatientButton.Disabled = !hasPatient;
 
+        // Friedmed Start - changes
         if (hasPatient)
-            HealthAnalyzer.Populate(msg.Health);
+        {
+            if (msg.Vitals is { } vitals)
+            {
+                var target = _entityManager.GetEntity(msg.Health.TargetEntity);
+                VitalsAnalyzer.Update((vitals, target!.Value, true));
+                VitalsAnalyzer.Visible = true;
+                HealthAnalyzer.Visible = false;
+            }
+            else
+            {
+                HealthAnalyzer.Populate(msg.Health);
+                VitalsAnalyzer.Visible = false;
+                HealthAnalyzer.Visible = true;
+            }
+        }
+        // Friedmed end
 
         // Reagents
         float? lowestTempRequirement = null;

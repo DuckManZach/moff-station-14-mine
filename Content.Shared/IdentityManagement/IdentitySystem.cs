@@ -49,6 +49,9 @@ public sealed partial class IdentitySystem : EntitySystem
         SubscribeLocalEvent<IdentityBlockerComponent, SeeIdentityAttemptEvent>(OnSeeIdentity);
         SubscribeLocalEvent<IdentityBlockerComponent, InventoryRelayedEvent<SeeIdentityAttemptEvent>>(OnRelaySeeIdentity);
         SubscribeLocalEvent<IdentityBlockerComponent, ItemMaskToggledEvent>(OnMaskToggled);
+        SubscribeLocalEvent<IdentityBlockerComponent, Content.Shared.StatusEffectNew.StatusEffectRelayedEvent<SeeIdentityAttemptEvent>>(OnRelayedSeeIdentity); // Friedmed
+        SubscribeLocalEvent<IdentityBlockerComponent, Content.Shared.StatusEffectNew.StatusEffectAppliedEvent>((_, _, ev) => QueueIdentityUpdate(ev.Target)); // Friedmed
+        SubscribeLocalEvent<IdentityBlockerComponent, Content.Shared.StatusEffectNew.StatusEffectRemovedEvent>((_, _, ev) => QueueIdentityUpdate(ev.Target)); // Friedmed
 
         SubscribeLocalEvent<IdentityComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<IdentityComponent, ComponentInit>(OnComponentInit);
@@ -63,6 +66,15 @@ public sealed partial class IdentitySystem : EntitySystem
 
         SubscribeLocalEvent<IdentityBlockerComponent, GetVerbsEvent<ExamineVerb>>(OnDetailedExamine);
     }
+
+    // Friedmed Start
+    private void OnRelayedSeeIdentity(Entity<IdentityBlockerComponent> ent, ref Content.Shared.StatusEffectNew.StatusEffectRelayedEvent<SeeIdentityAttemptEvent> args)
+    {
+        var argsArgs = args.Args;
+        OnSeeIdentity(ent, ref argsArgs);
+        args.Args = argsArgs;
+    }
+    // Friedmed end
 
     /// <summary>
     /// Iterates through all identities that need to be updated.

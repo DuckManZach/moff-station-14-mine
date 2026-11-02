@@ -264,6 +264,7 @@
   - BorgModuleChemical
   - BorgModuleTopicals
   - BorgModuleRescue
+  - BorgModuleOperatingRoom # Friedmed
 
   requiredModules:
   - simpleDescription: borg-module-requirement-topical

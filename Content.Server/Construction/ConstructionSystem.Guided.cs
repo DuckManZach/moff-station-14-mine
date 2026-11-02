@@ -86,11 +86,16 @@ namespace Content.Server.Construction
                     {
                         args.PushMarkup(Loc.GetString("deconstruction-header-text") + "\n");
                     }
+                    // Friedmed Start
                     else
                     {
                         // Try to get the name of the prototype on the node, if one exists.
                         var targetProtoId = target.Entity.GetId(uid, args.Examiner, new(EntityManager));
-                        if (targetProtoId != null
+                        if (target.LocalizedName is { } name)
+                        {
+                            args.PushMarkup(Loc.GetString(target.Header, ("targetName", Loc.GetString(name))) + "\n");
+                        }
+                        else if (targetProtoId != null
                             && ProtoMan.TryIndex(targetProtoId, out var targetPrototype))
                         {
                             args.PushMarkup(Loc.GetString("construction-component-to-create-prototype-header",
@@ -101,6 +106,7 @@ namespace Content.Server.Construction
                             args.PushMarkup(Loc.GetString("construction-component-to-create-header") + "\n");
                         }
                     }
+                    // Friedmed end
                 }
 
                 if (component.EdgeIndex == null && GetTargetEdge(uid, component) is { } targetEdge)
@@ -173,8 +179,13 @@ namespace Content.Server.Construction
                 // Initial construction header.
                 new()
                 {
-                    Localization = construction.Type == ConstructionType.Structure
-                        ? "construction-presenter-to-build" : "construction-presenter-to-craft",
+                    // Friedmed Start
+                    Localization = construction.Type switch {
+                        ConstructionType.Structure => "construction-presenter-to-build",
+                        ConstructionType.NodeToNode => "construction-presenter-to-node-to-node", // Friedmed
+                        _ => "construction-presenter-to-craft",
+                    },
+                    // Friedmed end
                     EntryNumber = step,
                 }
             };
@@ -191,7 +202,7 @@ namespace Content.Server.Construction
                     return null;
 
                 // First steps are handled specially.
-                if (step == 1)
+                if (step == 1 && construction.Type != ConstructionType.NodeToNode) // Friedmed
                 {
                     foreach (var graphStep in edge.Steps)
                     {

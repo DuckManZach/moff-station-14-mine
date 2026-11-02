@@ -676,7 +676,7 @@
     pocket1: PillCanisterTricordrazine
     pocket2: PillCanisterBicaridine
   inhand:
-  - SyringeSaline
+  - SyringeParacetamol # Friedmed
 
 - type: startingGear
   id: VisitorDentist
@@ -786,7 +786,7 @@
     pocket1: Ointment
     pocket2: Brutepack
   inhand:
-  - Bloodpack
+  - ChemistryBottleParacetamol # Friedmed
   - Gauze
 
 - type: startingGear
@@ -803,7 +803,7 @@
     pocket1: Ointment
     pocket2: Brutepack
   inhand:
-  - Bloodpack
+  - ChemistryBottleParacetamol # Friedmed
   - Gauze
 
 - type: startingGear

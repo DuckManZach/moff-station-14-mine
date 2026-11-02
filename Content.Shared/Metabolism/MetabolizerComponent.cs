@@ -64,10 +64,12 @@ public sealed partial class MetabolizerComponent : Component
         {
             SolutionName = BloodstreamComponent.DefaultBloodSolutionName,
             TransferSolutionName = BloodstreamComponent.DefaultMetabolitesSolutionName,
+            TransferMetabolized = true, // Friedmed
         },
         ["Metabolites"] = new()
         {
-            SolutionName = BloodstreamComponent.DefaultMetabolitesSolutionName
+            SolutionName = BloodstreamComponent.DefaultMetabolitesSolutionName, // Friedmed
+            PreviousStage = "Bloodstream", // Friedmed
         }
     };
 
@@ -100,6 +102,20 @@ public sealed partial class MetabolizerComponent : Component
     /// </summary>
     [DataField]
     public List<ProtoId<MetabolismStagePrototype>> Stages = new();
+
+    // Friedmed Start
+    /// <summary>
+    /// Friedmed - Set of reagents that are currently being metabolized
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<ProtoId<MetabolismStagePrototype>, HashSet<ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype>>> MetabolizingReagents = new()
+    {
+        ["Respiration"] = new(),
+        ["Digestion"] = new(),
+        ["Bloodstream"] = new(),
+        ["Metabolites"] = new(),
+    };
+    // Friedmed end
 }
 
 [DataDefinition]
@@ -149,4 +165,18 @@ public sealed partial class MetabolismSolutionEntry
     /// </summary>
     [DataField]
     public bool TransferSolutionOnBody = true;
+
+    // Friedmed Start
+    /// <summary>
+    /// Friedmed - If set, metabolizing reagents won't be removed unless they're absent in both direct and precursor forms in this stage
+    /// </summary>
+    [DataField]
+    public ProtoId<MetabolismStagePrototype>? PreviousStage;
+
+    /// <summary>
+    /// Friedmed - If set, metabolized reagents will also be transferred
+    /// </summary>
+    [DataField]
+    public bool TransferMetabolized = false;
+    // Friedmed end
 }

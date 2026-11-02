@@ -1,3 +1,4 @@
+using Content.Shared._Friedmed.Organs;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Chat;
 using Content.Shared.Damage.Systems;
@@ -18,6 +19,7 @@ using Content.Shared.Timing.Systems;
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
+using Content.Shared._Friedmed.Wounds;
 
 namespace Content.Shared.Medical;
 
@@ -191,14 +193,34 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
     {
         bool failedRevive = true;
         string? message = null;
+        TryComp<HeartDefibrillatableComponent>(target, out var heartDefibrillatable); // Friedmed
         if (_rotting.IsRotten(target))
         {
             message = Loc.GetString("defibrillator-rotten");
         }
-        else if (TryComp<UnrevivableComponent>(target, out var unrevivable))
+        else if (heartDefibrillatable is null && TryComp<UnrevivableComponent>(target, out var unrevivable)) // Friedmed
         {
             message = Loc.GetString(unrevivable.ReasonMessage);
         }
+        // Friedmed Start
+        else if (heartDefibrillatable is not null && _mobState.IsDead(target))
+        {
+            message = Loc.GetString(heartDefibrillatable.TargetIsDead);
+        }
+        else if (heartDefibrillatable is not null)
+        {
+            if (isOriginal)
+            {
+                var before = new BeforeTargetDefibrillatedEvent(new());
+                RaiseLocalEvent(target, ref before);
+
+                foreach (var beforeMessage in before.Messages)
+                {
+                    _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString(beforeMessage), InGameICChatType.Speak, true);
+                }
+            }
+        }
+        // Friedmed end
         else
         {
             TryComp<MobStateComponent>(target, out var targetMobState);

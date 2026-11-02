@@ -33,7 +33,7 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         SubscribeLocalEvent<StatusEffectContainerComponent, EntRemovedFromContainerMessage>(OnEntityRemoved);
         SubscribeLocalEvent<StatusEffectContainerComponent, TransferNewStatusEffectsEvent>(OnTransferStatuses); //Moffstation - Geras Patch
 
-        SubscribeLocalEvent<RejuvenateRemovedStatusEffectComponent, StatusEffectRelayedEvent<RejuvenateEvent>>(OnRejuvenate);
+        SubscribeLocalEvent<StatusEffectContainerComponent, RejuvenateEvent>(OnRejuvenate); // Friedmed
     }
 
     public override void Update(float frameTime)
@@ -114,11 +114,19 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         Dirty(args.Entity, statusComp);
     }
 
-    private void OnRejuvenate(Entity<RejuvenateRemovedStatusEffectComponent> ent,
-        ref StatusEffectRelayedEvent<RejuvenateEvent> args)
+    // Friedmed Start - Changes
+    private void OnRejuvenate(Entity<StatusEffectContainerComponent> ent,
+        ref RejuvenateEvent args)
     {
-        QueueDel(ent.Owner);
+        if (!TryEffectsWithComp<RejuvenateRemovedStatusEffectComponent>(ent, out var effects))
+            return;
+
+        foreach (var effect in effects)
+        {
+            Del(effect);
+        }
     }
+    // Friedmed end
 
     /// <summary>
     /// Applies the status effect, i.e. starts it after it has been added. Ensures delayed start times trigger when they should.

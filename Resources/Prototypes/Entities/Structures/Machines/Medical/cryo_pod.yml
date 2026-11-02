@@ -110,7 +110,7 @@
     coldDamageThreshold: 213
   - type: GuideHelp
     guides:
-    - Cryogenics
+    - OffbrandCryostasis # Friedmed
   - type: AmbientMusicMarkerMedical
 
 - type: entity

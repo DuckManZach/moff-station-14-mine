@@ -39,4 +39,7 @@ public sealed partial class DamageOverlayComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float OxygenLevel;
+
+    [DataField, AutoNetworkedField] // Friedmed
+    public bool AlwaysRenderAll; // Friedmed
 }

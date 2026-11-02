@@ -142,14 +142,22 @@
     - !type:RobustHarvest {}
   metabolisms:
     Bloodstream:
+      # Friedmed Start
+      metabolismRate: 0.2
+      statusEffects:
+      - statusEffect: StatusEffectPainkillersNegligibleRobustHarvest
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [Plant]
       effects:
       - !type:HealthChange
         damage:
           types:
-            Poison: -2
-            Blunt: -3
-            Slash: -3
-            Piercing: -3
+            Poison: -1
+      - !type:EvenHealthChange
+        damage:
+          Brute: -1
+      # Friedmed end
         conditions:
         - !type:MetabolizerTypeCondition
           type: [Plant]
@@ -170,7 +178,7 @@
         conditions:
           - !type:MetabolizerTypeCondition
             type: [Plant]
-          - !type:ReagentCondition
+          - !type:MetaboliteThresholdCondition # Friedmed
             reagent: RobustHarvest
             min: 80
 
@@ -189,6 +197,35 @@
       probability: 0.20
     - !type:PlantAdjustPotency
       amount: -3 # Match this with current rate of Robust Harvest potency increase
+  # Friedmed Start
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 1
+      statusEffects:
+      - statusEffect: StatusEffectHeartStrainSedin
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 2
+      - !type:SpawnEntity
+        entity: MobDionaNymph
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [Plant]
+        - !type:ReagentCondition
+          reagent: Sedin
+          min: 40
+      - !type:AdjustReagent
+        reagent: Sedin
+        amount: -20
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [Plant]
+        - !type:ReagentCondition
+          reagent: Sedin
+          min: 40
+  # Friedmed end
 
 - type: reagent
   id: WeedKiller
@@ -249,9 +286,22 @@
           type: [ Avali ]
           inverted: true
         # Moffstation end
+        # Friedmed Start
+        - !type:MetabolizerTypeCondition
+          type: [Plant]
+          inverted: true
+        # Friedmed end
         damage:
           types:
             Caustic: 1
+      # Friedmed Start
+      - !type:Satiate
+        satiationType: Hunger
+        factor: 1
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [Plant]
+      # Friedmed end
     Respiration:
       effects:
       - !type:HealthChange
@@ -309,7 +359,7 @@
         conditions:
         - !type:MetabolizerTypeCondition
           type: [ Vox ]
-        factor: -4
+        factor: -1 # Friedmed
       - !type:Oxygenate #macro, thaven don't suffocate from any gases
         scaling: true
         conditions:
@@ -359,6 +409,7 @@
           type: [ Avali ]
     # Moffstation end
     Bloodstream:
+      metabolismRate: 0.2 # Friedmed
       effects:
       - !type:HealthChange
         # Moffstation start - Allow avali to drink ammonia
@@ -367,6 +418,22 @@
           type: [ Avali ]
           inverted: true
         # Moffstation end
+        # Friedmed Start
+        - !type:MetabolizerTypeCondition
+          type: [ Plant ]
+          inverted: true
+        # Friedmed end
         damage:
           types:
-            Caustic: 1
+            Caustic: 0.5 # Friedmed
+      # Friedmed Start
+      - !type:HealthChange
+        damage:
+          types:
+            Heat: -0.5
+            Cold: -0.5
+            Shock: -0.5
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Plant ]
+      # Friedmed end

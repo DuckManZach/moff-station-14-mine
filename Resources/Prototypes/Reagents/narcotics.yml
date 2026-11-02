@@ -11,6 +11,8 @@
   meltingPoint: 170.0
   metabolisms:
     Bloodstream:
+      statusEffects: # Friedmed
+      - statusEffect: StatusEffectHeartStrainDesoxyephedrine # Friedmed
       # Main effects
       effects:
       - !type:HealthChange
@@ -28,7 +30,6 @@
           types:
             Poison: 3 # this is added to the base damage of the meth.
             Asphyxiation: 2
-
       # Main effects
       - !type:MovementSpeedModifier
         walkSpeedModifier: 1.20
@@ -76,6 +77,8 @@
   meltingPoint: 36.0
   metabolisms:
     Bloodstream:
+      statusEffects: # Friedmed
+      - statusEffect: StatusEffectHeartStrainEphedrine # Friedmed
       effects:
       # Main effects
       - !type:MovementSpeedModifier
@@ -152,6 +155,11 @@
   meltingPoint: 170.0
   metabolisms:
     Bloodstream:
+      statusEffects: # Friedmed
+      # Friedmed Start
+      - statusEffect: StatusEffectHeartStrainHyperzine
+      metabolismRate: 1.0
+      # Friedmed end
       effects:
       # Main effects
       - !type:MovementSpeedModifier
@@ -243,6 +251,8 @@
     amount: -1
   metabolisms:
     Bloodstream:
+      statusEffects: # Friedmed
+      - statusEffect: StatusEffectHeartStabilizationTHC # Friedmed
       effects:
       - !type:ModifyStatusEffect
         effectProto: StatusEffectSeeingRainbow
@@ -260,6 +270,16 @@
   plantMetabolism:
   - !type:PlantAdjustHealth
     amount: -5
+  metabolisms: # Friedmed
+    # Friedmed Start
+    Bloodstream:
+      statusEffects:
+      - statusEffect: StatusEffectHeartStrainNicotine
+      effects:
+      - !type:ModifyOrganDamage
+        category: Lungs
+        amount: 0.25
+    # Friedmed end
 
 # TODO: Replace these nonstandardized effects with generic brain damage
 - type: reagent
@@ -335,6 +355,8 @@
   meltingPoint: 128.0
   metabolisms:
     Bloodstream:
+      statusEffects: # Friedmed
+      - statusEffect: StatusEffectPainSuppressionNocturine # Friedmed
       effects: # It would be nice to have speech slurred or mumbly, but accents are a bit iffy atm. Same for distortion effects.
       - !type:MovementSpeedModifier
         walkSpeedModifier: 0.65

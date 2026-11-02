@@ -1,0 +1,4 @@
+namespace Content.Shared._Friedmed.StatusEffects;
+
+[RegisterComponent]
+public sealed partial class CannotUseHeadsetStatusEffectComponent : Component;

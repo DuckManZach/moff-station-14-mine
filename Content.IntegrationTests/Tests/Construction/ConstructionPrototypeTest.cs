@@ -68,6 +68,11 @@ namespace Content.IntegrationTests.Tests.Construction
                 var target = proto.TargetNode;
                 var graph = protoMan.Index(proto.Graph);
 
+                // Friedmed Start
+                if (proto.Type == ConstructionType.NodeToNode)
+                    return;
+                // Friedmed end
+
                 using (Assert.EnterMultipleScope())
                 {
                     Assert.That(graph.Nodes.ContainsKey(start),

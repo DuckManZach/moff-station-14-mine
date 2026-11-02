@@ -12,7 +12,7 @@
           amount: 2
         - id: Gauze
           amount: 2
-        - id: Bloodpack
+        - id: ChemistryBottleParacetamol # Friedmed
           amount: 2
         - id: BoxLatexGloves
         - id: BoxSterileMask
@@ -66,6 +66,10 @@
         - id: Saw
         - id: Hemostat
         - id: ClothingMaskSterile
+        - id: BoneGel # Friedmed
+        - id: BoneSetter # Friedmed
+        - id: VascularRecoupler # Friedmed
+        - id: Suture # Friedmed
 
 - type: entity
   parent: CrateMedical

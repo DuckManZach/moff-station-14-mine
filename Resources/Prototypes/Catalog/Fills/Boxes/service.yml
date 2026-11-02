@@ -57,3 +57,13 @@
     guides:
     - Botanical
     - Chemicals
+  # Friedmed Start
+  - type: Item
+    size: Large
+    shape:
+    - 0,0,4,2
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,4,2
+  # Friedmed end

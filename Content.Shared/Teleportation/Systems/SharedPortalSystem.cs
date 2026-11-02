@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._Friedmed.IV;
 using Content.Shared._Moffstation.Teleportation.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
@@ -39,6 +40,7 @@ public abstract partial class SharedPortalSystem : EntitySystem
     [Dependency] private TagSystem _tag = default!;
 
     [Dependency] private EntityQuery<PortalBlacklistComponent> _portalBlacklistQuery; // Moffstation - Portal Blacklist
+    [Dependency] private IVSystem _iv = default!; // Friedmed - IV ripping
 
     private const string PortalFixture = "portalFixture";
     private const string ProjectileFixture = "projectile";
@@ -131,6 +133,8 @@ public abstract partial class SharedPortalSystem : EntitySystem
         {
             return;
         }
+
+        _iv.RipOutIV(subject); // Friedmed - IV ripping
 
         if (TryComp<LinkedEntityComponent>(ent, out var link) && link.LinkedEntities.Count != 0)
         {

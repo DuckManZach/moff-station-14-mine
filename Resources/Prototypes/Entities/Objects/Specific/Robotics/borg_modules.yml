@@ -1039,6 +1039,15 @@
           - FitsInDispenser
           tags:
           - ChemDispensable
+    # Friedmed Start
+    - item: IVBag
+      hand:
+        emptyLabel: borg-slot-iv-bag-empty
+        emptyRepresentative: IVBag
+        whitelist:
+          tags:
+          - IVBag
+    # Friedmed end
   - type: BorgModuleIcon
     icon: { sprite: Interface/Actions/actions_borg.rsi, state: chem-module }
 

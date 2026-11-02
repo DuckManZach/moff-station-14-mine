@@ -216,6 +216,7 @@
     - ChemistryStatic
     - SurgeryStatic
     - ScienceModularHudModulesStatic # Moffstation - Modular Eyewear
+    - OffbrandSurgeryStatic # Friedmed
     dynamicPacks:
     - AdvancedTools
     - ScienceEquipment
@@ -279,6 +280,7 @@
     - CargoBoardsStatic
     - MedicalBoardsStatic
     - EngineeringBoardsStatic
+    - OffbrandCircuitboardsStatic # Friedmed
     dynamicPacks:
     - EngineeringBoards
     - CargoBoards
@@ -502,6 +504,8 @@
     - AACTabletStatic # Moffstation - AAC tablet
     - ModularHudFramesStatic # Moffstation - Modular Eyewear
     - MedicalModularHudModulesStatic # Moffstation - Modular Eyewear
+    - OffbrandSurgeryStatic # Friedmed
+    - OffbrandMedicalStatic # Friedmed
     dynamicPacks:
     - Chemistry
   - type: Machine

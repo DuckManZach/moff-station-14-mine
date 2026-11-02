@@ -289,7 +289,7 @@
       color: "#58abcc"
   - type: GuideHelp
     guides:
-    - Medical
+    - OffbrandMedical # Medical # Friedmed
 
 - type: entity
   id: BookHowToSurvive
@@ -337,7 +337,7 @@
   - type: GuideHelp
     guides:
     - Chemicals
-    - Chemist
+    - OffbrandChemist # Friedmed
 
 - type: entity
   id: BookAILawCompendium

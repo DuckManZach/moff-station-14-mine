@@ -25,7 +25,7 @@ namespace Content.Server.Examine
             SubscribeNetworkEvent<ExamineSystemMessages.RequestExamineInfoMessage>(ExamineInfoRequest);
         }
 
-        public override void SendExamineTooltip(EntityUid player, EntityUid target, FormattedMessage message, bool getVerbs, bool centerAtCursor)
+        public override void SendExamineTooltip(EntityUid player, EntityUid target, FormattedMessage message, bool getVerbs, bool centerAtCursor, bool showBody) // Friedmed
         {
             if (!TryComp<ActorComponent>(player, out var actor))
                 return;
@@ -37,11 +37,23 @@ namespace Content.Server.Examine
                 verbs = _verbSystem.GetLocalVerbs(target, player, typeof(ExamineVerb));
 
             var ev = new ExamineSystemMessages.ExamineInfoResponseMessage(
-                GetNetEntity(target), 0, message, verbs?.ToList(), centerAtCursor
+                GetNetEntity(target), 0, message, verbs?.ToList(), centerAtCursor, showBody: showBody // Friedmed
             );
 
             RaiseNetworkEvent(ev, session.Channel);
         }
+
+        // Friedmed Start - examine elaboration
+        public override void ElaborateExamineTooltip(EntityUid user, Enum key, FormattedMessage message)
+        {
+            if (!TryComp<ActorComponent>(user, out var actor))
+                return;
+
+            RaiseNetworkEvent(
+                new ExamineSystemMessages.ElaborateExamineTooltipMessage(key, message),
+                actor.PlayerSession.Channel);
+        }
+        // Friedmed end
 
         private void ExamineInfoRequest(ExamineSystemMessages.RequestExamineInfoMessage request, EntitySessionEventArgs eventArgs)
         {

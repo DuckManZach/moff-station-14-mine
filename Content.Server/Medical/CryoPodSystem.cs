@@ -4,6 +4,7 @@ using Content.Server.Medical.Components;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.NodeGroups;
 using Content.Server.NodeContainer.Nodes;
+using Content.Shared._Friedmed.Analyzers;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Damage.Systems;
@@ -20,6 +21,7 @@ public sealed partial class CryoPodSystem : SharedCryoPodSystem
     [Dependency] private HealthAnalyzerSystem _healthAnalyzerSystem = default!;
     [Dependency] private NodeContainerSystem _nodeContainer = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private VitalsAnalyzerSystem _vitalsAnalyzer = default!; // Friedmed
 
 
     public override void Initialize()
@@ -60,11 +62,12 @@ public sealed partial class CryoPodSystem : SharedCryoPodSystem
         var health = _healthAnalyzerSystem.GetHealthAnalyzerUiState(patient, true);
         health.ScanMode = true;
         var hasDamage = patient is null ? false : _damageable.GetTotalDamage(patient.Value) > 0;
+        var vitals = patient is null ? null : _vitalsAnalyzer.TakeSample(patient.Value); // Friedmed
 
         UI.ServerSendUiMessage(
             entity.Owner,
             CryoPodUiKey.Key,
-            new CryoPodUserMessage(gasMix, health, beakerCapacity, beaker, injecting, hasDamage)
+            new CryoPodUserMessage(gasMix, health, beakerCapacity, beaker, injecting, hasDamage, vitals) // Friedmed
         );
     }
 

@@ -1,3 +1,5 @@
+using System.Linq;
+using Content.Shared._Friedmed.Wounds;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
@@ -17,6 +19,8 @@ public abstract partial class SharedDamageOverlaySystem : EntitySystem
     [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private PerfusionSystem _perfusion = default!; // Friedmed
+    [Dependency] private PainSystem _pain = default!; // Friedmed
 
     [Dependency] private EntityQuery<InjurableComponent> _injurableQuery = default!;
     [Dependency] private EntityQuery<DamageableComponent> _damageableQuery = default!;
@@ -42,6 +46,14 @@ public abstract partial class SharedDamageOverlaySystem : EntitySystem
         UpdateOverlays(entity, args.MobState, args.Damageable, args.Threshold);
     }
 
+    // Friedmed Start
+    [SubscribeLocalEvent]
+    private void OnPotentiallyUpdateDamageOverlay(Entity<DamageOverlayComponent> entity, ref PotentiallyUpdateDamageOverlayEvent args)
+    {
+        UpdateOverlays(entity);
+    }
+    // Friedmed end
+
     protected void ClearOverlay(Entity<DamageOverlayComponent> entity)
     {
         entity.Comp.CurrentState = MobState.Alive;
@@ -49,12 +61,14 @@ public abstract partial class SharedDamageOverlaySystem : EntitySystem
         entity.Comp.CritLevel = 0f;
         entity.Comp.PainLevel = 0f;
         entity.Comp.OxygenLevel = 0f;
+        entity.Comp.AlwaysRenderAll = false; // Friedmed
 
         DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.CurrentState));
         DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.PainLevel));
         DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.OxygenLevel));
         DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.CritLevel));
         DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.DeadLevel));
+        DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.AlwaysRenderAll)); // Friedmed
     }
 
     //TODO: Jezi: adjust oxygen and hp overlays to use appropriate systems once bodysim is implemented
@@ -64,6 +78,58 @@ public abstract partial class SharedDamageOverlaySystem : EntitySystem
         MobThresholdsComponent? thresholds = null,
         InjurableComponent? injurable = null)
     {
+        // Friedmed Start
+        TryUpdateSimpleOverlays(entity, mobState, damageable, thresholds, injurable);
+        TryUpdateWoundableOverlays(entity);
+    }
+
+    private void TryUpdateWoundableOverlays(Entity<DamageOverlayComponent> entity)
+    {
+        if (!TryComp<PainComponent>(entity, out var pain) ||
+            !TryComp<ShockThresholdsComponent>(entity, out var shockThresholds) ||
+            !TryComp<BrainDamageThresholdsComponent>(entity, out var brainThresholds) ||
+            !TryComp<PerfusionComponent>(entity, out var perfusion))
+            return;
+
+        entity.Comp.AlwaysRenderAll = true;
+        entity.Comp.CurrentState = brainThresholds.CurrentState;
+        var maxBrain = brainThresholds.DamageStateThresholds.Keys.Max();
+        var maxShock = shockThresholds.Thresholds.Keys.Max();
+
+        switch (brainThresholds.CurrentState)
+        {
+            case MobState.Alive or MobState.Critical:
+            {
+                entity.Comp.CritLevel = FixedPoint2.Clamp(brainThresholds.DisplayDamage / maxBrain, 0, 1).Float();
+                entity.Comp.PainLevel = FixedPoint2.Clamp(_pain.GetShock((entity, pain)) / maxShock, 0, 1).Float();
+                entity.Comp.OxygenLevel = FixedPoint2.Clamp(1 - _perfusion.Spo2((entity, perfusion)), 0, 1).Float();
+                entity.Comp.DeadLevel = 0;
+                break;
+            }
+            case MobState.Dead:
+            {
+                entity.Comp.CritLevel = 0;
+                entity.Comp.PainLevel = 0;
+                entity.Comp.OxygenLevel = 0;
+                break;
+            }
+        }
+
+        DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.AlwaysRenderAll));
+        DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.CurrentState));
+        DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.PainLevel));
+        DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.OxygenLevel));
+        DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.CritLevel));
+        DirtyField(entity, entity.Comp, nameof(DamageOverlayComponent.DeadLevel));
+    }
+
+    private void TryUpdateSimpleOverlays(Entity<DamageOverlayComponent> entity,
+        MobStateComponent? mobState = null,
+        DamageableComponent? damageable = null,
+        MobThresholdsComponent? thresholds = null,
+        InjurableComponent? injurable = null)
+    {
+        // Friedmed end
         if (mobState == null && !_mobStateQuery.TryComp(entity, out mobState) ||
             thresholds == null && !_thresholdsQuery.TryComp(entity, out thresholds) ||
             damageable == null && !_damageableQuery.TryComp(entity, out damageable) ||
