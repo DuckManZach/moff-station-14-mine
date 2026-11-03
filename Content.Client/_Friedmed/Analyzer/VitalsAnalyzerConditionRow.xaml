@@ -1,0 +1,4 @@
+<BoxContainer xmlns="https://spacestation14.io" Orientation="Horizontal" MouseFilter="Pass">
+    <Label Name="ConditionName" HorizontalExpand="True" ClipText="True" />
+    <TextureRect Name="ConditionIcon" SetSize="18 18" Stretch="KeepAspectCentered" VerticalAlignment="Center" />
+</BoxContainer>

@@ -17,7 +17,7 @@ public sealed class StationaryVitalsAnalyzerBoundUserInterface : BoundUserInterf
 
     public Control CreateExamineControl()
     {
-        _control = new();
+        _control = new() { ShowBodyParts = false };
         Update();
         return _control;
     }

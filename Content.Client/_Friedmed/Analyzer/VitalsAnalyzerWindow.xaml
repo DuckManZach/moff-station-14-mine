@@ -2,10 +2,11 @@
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:ui="clr-namespace:Content.Client._Friedmed.Analyzer"
-    MaxHeight="525"
-    MinWidth="400">
+    MinSize="660 400"
+    SetSize="720 460">
 
     <ui:VitalsAnalyzerControl
         Name="VitalsAnalyzer" Access="Public"
+        VerticalExpand="True"
         Margin="16" />
 </controls:FancyWindow>

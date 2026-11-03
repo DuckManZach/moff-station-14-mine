@@ -1,0 +1,9 @@
+<PanelContainer xmlns="https://spacestation14.io">
+    <BoxContainer Orientation="Horizontal" Margin="6 3" SeparationOverride="8">
+        <BoxContainer Orientation="Vertical" SetWidth="120">
+            <ProgressBar Name="HealthBar" MinValue="0" MaxValue="1" MinHeight="2" />
+            <Label Name="PartName" ClipText="True" />
+        </BoxContainer>
+        <BoxContainer Name="Conditions" Orientation="Vertical" HorizontalExpand="True" />
+    </BoxContainer>
+</PanelContainer>

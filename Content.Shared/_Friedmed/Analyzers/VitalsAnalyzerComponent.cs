@@ -61,4 +61,54 @@ public sealed partial class VitalsData
 
     [DataField]
     public float BloodLevel;
+
+    /// Shock as a fraction of the highest pain threshold.
+    [DataField]
+    public float Pain;
+
+    [DataField]
+    public EntProtoId? PainStatus;
+
+    /// Only the parts with something to report, null when sampled without wounds.
+    [DataField]
+    public List<BodyPartData>? BodyParts;
+}
+
+[DataDefinition, Serializable, NetSerializable]
+public sealed partial class BodyPartData
+{
+    [DataField]
+    public EntProtoId Organ;
+
+    [DataField]
+    public float Health;
+
+    [DataField]
+    public bool Missing;
+
+    [DataField]
+    public List<BodyConditionData> Conditions = new();
+}
+
+[DataDefinition, Serializable, NetSerializable]
+public sealed partial class BodyConditionData
+{
+    [DataField]
+    public EntProtoId Wound;
+
+    [DataField]
+    public int Count;
+
+    [DataField]
+    public FixedPoint2 Damage;
+
+    [DataField]
+    public LocId? Description;
+
+    /// Summed over the grouped wounds, on the same scale as the bleed alert's severity.
+    [DataField]
+    public float BleedLevel;
+
+    [DataField]
+    public bool Tended;
 }

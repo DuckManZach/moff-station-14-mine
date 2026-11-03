@@ -11,23 +11,38 @@ spo2-nitrogen = SpN2
 
 # vitals monitor
 
+offbrand-vitals-pain = Pain
+offbrand-vitals-pain-none = None
 offbrand-vitals-spo2-value = {$value}%
 offbrand-vitals-brain-activity = Brain Activity
 offbrand-vitals-brain-activity-value = {$value}%
 
--offbrand-unit = [color=darkgray][font size=12][bold]{$unit}[/bold][/font][/color]
-
-offbrand-vitals-air = Air
 offbrand-vitals-respiratory-rate = Respiratory Rate
-offbrand-vitals-respiratory-rate-value = [color=white]{$value}[/color]{-offbrand-unit(unit: " breaths/minute")}
-offbrand-vitals-etco2-value = [color=white]{$value}[/color]{-offbrand-unit(unit: "mmHg")}
+offbrand-vitals-respiratory-rate-value = {$value}/min
+offbrand-vitals-etco2-value = {$value} mmHg
 
-offbrand-vitals-blood = Blood
 offbrand-vitals-blood-pressure = Blood Pressure
-offbrand-vitals-blood-pressure-value = [color=white]{$systolic}[/color][color=darkgray]/[/color][color=white]{$diastolic}[/color]
+offbrand-vitals-blood-pressure-value = {$systolic}/{$diastolic}
 offbrand-vitals-blood-volume = Blood Volume
-offbrand-vitals-blood-volume-value = [color=white]{$value}[/color][color=darkgray]%[/color]
+offbrand-vitals-blood-volume-value = {$value}%
 
-offbrand-vitals-heart = Heart
 offbrand-vitals-heart-rate = Heartrate
-offbrand-vitals-heart-rate-value = [color=white]{$value}[/color]{-offbrand-unit(unit: "bpm")}
+offbrand-vitals-heart-rate-value = {$value} bpm
+
+offbrand-vitals-capitalized = { CAPITALIZE($name) }
+offbrand-vitals-whole-body = Whole body
+offbrand-vitals-part-missing = Missing
+offbrand-vitals-part-damaged = Damaged
+
+offbrand-vitals-condition = { CAPITALIZE($name) }{ $count ->
+    [1] {""}
+   *[other] {" "}x{$count}
+}
+offbrand-vitals-condition-tended = {$condition} (tended)
+offbrand-vitals-condition-damage = Damage: {$damage}
+
+offbrand-vitals-reagent = { CAPITALIZE($reagent) } ({$amount}u)
+offbrand-vitals-reagent-tooltip =
+    In bloodstream: {$bloodstream}u
+    Metabolites: {$metabolites}u
+offbrand-vitals-non-medical-reagents = Non-medical reagents
