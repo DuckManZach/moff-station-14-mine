@@ -1,0 +1,223 @@
+# Colour jumpsuits
+- type: loadout
+  id: !type:CreateVariants
+    values: &ColourJumpsuits
+    - ClothingUniformJumpsuitColorBlack
+    - ClothingUniformJumpsuitColorBlue
+    - ClothingUniformJumpsuitColorDarkBlue
+    - ClothingUniformJumpsuitColorTeal
+    - ClothingUniformJumpsuitColorGreen
+    - ClothingUniformJumpsuitColorDarkGreen
+    - ClothingUniformJumpsuitColorOrange
+    - ClothingUniformJumpsuitColorMaroon
+    - ClothingUniformJumpsuitColorPink
+    - ClothingUniformJumpsuitColorPurple
+    - ClothingUniformJumpsuitColorLightBrown
+    - ClothingUniformJumpsuitColorBrown
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *ColourJumpsuits
+  groupBy: "colour jumpsuits"
+
+# Colour jumpskirts
+- type: loadout
+  id: !type:CreateVariants
+    values: &ColourJumpskirts
+    - ClothingUniformJumpskirtColorBlack
+    - ClothingUniformJumpskirtColorBlue
+    - ClothingUniformJumpskirtColorDarkBlue
+    - ClothingUniformJumpskirtColorTeal
+    - ClothingUniformJumpskirtColorGreen
+    - ClothingUniformJumpskirtColorDarkGreen
+    - ClothingUniformJumpskirtColorOrange
+    - ClothingUniformJumpskirtColorMaroon
+    - ClothingUniformJumpskirtColorPink
+    - ClothingUniformJumpskirtColorPurple
+    - ClothingUniformJumpskirtColorLightBrown
+    - ClothingUniformJumpskirtColorBrown
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *ColourJumpskirts
+  groupBy: "colour jumpskirts"
+
+# Casual jumpsuits
+- type: loadout
+  id: !type:CreateVariants
+    values: &CasualJumpsuits
+    - ClothingUniformJumpsuitCasualBlue
+    - ClothingUniformJumpsuitCasualGreen
+    - ClothingUniformJumpsuitCasualPurple
+    - ClothingUniformJumpsuitCasualRed
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *CasualJumpsuits
+  groupBy: "casual jumpsuits"
+
+# Casual jumpskirts
+- type: loadout
+  id: !type:CreateVariants
+    values: &CasualJumpskirts
+    - ClothingUniformJumpskirtCasualBlue
+    - ClothingUniformJumpskirtCasualGreen
+    - ClothingUniformJumpskirtCasualPurple
+    - ClothingUniformJumpskirtCasualRed
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *CasualJumpskirts
+  groupBy: "casual jumpskirts"
+
+# Turtlenecks
+- type: loadout
+  id: !type:CreateVariants
+    values: &Turtlenecks
+    - ClothingUniformTurtleneckColorWhite
+    - ClothingUniformTurtleneckColorGrey
+    - ClothingUniformTurtleneckColorBlack
+    - ClothingUniformTurtleneckColorBlue
+    - ClothingUniformTurtleneckColorDarkBlue
+    - ClothingUniformTurtleneckColorTeal
+    - ClothingUniformTurtleneckColorGreen
+    - ClothingUniformTurtleneckColorDarkGreen
+    - ClothingUniformTurtleneckColorYellow
+    - ClothingUniformTurtleneckColorOrange
+    - ClothingUniformTurtleneckColorRed
+    - ClothingUniformTurtleneckColorMaroon
+    - ClothingUniformTurtleneckColorPink
+    - ClothingUniformTurtleneckColorPurple
+    - ClothingUniformTurtleneckColorLightBrown
+    - ClothingUniformTurtleneckColorBrown
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *Turtlenecks
+  groupBy: "turtlenecks"
+
+# Turtleneck skirts
+- type: loadout
+  id: !type:CreateVariants
+    values: &TurtleneckSkirts
+    - ClothingUniformTurtleneckSkirtColorWhite
+    - ClothingUniformTurtleneckSkirtColorGrey
+    - ClothingUniformTurtleneckSkirtColorBlack
+    - ClothingUniformTurtleneckSkirtColorBlue
+    - ClothingUniformTurtleneckSkirtColorDarkBlue
+    - ClothingUniformTurtleneckSkirtColorTeal
+    - ClothingUniformTurtleneckSkirtColorGreen
+    - ClothingUniformTurtleneckSkirtColorDarkGreen
+    - ClothingUniformTurtleneckSkirtColorYellow
+    - ClothingUniformTurtleneckSkirtColorOrange
+    - ClothingUniformTurtleneckSkirtColorRed
+    - ClothingUniformTurtleneckSkirtColorMaroon
+    - ClothingUniformTurtleneckSkirtColorPink
+    - ClothingUniformTurtleneckSkirtColorPurple
+    - ClothingUniformTurtleneckSkirtColorLightBrown
+    - ClothingUniformTurtleneckSkirtColorBrown
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *TurtleneckSkirts
+  groupBy: "turtleneck skirts"
+
+# Hawaiian shirts
+- type: loadout
+  id: !type:CreateVariants
+    values: &HawaiianShirts
+    - ClothingUniformJumpsuitHawaiBlack
+    - ClothingUniformJumpsuitHawaiBlue
+    - ClothingUniformJumpsuitHawaiRed
+    - ClothingUniformJumpsuitHawaiYellow
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *HawaiianShirts
+  groupBy: "hawaiian shirts"
+
+# Bikinis
+- type: loadout
+  id: !type:CreateVariants
+    values: &Bikinis
+    - ClothingUniformBikiniWhite
+    - ClothingUniformBikiniBlack
+    - ClothingUniformBikiniBlue
+    - ClothingUniformBikiniRed
+    - ClothingUniformBikiniGreen
+    - ClothingUniformBikiniYellow
+    - ClothingUniformBikiniPink
+    - ClothingUniformNtBikini
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *Bikinis
+  groupBy: "bikinis"
+
+# One-pieces
+- type: loadout
+  id: !type:CreateVariants
+    values: &OnePieces
+    - ClothingUniformOnepieceWhite
+    - ClothingUniformOnepieceBlack
+    - ClothingUniformOnepieceBlue
+    - ClothingUniformOnepieceRed
+    - ClothingUniformOnepieceGreen
+    - ClothingUniformOnepieceYellow
+    - ClothingUniformOnepiecePink
+    - ClothingUniformHeartOnepiece
+    - ClothingUniformOldtimeyOnepiece
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *OnePieces
+  groupBy: "one-pieces"
+
+# Swim shorts
+- type: loadout
+  id: !type:CreateVariants
+    values: &SwimShorts
+    - ClothingUniformShortsWhite
+    - ClothingUniformShortsBlack
+    - ClothingUniformShortsBlue
+    - ClothingUniformShortsRed
+    - ClothingUniformShortsGreen
+    - ClothingUniformShortsYellow
+    - ClothingUniformShortsPink
+    - ClothingUniformMedShorts
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *SwimShorts
+  groupBy: "swim shorts"
+
+# Swimwear
+- type: loadout
+  id: !type:CreateVariants
+    values: &Swimwear
+    - ClothingUniformSpeedo
+    - ClothingUniformShirtkini
+    - ClothingUniformMedkini
+    - ClothingUniformHonkini
+    - ClothingUniformSundress
+    - ClothingUniformMermaid
+    - ClothingUniformFishsuit
+    - ClothingUniformWetsuitOrange
+    - ClothingUniformCoconutSkirt
+    - ClothingUniformGrassSkirt
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *Swimwear
+  groupBy: "swimwear"
+
+# Costume outfits
+- type: loadout
+  id: !type:CreateVariants
+    values: &CostumeOutfits
+    - ClothingUniformJumpsuitKimono
+    - ClothingUniformJumpskirtSerafuku
+    - ClothingUniformJumpskirtMaid
+    - ClothingUniformJumpskirtDressWitch
+    - ClothingUniformJumpsuitSgtPepperBlue
+    - ClothingUniformJumpsuitDameDane
+    - ClothingUniformJumpsuitGladiator
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *CostumeOutfits
+  groupBy: "costume outfits"
+
+# Other
+- type: loadout
+  id: ClothingUniformJumpsuitFlannel
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitFlannel

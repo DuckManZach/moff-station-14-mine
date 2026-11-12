@@ -40,9 +40,9 @@
 - type: startingGear
   id: CaptainGear
   equipment:
-    shoes: ClothingShoesBootsLaceup
+    # shoes: ClothingShoesBootsLaceup # Moff - Expanded wardrobe
   # eyes: ClothingEyesGlassesCommand  # Moffstation - Eyepatches!
-    gloves: ClothingHandsGlovesCaptain
+    # gloves: ClothingHandsGlovesCaptain # Moff - Expanded wardrobe
     #id: CaptainPDA # Moffstation - New PDAs
     ears: ClothingHeadsetAltCommand
   storage:

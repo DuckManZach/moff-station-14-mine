@@ -20,7 +20,7 @@
 - type: startingGear
   id: MedicalInternGear
   equipment:
-    shoes: ClothingShoesColorWhite
+    # shoes: ClothingShoesColorWhite # Moff - Expanded wardrobe
     id: MedicalInternPDA
     ears: ClothingHeadsetMedical
     pocket2: BookMedicalReferenceBook

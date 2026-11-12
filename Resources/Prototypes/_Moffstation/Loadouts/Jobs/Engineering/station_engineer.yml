@@ -28,6 +28,7 @@
   id: StationEngineerOrangeCap
   equipment:
     head: ClothingHeadHatOrangesoft
+  groupBy: "softcaps"
 # Mask
 
 # Neck

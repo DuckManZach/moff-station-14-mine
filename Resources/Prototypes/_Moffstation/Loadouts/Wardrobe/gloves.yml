@@ -1,0 +1,20 @@
+# Colour gloves
+- type: loadout
+  id: !type:CreateVariants
+    values: &ColourGloves
+    - ClothingHandsGlovesColorGray
+    - ClothingHandsGlovesColorBrown
+    - ClothingHandsGlovesColorRed
+    - ClothingHandsGlovesColorGreen
+    - ClothingHandsGlovesColorTeal
+    - ClothingHandsGlovesColorBlue
+  equipment:
+    gloves: !type:CreateVariants
+      values: *ColourGloves
+  groupBy: "colour gloves"
+
+# Other
+- type: loadout
+  id: ClothingHandsGlovesFingerless
+  equipment:
+    gloves: ClothingHandsGlovesFingerless

@@ -1,0 +1,46 @@
+# Colour shoes
+- type: loadout
+  id: !type:CreateVariants
+    values: &ColourShoes
+    - ClothingShoesColorRed
+    - ClothingShoesColorOrange
+    - ClothingShoesColorYellow
+    - ClothingShoesColorGreen
+    - ClothingShoesColorPurple
+  equipment:
+    shoes: !type:CreateVariants
+      values: *ColourShoes
+  groupBy: "colour shoes"
+
+# Cowboy boots
+- type: loadout
+  id: !type:CreateVariants
+    values: &CowboyBoots
+    - ClothingShoesBootsCowboyBrown
+    - ClothingShoesBootsCowboyWhite
+  equipment:
+    shoes: !type:CreateVariants
+      values: *CowboyBoots
+  groupBy: "cowboy boots"
+
+# Novelty socks
+- type: loadout
+  id: !type:CreateVariants
+    values: &NoveltySocks
+    - ClothingUnderSocksCoder
+    - ClothingUnderSocksBee
+  equipment:
+    shoes: !type:CreateVariants
+      values: *NoveltySocks
+  groupBy: "novelty socks"
+
+# Other
+- type: loadout
+  id: ClothingShoesHighheelBoots
+  equipment:
+    shoes: ClothingShoesHighheelBoots
+
+- type: loadout
+  id: ClothingShoesDameDane
+  equipment:
+    shoes: ClothingShoesDameDane

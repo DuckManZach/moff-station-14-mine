@@ -25,6 +25,7 @@
   - LeatherSatchel  # Moffstation - Allow picking leather satchel
 
 - type: loadoutGroup
+  parent: MoffWardrobeShoes # Moff - Expanded wardrobe
   id: MedicalShoes
   name: loadout-group-medical-doctor-shoes
   loadouts:
@@ -46,6 +47,7 @@
 # Chief Medical Officer
 
 - type: loadoutGroup
+  parent: MoffWardrobeHead # Moff - Expanded wardrobe
   id: ChiefMedicalOfficerHead
   name: loadout-group-chief-medical-officer-head
   minLimit: 0
@@ -54,6 +56,7 @@
   - CMOMedicalHeadMirror
 
 - type: loadoutGroup
+  parent: MoffWardrobeJumpsuit # Moff - Expanded wardrobe
   id: ChiefMedicalOfficerJumpsuit
   name: loadout-group-chief-medical-officer-jumpsuit
   loadouts:
@@ -70,6 +73,7 @@
   # Moffstation - End
 
 - type: loadoutGroup
+  parent: [ MoffWardrobeMedicalOuterClothing, MoffWardrobeOuterClothing ] # Moff - Expanded wardrobe
   id: ChiefMedicalOfficerOuterClothing
   name: loadout-group-chief-medical-officer-outerclothing
   minLimit: 0
@@ -99,6 +103,7 @@
 # Moffstation - End - Department Heads can use any department Bag
 
 - type: loadoutGroup
+  parent: MoffWardrobeNeck # Moff - Expanded wardrobe
   id: ChiefMedicalOfficerNeck
   name: loadout-group-chief-medical-officer-neck
   minLimit: 0
@@ -108,6 +113,7 @@
   - ChiefMedicalOfficerScarf  # Moffstation - CMO scarf
 
 - type: loadoutGroup
+  parent: MoffWardrobeShoes # Moff - Expanded wardrobe
   id: ChiefMedicalOfficerShoes
   name: loadout-group-chief-medical-officer-shoes
   loadouts:
@@ -123,6 +129,7 @@
 # Medical Doctor
 
 - type: loadoutGroup
+  parent: MoffWardrobeHead # Moff - Expanded wardrobe
   id: MedicalDoctorHead
   name: loadout-group-medical-doctor-head
   minLimit: 0
@@ -140,6 +147,7 @@
   - NurseHat
 
 - type: loadoutGroup
+  parent: MoffWardrobeJumpsuit # Moff - Expanded wardrobe
   id: MedicalDoctorJumpsuit
   name: loadout-group-medical-doctor-jumpsuit
   loadouts:
@@ -161,6 +169,7 @@
   # Moffstation - End
 
 - type: loadoutGroup
+  parent: [ MoffWardrobeMedicalOuterClothing, MoffWardrobeOuterClothing ] # Moff - Expanded wardrobe
   id: MedicalDoctorOuterClothing
   name: loadout-group-medical-doctor-outerclothing
   minLimit: 0
@@ -199,6 +208,7 @@
 # Medical Intern
 
 - type: loadoutGroup
+  parent: MoffWardrobeJumpsuit # Moff - Expanded wardrobe
   id: MedicalInternJumpsuit
   name: loadout-group-medical-intern-jumpsuit
   loadouts:
@@ -224,6 +234,7 @@
   #Moffstation - End - Chemist Outfits
 
 - type: loadoutGroup
+  parent: MoffWardrobeJumpsuit # Moff - Expanded wardrobe
   id: ChemistJumpsuit
   name: loadout-group-chemist-jumpsuit
   loadouts:
@@ -232,6 +243,7 @@
   - ChemistSweater # Moffstation - Chemist outfits
 
 - type: loadoutGroup
+  parent: [ MoffWardrobeMedicalOuterClothing, MoffWardrobeOuterClothing ] # Moff - Expanded wardrobe
   id: ChemistOuterClothing
   name: loadout-group-chemist-outerclothing
   minLimit: 0
@@ -252,6 +264,7 @@
   #- ChemistGloves
 
 - type: loadoutGroup
+  parent: MoffWardrobeShoes # Moff - Expanded wardrobe
   id: ChemistShoes
   name: loadout-group-chemist-shoes
   loadouts:
@@ -277,6 +290,7 @@
 # Paramedic
 
 - type: loadoutGroup
+  parent: MoffWardrobeHead # Moff - Expanded wardrobe
   id: ParamedicHead
   name: loadout-group-paramedic-head
   minLimit: 0
@@ -284,6 +298,7 @@
   - ParamedicHead
 
 - type: loadoutGroup
+  parent: MoffWardrobeJumpsuit # Moff - Expanded wardrobe
   id: ParamedicJumpsuit
   name: loadout-group-paramedic-jumpsuit
   loadouts:
@@ -292,6 +307,7 @@
   - ParamedicSpeedsuit # Moffstation
 
 - type: loadoutGroup
+  parent: [ MoffWardrobeMedicalOuterClothing, MoffWardrobeOuterClothing ] # Moff - Expanded wardrobe
   id: ParamedicOuterClothing
   name: loadout-group-paramedic-outerclothing
   minLimit: 0
@@ -300,6 +316,7 @@
   - ParamedicWintercoat
 
 - type: loadoutGroup
+  parent: MoffWardrobeShoes # Moff - Expanded wardrobe
   id: ParamedicShoes
   name: loadout-group-paramedic-shoes
   loadouts:

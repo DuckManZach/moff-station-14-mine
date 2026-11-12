@@ -21,7 +21,7 @@
 - type: startingGear
   id: LawyerGear
   equipment:
-    shoes: ClothingShoesBootsLaceup
+    # shoes: ClothingShoesBootsLaceup # Moff - Expanded wardrobe
 #    id: LawyerPDA # Moffstation - PDA loadouts
     ears: ClothingHeadsetService # Moffstation
   inhand:

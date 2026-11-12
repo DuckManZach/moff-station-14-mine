@@ -20,7 +20,7 @@
 - type: startingGear
   id: ResearchAssistantGear
   equipment:
-    shoes: ClothingShoesColorWhite
+    # shoes: ClothingShoesColorWhite # Moff - Expanded wardrobe
     id: ResearchAssistantPDA
     ears: ClothingHeadsetScience
     pocket2: BookScientistsGuidebook

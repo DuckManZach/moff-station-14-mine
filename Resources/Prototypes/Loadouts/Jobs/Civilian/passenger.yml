@@ -33,11 +33,13 @@
   id: GreyJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorGrey
+  groupBy: "colour jumpsuits" # Moff - Expanded wardrobe
 
 - type: loadout
   id: GreyJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtColorGrey
+  groupBy: "colour jumpskirts" # Moff - Expanded wardrobe
 
 # Rainbow
 - type: loadout
@@ -119,6 +121,7 @@
   id: BlackShoes
   equipment:
     shoes: ClothingShoesColorBlack
+  groupBy: "colour shoes" # Moff - Expanded wardrobe
 
 - type: loadout
   id: WinterBoots

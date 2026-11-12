@@ -28,8 +28,8 @@
 - type: startingGear
   id: SecurityCadetGear
   equipment:
-    shoes: ClothingShoesBootsJackFilled
-    outerClothing: ClothingOuterArmorBasic
+    # shoes: ClothingShoesBootsJackFilled # Moff - Expanded wardrobe
+    # outerClothing: ClothingOuterArmorBasic # Moff - Expanded wardrobe
     id: SecurityCadetPDA
     ears: ClothingHeadsetSecurity
     belt: ClothingBeltSecurityFilled

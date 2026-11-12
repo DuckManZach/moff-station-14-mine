@@ -24,7 +24,7 @@
 - type: startingGear
   id: BartenderGear
   equipment:
-    shoes: ClothingShoesColorBlack
+    # shoes: ClothingShoesColorBlack # Moff - Expanded wardrobe
     #id: BartenderPDA # Moffstation - pda loadouts
     ears: ClothingHeadsetService
   #storage:

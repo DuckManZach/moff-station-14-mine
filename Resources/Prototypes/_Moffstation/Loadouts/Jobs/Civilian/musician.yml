@@ -102,5 +102,6 @@
   id: CowboyShoes
   equipment:
     shoes: ClothingShoesBootsCowboyBlack
+  groupBy: "cowboy boots"
 
 # Eyewear

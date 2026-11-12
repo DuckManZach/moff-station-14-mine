@@ -14,7 +14,7 @@
 - type: startingGear
   id: ReporterGear
   equipment:
-    shoes: ClothingShoesBootsLaceup # Moffstation
+    # shoes: ClothingShoesColorWhite # Moff - Expanded wardrobe
 #    id: ReporterPDA # Moffstation - PDA loadouts
     ears: ClothingHeadsetService
   #storage:

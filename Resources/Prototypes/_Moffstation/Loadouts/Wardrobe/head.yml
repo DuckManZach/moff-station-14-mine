@@ -1,0 +1,111 @@
+# Softcaps
+- type: loadout
+  id: !type:CreateVariants
+    values: &Softcaps
+    - ClothingHeadHatBlacksoft
+    - ClothingHeadHatGreysoft
+    - ClothingHeadHatBluesoft
+    - ClothingHeadHatGreensoft
+    - ClothingHeadHatRedsoft
+  equipment:
+    head: !type:CreateVariants
+      values: *Softcaps
+  groupBy: "softcaps"
+
+# Flatcaps
+- type: loadout
+  id: !type:CreateVariants
+    values: &Flatcaps
+    - ClothingHeadHatGreyFlatcap
+    - ClothingHeadHatBrownFlatcap
+  equipment:
+    head: !type:CreateVariants
+      values: *Flatcaps
+  groupBy: "flatcaps"
+
+# Bandanas
+- type: loadout
+  id: !type:CreateVariants
+    values: &Bandanas
+    - ClothingHeadBandBlue
+    - ClothingHeadBandGreen
+  equipment:
+    head: !type:CreateVariants
+      values: *Bandanas
+  groupBy: "bandanas"
+
+# Cowboy hats
+- type: loadout
+  id: !type:CreateVariants
+    values: &CowboyHats
+    - ClothingHeadHatCowboyBrown
+    - ClothingHeadHatCowboyBlack
+    - ClothingHeadHatCowboyWhite
+    - ClothingHeadHatCowboyGrey
+  equipment:
+    head: !type:CreateVariants
+      values: *CowboyHats
+  groupBy: "cowboy hats"
+
+# Paper sacks
+- type: loadout
+  id: !type:CreateVariants
+    values: &PaperSacks
+    - ClothingHeadPaperSack
+    - ClothingHeadPaperSackSmile
+  equipment:
+    head: !type:CreateVariants
+      values: *PaperSacks
+  groupBy: "paper sacks"
+
+# Winter hats
+- type: loadout
+  id: !type:CreateVariants
+    values: &WinterHats
+    - ClothingHeadHatCanadaBeanie
+    - ClothingHeadHatSantahat
+    - ClothingHeadHatXmasCrown
+  equipment:
+    head: !type:CreateVariants
+      values: *WinterHats
+  groupBy: "winter hats"
+
+# Sunhats
+- type: loadout
+  id: !type:CreateVariants
+    values: &Sunhats
+    - ClothingHeadHatSunhat
+    - ClothingHeadHatClownSunhat
+  equipment:
+    head: !type:CreateVariants
+      values: *Sunhats
+  groupBy: "sunhats"
+
+# Novelty hats
+- type: loadout
+  id: !type:CreateVariants
+    values: &NoveltyHats
+    - ClothingHeadFishCap
+    - ClothingHeadRastaHat
+    - ClothingHeadPropellerHat
+    - ClothingHeadHatSombrero
+    - ClothingHeadHatCasa
+  equipment:
+    head: !type:CreateVariants
+      values: *NoveltyHats
+  groupBy: "novelty hats"
+
+# Costume hats
+- type: loadout
+  id: !type:CreateVariants
+    values: &CostumeHats
+    - ClothingHeadHatCatEars
+    - ClothingHeadHatMaid
+    - ClothingHeadHatPwig
+    - ClothingHeadHatShrineMaidenWig
+    - ClothingHeadHatGladiator
+    - MoffClothingHeadGhostHeadband
+  equipment:
+    head: !type:CreateVariants
+      values: *CostumeHats
+  groupBy: "costume hats"

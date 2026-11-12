@@ -12,6 +12,7 @@
   - ChiefMedicalOfficerOuterClothing
   - ChiefMedicalOfficerNeck
   - ChiefMedicalOfficerShoes
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - SurvivalMedical
@@ -31,6 +32,8 @@
   - MedicalBackpack
   - MedicalDoctorOuterClothing
   - MedicalShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   # - MedicalDoctorPDA # Moffstation - Moved up in list for title loadouts
   - Glasses
   - AssistiveItems
@@ -45,6 +48,11 @@
   groups:
   - GroupTankHarness
   - MedicalInternJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MedicalShoes # Moff - Expanded wardrobe
+  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - MedicalBackpack
   - Glasses
   - AssistiveItems
@@ -63,6 +71,9 @@
   - ChemistBackpack
   - ChemistOuterClothing
   - ChemistShoes
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - SurvivalMedical
@@ -82,6 +93,8 @@
   - MedicalBackpack
   - ParamedicOuterClothing
   - ParamedicShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - SurvivalMedical

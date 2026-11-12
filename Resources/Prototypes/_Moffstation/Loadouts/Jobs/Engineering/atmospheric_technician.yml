@@ -39,6 +39,7 @@
   id: AtmosphericTechnicianYellowCap
   equipment:
     head: ClothingHeadHatYellowsoft
+  groupBy: "softcaps"
 
 # Mask
 

@@ -3,3 +3,13 @@
   id: EyePatch
   equipment:
     eyes: ClothingEyesEyepatch
+
+- type: loadout
+  id: ClothingEyesGlassesCheapSunglasses
+  equipment:
+    eyes: ClothingEyesGlassesCheapSunglasses
+
+- type: loadout
+  id: ClothingEyesGlassesSunglasses
+  equipment:
+    eyes: ClothingEyesGlassesSunglasses

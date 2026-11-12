@@ -92,6 +92,7 @@
   id: ChaplainPlagueSuit
   equipment:
     outerClothing: ClothingOuterPlagueSuit
+  groupBy: "costume robes" # Moff - Expanded wardrobe
 
 - type: loadout
   id: ChaplainNunRobe
@@ -113,6 +114,7 @@
   id: BlackSandals
   equipment:
     shoes: ClothingShoesSandalsBlack
+  groupBy: "sandals" # Moff - Expanded wardrobe
 
 - type: loadout
   id: BrownSandals

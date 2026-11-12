@@ -26,8 +26,10 @@
   id: TramDriverGlovesWhite
   equipment:
     gloves: ClothingHandsGlovesColorWhite
+  groupBy: "colour gloves" # Moff - Expanded wardrobe
 
 - type: loadout
   id: TramDriverGlovesBlack
   equipment:
     gloves: ClothingHandsGlovesColorBlack
+  groupBy: "colour gloves" # Moff - Expanded wardrobe

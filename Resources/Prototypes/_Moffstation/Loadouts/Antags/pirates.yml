@@ -20,11 +20,13 @@
   id: HatHeadBandRed
   equipment:
     head: ClothingHeadBandRed
+  groupBy: "bandanas"
 
 - type: loadout
   id: HatHeadBandBlack
   equipment:
     head: ClothingHeadBandBlack
+  groupBy: "bandanas"
 
 - type: loadout
   id: HatHeadBandBrown

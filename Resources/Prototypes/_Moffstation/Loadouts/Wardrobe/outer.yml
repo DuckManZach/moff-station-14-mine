@@ -1,0 +1,46 @@
+# Flannel jackets
+- type: loadout
+  id: !type:CreateVariants
+    values: &FlannelJackets
+    - ClothingOuterFlannelRed
+    - ClothingOuterFlannelBlue
+    - ClothingOuterFlannelGreen
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *FlannelJackets
+  groupBy: "flannel jackets"
+
+# Ponchos
+- type: loadout
+  id: !type:CreateVariants
+    values: &Ponchos
+    - ClothingOuterPoncho
+    - ClothingOuterPonchoClassic
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *Ponchos
+  groupBy: "ponchos"
+
+# Jackets
+- type: loadout
+  id: !type:CreateVariants
+    values: &Jackets
+    - ClothingOuterCoatBomber
+    - ClothingOuterCoatTrench
+    - ClothingOuterDameDane
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *Jackets
+  groupBy: "jackets"
+
+# Costume robes
+- type: loadout
+  id: !type:CreateVariants
+    values: &CostumeRobes
+    - ClothingOuterSanta
+    - ClothingOuterSuitWitchRobes
+    - ClothingOuterSuitShrineMaiden
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *CostumeRobes
+  groupBy: "costume robes"

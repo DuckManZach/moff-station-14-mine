@@ -64,6 +64,13 @@ loadout-group-passenger-id = Passenger ID
 loadout-group-prisoner-id = Prisoner ID
 
 loadout-show-all = Show Unavailable Items
+loadout-search-placeholder = Search...
+
+loadout-group-wardrobe-head = Head
+loadout-group-wardrobe-neck = Neck
+loadout-group-wardrobe-gloves = Gloves
+loadout-group-wardrobe-shoes = Shoes
+loadout-group-wardrobe-outerclothing = Outer clothing
 
 loadout-group-drink-bottle = Species-Specific Bottle
 

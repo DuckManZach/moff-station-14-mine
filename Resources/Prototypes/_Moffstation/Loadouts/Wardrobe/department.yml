@@ -1,0 +1,49 @@
+# Security
+- type: loadout
+  id: ClothingUniformJumpsuitSecBlue
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSecBlue
+
+# Bartender
+- type: loadout
+  id: ClothingUniformJumpsuitJacketMonkey
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitJacketMonkey
+  groupBy: "bartender jumpsuits"
+
+# Job starting gear moved into loadouts
+- type: loadout
+  id: ClothingHandsGlovesCaptain
+  equipment:
+    gloves: ClothingHandsGlovesCaptain
+
+- type: loadout
+  id: ClothingHandsGlovesHop
+  equipment:
+    gloves: ClothingHandsGlovesHop
+
+- type: loadout
+  id: ClothingShoesChef
+  equipment:
+    shoes: ClothingShoesChef
+
+- type: loadout
+  id: ClothingShoesGaloshes
+  equipment:
+    shoes: ClothingShoesGaloshes
+
+- type: loadout
+  id: ClothingShoesLeather
+  equipment:
+    shoes: ClothingShoesLeather
+
+# Medical
+- type: loadout
+  id: !type:CreateVariants
+    values: &MedicalWinterCoats
+    - ClothingOuterWinterViro
+    - ClothingOuterWinterGen
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *MedicalWinterCoats
+  groupBy: "medical winter coats"

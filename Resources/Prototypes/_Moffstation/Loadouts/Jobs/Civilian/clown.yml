@@ -95,6 +95,7 @@
   id: ClownSandals
   equipment:
     shoes: ClothingShoesClownSandals
+  groupBy: "sandals"
 
 - type: loadout
   id: ClownSlippers

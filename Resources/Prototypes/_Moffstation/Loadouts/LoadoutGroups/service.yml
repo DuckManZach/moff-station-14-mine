@@ -75,6 +75,7 @@
   - ClownMaskBanana
 
 - type: loadoutGroup
+  parent: MoffWardrobeNeck
   id: TheatreNeck
   name: loadout-group-theatre-neck
   minLimit: 0
@@ -123,6 +124,7 @@
   - PierrotPDA
 
 - type: loadoutGroup
+  parent: MoffWardrobeShoes
   id: MimeShoes
   name: loadout-group-mime-shoes
   loadouts:
@@ -141,6 +143,7 @@
   - RockStarPDA
 
 - type: loadoutGroup
+  parent: MoffWardrobeHead
   id: MusicianHead
   name: loadout-group-musician-head
   minLimit: 0
@@ -151,6 +154,7 @@
   - RockstarWig
 
 - type: loadoutGroup
+  parent: MoffWardrobeShoes
   id: MusicianShoes
   name: loadout-group-musician-shoes
   loadouts:

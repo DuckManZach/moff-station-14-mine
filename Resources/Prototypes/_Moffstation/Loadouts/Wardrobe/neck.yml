@@ -1,0 +1,42 @@
+# Striped scarves
+- type: loadout
+  id: !type:CreateVariants
+    values: &StripedScarves
+    - ClothingNeckScarfStripedBlack
+    - ClothingNeckScarfStripedRed
+    - ClothingNeckScarfStripedGreen
+    - ClothingNeckScarfStripedBlue
+    - ClothingNeckScarfStripedLightBlue
+    - ClothingNeckScarfStripedBrown
+    - ClothingNeckScarfStripedOrange
+    - ClothingNeckScarfStripedPurple
+  equipment:
+    neck: !type:CreateVariants
+      values: *StripedScarves
+  groupBy: "striped scarves"
+
+# Pride scarves
+- type: loadout
+  id: !type:CreateVariants
+    values: &PrideScarves
+    - ClothingNeckScarfStripedRainbow
+    - ClothingNeckScarfStripedAce
+    - ClothingNeckScarfStripedAro
+    - ClothingNeckScarfStripedAroace
+    - ClothingNeckScarfStripedBiSexual
+    - ClothingNeckScarfStripedGay
+    - ClothingNeckScarfStripedInter
+    - ClothingNeckScarfStripedLesbian
+    - ClothingNeckScarfStripedNonBinary
+    - ClothingNeckScarfStripedPan
+    - ClothingNeckScarfStripedTrans
+  equipment:
+    neck: !type:CreateVariants
+      values: *PrideScarves
+  groupBy: "pride scarves"
+
+# Other
+- type: loadout
+  id: ClothingNeckLifeguardWhistle
+  equipment:
+    neck: ClothingNeckLifeguardWhistle

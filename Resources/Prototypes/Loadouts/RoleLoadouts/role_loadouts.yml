@@ -8,6 +8,8 @@
   - CaptainJumpsuit
   - CaptainBackpack
   - CaptainOuterClothing
+  - MoffWardrobeGlovesCaptain # Moff - Expanded wardrobe
+  - MoffWardrobeShoesLaceup # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - Survival
@@ -26,6 +28,8 @@
   - HoPJumpsuit
   - HoPBackpack
   - HoPOuterClothing
+  - MoffWardrobeGlovesHop # Moff - Expanded wardrobe
+  - MoffWardrobeShoesBrown # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -63,6 +67,7 @@
   - PassengerGloves
   - PassengerOuterClothing
   - PassengerShoes
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -80,6 +85,9 @@
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesBlack # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -94,6 +102,11 @@
   - GroupTankHarness
   - ServiceWorkerPDA # Moffstation - Additional job title loadouts
   - BartenderJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesBlack # Moff - Expanded wardrobe
+  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
   - AssistiveItems
@@ -113,6 +126,9 @@
   - ChefJumpsuit
   - CommonBackpack
   - ChefOuterClothing
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesChef # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -127,6 +143,11 @@
   - GroupTankHarness
   - LibrarianPDA # Moffstation - Additional job title loadouts
   - LibrarianJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesLaceup # Moff - Expanded wardrobe
+  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
   - AssistiveItems
@@ -143,6 +164,10 @@
   - LawyerPDA # Moffstation - Additional job title loadouts
   - LawyerNeck
   - LawyerJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesLaceup # Moff - Expanded wardrobe
+  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
   - AssistiveItems
@@ -165,6 +190,7 @@
   - CommonBackpack
   - ChaplainOuterClothing
   - ChaplainShoes
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - ChaplainBible
   - Glasses
   - AssistiveItems
@@ -184,6 +210,8 @@
   - JanitorGloves
   - CommonBackpack
   - JanitorOuterClothing
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesGaloshes # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -201,6 +229,9 @@
   - BotanistJumpsuit
   - BotanistBackpack
   - BotanistOuterClothing
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesBrown # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -222,6 +253,7 @@
   - ClownBackpack
   - ClownOuterClothing
   - ClownShoes
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - SurvivalClown
@@ -243,6 +275,7 @@
   - MimeOuterClothing
   - MimeBelt
   - MimeShoes # Moffstation
+  - MoffWardrobeGlovesWhite # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -261,8 +294,11 @@
   - MusicianShoes # Moffstation - Musician loadout Options
   - CommonBackpack
   - MusicianOuterClothing
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Instruments
-  - Glasses
+  # - Glasses # Moff - Expanded wardrobe
+  - MusicianGlasses # Moff - Expanded wardrobe
   - AssistiveItems
   - Survival
   - Trinkets
@@ -282,6 +318,7 @@
   - QuartermasterBackpack # Moffstation - Department Heads can wear any bag from their department
   - QuartermasterOuterClothing
   - QuartermasterShoes
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -300,6 +337,8 @@
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
   - CargoTechnicianShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   # - CargoTechnicianID # Moffstation - Moved up in list
   - Glasses
   - AssistiveItems
@@ -321,6 +360,8 @@
   - SalvageSpecialistBackpack
   - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -341,6 +382,7 @@
   - ChiefEngineerNeck
   - ChiefEngineerOuterClothing
   - ChiefEngineerShoes
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - SurvivalExtended
@@ -354,6 +396,11 @@
   groups:
   - GroupTankHarness
   - TechnicalAssistantJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - StationEngineerShoes # Moff - Expanded wardrobe
+  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - StationEngineerBackpack
   - AssistiveItems
   - SurvivalExtended
@@ -371,6 +418,8 @@
   - StationEngineerBackpack
   - StationEngineerOuterClothing
   - StationEngineerShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   # - StationEngineerID # Moffstation - Moved up in list
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
@@ -390,6 +439,8 @@
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianOuterClothing
   - AtmosphericTechnicianShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - SurvivalExtended
@@ -445,6 +496,11 @@
   groups:
   - GroupTankHarness
   - ResearchAssistantJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - ScientistShoes # Moff - Expanded wardrobe
+  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - ScientistBackpack
   - Glasses
   - AssistiveItems
@@ -465,6 +521,7 @@
   - SecurityBelt
   - HeadofSecurityOuterClothing
   - SecurityShoes
+  - MoffWardrobeGlovesCombat # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - SurvivalSecurity
@@ -483,6 +540,8 @@
   - SecurityBelt
   - WardenOuterClothing
   - SecurityShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - SurvivalSecurity
@@ -500,6 +559,8 @@
   - SecurityBackpack
   - SecurityOuterClothing
   - SecurityShoes
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
 # - SecurityPDA # Moffstation - Moved up in list
   - SecurityBelt
   - AssistiveItems
@@ -521,6 +582,7 @@
   - DetectiveOuterClothing
   - DetectiveBelt # Moffstation - Detective loadout changes
   - SecurityShoes
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - DetectiveSidearm # Moffstation - (PM Pistol) - With the new PM, detective needs a loadout to select which sidearm they want.
@@ -534,6 +596,11 @@
   id: JobSecurityCadet
   groups:
   - SecurityCadetJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - SecurityShoes # Moff - Expanded wardrobe
+  - SecurityOuterClothing # Moff - Expanded wardrobe
   - SecurityBackpack
   - AssistiveItems
   - SurvivalSecurity
@@ -550,6 +617,9 @@
   - ReporterJumpsuit
   - ReporterHead
   - ReporterOuterClothing
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesLaceup # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
   - AssistiveItems
@@ -565,6 +635,11 @@
   - GroupTankHarness
   - PsychologistPDA # Moffstation - Additional job title loadouts
   - PsychologistJumpsuit
+  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesLeather # Moff - Expanded wardrobe
+  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - MedicalBackpack
   - Glasses
   - AssistiveItems
@@ -583,6 +658,8 @@
   - TramDriverOuterClothing #Vest and such
   - TramDriverHat
   - TramDriverGloves
+  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
+  - MoffWardrobeShoesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival

@@ -69,3 +69,4 @@
   id: BrownShoes
   equipment:
     shoes: ClothingShoesColorBrown
+  groupBy: "colour shoes" # Moff - Expanded wardrobe

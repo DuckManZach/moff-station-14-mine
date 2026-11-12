@@ -24,7 +24,7 @@
 - type: startingGear
   id: ServiceWorkerGear
   equipment:
-    shoes: ClothingShoesColorBlack
+    # shoes: ClothingShoesColorBlack # Moff - Expanded wardrobe
 #    id: ServiceWorkerPDA # Moffstation - PDA loadouts
     ears: ClothingHeadsetService
   #storage:

@@ -22,6 +22,7 @@
 
 # Atmospheric Technician
 - type: loadoutGroup
+  parent: MoffWardrobeHead
   id: AtmosphericTechnicianHead
   name: loadout-group-atmospheric-technician-head
   minLimit: 0

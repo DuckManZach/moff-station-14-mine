@@ -3,8 +3,10 @@
   id: YellowJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorYellow
+  groupBy: "colour jumpsuits" # Moff - Expanded wardrobe
 
 - type: loadout
   id: YellowJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtColorYellow
+  groupBy: "colour jumpskirts" # Moff - Expanded wardrobe

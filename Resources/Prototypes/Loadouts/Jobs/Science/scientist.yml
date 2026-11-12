@@ -25,11 +25,13 @@
   id: RoboticistCap
   equipment:
     head: ClothingHeadHatCorpsoft
+  groupBy: "softcaps" # Moff - Expanded wardrobe
 
 - type: loadout
   id: SkullBandana
   equipment:
     head: ClothingHeadBandSkull
+  groupBy: "bandanas" # Moff - Expanded wardrobe
 
 # Neck
 

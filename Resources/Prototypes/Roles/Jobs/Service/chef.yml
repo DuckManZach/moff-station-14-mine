@@ -24,7 +24,7 @@
 - type: startingGear
   id: ChefGear
   equipment:
-    shoes: ClothingShoesChef
+    # shoes: ClothingShoesChef # Moff - Expanded wardrobe
 #    id: ChefPDA # Moffstation - PDA loadouts
     ears: ClothingHeadsetService
     belt: ClothingBeltChefFilled

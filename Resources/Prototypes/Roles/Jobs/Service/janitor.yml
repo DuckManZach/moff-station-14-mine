@@ -19,7 +19,7 @@
 - type: startingGear
   id: JanitorGear
   equipment:
-    shoes: ClothingShoesGaloshes
+    # shoes: ClothingShoesGaloshes # Moff - Expanded wardrobe
 #    id: JanitorPDA # Moffstation - PDA loadouts
     ears: ClothingHeadsetService
     belt: ClothingBeltJanitorFilled

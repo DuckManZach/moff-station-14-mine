@@ -12,6 +12,7 @@
   id: JanitorHead
   equipment:
     head: ClothingHeadHatPurplesoft
+  groupBy: "softcaps" # Moff - Expanded wardrobe
 
 # Jumpsuit
 - type: loadout
@@ -36,11 +37,13 @@
   id: OrangeGloves
   equipment:
     gloves: ClothingHandsGlovesColorOrange
+  groupBy: "colour gloves" # Moff - Expanded wardrobe
 
 - type: loadout
   id: PurpleGloves
   equipment:
     gloves: ClothingHandsGlovesColorPurple
+  groupBy: "colour gloves" # Moff - Expanded wardrobe
 
 # Outer clothing
 - type: loadout

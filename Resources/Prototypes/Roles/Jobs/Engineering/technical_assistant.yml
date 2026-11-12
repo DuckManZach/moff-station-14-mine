@@ -23,7 +23,7 @@
 - type: startingGear
   id: TechnicalAssistantGear
   equipment:
-    shoes: ClothingShoesBootsWork
+    # shoes: ClothingShoesBootsWork # Moff - Expanded wardrobe
     id: TechnicalAssistantPDA
     belt: ClothingBeltUtilityEngineering
     ears: ClothingHeadsetEngineering

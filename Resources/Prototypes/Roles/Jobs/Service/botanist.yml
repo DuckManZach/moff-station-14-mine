@@ -22,7 +22,7 @@
 - type: startingGear
   id: BotanistGear
   equipment:
-    shoes: ClothingShoesColorBrown
+    # shoes: ClothingShoesColorBrown # Moff - Expanded wardrobe
 #    id: BotanistPDA # Moffstation - PDA loadouts
     ears: ClothingHeadsetService
     belt: ClothingBeltPlantFilled
