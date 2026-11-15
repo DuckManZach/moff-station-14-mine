@@ -136,3 +136,26 @@
   abstract: true
   id: MoffWardrobeCostumeHats
   loadouts: *CostumeHats
+
+# Gathers every category above, plus the upstream loadouts listed below.
+- type: loadoutGroup
+  abstract: true
+  parent:
+  - MoffWardrobeSoftcaps
+  - MoffWardrobeFlatcaps
+  - MoffWardrobeBandanas
+  - MoffWardrobeCowboyHats
+  - MoffWardrobePaperSacks
+  - MoffWardrobeWinterHats
+  - MoffWardrobeSunhats
+  - MoffWardrobeNoveltyHats
+  - MoffWardrobeCostumeHats
+  id: MoffWardrobeHead
+  loadouts:
+  - AtmosphericTechnicianYellowCap
+  - StationEngineerOrangeCap
+  - JanitorHead
+  - RoboticistCap
+  - HatHeadBandBlack
+  - HatHeadBandRed
+  - SkullBandana

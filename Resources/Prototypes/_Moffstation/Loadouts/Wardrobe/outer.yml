@@ -56,3 +56,16 @@
   abstract: true
   id: MoffWardrobeCostumeRobes
   loadouts: *CostumeRobes
+
+# Gathers every category above, plus the upstream loadouts listed below.
+- type: loadoutGroup
+  abstract: true
+  parent:
+  - MoffWardrobeFlannelJackets
+  - MoffWardrobePonchos
+  - MoffWardrobeJackets
+  - MoffWardrobeCostumeRobes
+  id: MoffWardrobeOuterClothing
+  loadouts:
+  - ChaplainPlagueSuit
+  - PassengerWintercoat

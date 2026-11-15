@@ -1,7 +1,7 @@
-# Colour jumpsuits
+# Color jumpsuits
 - type: loadout
   id: !type:CreateVariants
-    values: &ColourJumpsuits
+    values: &ColorJumpsuits
     - ClothingUniformJumpsuitColorBlack
     - ClothingUniformJumpsuitColorBlue
     - ClothingUniformJumpsuitColorDarkBlue
@@ -15,17 +15,17 @@
     - ClothingUniformJumpsuitColorLightBrown
     - ClothingUniformJumpsuitColorBrown
   slot: jumpsuit
-  groupBy: "colour jumpsuits"
+  groupBy: "color jumpsuits"
 
 - type: loadoutGroup
   abstract: true
-  id: MoffWardrobeColourJumpsuits
-  loadouts: *ColourJumpsuits
+  id: MoffWardrobeColorJumpsuits
+  loadouts: *ColorJumpsuits
 
-# Colour jumpskirts
+# Color jumpskirts
 - type: loadout
   id: !type:CreateVariants
-    values: &ColourJumpskirts
+    values: &ColorJumpskirts
     - ClothingUniformJumpskirtColorBlack
     - ClothingUniformJumpskirtColorBlue
     - ClothingUniformJumpskirtColorDarkBlue
@@ -39,12 +39,12 @@
     - ClothingUniformJumpskirtColorLightBrown
     - ClothingUniformJumpskirtColorBrown
   slot: jumpsuit
-  groupBy: "colour jumpskirts"
+  groupBy: "color jumpskirts"
 
 - type: loadoutGroup
   abstract: true
-  id: MoffWardrobeColourJumpskirts
-  loadouts: *ColourJumpskirts
+  id: MoffWardrobeColorJumpskirts
+  loadouts: *ColorJumpskirts
 
 # Casual jumpsuits
 - type: loadout
@@ -263,3 +263,31 @@
   abstract: true
   id: MoffWardrobeOtherJumpsuits
   loadouts: *OtherJumpsuits
+
+# Gathers every category above, plus the upstream loadouts listed below.
+- type: loadoutGroup
+  abstract: true
+  parent:
+  - MoffWardrobeColorJumpsuits
+  - MoffWardrobeColorJumpskirts
+  - MoffWardrobeCasualJumpsuits
+  - MoffWardrobeCasualJumpskirts
+  - MoffWardrobeTurtlenecks
+  - MoffWardrobeTurtleneckSkirts
+  - MoffWardrobeHawaiianShirts
+  - MoffWardrobeBikinis
+  - MoffWardrobeOnePieces
+  - MoffWardrobeSwimShorts
+  - MoffWardrobeSwimwear
+  - MoffWardrobeCostumeOutfits
+  - MoffWardrobeOtherJumpsuits
+  id: MoffWardrobeJumpsuit
+  loadouts:
+  - GreyJumpsuit
+  - WhiteJumpsuit
+  - YellowJumpsuit
+  - RedJumpsuit
+  - GreyJumpskirt
+  - WhiteJumpskirt
+  - YellowJumpskirt
+  - RedJumpskirt

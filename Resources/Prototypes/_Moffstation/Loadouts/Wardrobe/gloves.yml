@@ -1,7 +1,7 @@
-# Colour gloves
+# Color gloves
 - type: loadout
   id: !type:CreateVariants
-    values: &ColourGloves
+    values: &ColorGloves
     - ClothingHandsGlovesColorGray
     - ClothingHandsGlovesColorBrown
     - ClothingHandsGlovesColorRed
@@ -9,12 +9,12 @@
     - ClothingHandsGlovesColorTeal
     - ClothingHandsGlovesColorBlue
   slot: gloves
-  groupBy: "colour gloves"
+  groupBy: "color gloves"
 
 - type: loadoutGroup
   abstract: true
-  id: MoffWardrobeColourGloves
-  loadouts: *ColourGloves
+  id: MoffWardrobeColorGloves
+  loadouts: *ColorGloves
 
 # Other
 - type: loadout
@@ -27,3 +27,16 @@
   abstract: true
   id: MoffWardrobeOtherGloves
   loadouts: *OtherGloves
+
+# Gathers every category above, plus the upstream loadouts listed below.
+- type: loadoutGroup
+  abstract: true
+  parent:
+  - MoffWardrobeColorGloves
+  - MoffWardrobeOtherGloves
+  id: MoffWardrobeGloves
+  loadouts:
+  - TramDriverGlovesBlack
+  - TramDriverGlovesWhite
+  - OrangeGloves
+  - PurpleGloves

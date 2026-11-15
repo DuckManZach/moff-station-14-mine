@@ -3,10 +3,10 @@
   id: WhiteJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorWhite
-  groupBy: "colour jumpsuits" # Moff - Expanded wardrobe
+  groupBy: "color jumpsuits" # Moff - Expanded wardrobe
 
 - type: loadout
   id: WhiteJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtColorWhite
-  groupBy: "colour jumpskirts" # Moff - Expanded wardrobe
+  groupBy: "color jumpskirts" # Moff - Expanded wardrobe

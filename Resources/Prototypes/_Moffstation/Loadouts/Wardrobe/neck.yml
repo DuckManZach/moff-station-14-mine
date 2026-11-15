@@ -52,3 +52,12 @@
   abstract: true
   id: MoffWardrobeOtherNeck
   loadouts: *OtherNeck
+
+# Gathers every category above.
+- type: loadoutGroup
+  abstract: true
+  parent:
+  - MoffWardrobeStripedScarves
+  - MoffWardrobePrideScarves
+  - MoffWardrobeOtherNeck
+  id: MoffWardrobeNeck

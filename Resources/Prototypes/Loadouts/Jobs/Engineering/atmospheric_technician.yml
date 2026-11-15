@@ -44,4 +44,4 @@
   id: WhiteShoes
   equipment:
     shoes: ClothingShoesColorWhite
-  groupBy: "colour shoes" # Moff - Expanded wardrobe
+  groupBy: "color shoes" # Moff - Expanded wardrobe

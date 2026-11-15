@@ -1,19 +1,19 @@
-# Colour shoes
+# Color shoes
 - type: loadout
   id: !type:CreateVariants
-    values: &ColourShoes
+    values: &ColorShoes
     - ClothingShoesColorRed
     - ClothingShoesColorOrange
     - ClothingShoesColorYellow
     - ClothingShoesColorGreen
     - ClothingShoesColorPurple
   slot: shoes
-  groupBy: "colour shoes"
+  groupBy: "color shoes"
 
 - type: loadoutGroup
   abstract: true
-  id: MoffWardrobeColourShoes
-  loadouts: *ColourShoes
+  id: MoffWardrobeColorShoes
+  loadouts: *ColorShoes
 
 # Cowboy boots
 - type: loadout
@@ -55,3 +55,23 @@
   abstract: true
   id: MoffWardrobeOtherShoes
   loadouts: *OtherShoes
+
+# Gathers every category above, plus the upstream loadouts listed below.
+- type: loadoutGroup
+  abstract: true
+  parent:
+  - MoffWardrobeColorShoes
+  - MoffWardrobeCowboyBoots
+  - MoffWardrobeNoveltySocks
+  - MoffWardrobeOtherShoes
+  id: MoffWardrobeShoes
+  loadouts:
+  - BlackShoes
+  - WhiteShoes
+  - BrownShoes
+  - BlueShoes
+  - CowboyShoes
+  - BlackSandals
+  - ClownSandals
+  - WinterBoots
+  - LaceupShoes
