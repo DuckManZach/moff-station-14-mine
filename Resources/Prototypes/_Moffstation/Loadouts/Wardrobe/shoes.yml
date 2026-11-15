@@ -7,10 +7,13 @@
     - ClothingShoesColorYellow
     - ClothingShoesColorGreen
     - ClothingShoesColorPurple
-  equipment:
-    shoes: !type:CreateVariants
-      values: *ColourShoes
+  slot: shoes
   groupBy: "colour shoes"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeColourShoes
+  loadouts: *ColourShoes
 
 # Cowboy boots
 - type: loadout
@@ -18,10 +21,13 @@
     values: &CowboyBoots
     - ClothingShoesBootsCowboyBrown
     - ClothingShoesBootsCowboyWhite
-  equipment:
-    shoes: !type:CreateVariants
-      values: *CowboyBoots
+  slot: shoes
   groupBy: "cowboy boots"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeCowboyBoots
+  loadouts: *CowboyBoots
 
 # Novelty socks
 - type: loadout
@@ -29,18 +35,23 @@
     values: &NoveltySocks
     - ClothingUnderSocksCoder
     - ClothingUnderSocksBee
-  equipment:
-    shoes: !type:CreateVariants
-      values: *NoveltySocks
+  slot: shoes
   groupBy: "novelty socks"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeNoveltySocks
+  loadouts: *NoveltySocks
 
 # Other
 - type: loadout
-  id: ClothingShoesHighheelBoots
-  equipment:
-    shoes: ClothingShoesHighheelBoots
+  id: !type:CreateVariants
+    values: &OtherShoes
+    - ClothingShoesHighheelBoots
+    - ClothingShoesDameDane
+  slot: shoes
 
-- type: loadout
-  id: ClothingShoesDameDane
-  equipment:
-    shoes: ClothingShoesDameDane
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeOtherShoes
+  loadouts: *OtherShoes

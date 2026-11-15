@@ -7,10 +7,13 @@
     - ClothingHeadHatBluesoft
     - ClothingHeadHatGreensoft
     - ClothingHeadHatRedsoft
-  equipment:
-    head: !type:CreateVariants
-      values: *Softcaps
+  slot: head
   groupBy: "softcaps"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeSoftcaps
+  loadouts: *Softcaps
 
 # Flatcaps
 - type: loadout
@@ -18,10 +21,13 @@
     values: &Flatcaps
     - ClothingHeadHatGreyFlatcap
     - ClothingHeadHatBrownFlatcap
-  equipment:
-    head: !type:CreateVariants
-      values: *Flatcaps
+  slot: head
   groupBy: "flatcaps"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeFlatcaps
+  loadouts: *Flatcaps
 
 # Bandanas
 - type: loadout
@@ -29,10 +35,13 @@
     values: &Bandanas
     - ClothingHeadBandBlue
     - ClothingHeadBandGreen
-  equipment:
-    head: !type:CreateVariants
-      values: *Bandanas
+  slot: head
   groupBy: "bandanas"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeBandanas
+  loadouts: *Bandanas
 
 # Cowboy hats
 - type: loadout
@@ -42,10 +51,13 @@
     - ClothingHeadHatCowboyBlack
     - ClothingHeadHatCowboyWhite
     - ClothingHeadHatCowboyGrey
-  equipment:
-    head: !type:CreateVariants
-      values: *CowboyHats
+  slot: head
   groupBy: "cowboy hats"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeCowboyHats
+  loadouts: *CowboyHats
 
 # Paper sacks
 - type: loadout
@@ -53,10 +65,13 @@
     values: &PaperSacks
     - ClothingHeadPaperSack
     - ClothingHeadPaperSackSmile
-  equipment:
-    head: !type:CreateVariants
-      values: *PaperSacks
+  slot: head
   groupBy: "paper sacks"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobePaperSacks
+  loadouts: *PaperSacks
 
 # Winter hats
 - type: loadout
@@ -65,10 +80,13 @@
     - ClothingHeadHatCanadaBeanie
     - ClothingHeadHatSantahat
     - ClothingHeadHatXmasCrown
-  equipment:
-    head: !type:CreateVariants
-      values: *WinterHats
+  slot: head
   groupBy: "winter hats"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeWinterHats
+  loadouts: *WinterHats
 
 # Sunhats
 - type: loadout
@@ -76,10 +94,13 @@
     values: &Sunhats
     - ClothingHeadHatSunhat
     - ClothingHeadHatClownSunhat
-  equipment:
-    head: !type:CreateVariants
-      values: *Sunhats
+  slot: head
   groupBy: "sunhats"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeSunhats
+  loadouts: *Sunhats
 
 # Novelty hats
 - type: loadout
@@ -90,10 +111,13 @@
     - ClothingHeadPropellerHat
     - ClothingHeadHatSombrero
     - ClothingHeadHatCasa
-  equipment:
-    head: !type:CreateVariants
-      values: *NoveltyHats
+  slot: head
   groupBy: "novelty hats"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeNoveltyHats
+  loadouts: *NoveltyHats
 
 # Costume hats
 - type: loadout
@@ -105,7 +129,10 @@
     - ClothingHeadHatShrineMaidenWig
     - ClothingHeadHatGladiator
     - MoffClothingHeadGhostHeadband
-  equipment:
-    head: !type:CreateVariants
-      values: *CostumeHats
+  slot: head
   groupBy: "costume hats"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeCostumeHats
+  loadouts: *CostumeHats

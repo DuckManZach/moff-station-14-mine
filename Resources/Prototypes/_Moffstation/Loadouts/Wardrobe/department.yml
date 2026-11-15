@@ -1,41 +1,34 @@
 # Security
 - type: loadout
   id: ClothingUniformJumpsuitSecBlue
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitSecBlue
+  slot: jumpsuit
 
 # Bartender
 - type: loadout
   id: ClothingUniformJumpsuitJacketMonkey
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitJacketMonkey
+  slot: jumpsuit
   groupBy: "bartender jumpsuits"
 
 # Job starting gear moved into loadouts
 - type: loadout
   id: ClothingHandsGlovesCaptain
-  equipment:
-    gloves: ClothingHandsGlovesCaptain
+  slot: gloves
 
 - type: loadout
   id: ClothingHandsGlovesHop
-  equipment:
-    gloves: ClothingHandsGlovesHop
+  slot: gloves
 
 - type: loadout
   id: ClothingShoesChef
-  equipment:
-    shoes: ClothingShoesChef
+  slot: shoes
 
 - type: loadout
   id: ClothingShoesGaloshes
-  equipment:
-    shoes: ClothingShoesGaloshes
+  slot: shoes
 
 - type: loadout
   id: ClothingShoesLeather
-  equipment:
-    shoes: ClothingShoesLeather
+  slot: shoes
 
 # Medical
 - type: loadout
@@ -43,7 +36,10 @@
     values: &MedicalWinterCoats
     - ClothingOuterWinterViro
     - ClothingOuterWinterGen
-  equipment:
-    outerClothing: !type:CreateVariants
-      values: *MedicalWinterCoats
+  slot: outerClothing
   groupBy: "medical winter coats"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeMedicalOuterClothing
+  loadouts: *MedicalWinterCoats

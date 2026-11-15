@@ -5,10 +5,13 @@
     - ClothingOuterFlannelRed
     - ClothingOuterFlannelBlue
     - ClothingOuterFlannelGreen
-  equipment:
-    outerClothing: !type:CreateVariants
-      values: *FlannelJackets
+  slot: outerClothing
   groupBy: "flannel jackets"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeFlannelJackets
+  loadouts: *FlannelJackets
 
 # Ponchos
 - type: loadout
@@ -16,10 +19,13 @@
     values: &Ponchos
     - ClothingOuterPoncho
     - ClothingOuterPonchoClassic
-  equipment:
-    outerClothing: !type:CreateVariants
-      values: *Ponchos
+  slot: outerClothing
   groupBy: "ponchos"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobePonchos
+  loadouts: *Ponchos
 
 # Jackets
 - type: loadout
@@ -28,10 +34,13 @@
     - ClothingOuterCoatBomber
     - ClothingOuterCoatTrench
     - ClothingOuterDameDane
-  equipment:
-    outerClothing: !type:CreateVariants
-      values: *Jackets
+  slot: outerClothing
   groupBy: "jackets"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeJackets
+  loadouts: *Jackets
 
 # Costume robes
 - type: loadout
@@ -40,7 +49,10 @@
     - ClothingOuterSanta
     - ClothingOuterSuitWitchRobes
     - ClothingOuterSuitShrineMaiden
-  equipment:
-    outerClothing: !type:CreateVariants
-      values: *CostumeRobes
+  slot: outerClothing
   groupBy: "costume robes"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeCostumeRobes
+  loadouts: *CostumeRobes

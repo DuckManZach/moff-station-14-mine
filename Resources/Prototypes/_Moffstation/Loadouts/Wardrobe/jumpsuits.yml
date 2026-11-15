@@ -14,10 +14,13 @@
     - ClothingUniformJumpsuitColorPurple
     - ClothingUniformJumpsuitColorLightBrown
     - ClothingUniformJumpsuitColorBrown
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *ColourJumpsuits
+  slot: jumpsuit
   groupBy: "colour jumpsuits"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeColourJumpsuits
+  loadouts: *ColourJumpsuits
 
 # Colour jumpskirts
 - type: loadout
@@ -35,10 +38,13 @@
     - ClothingUniformJumpskirtColorPurple
     - ClothingUniformJumpskirtColorLightBrown
     - ClothingUniformJumpskirtColorBrown
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *ColourJumpskirts
+  slot: jumpsuit
   groupBy: "colour jumpskirts"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeColourJumpskirts
+  loadouts: *ColourJumpskirts
 
 # Casual jumpsuits
 - type: loadout
@@ -48,10 +54,13 @@
     - ClothingUniformJumpsuitCasualGreen
     - ClothingUniformJumpsuitCasualPurple
     - ClothingUniformJumpsuitCasualRed
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *CasualJumpsuits
+  slot: jumpsuit
   groupBy: "casual jumpsuits"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeCasualJumpsuits
+  loadouts: *CasualJumpsuits
 
 # Casual jumpskirts
 - type: loadout
@@ -61,10 +70,13 @@
     - ClothingUniformJumpskirtCasualGreen
     - ClothingUniformJumpskirtCasualPurple
     - ClothingUniformJumpskirtCasualRed
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *CasualJumpskirts
+  slot: jumpsuit
   groupBy: "casual jumpskirts"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeCasualJumpskirts
+  loadouts: *CasualJumpskirts
 
 # Turtlenecks
 - type: loadout
@@ -86,10 +98,13 @@
     - ClothingUniformTurtleneckColorPurple
     - ClothingUniformTurtleneckColorLightBrown
     - ClothingUniformTurtleneckColorBrown
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *Turtlenecks
+  slot: jumpsuit
   groupBy: "turtlenecks"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeTurtlenecks
+  loadouts: *Turtlenecks
 
 # Turtleneck skirts
 - type: loadout
@@ -111,10 +126,13 @@
     - ClothingUniformTurtleneckSkirtColorPurple
     - ClothingUniformTurtleneckSkirtColorLightBrown
     - ClothingUniformTurtleneckSkirtColorBrown
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *TurtleneckSkirts
+  slot: jumpsuit
   groupBy: "turtleneck skirts"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeTurtleneckSkirts
+  loadouts: *TurtleneckSkirts
 
 # Hawaiian shirts
 - type: loadout
@@ -124,10 +142,13 @@
     - ClothingUniformJumpsuitHawaiBlue
     - ClothingUniformJumpsuitHawaiRed
     - ClothingUniformJumpsuitHawaiYellow
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *HawaiianShirts
+  slot: jumpsuit
   groupBy: "hawaiian shirts"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeHawaiianShirts
+  loadouts: *HawaiianShirts
 
 # Bikinis
 - type: loadout
@@ -141,10 +162,13 @@
     - ClothingUniformBikiniYellow
     - ClothingUniformBikiniPink
     - ClothingUniformNtBikini
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *Bikinis
+  slot: jumpsuit
   groupBy: "bikinis"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeBikinis
+  loadouts: *Bikinis
 
 # One-pieces
 - type: loadout
@@ -159,10 +183,13 @@
     - ClothingUniformOnepiecePink
     - ClothingUniformHeartOnepiece
     - ClothingUniformOldtimeyOnepiece
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *OnePieces
+  slot: jumpsuit
   groupBy: "one-pieces"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeOnePieces
+  loadouts: *OnePieces
 
 # Swim shorts
 - type: loadout
@@ -176,10 +203,13 @@
     - ClothingUniformShortsYellow
     - ClothingUniformShortsPink
     - ClothingUniformMedShorts
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *SwimShorts
+  slot: jumpsuit
   groupBy: "swim shorts"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeSwimShorts
+  loadouts: *SwimShorts
 
 # Swimwear
 - type: loadout
@@ -195,10 +225,13 @@
     - ClothingUniformWetsuitOrange
     - ClothingUniformCoconutSkirt
     - ClothingUniformGrassSkirt
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *Swimwear
+  slot: jumpsuit
   groupBy: "swimwear"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeSwimwear
+  loadouts: *Swimwear
 
 # Costume outfits
 - type: loadout
@@ -211,13 +244,22 @@
     - ClothingUniformJumpsuitSgtPepperBlue
     - ClothingUniformJumpsuitDameDane
     - ClothingUniformJumpsuitGladiator
-  equipment:
-    jumpsuit: !type:CreateVariants
-      values: *CostumeOutfits
+  slot: jumpsuit
   groupBy: "costume outfits"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeCostumeOutfits
+  loadouts: *CostumeOutfits
 
 # Other
 - type: loadout
-  id: ClothingUniformJumpsuitFlannel
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitFlannel
+  id: !type:CreateVariants
+    values: &OtherJumpsuits
+    - ClothingUniformJumpsuitFlannel
+  slot: jumpsuit
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeOtherJumpsuits
+  loadouts: *OtherJumpsuits

@@ -1,252 +1,101 @@
 # Shared drobe clothing, appended to every crew job's slot group through parent:.
 - type: loadoutGroup
   abstract: true
+  parent:
+  - MoffWardrobeColourJumpsuits
+  - MoffWardrobeColourJumpskirts
+  - MoffWardrobeCasualJumpsuits
+  - MoffWardrobeCasualJumpskirts
+  - MoffWardrobeTurtlenecks
+  - MoffWardrobeTurtleneckSkirts
+  - MoffWardrobeHawaiianShirts
+  - MoffWardrobeBikinis
+  - MoffWardrobeOnePieces
+  - MoffWardrobeSwimShorts
+  - MoffWardrobeSwimwear
+  - MoffWardrobeCostumeOutfits
+  - MoffWardrobeOtherJumpsuits
   id: MoffWardrobeJumpsuit
   loadouts:
   - GreyJumpsuit
   - WhiteJumpsuit
-  - ClothingUniformJumpsuitColorBlack
-  - ClothingUniformJumpsuitColorBlue
-  - ClothingUniformJumpsuitColorDarkBlue
-  - ClothingUniformJumpsuitColorTeal
-  - ClothingUniformJumpsuitColorGreen
-  - ClothingUniformJumpsuitColorDarkGreen
   - YellowJumpsuit
-  - ClothingUniformJumpsuitColorOrange
   - RedJumpsuit
-  - ClothingUniformJumpsuitColorMaroon
-  - ClothingUniformJumpsuitColorPink
-  - ClothingUniformJumpsuitColorPurple
-  - ClothingUniformJumpsuitColorLightBrown
-  - ClothingUniformJumpsuitColorBrown
   - GreyJumpskirt
   - WhiteJumpskirt
-  - ClothingUniformJumpskirtColorBlack
-  - ClothingUniformJumpskirtColorBlue
-  - ClothingUniformJumpskirtColorDarkBlue
-  - ClothingUniformJumpskirtColorTeal
-  - ClothingUniformJumpskirtColorGreen
-  - ClothingUniformJumpskirtColorDarkGreen
   - YellowJumpskirt
-  - ClothingUniformJumpskirtColorOrange
   - RedJumpskirt
-  - ClothingUniformJumpskirtColorMaroon
-  - ClothingUniformJumpskirtColorPink
-  - ClothingUniformJumpskirtColorPurple
-  - ClothingUniformJumpskirtColorLightBrown
-  - ClothingUniformJumpskirtColorBrown
-  - ClothingUniformJumpsuitCasualBlue
-  - ClothingUniformJumpsuitCasualGreen
-  - ClothingUniformJumpsuitCasualPurple
-  - ClothingUniformJumpsuitCasualRed
-  - ClothingUniformJumpskirtCasualBlue
-  - ClothingUniformJumpskirtCasualGreen
-  - ClothingUniformJumpskirtCasualPurple
-  - ClothingUniformJumpskirtCasualRed
-  - ClothingUniformTurtleneckColorWhite
-  - ClothingUniformTurtleneckColorGrey
-  - ClothingUniformTurtleneckColorBlack
-  - ClothingUniformTurtleneckColorBlue
-  - ClothingUniformTurtleneckColorDarkBlue
-  - ClothingUniformTurtleneckColorTeal
-  - ClothingUniformTurtleneckColorGreen
-  - ClothingUniformTurtleneckColorDarkGreen
-  - ClothingUniformTurtleneckColorYellow
-  - ClothingUniformTurtleneckColorOrange
-  - ClothingUniformTurtleneckColorRed
-  - ClothingUniformTurtleneckColorMaroon
-  - ClothingUniformTurtleneckColorPink
-  - ClothingUniformTurtleneckColorPurple
-  - ClothingUniformTurtleneckColorLightBrown
-  - ClothingUniformTurtleneckColorBrown
-  - ClothingUniformTurtleneckSkirtColorWhite
-  - ClothingUniformTurtleneckSkirtColorGrey
-  - ClothingUniformTurtleneckSkirtColorBlack
-  - ClothingUniformTurtleneckSkirtColorBlue
-  - ClothingUniformTurtleneckSkirtColorDarkBlue
-  - ClothingUniformTurtleneckSkirtColorTeal
-  - ClothingUniformTurtleneckSkirtColorGreen
-  - ClothingUniformTurtleneckSkirtColorDarkGreen
-  - ClothingUniformTurtleneckSkirtColorYellow
-  - ClothingUniformTurtleneckSkirtColorOrange
-  - ClothingUniformTurtleneckSkirtColorRed
-  - ClothingUniformTurtleneckSkirtColorMaroon
-  - ClothingUniformTurtleneckSkirtColorPink
-  - ClothingUniformTurtleneckSkirtColorPurple
-  - ClothingUniformTurtleneckSkirtColorLightBrown
-  - ClothingUniformTurtleneckSkirtColorBrown
-  - ClothingUniformJumpsuitHawaiBlack
-  - ClothingUniformJumpsuitHawaiBlue
-  - ClothingUniformJumpsuitHawaiRed
-  - ClothingUniformJumpsuitHawaiYellow
-  - ClothingUniformBikiniWhite
-  - ClothingUniformBikiniBlack
-  - ClothingUniformBikiniBlue
-  - ClothingUniformBikiniRed
-  - ClothingUniformBikiniGreen
-  - ClothingUniformBikiniYellow
-  - ClothingUniformBikiniPink
-  - ClothingUniformNtBikini
-  - ClothingUniformOnepieceWhite
-  - ClothingUniformOnepieceBlack
-  - ClothingUniformOnepieceBlue
-  - ClothingUniformOnepieceRed
-  - ClothingUniformOnepieceGreen
-  - ClothingUniformOnepieceYellow
-  - ClothingUniformOnepiecePink
-  - ClothingUniformHeartOnepiece
-  - ClothingUniformOldtimeyOnepiece
-  - ClothingUniformShortsWhite
-  - ClothingUniformShortsBlack
-  - ClothingUniformShortsBlue
-  - ClothingUniformShortsRed
-  - ClothingUniformShortsGreen
-  - ClothingUniformShortsYellow
-  - ClothingUniformShortsPink
-  - ClothingUniformMedShorts
-  - ClothingUniformSpeedo
-  - ClothingUniformShirtkini
-  - ClothingUniformMedkini
-  - ClothingUniformHonkini
-  - ClothingUniformSundress
-  - ClothingUniformMermaid
-  - ClothingUniformFishsuit
-  - ClothingUniformWetsuitOrange
-  - ClothingUniformCoconutSkirt
-  - ClothingUniformGrassSkirt
-  - ClothingUniformJumpsuitKimono
-  - ClothingUniformJumpskirtSerafuku
-  - ClothingUniformJumpskirtMaid
-  - ClothingUniformJumpskirtDressWitch
-  - ClothingUniformJumpsuitSgtPepperBlue
-  - ClothingUniformJumpsuitDameDane
-  - ClothingUniformJumpsuitGladiator
-  - ClothingUniformJumpsuitFlannel
 
 - type: loadoutGroup
   abstract: true
+  parent:
+  - MoffWardrobeSoftcaps
+  - MoffWardrobeFlatcaps
+  - MoffWardrobeBandanas
+  - MoffWardrobeCowboyHats
+  - MoffWardrobePaperSacks
+  - MoffWardrobeWinterHats
+  - MoffWardrobeSunhats
+  - MoffWardrobeNoveltyHats
+  - MoffWardrobeCostumeHats
   id: MoffWardrobeHead
   loadouts:
-  - ClothingHeadHatBlacksoft
-  - ClothingHeadHatGreysoft
-  - ClothingHeadHatBluesoft
-  - ClothingHeadHatGreensoft
-  - ClothingHeadHatRedsoft
   - AtmosphericTechnicianYellowCap
   - StationEngineerOrangeCap
   - JanitorHead
   - RoboticistCap
-  - ClothingHeadHatGreyFlatcap
-  - ClothingHeadHatBrownFlatcap
   - HatHeadBandBlack
   - HatHeadBandRed
-  - ClothingHeadBandBlue
-  - ClothingHeadBandGreen
   - SkullBandana
-  - ClothingHeadHatCowboyBrown
-  - ClothingHeadHatCowboyBlack
-  - ClothingHeadHatCowboyWhite
-  - ClothingHeadHatCowboyGrey
-  - ClothingHeadPaperSack
-  - ClothingHeadPaperSackSmile
-  - ClothingHeadHatCanadaBeanie
-  - ClothingHeadHatSantahat
-  - ClothingHeadHatXmasCrown
-  - ClothingHeadHatSunhat
-  - ClothingHeadHatClownSunhat
-  - ClothingHeadFishCap
-  - ClothingHeadRastaHat
-  - ClothingHeadPropellerHat
-  - ClothingHeadHatSombrero
-  - ClothingHeadHatCasa
-  - ClothingHeadHatCatEars
-  - ClothingHeadHatMaid
-  - ClothingHeadHatPwig
-  - ClothingHeadHatShrineMaidenWig
-  - ClothingHeadHatGladiator
-  - MoffClothingHeadGhostHeadband
 
 - type: loadoutGroup
   abstract: true
+  parent:
+  - MoffWardrobeStripedScarves
+  - MoffWardrobePrideScarves
+  - MoffWardrobeOtherNeck
   id: MoffWardrobeNeck
-  loadouts:
-  - ClothingNeckScarfStripedBlack
-  - ClothingNeckScarfStripedRed
-  - ClothingNeckScarfStripedGreen
-  - ClothingNeckScarfStripedBlue
-  - ClothingNeckScarfStripedLightBlue
-  - ClothingNeckScarfStripedBrown
-  - ClothingNeckScarfStripedOrange
-  - ClothingNeckScarfStripedPurple
-  - ClothingNeckScarfStripedRainbow
-  - ClothingNeckScarfStripedAce
-  - ClothingNeckScarfStripedAro
-  - ClothingNeckScarfStripedAroace
-  - ClothingNeckScarfStripedBiSexual
-  - ClothingNeckScarfStripedGay
-  - ClothingNeckScarfStripedInter
-  - ClothingNeckScarfStripedLesbian
-  - ClothingNeckScarfStripedNonBinary
-  - ClothingNeckScarfStripedPan
-  - ClothingNeckScarfStripedTrans
-  - ClothingNeckLifeguardWhistle
 
 - type: loadoutGroup
   abstract: true
+  parent:
+  - MoffWardrobeColourGloves
+  - MoffWardrobeOtherGloves
   id: MoffWardrobeGloves
   loadouts:
   - TramDriverGlovesBlack
   - TramDriverGlovesWhite
-  - ClothingHandsGlovesColorGray
-  - ClothingHandsGlovesColorBrown
-  - ClothingHandsGlovesColorRed
   - OrangeGloves
-  - ClothingHandsGlovesColorGreen
-  - ClothingHandsGlovesColorTeal
-  - ClothingHandsGlovesColorBlue
   - PurpleGloves
-  - ClothingHandsGlovesFingerless
 
 - type: loadoutGroup
   abstract: true
+  parent:
+  - MoffWardrobeColourShoes
+  - MoffWardrobeCowboyBoots
+  - MoffWardrobeNoveltySocks
+  - MoffWardrobeOtherShoes
   id: MoffWardrobeShoes
   loadouts:
   - BlackShoes
   - WhiteShoes
   - BrownShoes
-  - ClothingShoesColorRed
-  - ClothingShoesColorOrange
-  - ClothingShoesColorYellow
-  - ClothingShoesColorGreen
   - BlueShoes
-  - ClothingShoesColorPurple
   - CowboyShoes
-  - ClothingShoesBootsCowboyBrown
-  - ClothingShoesBootsCowboyWhite
   - BlackSandals
   - ClownSandals
-  - ClothingUnderSocksCoder
-  - ClothingUnderSocksBee
   - WinterBoots
   - LaceupShoes
-  - ClothingShoesHighheelBoots
-  - ClothingShoesDameDane
 
 - type: loadoutGroup
   abstract: true
+  parent:
+  - MoffWardrobeFlannelJackets
+  - MoffWardrobePonchos
+  - MoffWardrobeJackets
+  - MoffWardrobeCostumeRobes
   id: MoffWardrobeOuterClothing
   loadouts:
-  - ClothingOuterFlannelRed
-  - ClothingOuterFlannelBlue
-  - ClothingOuterFlannelGreen
-  - ClothingOuterPoncho
-  - ClothingOuterPonchoClassic
-  - ClothingOuterCoatBomber
-  - ClothingOuterCoatTrench
-  - ClothingOuterDameDane
-  - ClothingOuterSanta
-  - ClothingOuterSuitWitchRobes
-  - ClothingOuterSuitShrineMaiden
   - ChaplainPlagueSuit
   - PassengerWintercoat
 
@@ -262,13 +111,6 @@
   id: MoffWardrobeBartenderJumpsuit
   loadouts:
   - ClothingUniformJumpsuitJacketMonkey
-
-- type: loadoutGroup
-  abstract: true
-  id: MoffWardrobeMedicalOuterClothing
-  loadouts:
-  - ClothingOuterWinterViro
-  - ClothingOuterWinterGen
 
 # Tabs for jobs that have no group of their own for the slot; starting gear fills it when nothing is picked.
 - type: loadoutGroup

@@ -8,13 +8,22 @@
     - ClothingHandsGlovesColorGreen
     - ClothingHandsGlovesColorTeal
     - ClothingHandsGlovesColorBlue
-  equipment:
-    gloves: !type:CreateVariants
-      values: *ColourGloves
+  slot: gloves
   groupBy: "colour gloves"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeColourGloves
+  loadouts: *ColourGloves
 
 # Other
 - type: loadout
-  id: ClothingHandsGlovesFingerless
-  equipment:
-    gloves: ClothingHandsGlovesFingerless
+  id: !type:CreateVariants
+    values: &OtherGloves
+    - ClothingHandsGlovesFingerless
+  slot: gloves
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeOtherGloves
+  loadouts: *OtherGloves

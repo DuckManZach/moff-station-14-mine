@@ -10,10 +10,13 @@
     - ClothingNeckScarfStripedBrown
     - ClothingNeckScarfStripedOrange
     - ClothingNeckScarfStripedPurple
-  equipment:
-    neck: !type:CreateVariants
-      values: *StripedScarves
+  slot: neck
   groupBy: "striped scarves"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeStripedScarves
+  loadouts: *StripedScarves
 
 # Pride scarves
 - type: loadout
@@ -30,13 +33,22 @@
     - ClothingNeckScarfStripedNonBinary
     - ClothingNeckScarfStripedPan
     - ClothingNeckScarfStripedTrans
-  equipment:
-    neck: !type:CreateVariants
-      values: *PrideScarves
+  slot: neck
   groupBy: "pride scarves"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobePrideScarves
+  loadouts: *PrideScarves
 
 # Other
 - type: loadout
-  id: ClothingNeckLifeguardWhistle
-  equipment:
-    neck: ClothingNeckLifeguardWhistle
+  id: !type:CreateVariants
+    values: &OtherNeck
+    - ClothingNeckLifeguardWhistle
+  slot: neck
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeOtherNeck
+  loadouts: *OtherNeck
