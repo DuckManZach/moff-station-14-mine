@@ -59,6 +59,10 @@
 # Outer Clothing
 
 # Gloves
+- type: loadout
+  id: ClothingHandsGlovesHop
+  equipment:
+    gloves: ClothingHandsGlovesHop
 
 # Shoes
 

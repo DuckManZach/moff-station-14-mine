@@ -4,6 +4,17 @@
   equipment:
     outerClothing: ClothingOuterWinterSecArmored
 
+- type: loadout
+  id: ClothingUniformJumpsuitSecBlue
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSecBlue
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeSecurityJumpsuit
+  loadouts:
+  - ClothingUniformJumpsuitSecBlue
+
 #HoS
 - type: loadoutGroup
   id:  HeadofSecurityPDA
@@ -17,6 +28,13 @@
   id: HeadofSecurityWintercoatSmall
   equipment:
     outerClothing: ClothingOuterWinterHoSUnarmored
+
+- type: loadoutGroup
+  parent: MoffWardrobeGloves
+  id: MoffWardrobeGlovesCombat
+  name: loadout-group-wardrobe-gloves
+  loadouts:
+  - CombatGloves
 
 # Warden
 - type: loadoutGroup

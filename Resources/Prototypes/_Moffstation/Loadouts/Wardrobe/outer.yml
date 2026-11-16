@@ -5,7 +5,9 @@
     - ClothingOuterFlannelRed
     - ClothingOuterFlannelBlue
     - ClothingOuterFlannelGreen
-  slot: outerClothing
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *FlannelJackets
   groupBy: "flannel jackets"
 
 - type: loadoutGroup
@@ -19,7 +21,9 @@
     values: &Ponchos
     - ClothingOuterPoncho
     - ClothingOuterPonchoClassic
-  slot: outerClothing
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *Ponchos
   groupBy: "ponchos"
 
 - type: loadoutGroup
@@ -34,7 +38,9 @@
     - ClothingOuterCoatBomber
     - ClothingOuterCoatTrench
     - ClothingOuterDameDane
-  slot: outerClothing
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *Jackets
   groupBy: "jackets"
 
 - type: loadoutGroup
@@ -49,7 +55,9 @@
     - ClothingOuterSanta
     - ClothingOuterSuitWitchRobes
     - ClothingOuterSuitShrineMaiden
-  slot: outerClothing
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *CostumeRobes
   groupBy: "costume robes"
 
 - type: loadoutGroup
@@ -57,7 +65,6 @@
   id: MoffWardrobeCostumeRobes
   loadouts: *CostumeRobes
 
-# Gathers every category above, plus the upstream loadouts listed below.
 - type: loadoutGroup
   abstract: true
   parent:
@@ -69,3 +76,9 @@
   loadouts:
   - ChaplainPlagueSuit
   - PassengerWintercoat
+
+- type: loadoutGroup
+  parent: MoffWardrobeOuterClothing
+  id: MoffWardrobeOuterClothingOptional
+  name: loadout-group-wardrobe-outerclothing
+  minLimit: 0

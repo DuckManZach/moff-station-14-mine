@@ -1,4 +1,18 @@
 # Generic
+- type: loadout
+  id: !type:CreateVariants
+    values: &MedicalWinterCoats
+    - ClothingOuterWinterViro
+    - ClothingOuterWinterGen
+  equipment:
+    outerClothing: !type:CreateVariants
+      values: *MedicalWinterCoats
+  groupBy: "medical winter coats"
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeMedicalOuterClothing
+  loadouts: *MedicalWinterCoats
 
 # CMO
 - type: loadoutGroup
@@ -36,3 +50,10 @@
   - PsychiatristPDA
   - TherapistPDA
   - SocialWorkerPDA
+
+- type: loadoutGroup
+  parent: MoffWardrobeShoes
+  id: MoffWardrobeShoesLeather
+  name: loadout-group-wardrobe-shoes
+  loadouts:
+  - ClothingShoesLeather

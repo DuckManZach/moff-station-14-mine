@@ -8,6 +8,13 @@
   - HoPPDA # Keep default PDA on top of the list
   - HRAdministratorPDA
 
+- type: loadoutGroup
+  parent: MoffWardrobeGloves
+  id: MoffWardrobeGlovesHop
+  name: loadout-group-wardrobe-gloves
+  loadouts:
+  - ClothingHandsGlovesHop
+
 # Bartender
 - type: loadoutGroup
   id: BartenderPDA
@@ -17,6 +24,12 @@
   - BaristaPDA
   - BarkeeperPDA
   - MixologistPDA
+
+- type: loadoutGroup
+  abstract: true
+  id: MoffWardrobeBartenderJumpsuit
+  loadouts:
+  - ClothingUniformJumpsuitJacketMonkey
 
 # Botanist
 - type: loadoutGroup
@@ -53,6 +66,13 @@
   - BakerPDA
   - ButcherPDA
   - PizzaioloPDA
+
+- type: loadoutGroup
+  parent: MoffWardrobeShoes
+  id: MoffWardrobeShoesChef
+  name: loadout-group-wardrobe-shoes
+  loadouts:
+  - ClothingShoesChef
 
 # Clown
 - type: loadoutGroup
@@ -92,6 +112,13 @@
   - HygieneTechnicianPDA
   - MaidPDA
   - SanitationsWorkerPDA
+
+- type: loadoutGroup
+  parent: MoffWardrobeShoes
+  id: MoffWardrobeShoesGaloshes
+  name: loadout-group-wardrobe-shoes
+  loadouts:
+  - ClothingShoesGaloshes
 
 # Lawyer
 - type: loadoutGroup
@@ -133,6 +160,13 @@
   - LaceupShoes
   - CowboyShoes
 
+- type: loadoutGroup
+  parent: MoffWardrobeGloves
+  id: MoffWardrobeGlovesWhite
+  name: loadout-group-wardrobe-gloves
+  loadouts:
+  - TramDriverGlovesWhite
+
 # Musician
 - type: loadoutGroup
   id: MusicianPDA
@@ -163,6 +197,13 @@
   - PerformerShoesRed
   - PerformerShoesYellow
   - CowboyShoes
+
+- type: loadoutGroup
+  parent: Glasses
+  id: MusicianGlasses
+  minLimit: 1
+  loadouts:
+  - ClothingEyesGlassesSunglasses
 
 # Reporter
 - type: loadoutGroup

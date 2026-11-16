@@ -37,6 +37,13 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtBartenderRed
   groupBy: "bartender jumpskirts"
+
+- type: loadout
+  id: ClothingUniformJumpsuitJacketMonkey
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitJacketMonkey
+  groupBy: "bartender jumpsuits"
+
 # Back
 
 # Belt

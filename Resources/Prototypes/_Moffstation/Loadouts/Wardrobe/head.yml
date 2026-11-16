@@ -7,7 +7,9 @@
     - ClothingHeadHatBluesoft
     - ClothingHeadHatGreensoft
     - ClothingHeadHatRedsoft
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *Softcaps
   groupBy: "softcaps"
 
 - type: loadoutGroup
@@ -21,7 +23,9 @@
     values: &Flatcaps
     - ClothingHeadHatGreyFlatcap
     - ClothingHeadHatBrownFlatcap
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *Flatcaps
   groupBy: "flatcaps"
 
 - type: loadoutGroup
@@ -35,7 +39,9 @@
     values: &Bandanas
     - ClothingHeadBandBlue
     - ClothingHeadBandGreen
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *Bandanas
   groupBy: "bandanas"
 
 - type: loadoutGroup
@@ -51,7 +57,9 @@
     - ClothingHeadHatCowboyBlack
     - ClothingHeadHatCowboyWhite
     - ClothingHeadHatCowboyGrey
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *CowboyHats
   groupBy: "cowboy hats"
 
 - type: loadoutGroup
@@ -65,7 +73,9 @@
     values: &PaperSacks
     - ClothingHeadPaperSack
     - ClothingHeadPaperSackSmile
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *PaperSacks
   groupBy: "paper sacks"
 
 - type: loadoutGroup
@@ -80,7 +90,9 @@
     - ClothingHeadHatCanadaBeanie
     - ClothingHeadHatSantahat
     - ClothingHeadHatXmasCrown
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *WinterHats
   groupBy: "winter hats"
 
 - type: loadoutGroup
@@ -94,7 +106,9 @@
     values: &Sunhats
     - ClothingHeadHatSunhat
     - ClothingHeadHatClownSunhat
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *Sunhats
   groupBy: "sunhats"
 
 - type: loadoutGroup
@@ -111,7 +125,9 @@
     - ClothingHeadPropellerHat
     - ClothingHeadHatSombrero
     - ClothingHeadHatCasa
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *NoveltyHats
   groupBy: "novelty hats"
 
 - type: loadoutGroup
@@ -129,7 +145,9 @@
     - ClothingHeadHatShrineMaidenWig
     - ClothingHeadHatGladiator
     - MoffClothingHeadGhostHeadband
-  slot: head
+  equipment:
+    head: !type:CreateVariants
+      values: *CostumeHats
   groupBy: "costume hats"
 
 - type: loadoutGroup
@@ -137,7 +155,6 @@
   id: MoffWardrobeCostumeHats
   loadouts: *CostumeHats
 
-# Gathers every category above, plus the upstream loadouts listed below.
 - type: loadoutGroup
   abstract: true
   parent:
@@ -159,3 +176,9 @@
   - HatHeadBandBlack
   - HatHeadBandRed
   - SkullBandana
+
+- type: loadoutGroup
+  parent: MoffWardrobeHead
+  id: MoffWardrobeHeadOptional
+  name: loadout-group-wardrobe-head
+  minLimit: 0

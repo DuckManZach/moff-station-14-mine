@@ -15,6 +15,13 @@
   - CaptainPDA # Keep default PDA on top of the list
   - CommandingOfficerPDA
 
+- type: loadoutGroup
+  parent: MoffWardrobeGloves
+  id: MoffWardrobeGlovesCaptain
+  name: loadout-group-wardrobe-gloves
+  loadouts:
+  - ClothingHandsGlovesCaptain
+
 # Passenger
 - type: loadoutGroup
   id: PassengerPDA

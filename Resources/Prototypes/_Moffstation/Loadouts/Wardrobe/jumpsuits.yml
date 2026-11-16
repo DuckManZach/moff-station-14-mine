@@ -14,7 +14,9 @@
     - ClothingUniformJumpsuitColorPurple
     - ClothingUniformJumpsuitColorLightBrown
     - ClothingUniformJumpsuitColorBrown
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *ColorJumpsuits
   groupBy: "color jumpsuits"
 
 - type: loadoutGroup
@@ -38,7 +40,9 @@
     - ClothingUniformJumpskirtColorPurple
     - ClothingUniformJumpskirtColorLightBrown
     - ClothingUniformJumpskirtColorBrown
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *ColorJumpskirts
   groupBy: "color jumpskirts"
 
 - type: loadoutGroup
@@ -54,7 +58,9 @@
     - ClothingUniformJumpsuitCasualGreen
     - ClothingUniformJumpsuitCasualPurple
     - ClothingUniformJumpsuitCasualRed
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *CasualJumpsuits
   groupBy: "casual jumpsuits"
 
 - type: loadoutGroup
@@ -70,7 +76,9 @@
     - ClothingUniformJumpskirtCasualGreen
     - ClothingUniformJumpskirtCasualPurple
     - ClothingUniformJumpskirtCasualRed
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *CasualJumpskirts
   groupBy: "casual jumpskirts"
 
 - type: loadoutGroup
@@ -98,7 +106,9 @@
     - ClothingUniformTurtleneckColorPurple
     - ClothingUniformTurtleneckColorLightBrown
     - ClothingUniformTurtleneckColorBrown
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *Turtlenecks
   groupBy: "turtlenecks"
 
 - type: loadoutGroup
@@ -126,7 +136,9 @@
     - ClothingUniformTurtleneckSkirtColorPurple
     - ClothingUniformTurtleneckSkirtColorLightBrown
     - ClothingUniformTurtleneckSkirtColorBrown
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *TurtleneckSkirts
   groupBy: "turtleneck skirts"
 
 - type: loadoutGroup
@@ -142,7 +154,9 @@
     - ClothingUniformJumpsuitHawaiBlue
     - ClothingUniformJumpsuitHawaiRed
     - ClothingUniformJumpsuitHawaiYellow
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *HawaiianShirts
   groupBy: "hawaiian shirts"
 
 - type: loadoutGroup
@@ -162,7 +176,9 @@
     - ClothingUniformBikiniYellow
     - ClothingUniformBikiniPink
     - ClothingUniformNtBikini
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *Bikinis
   groupBy: "bikinis"
 
 - type: loadoutGroup
@@ -183,7 +199,9 @@
     - ClothingUniformOnepiecePink
     - ClothingUniformHeartOnepiece
     - ClothingUniformOldtimeyOnepiece
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *OnePieces
   groupBy: "one-pieces"
 
 - type: loadoutGroup
@@ -203,7 +221,9 @@
     - ClothingUniformShortsYellow
     - ClothingUniformShortsPink
     - ClothingUniformMedShorts
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *SwimShorts
   groupBy: "swim shorts"
 
 - type: loadoutGroup
@@ -225,7 +245,9 @@
     - ClothingUniformWetsuitOrange
     - ClothingUniformCoconutSkirt
     - ClothingUniformGrassSkirt
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *Swimwear
   groupBy: "swimwear"
 
 - type: loadoutGroup
@@ -244,7 +266,9 @@
     - ClothingUniformJumpsuitSgtPepperBlue
     - ClothingUniformJumpsuitDameDane
     - ClothingUniformJumpsuitGladiator
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *CostumeOutfits
   groupBy: "costume outfits"
 
 - type: loadoutGroup
@@ -257,14 +281,15 @@
   id: !type:CreateVariants
     values: &OtherJumpsuits
     - ClothingUniformJumpsuitFlannel
-  slot: jumpsuit
+  equipment:
+    jumpsuit: !type:CreateVariants
+      values: *OtherJumpsuits
 
 - type: loadoutGroup
   abstract: true
   id: MoffWardrobeOtherJumpsuits
   loadouts: *OtherJumpsuits
 
-# Gathers every category above, plus the upstream loadouts listed below.
 - type: loadoutGroup
   abstract: true
   parent:

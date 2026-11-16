@@ -7,7 +7,9 @@
     - ClothingShoesColorYellow
     - ClothingShoesColorGreen
     - ClothingShoesColorPurple
-  slot: shoes
+  equipment:
+    shoes: !type:CreateVariants
+      values: *ColorShoes
   groupBy: "color shoes"
 
 - type: loadoutGroup
@@ -21,7 +23,9 @@
     values: &CowboyBoots
     - ClothingShoesBootsCowboyBrown
     - ClothingShoesBootsCowboyWhite
-  slot: shoes
+  equipment:
+    shoes: !type:CreateVariants
+      values: *CowboyBoots
   groupBy: "cowboy boots"
 
 - type: loadoutGroup
@@ -35,7 +39,9 @@
     values: &NoveltySocks
     - ClothingUnderSocksCoder
     - ClothingUnderSocksBee
-  slot: shoes
+  equipment:
+    shoes: !type:CreateVariants
+      values: *NoveltySocks
   groupBy: "novelty socks"
 
 - type: loadoutGroup
@@ -49,14 +55,15 @@
     values: &OtherShoes
     - ClothingShoesHighheelBoots
     - ClothingShoesDameDane
-  slot: shoes
+  equipment:
+    shoes: !type:CreateVariants
+      values: *OtherShoes
 
 - type: loadoutGroup
   abstract: true
   id: MoffWardrobeOtherShoes
   loadouts: *OtherShoes
 
-# Gathers every category above, plus the upstream loadouts listed below.
 - type: loadoutGroup
   abstract: true
   parent:
@@ -74,4 +81,31 @@
   - BlackSandals
   - ClownSandals
   - WinterBoots
+  - LaceupShoes
+
+- type: loadoutGroup
+  parent: MoffWardrobeShoes
+  id: MoffWardrobeShoesOptional
+  name: loadout-group-wardrobe-shoes
+  minLimit: 0
+
+- type: loadoutGroup
+  parent: MoffWardrobeShoes
+  id: MoffWardrobeShoesBlack
+  name: loadout-group-wardrobe-shoes
+  loadouts:
+  - BlackShoes
+
+- type: loadoutGroup
+  parent: MoffWardrobeShoes
+  id: MoffWardrobeShoesBrown
+  name: loadout-group-wardrobe-shoes
+  loadouts:
+  - BrownShoes
+
+- type: loadoutGroup
+  parent: MoffWardrobeShoes
+  id: MoffWardrobeShoesLaceup
+  name: loadout-group-wardrobe-shoes
+  loadouts:
   - LaceupShoes
