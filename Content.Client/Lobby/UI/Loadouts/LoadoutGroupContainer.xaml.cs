@@ -1,3 +1,4 @@
+using Content.Shared._Moffstation.Extensions;
 using Content.Shared.Clothing;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
@@ -33,7 +34,7 @@ public sealed partial class LoadoutGroupContainer : BoxContainer
         _groupProto = groupProto;
 
         // Moffstation - Personal Item Filters
-        ShowAllLoadouts.OnToggled += _ => { 
+        ShowAllLoadouts.OnToggled += _ => {
             RefreshLoadouts(profile, loadout, session, collection);
         };
         // Moffstation - End
@@ -81,8 +82,8 @@ public sealed partial class LoadoutGroupContainer : BoxContainer
         LoadoutsContainer.RemoveAllChildren();
 
         // Get all loadout prototypes for this group.
-        var validProtos = _groupProto.Loadouts.Distinct().Select(id => protoMan.Index(id)); // Moff - Expanded wardrobe
-        
+        var validProtos = protoMan.ResolveAll(_groupProto.Loadouts.Distinct()); // Moff - Loadout Search
+
         // MOFFSTATION - Personal Item Filters
         if (!ShowAllLoadouts.Pressed)
             validProtos = validProtos.Where((proto) => loadout.IsValid(profile, session, proto.ID, collection, out var reason));
