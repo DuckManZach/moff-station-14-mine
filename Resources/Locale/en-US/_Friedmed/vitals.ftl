@@ -8,6 +8,8 @@ offbrand-vitals-brain-activity-value = {$value}%
 offbrand-vitals-blood-volume = Blood Volume
 offbrand-vitals-blood-volume-value = {$value}%
 
+offbrand-vitals-stat-value = {$value}%
+
 offbrand-vitals-capitalized = { CAPITALIZE($name) }
 offbrand-vitals-whole-body = Whole body
 offbrand-vitals-part-missing = Missing

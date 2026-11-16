@@ -1,0 +1,15 @@
+- type: entity
+  abstract: true
+  id: MoffOrganBaseHand
+  components:
+  - type: BodyStatContributor
+    stats:
+      Manipulation: 0.5
+
+- type: entity
+  abstract: true
+  id: MoffOrganBaseFoot
+  components:
+  - type: BodyStatContributor
+    stats:
+      Movement: 0.5

@@ -1,3 +1,4 @@
+using Content.Shared._Friedmed.Stats;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
@@ -35,6 +36,9 @@ public sealed partial class VitalsData
 
     [DataField]
     public EntProtoId? PainStatus;
+
+    [DataField]
+    public Dictionary<ProtoId<BodyStatPrototype>, float> Stats = new();
 
     /// Only the parts with something to report, null when sampled without wounds.
     [DataField]

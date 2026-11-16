@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._Friedmed.Organs;
+using Content.Shared._Friedmed.Stats;
 using Content.Shared._Friedmed.Wounds;
 using Content.Shared.Body;
 using Content.Shared.Body.Components;
@@ -23,6 +24,7 @@ public sealed partial class VitalsAnalyzerSystem : EntitySystem
     [Dependency] private PainSystem _pain = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private WoundableSystem _woundable = default!;
+    [Dependency] private BodyStatSystem _bodyStats = default!;
 
     private const string MedicineGroup = "Medicine";
     private static readonly ProtoId<MetabolismStagePrototype> MetabolitesStage = "Metabolites";
@@ -210,6 +212,7 @@ public sealed partial class VitalsAnalyzerSystem : EntitySystem
                 BloodLevel = _bloodstream.GetBloodLevel(uid),
                 Pain = SamplePain(uid),
                 PainStatus = CompOrNull<ShockThresholdsComponent>(uid)?.CurrentThresholdState,
+                Stats = _bodyStats.GetStats(uid),
                 BodyParts = withWounds ? SampleBodyParts(uid) : null,
             };
     }

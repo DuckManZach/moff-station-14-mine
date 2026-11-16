@@ -36,6 +36,7 @@
                 <Label Text="{Loc 'offbrand-vitals-blood-volume'}" HorizontalExpand="True" />
                 <Label Name="BloodVolumeValue" />
             </BoxContainer>
+            <BoxContainer Name="StatRows" Orientation="Vertical" />
         </BoxContainer>
 
         <PanelContainer Name="BodyPartsPanel" StyleClasses="PanelDark" MinSize="360 300" HorizontalExpand="True" VerticalExpand="True">

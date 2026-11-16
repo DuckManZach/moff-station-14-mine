@@ -180,6 +180,7 @@
   - OffbrandOrganWoundableVisuals
   - OffbrandOrganChild
   - OffbrandOrganPalpatable
+  - MoffOrganBaseFoot
   id: OffbrandOrganWoundableFootLeft
 
 - type: entity
@@ -188,6 +189,7 @@
   - OffbrandOrganWoundableVisuals
   - OffbrandOrganChild
   - OffbrandOrganPalpatable
+  - MoffOrganBaseHand
   id: OffbrandOrganWoundableHandLeft
 
 - type: entity
@@ -214,6 +216,7 @@
   - OffbrandOrganWoundableVisuals
   - OffbrandOrganChild
   - OffbrandOrganPalpatable
+  - MoffOrganBaseFoot
   id: OffbrandOrganWoundableFootRight
 
 - type: entity
@@ -222,6 +225,7 @@
   - OffbrandOrganWoundableVisuals
   - OffbrandOrganChild
   - OffbrandOrganPalpatable
+  - MoffOrganBaseHand
   id: OffbrandOrganWoundableHandRight
 
 - type: entity

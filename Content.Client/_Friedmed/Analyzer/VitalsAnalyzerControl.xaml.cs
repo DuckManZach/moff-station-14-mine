@@ -78,6 +78,8 @@ public sealed partial class VitalsAnalyzerControl : BoxContainer
 
         SetCondition(BloodVolumeValue, Loc.GetString("offbrand-vitals-blood-volume-value", ("value", $"{data.BloodLevel * 100:F0}")), data.BloodLevel);
 
+        UpdateStats(data);
+
         if (ShowBodyParts)
             UpdateBodyParts(data, target);
     }
@@ -86,6 +88,27 @@ public sealed partial class VitalsAnalyzerControl : BoxContainer
     {
         label.Text = text;
         label.FontColorOverride = _progressColor.GetProgressColor(Math.Clamp(health, 0f, 1f));
+    }
+
+    private void UpdateStats(VitalsData data)
+    {
+        var stats = data.Stats
+            .Select(stat => (Name: Loc.GetString(_prototype.Index(stat.Key).Name), Value: stat.Value))
+            .OrderBy(stat => stat.Name)
+            .ToList();
+
+        VitalsAnalyzerBodyPartRow.SyncChildren(StatRows, stats.Count, () => new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            Children = { new Label { HorizontalExpand = true }, new Label() },
+        });
+
+        for (var i = 0; i < stats.Count; i++)
+        {
+            var row = StatRows.GetChild(i);
+            ((Label) row.GetChild(0)).Text = stats[i].Name;
+            SetCondition((Label) row.GetChild(1), Loc.GetString("offbrand-vitals-stat-value", ("value", $"{stats[i].Value * 100:F0}")), stats[i].Value);
+        }
     }
 
     private void UpdateBodyParts(VitalsData data, EntityUid target)

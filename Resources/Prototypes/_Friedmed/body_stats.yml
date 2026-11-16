@@ -1,0 +1,21 @@
+- type: bodyStat
+  id: Consciousness
+  name: body-stat-consciousness-name
+  description: body-stat-consciousness-desc
+
+- type: bodyStat
+  id: Manipulation
+  name: body-stat-manipulation-name
+  description: body-stat-manipulation-desc
+  dependencies:
+  - !type:ScaledBy
+    stat: Consciousness
+
+- type: bodyStat
+  id: Movement
+  name: body-stat-movement-name
+  description: body-stat-movement-desc
+  dependencies:
+  - !type:ScaledBy
+    stat: Consciousness
+
