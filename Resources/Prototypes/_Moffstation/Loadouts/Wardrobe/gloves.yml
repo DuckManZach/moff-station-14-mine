@@ -49,3 +49,9 @@
   id: MoffWardrobeGlovesOptional
   name: loadout-group-wardrobe-gloves
   minLimit: 0
+
+- type: roleLoadout
+  abstract: true
+  id: MoffWardrobeGlovesOptional
+  groups:
+  - MoffWardrobeGlovesOptional

@@ -56,6 +56,7 @@
 
 # Civilian
 - type: roleLoadout
+  parent: MoffWardrobeHeadOptional # Moff - Expanded wardrobe
   id: JobPassenger
   groups:
   - GroupTankHarness
@@ -67,7 +68,6 @@
   - PassengerGloves
   - PassengerOuterClothing
   - PassengerShoes
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -77,6 +77,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobBartender
   groups:
   - GroupTankHarness
@@ -85,8 +86,6 @@
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesBlack # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
@@ -97,16 +96,13 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeHeadOptional, MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional, MoffWardrobeOuterClothingOptional ] # Moff - Expanded wardrobe
   id: JobServiceWorker
   groups:
   - GroupTankHarness
   - ServiceWorkerPDA # Moffstation - Additional job title loadouts
   - BartenderJumpsuit
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesBlack # Moff - Expanded wardrobe
-  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
   - AssistiveItems
@@ -117,6 +113,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobChef
   groups:
   - GroupTankHarness
@@ -126,8 +123,6 @@
   - ChefJumpsuit
   - CommonBackpack
   - ChefOuterClothing
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesChef # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
@@ -138,16 +133,13 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeHeadOptional, MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional, MoffWardrobeOuterClothingOptional ] # Moff - Expanded wardrobe
   id: JobLibrarian
   groups:
   - GroupTankHarness
   - LibrarianPDA # Moffstation - Additional job title loadouts
   - LibrarianJumpsuit
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesLaceup # Moff - Expanded wardrobe
-  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
   - AssistiveItems
@@ -158,16 +150,14 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeHeadOptional, MoffWardrobeGlovesOptional, MoffWardrobeOuterClothingOptional ] # Moff - Expanded wardrobe
   id: JobLawyer
   groups:
   - GroupTankHarness
   - LawyerPDA # Moffstation - Additional job title loadouts
   - LawyerNeck
   - LawyerJumpsuit
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesLaceup # Moff - Expanded wardrobe
-  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
   - AssistiveItems
@@ -178,6 +168,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   id: JobChaplain
   canCustomizeName: true
   groups:
@@ -190,7 +181,6 @@
   - CommonBackpack
   - ChaplainOuterClothing
   - ChaplainShoes
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - ChaplainBible
   - Glasses
   - AssistiveItems
@@ -201,6 +191,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: MoffWardrobeNeckOptional # Moff - Expanded wardrobe
   id: JobJanitor
   groups:
   - GroupTankHarness
@@ -210,7 +201,6 @@
   - JanitorGloves
   - CommonBackpack
   - JanitorOuterClothing
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesGaloshes # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
@@ -221,6 +211,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobBotanist
   groups:
   - GroupTankHarness
@@ -229,8 +220,6 @@
   - BotanistJumpsuit
   - BotanistBackpack
   - BotanistOuterClothing
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesBrown # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
@@ -241,6 +230,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   id: JobClown
   canCustomizeName: true
   groups:
@@ -253,7 +243,6 @@
   - ClownBackpack
   - ClownOuterClothing
   - ClownShoes
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - SurvivalClown
@@ -284,6 +273,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobMusician
   canCustomizeName: true
   groups:
@@ -294,8 +284,6 @@
   - MusicianShoes # Moffstation - Musician loadout Options
   - CommonBackpack
   - MusicianOuterClothing
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Instruments
   # - Glasses # Moff - Expanded wardrobe
   - MusicianGlasses # Moff - Expanded wardrobe
@@ -308,6 +296,7 @@
 
 # Cargo
 - type: roleLoadout
+  parent: MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   id: JobQuartermaster
   groups:
   - GroupTankHarness
@@ -318,7 +307,6 @@
   - QuartermasterBackpack # Moffstation - Department Heads can wear any bag from their department
   - QuartermasterOuterClothing
   - QuartermasterShoes
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -328,6 +316,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobCargoTechnician
   groups:
   - GroupTankHarness
@@ -337,8 +326,6 @@
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
   - CargoTechnicianShoes
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   # - CargoTechnicianID # Moffstation - Moved up in list
   - Glasses
   - AssistiveItems
@@ -349,6 +336,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobSalvageSpecialist
   groups:
   - GroupTankHarness
@@ -360,8 +348,6 @@
   - SalvageSpecialistBackpack
   - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival
@@ -372,6 +358,7 @@
 
 # Engineering
 - type: roleLoadout
+  parent: MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   id: JobChiefEngineer
   groups:
   - GroupTankHarness
@@ -382,7 +369,6 @@
   - ChiefEngineerNeck
   - ChiefEngineerOuterClothing
   - ChiefEngineerShoes
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - SurvivalExtended
@@ -392,15 +378,12 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeHeadOptional, MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional, MoffWardrobeOuterClothingOptional ] # Moff - Expanded wardrobe
   id: JobTechnicalAssistant
   groups:
   - GroupTankHarness
   - TechnicalAssistantJumpsuit
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - StationEngineerShoes # Moff - Expanded wardrobe
-  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - StationEngineerBackpack
   - AssistiveItems
   - SurvivalExtended
@@ -409,6 +392,7 @@
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobStationEngineer
   groups:
   - GroupTankHarness
@@ -418,8 +402,6 @@
   - StationEngineerBackpack
   - StationEngineerOuterClothing
   - StationEngineerShoes
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   # - StationEngineerID # Moffstation - Moved up in list
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
@@ -430,6 +412,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobAtmosphericTechnician
   groups:
   - GroupTankHarness
@@ -439,8 +422,6 @@
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianOuterClothing
   - AtmosphericTechnicianShoes
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - SurvivalExtended
@@ -492,15 +473,12 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeHeadOptional, MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional, MoffWardrobeOuterClothingOptional ] # Moff - Expanded wardrobe
   id: JobResearchAssistant
   groups:
   - GroupTankHarness
   - ResearchAssistantJumpsuit
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - ScientistShoes # Moff - Expanded wardrobe
-  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - ScientistBackpack
   - Glasses
   - AssistiveItems
@@ -531,6 +509,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobWarden
   groups:
   - WardenPDA # Moffstation - Additional job title loadouts
@@ -540,8 +519,6 @@
   - SecurityBelt
   - WardenOuterClothing
   - SecurityShoes
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - SurvivalSecurity
@@ -551,6 +528,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobSecurityOfficer
   groups:
   - SecurityPDA # Moffstation - Additional job title loadouts
@@ -559,8 +537,6 @@
   - SecurityBackpack
   - SecurityOuterClothing
   - SecurityShoes
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
 # - SecurityPDA # Moffstation - Moved up in list
   - SecurityBelt
   - AssistiveItems
@@ -572,6 +548,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   id: JobDetective
   groups:
   - DetectivePDA # Moffstation - Additional job title loadouts
@@ -582,7 +559,6 @@
   - DetectiveOuterClothing
   - DetectiveBelt # Moffstation - Detective loadout changes
   - SecurityShoes
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - AssistiveItems
   - Glasses # Moffstation - Modular Eyewear
   - DetectiveSidearm # Moffstation - (PM Pistol) - With the new PM, detective needs a loadout to select which sidearm they want.
@@ -593,12 +569,10 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeHeadOptional, MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobSecurityCadet
   groups:
   - SecurityCadetJumpsuit
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - SecurityShoes # Moff - Expanded wardrobe
   - SecurityOuterClothing # Moff - Expanded wardrobe
   - SecurityBackpack
@@ -610,6 +584,7 @@
 
 # Wildcards
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional ] # Moff - Expanded wardrobe
   id: JobReporter
   groups:
   - GroupTankHarness
@@ -617,8 +592,6 @@
   - ReporterJumpsuit
   - ReporterHead
   - ReporterOuterClothing
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesLaceup # Moff - Expanded wardrobe
   - CommonBackpack
   - Glasses
@@ -630,16 +603,13 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeHeadOptional, MoffWardrobeNeckOptional, MoffWardrobeGlovesOptional, MoffWardrobeOuterClothingOptional ] # Moff - Expanded wardrobe
   id: JobPsychologist
   groups:
   - GroupTankHarness
   - PsychologistPDA # Moffstation - Additional job title loadouts
   - PsychologistJumpsuit
-  - MoffWardrobeHeadOptional # Moff - Expanded wardrobe
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeGlovesOptional # Moff - Expanded wardrobe
   - MoffWardrobeShoesLeather # Moff - Expanded wardrobe
-  - MoffWardrobeOuterClothingOptional # Moff - Expanded wardrobe
   - MedicalBackpack
   - Glasses
   - AssistiveItems
@@ -650,6 +620,7 @@
   - PersonalItemsJobAgnostic # Umbra
 
 - type: roleLoadout
+  parent: [ MoffWardrobeNeckOptional, MoffWardrobeShoesOptional ] # Moff - Expanded wardrobe
   id: JobTramDriver
   groups:
   - GroupTankHarness
@@ -658,8 +629,6 @@
   - TramDriverOuterClothing #Vest and such
   - TramDriverHat
   - TramDriverGloves
-  - MoffWardrobeNeckOptional # Moff - Expanded wardrobe
-  - MoffWardrobeShoesOptional # Moff - Expanded wardrobe
   - Glasses
   - AssistiveItems
   - Survival

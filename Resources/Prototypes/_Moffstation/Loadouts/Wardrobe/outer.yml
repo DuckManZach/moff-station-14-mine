@@ -82,3 +82,9 @@
   id: MoffWardrobeOuterClothingOptional
   name: loadout-group-wardrobe-outerclothing
   minLimit: 0
+
+- type: roleLoadout
+  abstract: true
+  id: MoffWardrobeOuterClothingOptional
+  groups:
+  - MoffWardrobeOuterClothingOptional

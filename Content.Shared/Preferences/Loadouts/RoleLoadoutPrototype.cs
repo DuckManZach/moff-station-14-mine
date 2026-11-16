@@ -32,6 +32,7 @@ public sealed partial class RoleLoadoutPrototype : IPrototype
     /// <summary>
     /// Groups that comprise this role loadout.
     /// </summary>
+    [AlwaysPushInheritance] // Moff - Expanded wardrobe
     [DataField]
     public List<ProtoId<LoadoutGroupPrototype>> Groups = new();
 

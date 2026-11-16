@@ -89,6 +89,12 @@
   name: loadout-group-wardrobe-shoes
   minLimit: 0
 
+- type: roleLoadout
+  abstract: true
+  id: MoffWardrobeShoesOptional
+  groups:
+  - MoffWardrobeShoesOptional
+
 - type: loadoutGroup
   parent: MoffWardrobeShoes
   id: MoffWardrobeShoesBlack

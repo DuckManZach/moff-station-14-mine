@@ -72,3 +72,9 @@
   id: MoffWardrobeNeckOptional
   name: loadout-group-wardrobe-neck
   minLimit: 0
+
+- type: roleLoadout
+  abstract: true
+  id: MoffWardrobeNeckOptional
+  groups:
+  - MoffWardrobeNeckOptional
