@@ -1,6 +1,3 @@
-heart-defibrillatable-target-is-dead = Severe neurological decay makes rescuitation impossible. Further attempts futile.
-heart-defibrillatable-target-strain = Patient's vitals are outside of acceptable parameters: the patient will likely re-enter cardiac arrest.
-
 mmi-extractor-no-mind = No neurological activity detected in patient; brain will not be extracted.
 mmi-extractor-probing = Probing patient for neurological activity...
 mmi-extractor-accepted = Neurological link established; brain will be extracted.

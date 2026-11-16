@@ -65,10 +65,6 @@
     effectiveness: 10
 
 - type: entity
-  parent: StatusEffectHeartStrainDesoxyephedrine
-  id: StatusEffectHeartStrainTramadolAlcohol
-
-- type: entity
   parent: MobStatusEffectBase
   id: StatusEffectPainkillersSalicylicAcid
   name: 30 pain relief
@@ -101,144 +97,12 @@
     effectiveness: 10
 
 - type: entity
-  parent: StatusEffectHeartStrainSedin
-  id: StatusEffectHeartStrainOxycodoneAlcohol
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectEpinephrine
-  name: counteracts the effects of low brain health on blood pressure and increases the metabolic rate
-  components:
-  - type: VascularToneModifierStatusEffect
-    tone: 0.9
-  - type: MetabolicRateModifierStatusEffect
-    delta: 0.1
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectHeartStrainSedin
-  name: severely increased metabolic rate
-  components:
-  - type: MetabolicRateModifierStatusEffect
-    delta: 0.25
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectHeartStrainRomerol
-  name: increased metabolic rate
-  components:
-  - type: MetabolicRateModifierStatusEffect
-    delta: 0.25
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectHeartStabilizationInaprovaline
-  name: reduced metabolic rate and regulated respiratory rate
-  components:
-  - type: MetabolicRateModifierStatusEffect
-    delta: -0.5
-  - type: RespiratoryRateModifierStatusEffect
-    rate: 0.8
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectHeartStrainDesoxyephedrine
-  name: increased metabolic rate
-  components:
-  - type: MetabolicRateModifierStatusEffect
-    delta: 0.15
-
-- type: entity
-  parent: StatusEffectHeartStrainDesoxyephedrine
-  id: StatusEffectHeartStrainEphedrine
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectHeartStrainNicotine
-  name: slightly increased metabolic rate
-  components:
-  - type: MetabolicRateModifierStatusEffect
-    delta: 0.1
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectHeartStrainHyperzine
-  name: severely increased metabolic rate & forced heartbeat
-  components:
-  - type: PreventHeartStopFromStrainStatusEffect
-  - type: MetabolicRateModifierStatusEffect
-    delta: 0.5
-
-- type: entity
   parent: MobStatusEffectBase
   id: StatusEffectHeartStabilizationTHC
   name: 20 pain relief
   components:
   - type: PainkillerStatusEffect
     effectiveness: 20
-
-- type: entity
-  parent: StatusEffectHeartStabilizationInaprovaline
-  id: StatusEffectHeartStabilizationCryoxadone
-
-- type: entity
-  parent: StatusEffectHeartStabilizationInaprovaline
-  id: StatusEffectHeartStabilizationCloneoxadone
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectBrainStabilizationInaprovaline
-  name: reduction in chance to take brain damage
-  components:
-  - type: ModifyOrganOxygenDamageChanceStatusEffect
-    oxygenationModifierThresholds:
-      0.30: 0.7
-      0.60: 0.5
-      0.70: 0.4
-      0.85: 0.4
-      1:    0.1
-  - type: ModifyOrganOxygenDepletionChanceStatusEffect
-    oxygenationModifierThresholds:
-      0.30: 0.7
-      0.60: 0.5
-      0.70: 0.4
-      0.85: 0.4
-      1:    0.1
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectBrainHealingMannitol
-  name: brain healing with adequate saturation
-  components:
-  - type: OxygenatableOrganHealingStatusEffect
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectMinorOxygenationDexalin
-  name: 50% artificial respiration
-  components:
-  - type: LungFunctionModifierStatusEffect
-    function: 0.5
-
-- type: entity
-  parent: StatusEffectMinorOxygenationDexalin
-  id: StatusEffectMinorOxygenationPolypyryliumOligomers
-
-- type: entity
-  parent: StatusEffectMinorOxygenationDexalin
-  id: StatusEffectMinorOxygenationCryoxadone
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectMajorOxygenationDexalinPlus
-  name: 80% artificial respiration
-  components:
-  - type: LungFunctionModifierStatusEffect
-    function: 0.8
-
-- type: entity
-  parent: StatusEffectMajorOxygenationDexalinPlus
-  id: StatusEffectMajorOxygenationCloneoxadone
 
 - type: entity
   parent: MobStatusEffectBase
@@ -321,15 +185,6 @@
 
 - type: entity
   parent: MobStatusEffectBase
-  id: StatusEffectHeartStopped
-  name: stopped heart
-  components:
-  - type: PopupOnAppliedStatusEffect
-    message: own-heart-has-stopped-beating
-    visualType: LargeCaution
-
-- type: entity
-  parent: MobStatusEffectBase
   id: StatusEffectPainSuppressionNocturine
   name: total pain suppression
   components:
@@ -349,58 +204,6 @@
     message: neural-suppression-applied
   - type: PainSuppressionStatusEffect
   - type: BlindnessStatusEffect
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectSevereBrainDamage
-  name: severe brain damage
-  components:
-  - type: PopupOnAppliedStatusEffect
-    message: severe-brain-damage-applied
-  - type: StutteringAccent
-  - type: MeleeModifiersStatusEffect
-    damageModifier:
-      coefficients:
-        Blunt: 0.5
-        Piercing: 0.5
-        Slash: 0.5
-        Structural: 0.5
-    attackRateMultiplier: 0.2
-    attackRateConstant: -0.1
-  - type: GunAccuracyStatusEffect
-    angleRangeModifier: 24
-  - type: DisruptOnAttackStatusEffect
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectBrainNoOxygen
-  name: no brain oxygen
-  components:
-  - type: PopupOnAppliedStatusEffect
-    message: brain-oxygen-depleted
-    visualType: LargeCaution
-  - type: StutteringAccent
-  - type: DrunkStatusEffect
-  - type: KnockdownStatusEffect
-  - type: KnockdownOnAppliedStatusEffect
-    duration: 5
-
-- type: entity
-  parent: StatusEffectSevereBrainDamage
-  id: StatusEffectCriticalBrainDamage
-  name: critical brain damage
-  components:
-  - type: PopupOnAppliedStatusEffect
-    message: critical-brain-damage-applied
-    visualType: LargeCaution
-
-- type: entity
-  parent: MobStatusEffectBase
-  id: StatusEffectActiveCPR
-  name: ongoing CPR
-  components:
-  - type: CardiacOutputModifierStatusEffect
-    output: 0.8
 
 - type: entity
   abstract: true

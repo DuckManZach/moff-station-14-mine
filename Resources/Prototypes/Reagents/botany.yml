@@ -201,8 +201,6 @@
   metabolisms:
     Bloodstream:
       metabolismRate: 1
-      statusEffects:
-      - statusEffect: StatusEffectHeartStrainSedin
       effects:
       - !type:HealthChange
         damage:

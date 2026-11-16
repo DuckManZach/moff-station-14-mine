@@ -20,18 +20,3 @@
   files:
   - /Audio/_Friedmed/Surgery/scalpel1.ogg
   - /Audio/_Friedmed/Surgery/scalpel2.ogg
-
-- type: soundCollection
-  id: VitalsAsystole
-  files:
-  - /Audio/_Friedmed/Vitals/asystole.ogg
-
-- type: soundCollection
-  id: VitalsPulseNormal
-  files:
-  - /Audio/_Friedmed/Vitals/pulse.ogg
-
-- type: soundCollection
-  id: VitalsPulseDouble
-  files:
-  - /Audio/_Friedmed/Vitals/pulse_double.ogg

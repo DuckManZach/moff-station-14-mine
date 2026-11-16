@@ -1,4 +1,3 @@
-own-heart-has-stopped-beating = Your heart has stopped beating.
 minor-pain-applied = Your body begins to ache.
 moderate-pain-applied = You struggle to keep your eyes open.
 severe-pain-applied = Your whole body is going numb.
@@ -34,17 +33,10 @@ persistent-tender-removal-reflexive-other-started = { $user } begins to loosen {
 persistent-tender-removal-user-started = You begin to loosen { THE($effect) } from { $target }.
 persistent-tender-removal-other-started = { $user } begins to loosen { THE($effect) } around { $target }.
 
-cpr-target-started-user = You begin to perform chest compressions on { $target }.
-cpr-target-started-others = { $user } begins performing chest compressions { $target }.
-cpr-wound-caused = You hear a loud, sickening crack.
-
 surgery-must-be-stripped = { $target } needs to remove { POSS-ADJ($target) } { $clothing }.
 surgery-must-be-down = { $target } needs to be laying down.
 
 neural-suppression-applied = Your thoughts turn inwards as the world and your body fade away.
-critical-brain-damage-applied = Your brain feels cut off from the world.
-brain-oxygen-depleted = Your brain struggles to control your limbs.
-severe-brain-damage-applied = Your brain struggles to direct your body.
 
 iv-bag-none-inserted = The IV stand doesn't have a bag in it.
 iv-bag-start-connection-user = You begin to search for a vein in { $target }...

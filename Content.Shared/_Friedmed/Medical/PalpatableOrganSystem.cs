@@ -70,7 +70,6 @@ public sealed partial class PalpatableOrganSystem : EntitySystem
         var ev = new PalpationEvent(new());
 
         RaiseLocalEvent(ent, ref ev);
-        CheckPulse(ent, ref ev); // not a subscription to avoid child organs double-reporting pulse
 
         if (_parentOrganQuery.TryGetComponent(ent, out var parent))
         {
@@ -85,22 +84,5 @@ public sealed partial class PalpatableOrganSystem : EntitySystem
             _examine.ElaborateExamineTooltip(args.User, ExaminationKeys.Palpation, FormattedMessage.FromMarkupOrThrow(Loc.GetString("palpation-nothing", ("target", Identity.Entity(body, EntityManager)), ("organ", ent))));
         else
             _examine.ElaborateExamineTooltip(args.User, ExaminationKeys.Palpation, FormattedMessage.FromMarkupOrThrow(Loc.GetString("palpation-feels", ("feels", ContentLocalizationManager.FormatList(ev.Messages)), ("target", Identity.Entity(body, EntityManager)), ("organ", ent))));
-    }
-
-    private void CheckPulse(Entity<PalpatableOrganComponent> ent, ref PalpationEvent args)
-    {
-        if (Comp<OrganComponent>(ent).Body is not { } body)
-            return;
-
-        if (!TryComp<PerfusionComponent>(body, out var perfusion))
-            return;
-
-        if (ent.Comp.PulseQualities.HighestMatch(perfusion.Perfusion) is not { } quality)
-            return;
-
-        if (ent.Comp.PulseSpeeds.HighestMatch(perfusion.Strain) is not { } speeds)
-            return;
-
-        args.Messages.Add(Loc.GetString(speeds, ("quality", quality)));
     }
 }

@@ -31,14 +31,14 @@ public sealed class StationaryAnalyzerSystem : EntitySystem
         {
             foreach (var buckled in strap.BuckledEntities)
             {
-                if (!HasComp<PerfusionComponent>(buckled))
+                if (!HasComp<WoundableBodyComponent>(buckled))
                     continue;
 
                 args.ActualTarget = buckled;
                 break;
             }
         }
-        else if (HasComp<PerfusionComponent>(args.Target))
+        else if (HasComp<WoundableBodyComponent>(args.Target))
         {
             args.ActualTarget = args.Target;
         }
@@ -51,7 +51,7 @@ public sealed class StationaryAnalyzerSystem : EntitySystem
 
     private void OnCanDropDragged(Entity<StationaryAnalyzerComponent> ent, ref CanDropDraggedEvent args)
     {
-        if (!(HasComp<PerfusionComponent>(args.Target) || HasComp<StrapComponent>(args.Target)))
+        if (!(HasComp<WoundableBodyComponent>(args.Target) || HasComp<StrapComponent>(args.Target)))
             return;
 
         args.Handled = true;
@@ -60,7 +60,7 @@ public sealed class StationaryAnalyzerSystem : EntitySystem
 
     private void OnDragDropDragged(Entity<StationaryAnalyzerComponent> ent, ref DragDropDraggedEvent args)
     {
-        if (!(HasComp<PerfusionComponent>(args.Target) || HasComp<StrapComponent>(args.Target)) || !TryComp<AnalyzerComponent>(ent, out var analyzer))
+        if (!(HasComp<WoundableBodyComponent>(args.Target) || HasComp<StrapComponent>(args.Target)) || !TryComp<AnalyzerComponent>(ent, out var analyzer))
             return;
 
         args.Handled = true;
@@ -71,7 +71,7 @@ public sealed class StationaryAnalyzerSystem : EntitySystem
             _analyzer.Analyze((ent, analyzer), args.Target);
             var identity = Identity.Entity(args.Target, EntityManager);
 
-            if (HasComp<PerfusionComponent>(args.Target))
+            if (HasComp<WoundableBodyComponent>(args.Target))
                 _chat.TrySendInGameICMessage(ent, Loc.GetString(ent.Comp.ScanningPatient, ("patient", identity)), InGameICChatType.Speak, true);
             else
                 _chat.TrySendInGameICMessage(ent, Loc.GetString(ent.Comp.ScanningStrap, ("strap", identity)), InGameICChatType.Speak, true);

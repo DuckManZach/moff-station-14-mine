@@ -53,7 +53,6 @@ public sealed partial class RespiratorSystem : EntitySystem
         UpdatesAfter.Add(typeof(MetabolizerSystem));
         SubscribeLocalEvent<RespiratorComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RespiratorComponent, ApplyMetabolicMultiplierEvent>(OnApplyMetabolicMultiplier);
-        SubscribeLocalEvent<RespiratorComponent, ApplyRespiratoryRateModifiersEvent>(OnApplyRespiratoryRateModifiers); // Friedmed
 
         // BodyComp stuff
         SubscribeLocalEvent<BodyComponent, InhaledGasEvent>(_body.RelayEvent);
@@ -91,7 +90,7 @@ public sealed partial class RespiratorSystem : EntitySystem
 
             UpdateSaturation(uid, -(float)respirator.BodyAdjustedUpdateInterval.TotalSeconds, respirator); // Friedmed
 
-            if (!_mobState.IsIncapacitated(uid) || HasComp<PerfusionComponent>(uid)) // Friedmed - simplemobs get crit behaviour, heartmobs get hyperventilation
+            if (!_mobState.IsIncapacitated(uid)) // cannot breathe in crit.
             {
                 switch (respirator.Status)
                 {
@@ -151,15 +150,7 @@ public sealed partial class RespiratorSystem : EntitySystem
         if (ev.Gas is null)
             return;
 
-        // Friedmed Start
-        var breathEv = new Content.Shared._Friedmed.Organs.BeforeBreathEvent(entity.Comp.AdjustedBreathVolume); // Friedmed - modify breath volume
-        RaiseLocalEvent(entity, ref breathEv);
-
-        var gas = ev.Gas.RemoveVolume(breathEv.BreathVolume);
-
-        var beforeEv = new Content.Shared._Friedmed.Organs.BeforeInhaledGasEvent(gas);
-        RaiseLocalEvent(entity, ref beforeEv);
-        // Friedmed end
+        var gas = ev.Gas.RemoveVolume(entity.Comp.BreathVolume);
 
         var inhaleEv = new InhaledGasEvent(gas);
         RaiseLocalEvent(entity, ref inhaleEv);
@@ -384,13 +375,6 @@ public sealed partial class RespiratorSystem : EntitySystem
     {
         ent.Comp.UpdateIntervalMultiplier = args.Multiplier;
     }
-
-    // Friedmed Start
-    private void OnApplyRespiratoryRateModifiers(Entity<RespiratorComponent> ent, ref ApplyRespiratoryRateModifiersEvent args)
-    {
-        ent.Comp.BreathRateMultiplier = args.BreathRate;
-    }
-    // Friedmed end
 
     private void OnGasInhaled(Entity<LungComponent> ent, ref BodyRelayedEvent<InhaledGasEvent> args)
     {

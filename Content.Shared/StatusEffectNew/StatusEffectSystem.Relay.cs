@@ -84,14 +84,6 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.HealWoundsEvent>(RefRelayStatusEffectEvent); // Friedmed
         SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.GetBleedLevelEvent>(RefRelayStatusEffectEvent); // Friedmed
         SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.PainSuppressionEvent>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Organs.BeforeDealOrganOxygenDamage>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Organs.BeforeDepleteOrganOxygen>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Organs.BeforeHealOrganOxygenDamage>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedVascularToneEvent>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedLungFunctionEvent>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedMetabolicRateEvent>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedCardiacOutputEvent>(RefRelayStatusEffectEvent); // Friedmed
-        SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Wounds.ModifiedRespiratoryRateEvent>(RefRelayStatusEffectEvent); // Friedmed
         SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Weapons.RelayedGetMeleeDamageEvent>(RefRelayStatusEffectEvent); // Friedmed
         SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Weapons.RelayedGetMeleeAttackRateEvent>(RefRelayStatusEffectEvent); // Friedmed
         SubscribeLocalEvent<StatusEffectContainerComponent, Content.Shared._Friedmed.Weapons.RelayedGunRefreshModifiersEvent>(RefRelayStatusEffectEvent); // Friedmed

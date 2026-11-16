@@ -73,10 +73,6 @@ entity-effect-guidebook-modify-brain-oxygen-deals = { $chance ->
    *[other] deplete { $amount } brain oxygenation
 }
 
-entity-effect-guidebook-start-heart = { $chance ->
-        [1] Restarts the target's heart
-   *[other] restart the target's heart
-}
 entity-effect-guidebook-zombify = { $chance ->
         [1] Zombifies the target
    *[other] zombify the target

@@ -54,11 +54,6 @@
         - !type:ReagentCondition
           reagent: Oxycodone
           max: 1
-      - statusEffect: StatusEffectHeartStrainTramadolAlcohol
-        conditions:
-        - !type:ReagentCondition
-          reagent: Ethanol
-          min: 1
       effects:
       - !type:Drunk
         boozePower: 1
@@ -101,11 +96,6 @@
         - !type:ReagentCondition
           reagent: Oxycodone
           min: 10
-      - statusEffect: StatusEffectHeartStrainOxycodoneAlcohol
-        conditions:
-        - !type:ReagentCondition
-          reagent: Ethanol
-          min: 1
       effects:
       - !type:Drunk
         boozePower: 2
@@ -209,15 +199,6 @@
   color: "#4053b0"
   metabolisms:
     Bloodstream:
-      statusEffects:
-      - statusEffect: StatusEffectMajorOxygenationCloneoxadone
-        conditions:
-        - !type:TemperatureCondition
-          max: 170.0
-      - statusEffect: StatusEffectHeartStabilizationCloneoxadone
-        conditions:
-        - !type:TemperatureCondition
-          max: 170.0
       effects:
       - !type:ModifyOrganDamage
         category: Heart

@@ -1,3 +1,4 @@
+using Content.Shared._Friedmed.Wounds;
 using Content.Shared.Body;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction.Events;
@@ -16,11 +17,21 @@ public sealed partial class DamageableOrganSystem : EntitySystem
 
         SubscribeLocalEvent<DamageableOrganComponent, BodyRelayedEvent<SuicideEvent>>(OnSuicide);
         SubscribeLocalEvent<DamageableOrganComponent, BodyRelayedEvent<RejuvenateEvent>>(OnRejuvenate);
+        SubscribeLocalEvent<DamageableOrganComponent, WoundableDamageChanged>(OnWoundableDamageChanged);
     }
 
     private void OnRejuvenate(Entity<DamageableOrganComponent> ent, ref BodyRelayedEvent<RejuvenateEvent> args)
     {
         ChangeDamage(ent.AsNullable(), -ent.Comp.Damage);
+    }
+
+    // A woundable part's health is the damage of the wounds on it.
+    private void OnWoundableDamageChanged(Entity<DamageableOrganComponent> ent, ref WoundableDamageChanged args)
+    {
+        if (_timing.ApplyingState || !TryComp<WoundableComponent>(ent, out var woundable))
+            return;
+
+        ChangeDamage(ent.AsNullable(), woundable.Damage.GetTotal() - ent.Comp.Damage);
     }
 
     private void OnSuicide(Entity<DamageableOrganComponent> ent, ref BodyRelayedEvent<SuicideEvent> args)
@@ -50,25 +61,5 @@ public sealed partial class DamageableOrganSystem : EntitySystem
         }
 
         return organ.Comp.Damage - oldDamage;
-    }
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        var query = EntityQueryEnumerator<DamageableOrganComponent, PassiveOrganDamageComponent>();
-        while (query.MoveNext(out var uid, out var organ, out var passive))
-        {
-            if (_timing.CurTime < passive.NextUpdate)
-                continue;
-
-            passive.NextUpdate = _timing.CurTime + passive.UpdateInterval;
-            Dirty(uid, passive);
-
-            if (organ.Damage > passive.DamageCap)
-                continue;
-
-            ChangeDamage((uid, organ), passive.Damage);
-        }
     }
 }

@@ -76,19 +76,7 @@ public sealed partial class VitalsAnalyzerControl : BoxContainer
 
         SetCondition(BrainActivityValue, Loc.GetString("offbrand-vitals-brain-activity-value", ("value", $"{data.BrainHealth * 100:F0}")), data.BrainHealth);
 
-        SpO2Label.Text = Loc.GetString(data.Spo2Name);
-        SetCondition(SpO2Value, Loc.GetString("offbrand-vitals-spo2-value", ("value", $"{data.Spo2 * 100:F0}")), data.Spo2);
-
-        RespiratoryRateValue.Text = Loc.GetString("offbrand-vitals-respiratory-rate-value", ("value", data.RespiratoryRate));
-
-        EtCO2Label.Text = Loc.GetString(data.Etco2Name);
-        EtCO2Value.Text = Loc.GetString("offbrand-vitals-etco2-value", ("value", data.Etco2));
-
-        var (systolic, diastolic) = data.BloodPressure;
-        BloodPressureValue.Text = Loc.GetString("offbrand-vitals-blood-pressure-value", ("systolic", systolic), ("diastolic", diastolic));
         SetCondition(BloodVolumeValue, Loc.GetString("offbrand-vitals-blood-volume-value", ("value", $"{data.BloodLevel * 100:F0}")), data.BloodLevel);
-
-        SetCondition(HeartRateValue, Loc.GetString("offbrand-vitals-heart-rate-value", ("value", data.HeartRate)), 1f - data.HeartStrain);
 
         if (ShowBodyParts)
             UpdateBodyParts(data, target);

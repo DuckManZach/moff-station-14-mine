@@ -41,15 +41,8 @@ public sealed partial class BodySystem
         // Friedmed Start
         SubscribeLocalEvent<BodyComponent, SuicideEvent>(RelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, RejuvenateEvent>(RelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, BeforeInhaledGasEvent>(RefRelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, BeforeBreathEvent>(RefRelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, BaseLungFunctionEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, DamageChangedEvent>(RelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, BaseCardiacOutputEvent>(RefRelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, CardiacCompensationEvent>(RefRelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, HeartBeatEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, TargetDefibrillatedEvent>(RefRelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, BaseVascularToneEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, WoundableOrganWeightsEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, WoundGetDamageEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, GetWoundsWithSpaceEvent>(RefRelayBodyEvent);

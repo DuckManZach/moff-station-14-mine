@@ -11,8 +11,6 @@
   meltingPoint: 170.0
   metabolisms:
     Bloodstream:
-      statusEffects: # Friedmed
-      - statusEffect: StatusEffectHeartStrainDesoxyephedrine # Friedmed
       # Main effects
       effects:
       - !type:HealthChange
@@ -77,8 +75,6 @@
   meltingPoint: 36.0
   metabolisms:
     Bloodstream:
-      statusEffects: # Friedmed
-      - statusEffect: StatusEffectHeartStrainEphedrine # Friedmed
       effects:
       # Main effects
       - !type:MovementSpeedModifier
@@ -155,9 +151,7 @@
   meltingPoint: 170.0
   metabolisms:
     Bloodstream:
-      statusEffects: # Friedmed
       # Friedmed Start
-      - statusEffect: StatusEffectHeartStrainHyperzine
       metabolismRate: 1.0
       # Friedmed end
       effects:
@@ -273,8 +267,6 @@
   metabolisms: # Friedmed
     # Friedmed Start
     Bloodstream:
-      statusEffects:
-      - statusEffect: StatusEffectHeartStrainNicotine
       effects:
       - !type:ModifyOrganDamage
         category: Lungs

@@ -33,28 +33,8 @@
                 <Label Name="BrainActivityValue" />
             </BoxContainer>
             <BoxContainer Orientation="Horizontal">
-                <Label Name="SpO2Label" HorizontalExpand="True" />
-                <Label Name="SpO2Value" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal">
-                <Label Text="{Loc 'offbrand-vitals-respiratory-rate'}" HorizontalExpand="True" />
-                <Label Name="RespiratoryRateValue" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal">
-                <Label Name="EtCO2Label" HorizontalExpand="True" />
-                <Label Name="EtCO2Value" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal">
-                <Label Text="{Loc 'offbrand-vitals-blood-pressure'}" HorizontalExpand="True" />
-                <Label Name="BloodPressureValue" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal">
                 <Label Text="{Loc 'offbrand-vitals-blood-volume'}" HorizontalExpand="True" />
                 <Label Name="BloodVolumeValue" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal">
-                <Label Text="{Loc 'offbrand-vitals-heart-rate'}" HorizontalExpand="True" />
-                <Label Name="HeartRateValue" />
             </BoxContainer>
         </BoxContainer>
 

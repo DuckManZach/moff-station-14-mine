@@ -78,34 +78,6 @@
   abstract: true
   id: BaseMobPerfusion
   components:
-  - type: Perfusion
-    respiratoryRateCoefficient: -3
-    respiratoryRateConstant: 1.333
-    respiratoryRateNormalBreath: 5
-    bloodPressureDeviation: 5
-    systolicBase: 120
-    diastolicBase: 80
-    heartRateDeviation: 15
-    heartRateFullPerfusion: 75
-    heartRateNoPerfusion: 200
-    etco2Base: 40
-    etco2Deviation: 4
-    etco2Name: etco2-carbon-dioxide
-    etco2GasName: reagent-name-carbon-dioxide
-    spo2Name: spo2-oxygen
-    spo2GasName: reagent-name-oxygen
-    # TODO: heartstop
-    # heartStoppedEffect: StatusEffectHeartStopped
-  - type: HeartDefibrillatable
-  - type: PainMetabolicRate
-    quadraticFactor: 0.00005
-    linearFactor: -0.0025
-    constantFactor: 0
-  - type: HeartrateAlerts
-    strainAlert: HeartRate
-    stoppedAlert: HeartStopped
-    alertCategory: Health
-    maxStrain: 4
   - type: SolutionManager
   - type: InjectableSolution
     solution: bloodstream
@@ -115,12 +87,6 @@
     bloodlossDamage: null
     bloodlossHealDamage: null
     updateInterval: 1
-  - type: CprTarget
-    effect: StatusEffectActiveCPR
-    effectDuration: 2.1
-    doAfterDuration: 2
-    wound: WoundFracture
-    woundProbability: 0.03
   - type: IVTarget
     permissibleContainers:
       components:
@@ -131,16 +97,6 @@
   id: BaseMobBrain
   components:
   - type: BrainDamageThresholds
-    damageStateThresholds:
-      70: Critical
-      100: Dead
-    oxygenStateThresholds:
-      0: Critical
-    damageEffectThresholds:
-      30: StatusEffectSevereBrainDamage
-      70: StatusEffectCriticalBrainDamage
-    oxygenEffectThresholds:
-      0: StatusEffectBrainNoOxygen
     aliveDamageIcons:
     - HealthIconNormal7
     - HealthIconNormal6

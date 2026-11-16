@@ -21,39 +21,6 @@ public sealed partial class VitalsData
     public float BrainHealth;
 
     [DataField]
-    public (int, int) BloodPressure;
-
-    [DataField]
-    public int HeartRate;
-
-    [DataField]
-    public float HeartStrain;
-
-    [DataField]
-    public int Etco2;
-
-    [DataField]
-    public int RespiratoryRate;
-
-    [DataField]
-    public float RespiratoryRateModifier;
-
-    [DataField]
-    public float Spo2;
-
-    [DataField]
-    public LocId Etco2Name;
-
-    [DataField]
-    public LocId Etco2GasName;
-
-    [DataField]
-    public LocId Spo2Name;
-
-    [DataField]
-    public LocId Spo2GasName;
-
-    [DataField]
     public Dictionary<ProtoId<ReagentPrototype>, (FixedPoint2 InBloodstream, FixedPoint2 Metabolites)>? Reagents;
 
     [DataField]

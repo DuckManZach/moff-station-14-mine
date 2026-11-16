@@ -338,26 +338,6 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
             }
             // Moffstation - End
 
-            // Friedmed Start - Additions
-            var vitalsContainer = new BoxContainer()
-            {
-                SizeFlagsStretchRatio = 1.25f,
-                Orientation = LayoutOrientation.Horizontal,
-                HorizontalExpand = true,
-                SeparationOverride = 8,
-            };
-
-            if (sensor.VitalsData is { } woundable)
-            {
-                vitalsContainer.AddChild(new RichTextLabel() { Text = Loc.GetString("offbrand-crew-monitoring-heart-rate", ("rate", woundable.HeartRate)) });
-                var (systolic, diastolic) = woundable.BloodPressure;
-                vitalsContainer.AddChild(new RichTextLabel() { Text = Loc.GetString("offbrand-crew-monitoring-blood-pressure", ("systolic", systolic), ("diastolic", diastolic)) });
-                vitalsContainer.AddChild(new RichTextLabel() { Text = Loc.GetString("offbrand-crew-monitoring-spo2", ("value", $"{woundable.Spo2 * 100:F1}"), ("spo2", woundable.Spo2Name)) });
-            }
-
-            mainContainer.AddChild(vitalsContainer);
-            // Friedmed end
-
             // Add user coordinates to the navmap
             if (coordinates != null && NavMap.Visible && _blipTexture != null)
             {

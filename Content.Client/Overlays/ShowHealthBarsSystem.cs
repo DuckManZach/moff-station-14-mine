@@ -12,7 +12,6 @@ public sealed partial class ShowHealthBarsSystem : EquipmentHudSystem<ShowHealth
     [Dependency] private IOverlayManager _overlayMan = default!;
 
     private EntityHealthBarOverlay _overlay = default!;
-    private Content.Client._Friedmed.Overlays.HeartrateOverlay _heartrate = default!; // Friedmed
 
     public override void Initialize()
     {
@@ -21,7 +20,6 @@ public sealed partial class ShowHealthBarsSystem : EquipmentHudSystem<ShowHealth
         SubscribeLocalEvent<ShowHealthBarsComponent, AfterAutoHandleStateEvent>(OnHandleState);
 
         _overlay = new(EntityManager, ProtoMan);
-        _heartrate = new(); // Friedmed
     }
 
     private void OnHandleState(Entity<ShowHealthBarsComponent> ent, ref AfterAutoHandleStateEvent args)
@@ -44,19 +42,12 @@ public sealed partial class ShowHealthBarsSystem : EquipmentHudSystem<ShowHealth
             }
 
             _overlay.StatusIcon = comp.HealthStatusIcon;
-            _heartrate.StatusIcon = comp.HealthStatusIcon; // Friedmed
         }
 
         if (!_overlayMan.HasOverlay<EntityHealthBarOverlay>())
         {
             _overlayMan.AddOverlay(_overlay);
         }
-        // Friedmed Start
-        if (!_overlayMan.HasOverlay<Content.Client._Friedmed.Overlays.HeartrateOverlay>())
-        {
-            _overlayMan.AddOverlay(_heartrate);
-        }
-        // Friedmed end
     }
 
     protected override void DeactivateInternal()
@@ -65,6 +56,5 @@ public sealed partial class ShowHealthBarsSystem : EquipmentHudSystem<ShowHealth
 
         _overlay.DamageContainers.Clear();
         _overlayMan.RemoveOverlay(_overlay);
-        _overlayMan.RemoveOverlay(_heartrate); // Friedmed
     }
 }

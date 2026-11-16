@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared._Friedmed.OrganVisuals;
 using Content.Shared._Friedmed.Organs;
 using Content.Shared._Friedmed.Wounds;
 using Content.Shared.Body;
@@ -16,7 +15,6 @@ namespace Content.Shared._Friedmed.Analyzers;
 
 public sealed partial class VitalsAnalyzerSystem : EntitySystem
 {
-    [Dependency] private PerfusionSystem _perfusion = default!;
     [Dependency] private BodySystem _body = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
@@ -140,14 +138,6 @@ public sealed partial class VitalsAnalyzerSystem : EntitySystem
         if (TryComp<DamageableOrganComponent>(organ, out var damageable))
             health = 1f - damageable.Damage.Float() / damageable.MaxDamage.Float();
 
-        // Wounds have no hard cap on a part, so the heaviest wound visual stands in for it.
-        if (TryComp<WoundableComponent>(organ, out var woundable) &&
-            TryComp<VisualOrganWoundsComponent>(organ, out var visuals) &&
-            visuals.Thresholds.Count != 0)
-        {
-            health = MathF.Min(health, 1f - woundable.Damage.GetTotal().Float() / visuals.Thresholds[^1].Float());
-        }
-
         return Math.Clamp(health, 0f, 1f);
     }
 
@@ -206,13 +196,8 @@ public sealed partial class VitalsAnalyzerSystem : EntitySystem
 
     public VitalsData? TakeSample(EntityUid uid, bool withWounds = true)
     {
-        if (!TryComp<PerfusionComponent>(uid, out var heartrate))
-            return null;
-
         if (!TryComp<BrainDamageThresholdsComponent>(uid, out var brainDamageThresholds))
             return null;
-
-        var (upper, lower) = _perfusion.BloodPressure((uid, heartrate));
 
         var hasNonMedical = false;
         var reagents = withWounds ? SampleReagents(uid, out hasNonMedical) : null;
@@ -220,17 +205,6 @@ public sealed partial class VitalsAnalyzerSystem : EntitySystem
         return new VitalsData()
             {
                 BrainHealth = 1f - brainDamageThresholds.DisplayDamage.Float() / brainDamageThresholds.DisplayMaxDamage.Float(),
-                BloodPressure = (upper, lower),
-                HeartRate = _perfusion.HeartRate((uid, heartrate)),
-                HeartStrain = heartrate.Strain,
-                Etco2 = _perfusion.Etco2((uid, heartrate)),
-                RespiratoryRate = _perfusion.RespiratoryRate((uid, heartrate)),
-                RespiratoryRateModifier = _perfusion.ComputeRespiratoryRateModifier((uid, heartrate)),
-                Spo2 = _perfusion.Spo2((uid, heartrate)).Float(),
-                Etco2Name = heartrate.Etco2Name,
-                Etco2GasName = heartrate.Etco2GasName,
-                Spo2Name = heartrate.Spo2Name,
-                Spo2GasName = heartrate.Spo2GasName,
                 Reagents = reagents,
                 NonMedicalReagents = hasNonMedical,
                 BloodLevel = _bloodstream.GetBloodLevel(uid),

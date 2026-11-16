@@ -7,6 +7,7 @@ using Content.Shared.StatusIcon.Components;
 using Content.Shared.Damage.Components;
 using Content.Shared._Friedmed.Wounds;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 
 namespace Content.Client.Overlays;
 
@@ -75,7 +76,8 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
 
     private List<StatusIconPrototype> DecideBrainHealthIcons(Entity<BrainDamageThresholdsComponent> ent)
     {
-        if (ent.Comp.CurrentState == MobState.Dead)
+        var state = CompOrNull<MobStateComponent>(ent)?.CurrentState;
+        if (state == MobState.Dead)
         {
             return new() { ProtoMan.Index(ent.Comp.DeadIcon) };
         }
@@ -83,7 +85,7 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
         var current = ent.Comp.DisplayDamage;
         var max = ent.Comp.DisplayMaxDamage;
 
-        if (ent.Comp.CurrentState == MobState.Critical || ent.Comp.DisplayOxygen == 0)
+        if (state == MobState.Critical)
         {
             var amount = ent.Comp.CriticalDamageIcons.Count;
             var idx = Math.Clamp((int)Math.Floor(amount - (amount / max.Double()) * current.Double()), 0, amount-1);

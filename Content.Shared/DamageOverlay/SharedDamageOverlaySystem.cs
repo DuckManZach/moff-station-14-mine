@@ -19,7 +19,6 @@ public abstract partial class SharedDamageOverlaySystem : EntitySystem
     [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
-    [Dependency] private PerfusionSystem _perfusion = default!; // Friedmed
     [Dependency] private PainSystem _pain = default!; // Friedmed
 
     [Dependency] private EntityQuery<InjurableComponent> _injurableQuery = default!;
@@ -87,22 +86,20 @@ public abstract partial class SharedDamageOverlaySystem : EntitySystem
     {
         if (!TryComp<PainComponent>(entity, out var pain) ||
             !TryComp<ShockThresholdsComponent>(entity, out var shockThresholds) ||
-            !TryComp<BrainDamageThresholdsComponent>(entity, out var brainThresholds) ||
-            !TryComp<PerfusionComponent>(entity, out var perfusion))
+            !_mobStateQuery.TryComp(entity, out var mobState))
             return;
 
         entity.Comp.AlwaysRenderAll = true;
-        entity.Comp.CurrentState = brainThresholds.CurrentState;
-        var maxBrain = brainThresholds.DamageStateThresholds.Keys.Max();
+        entity.Comp.CurrentState = mobState.CurrentState;
         var maxShock = shockThresholds.Thresholds.Keys.Max();
 
-        switch (brainThresholds.CurrentState)
+        switch (mobState.CurrentState)
         {
             case MobState.Alive or MobState.Critical:
             {
-                entity.Comp.CritLevel = FixedPoint2.Clamp(brainThresholds.DisplayDamage / maxBrain, 0, 1).Float();
+                entity.Comp.CritLevel = 0;
                 entity.Comp.PainLevel = FixedPoint2.Clamp(_pain.GetShock((entity, pain)) / maxShock, 0, 1).Float();
-                entity.Comp.OxygenLevel = FixedPoint2.Clamp(1 - _perfusion.Spo2((entity, perfusion)), 0, 1).Float();
+                entity.Comp.OxygenLevel = 0;
                 entity.Comp.DeadLevel = 0;
                 break;
             }

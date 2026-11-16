@@ -196,15 +196,6 @@
   metabolisms:
     Bloodstream:
       # Friedmed Start
-      statusEffects:
-      - statusEffect: StatusEffectMinorOxygenationCryoxadone
-        conditions:
-        - !type:TemperatureCondition
-          max: 213.0
-      - statusEffect: StatusEffectHeartStabilizationCryoxadone
-        conditions:
-        - !type:TemperatureCondition
-          max: 213.0
       effects:
       - !type:AdjustTemperature
         amount: 60000 # Heats you up as it metabolizes necessitating constant cooling.
@@ -311,8 +302,6 @@
     Bloodstream:
       # Friedmed Start
       metabolismRate: 0.1
-      statusEffects:
-      - statusEffect: StatusEffectMinorOxygenationDexalin
       # Friedmed end
       effects:
       - !type:HealthChange
@@ -344,8 +333,6 @@
     Bloodstream:
       # Friedmed Start
       metabolismRate: 0.1
-      statusEffects:
-      - statusEffect: StatusEffectMajorOxygenationDexalinPlus
       # Friedmed end
       effects:
       - !type:HealthChange
@@ -385,11 +372,7 @@
     Bloodstream:
       # Friedmed Start
       metabolismRate: 0.25
-      statusEffects:
-      - statusEffect: StatusEffectEpinephrine
       effects:
-      - !type:StartHeart
-        probability: 0.03
       # Friedmed end
       - !type:AdjustReagent
         conditions:
@@ -522,9 +505,6 @@
     Bloodstream:
       # Friedmed Start
       metabolismRate: 0.05
-      statusEffects:
-      - statusEffect: StatusEffectHeartStabilizationInaprovaline
-      - statusEffect: StatusEffectBrainStabilizationInaprovaline
       # Friedmed end
       effects:
       - !type:HealthChange
@@ -709,8 +689,6 @@
     Bloodstream:
       # Friedmed Start
       metabolismRate: 0.2
-      statusEffects:
-      - statusEffect: StatusEffectMinorOxygenationPolypyryliumOligomers
       # Friedmed end
       effects:
       - !type:EvenHealthChange
@@ -1497,12 +1475,6 @@
           conditions:
           - !type:TemperatureCondition
             max: 150.0
-        - !type:ModifyOrganOxygen
-          category: Brain
-          amount: 0.5
-          conditions:
-          - !type:TemperatureCondition
-            max: 150.0
         # Friedmed end
         # Friedmed Start - Removals
         # - !type:ReduceRotting
@@ -1570,8 +1542,6 @@
     Bloodstream:
       # Friedmed Start
       metabolismRate: 0.05
-      statusEffects:
-      - statusEffect: StatusEffectBrainHealingMannitol
       effects:
       - !type:Drunk
         boozePower: 1
