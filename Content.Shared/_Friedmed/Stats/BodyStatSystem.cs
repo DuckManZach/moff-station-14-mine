@@ -1,8 +1,7 @@
-using Content.Shared._Friedmed.Wounds;
-using Content.Shared._Moffstation.Extensions;
 using Content.Shared.Body;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._Friedmed.Stats;
 
@@ -15,7 +14,6 @@ public sealed partial class BodyStatSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<BodyComponent, GetAllBodyStatsEvent>(_body.RelayEvent);
-        SubscribeLocalEvent<BodyComponent, GetBodyStatEvent>(_body.RelayEvent);
     }
 
     [SubscribeLocalEvent]
@@ -28,32 +26,61 @@ public sealed partial class BodyStatSystem : EntitySystem
     }
 
     [SubscribeLocalEvent]
-    private static void OnGetBodyStat(Entity<BodyStatContributorComponent> ent, ref BodyRelayedEvent<GetBodyStatEvent> args)
+    private void OnStartup(Entity<BodyStatsComponent> ent, ref ComponentStartup args)
     {
-        if (ent.Comp.Stats.TryGetValue(args.Args.StatId, out var value))
-            args.Args = args.Args with { Value = args.Args.Value + value };
+        RefreshStats(ent.AsNullable());
     }
 
-    /// Each stat's summed contributions; stats nothing contributes to are left out.
-    [PublicAPI]
-    public Dictionary<ProtoId<BodyStatPrototype>, float> GetStats(Entity<WoundableBodyComponent?> body)
+    [SubscribeLocalEvent]
+    private void OnOrganInserted(Entity<BodyStatsComponent> ent, ref OrganInsertedIntoEvent args)
     {
+        RefreshStats(ent.AsNullable());
+    }
+
+    [SubscribeLocalEvent]
+    private void OnOrganRemoved(Entity<BodyStatsComponent> ent, ref OrganRemovedFromEvent args)
+    {
+        if (TerminatingOrDeleted(ent))
+            return;
+
+        RefreshStats(ent.AsNullable());
+    }
+
+    /// Recomputes the body's stats from its organs; call whenever a contribution changes.
+    [PublicAPI]
+    public void RefreshStats(Entity<BodyStatsComponent?> body)
+    {
+        if (!Resolve(body, ref body.Comp, false))
+            return;
+
         var ev = new GetAllBodyStatsEvent(new Dictionary<ProtoId<BodyStatPrototype>, float>());
-        if (!Resolve(body, ref body.Comp, false))
-            return ev.Stats;
-
         RaiseLocalEvent(body, ref ev);
-        return ev.Stats;
+        foreach (var (stat, value) in ev.Stats)
+        {
+            if (ProtoMan.Resolve(stat, out var proto))
+                ev.Stats[stat] = value / proto.Baseline;
+        }
+
+        if (ev.Stats.DictionaryEquals(body.Comp.Stats))
+            return;
+
+        body.Comp.Stats = ev.Stats;
+        var changed = new BodyStatsChangedEvent(ev.Stats);
+        RaiseLocalEvent(body, ref changed);
+    }
+
+    /// Each stat's effectiveness (summed contributions / baseline); stats nothing contributes to are left out.
+    [PublicAPI]
+    public Dictionary<ProtoId<BodyStatPrototype>, float> GetStats(Entity<BodyStatsComponent?> body)
+    {
+        return Resolve(body, ref body.Comp, false)
+            ? new Dictionary<ProtoId<BodyStatPrototype>, float>(body.Comp.Stats)
+            : new();
     }
 
     [PublicAPI]
-    public float GetStat(Entity<WoundableBodyComponent?> body, ProtoId<BodyStatPrototype> stat)
+    public float GetStat(Entity<BodyStatsComponent?> body, ProtoId<BodyStatPrototype> stat)
     {
-        if (!Resolve(body, ref body.Comp, false))
-            return 1f;
-
-        var ev = new GetBodyStatEvent(stat);
-        RaiseLocalEvent(body, ref ev);
-        return ev.Value;
+        return Resolve(body, ref body.Comp, false) ? body.Comp.Stats.GetValueOrDefault(stat) : 1f;
     }
 }

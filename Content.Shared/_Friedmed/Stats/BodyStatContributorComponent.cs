@@ -15,6 +15,3 @@ public sealed partial class BodyStatContributorComponent : Component
 /// Raised on a body to collect its stats; relayed to its organs.
 [ByRefEvent]
 public record struct GetAllBodyStatsEvent(Dictionary<ProtoId<BodyStatPrototype>, float> Stats);
-
-[ByRefEvent]
-public record struct GetBodyStatEvent(ProtoId<BodyStatPrototype> StatId, float Value = 0f);

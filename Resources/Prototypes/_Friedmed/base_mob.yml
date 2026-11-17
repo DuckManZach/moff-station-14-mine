@@ -4,6 +4,7 @@
   components:
   - type: StatusEffectContainer
   - type: WoundableBody
+  - type: BodyStats
   - type: HealthExaminable
     examinableTypes:
     - Asphyxiation

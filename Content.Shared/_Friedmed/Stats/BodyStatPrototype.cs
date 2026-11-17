@@ -5,7 +5,7 @@ namespace Content.Shared._Friedmed.Stats;
 
 /// <summary>
 /// This is a prototype for denoting a stat influenced by the organs on the body.
-/// The baseline for a stat should ALWAYS be assumed to be 1.0.
+/// The baseline for a stat should be 1.0 by default. DO NOT CHANGE WITHOUT GOOD REASON
 /// Anything making a stat less efficient should be less, and anything making it more efficient should be more.
 /// </summary>
 [UsedImplicitly]
@@ -24,6 +24,9 @@ public sealed partial class BodyStatPrototype : IPrototype
 
     [DataField]
     public List<BodyStatDependency> Dependencies = new();
+
+    [ViewVariables]
+    public float Baseline = 1.0f;
 }
 
 [ImplicitDataDefinitionForInheritors]
