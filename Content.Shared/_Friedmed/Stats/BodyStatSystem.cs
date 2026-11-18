@@ -1,13 +1,20 @@
+using Content.Shared._Friedmed.Organs;
 using Content.Shared.Body;
 using JetBrains.Annotations;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._Friedmed.Stats;
 
 public sealed partial class BodyStatSystem : EntitySystem
 {
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private BodySystem _body = default!;
+
+    [Dependency] private EntityQuery<DamageableOrganComponent> _damageableOrganQuery;
+    [Dependency] private EntityQuery<OrganComponent> _organQuery;
 
     public override void Initialize()
     {
@@ -17,12 +24,24 @@ public sealed partial class BodyStatSystem : EntitySystem
     }
 
     [SubscribeLocalEvent]
-    private static void OnGetAllBodyStats(Entity<BodyStatContributorComponent> ent, ref BodyRelayedEvent<GetAllBodyStatsEvent> args)
+    private void OnGetAllBodyStats(Entity<BodyStatContributorComponent> ent, ref BodyRelayedEvent<GetAllBodyStatsEvent> args)
     {
+        // A damaged organ contributes in proportion to its remaining health.
+        var health = _damageableOrganQuery.TryComp(ent, out var damageable)
+            ? 1f - damageable.Damage.Float() / damageable.MaxDamage.Float()
+            : 1f;
+
         foreach (var (stat, value) in ent.Comp.Stats)
         {
-            args.Args.Stats[stat] = args.Args.Stats.GetValueOrDefault(stat) + value;
+            args.Args.Stats[stat] = args.Args.Stats.GetValueOrDefault(stat) + value * health;
         }
+    }
+
+    [SubscribeLocalEvent]
+    private void OnOrganDamageChanged(Entity<BodyStatContributorComponent> ent, ref OrganDamageChangedEvent args)
+    {
+        if (_organQuery.CompOrNull(ent)?.Body is { } body)
+            RefreshStats(body);
     }
 
     [SubscribeLocalEvent]
@@ -46,11 +65,28 @@ public sealed partial class BodyStatSystem : EntitySystem
         RefreshStats(ent.AsNullable());
     }
 
+    [SubscribeLocalEvent]
+    private static void OnGetState(Entity<BodyStatsComponent> ent, ref ComponentGetState args)
+    {
+        args.State = new BodyStatsComponentState(ent.Comp.Stats);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnHandleState(Entity<BodyStatsComponent> ent, ref ComponentHandleState args)
+    {
+        if (args.Current is not BodyStatsComponentState state || state.Stats.DictionaryEquals(ent.Comp.Stats))
+            return;
+
+        ent.Comp.Stats = new Dictionary<ProtoId<BodyStatPrototype>, float>(state.Stats);
+        var changed = new BodyStatsChangedEvent(ent.Comp.Stats);
+        RaiseLocalEvent(ent, ref changed);
+    }
+
     /// Recomputes the body's stats from its organs; call whenever a contribution changes.
     [PublicAPI]
     public void RefreshStats(Entity<BodyStatsComponent?> body)
     {
-        if (!Resolve(body, ref body.Comp, false))
+        if (_timing.ApplyingState || !Resolve(body, ref body.Comp, false))
             return;
 
         var ev = new GetAllBodyStatsEvent(new Dictionary<ProtoId<BodyStatPrototype>, float>());
@@ -65,6 +101,7 @@ public sealed partial class BodyStatSystem : EntitySystem
             return;
 
         body.Comp.Stats = ev.Stats;
+        Dirty(body);
         var changed = new BodyStatsChangedEvent(ev.Stats);
         RaiseLocalEvent(body, ref changed);
     }
