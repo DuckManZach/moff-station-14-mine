@@ -1,7 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared._Friedmed.Organs;
+using Content.Shared._Moffstation.Extensions;
+using Content.Shared.Body;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Destructible.Thresholds;
 using Content.Shared.FixedPoint;
 using Content.Shared.Random.Helpers;
 using Content.Shared.StatusEffectNew;
@@ -18,15 +23,10 @@ public sealed partial class WoundableBodySystem : OffbrandDamageSystem
     [Dependency] private WoundableOrganSystem _woundableOrgan = default!;
     [Dependency] private WoundableSystem _woundable = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] private EntityQuery<CollateralWoundTargetComponent> _collateralQuery;
+    [Dependency] private EntityQuery<ParentOrganComponent> _parentOrganQuery;
 
-        SubscribeLocalEvent<WoundableBodyComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<WoundableBodyComponent, DamageDealtEvent>(OnDamageDealt);
-        SubscribeLocalEvent<WoundableBodyComponent, RefreshWoundsEvent>(OnRefreshWounds);
-    }
-
+    [SubscribeLocalEvent]
     private void OnShutdown(Entity<WoundableBodyComponent> ent, ref ComponentShutdown args)
     {
         if (!_statusEffects.TryEffectsWithComp<WoundComponent>(ent, out var wounds))
@@ -47,6 +47,7 @@ public sealed partial class WoundableBodySystem : OffbrandDamageSystem
             _woundable.RefreshWounds(ent, false, null);
     }
 
+    [SubscribeLocalEvent]
     private void OnDamageDealt(Entity<WoundableBodyComponent> ent, ref DamageDealtEvent args)
     {
         if (_timing.ApplyingState || !TryComp<DamageableComponent>(ent, out _))
@@ -54,15 +55,31 @@ public sealed partial class WoundableBodySystem : OffbrandDamageSystem
 
         if (args.Damage.AnyPositive())
         {
-            var seed = SharedRandomExtensions.HashCodeCombine((int)_timing.CurTick.Value, GetNetEntity(ent).Id);
-            var rand = new RobustRandom();
-            rand.SetSeed(seed);
+            var rand = SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(ent));
 
-            var organs = _woundableOrgan.GetWoundableOrgans(ent);
+            var organs = _woundableOrgan.GetWoundTargets(ent);
             var target = SharedRandomExtensions.Pick(organs, rand);
+            var damage = DamageSpecifier.GetPositive(args.Damage);
 
-            var organEvt = args with { Damage = DamageSpecifier.GetPositive(args.Damage) };
-            RaiseLocalEvent(target, ref organEvt);
+            if (damage.GetTotal() >= target.Comp.CollateralThreshold &&
+                rand.Prob(target.Comp.CollateralChance) &&
+                _parentOrganQuery.TryComp(target, out var parentOrganComponent))
+            {
+                var collateralOptions = _collateralQuery.ResolveAll(parentOrganComponent.Children, logMissing: false)
+                    .ToDictionary(o => o, o => o.Comp.Weight);
+
+                if (collateralOptions.Count > 0)
+                {
+                    var collateral = SharedRandomExtensions.Pick(collateralOptions, rand);
+
+                    var collateralEv = args with { Damage = damage * collateral.Comp.DamageShareRange.NextFloat(rand) };
+                    RaiseLocalEvent(collateral, ref collateralEv);
+                    damage -= collateralEv.Damage;
+                }
+            }
+
+            var organEv = args with { Damage = damage };
+            RaiseLocalEvent(target, ref organEv);
         }
 
         if (args.Damage.AnyNegative())
@@ -71,6 +88,7 @@ public sealed partial class WoundableBodySystem : OffbrandDamageSystem
         _woundable.RefreshWounds(ent, args.InterruptsDoAfters, args.Origin);
     }
 
+    [SubscribeLocalEvent]
     private void OnRefreshWounds(Entity<WoundableBodyComponent> ent, ref RefreshWoundsEvent args)
     {
         var damageable = Comp<DamageableComponent>(ent);

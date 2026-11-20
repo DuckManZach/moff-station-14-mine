@@ -7,19 +7,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Friedmed.Organs;
 
+/// <summary>
+/// Marks an organ as being able to bear wounds
+/// </summary>
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(WoundableOrganSystem), Other = AccessPermissions.ReadExecute)]
-public sealed partial class WoundableOrganComponent : Component
-{
-    /// <summary>
-    /// The weight this organ has in being targeted by an attack on its body.
-    /// </summary>
-    [DataField]
-    public float Weight;
-}
-
-/// <summary>
-/// Raised on a body to get a by-weight dictionary of woundable organs
-/// </summary>
-[ByRefEvent]
-public readonly record struct WoundableOrganWeightsEvent(Dictionary<Entity<WoundableOrganComponent>, float> Weights);
+public sealed partial class WoundableOrganComponent : Component;

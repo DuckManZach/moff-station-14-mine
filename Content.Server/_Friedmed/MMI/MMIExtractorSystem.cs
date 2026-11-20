@@ -22,6 +22,7 @@ public sealed partial class MMIExtractorSystem : EntitySystem
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private ItemSlotsSystem _slots = default!;
     [Dependency] private BodySystem _body = default!;
+    [Dependency] private OrganRelationSystem _organRelation = default!;
     [Dependency] private SharedChatSystem _chat = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedMindSystem _mind = default!;
@@ -164,5 +165,7 @@ public sealed partial class MMIExtractorSystem : EntitySystem
 
         if (!_slots.TryInsert(mmi, insertionComp.BrainSlotId, ent, null))
             return;
+
+        _organRelation.Orphan(ent.Owner);
     }
 }

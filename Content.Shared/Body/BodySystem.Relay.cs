@@ -43,7 +43,7 @@ public sealed partial class BodySystem
         SubscribeLocalEvent<BodyComponent, RejuvenateEvent>(RelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, DamageChangedEvent>(RelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, TargetDefibrillatedEvent>(RefRelayBodyEvent);
-        SubscribeLocalEvent<BodyComponent, WoundableOrganWeightsEvent>(RefRelayBodyEvent);
+        SubscribeLocalEvent<BodyComponent, WoundTargetWeightsEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, WoundGetDamageEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, GetWoundsWithSpaceEvent>(RefRelayBodyEvent);
         SubscribeLocalEvent<BodyComponent, GetPainEvent>(RefRelayBodyEvent);

@@ -2,8 +2,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseHeart
   components:
+  - type: CollateralWoundTarget
+    weight: 1
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -12,8 +15,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseBrain
   components:
+  - type: CollateralWoundTarget
+    weight: 4
   - type: OffbrandBrainOrgan
   - type: DamageableOrgan
     maxDamage: 100
@@ -23,8 +29,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseLungs
   components:
+  - type: CollateralWoundTarget
+    weight: 3
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -106,7 +115,7 @@
     maxDamage: 100
     damage: 0
   - type: StatusEffectContainer
-  - type: WoundableOrgan
+  - type: WoundTarget
     weight: 150
   - type: VisualOrganWounds
     thresholds: [ 10, 20, 30, 50, 70, 100 ]
@@ -121,7 +130,7 @@
     maxDamage: 50
     damage: 0
   - type: StatusEffectContainer
-  - type: WoundableOrgan
+  - type: WoundTarget
     weight: 50
   - type: VisualOrganWounds
     thresholds: [ 5, 10, 15, 25, 35, 50 ]
@@ -136,11 +145,21 @@
     maxDamage: 30
     damage: 0
   - type: StatusEffectContainer
-  - type: WoundableOrgan
+  - type: WoundTarget
     weight: 25
   - type: VisualOrganWounds
     thresholds: [ 3, 6, 9, 15, 21, 30 ]
     bandageThresholds: [ 3, 15, 30 ]
+
+- type: entity
+  abstract: true
+  parent: OffbrandOrganWoundable
+  id: OffbrandOrganWoundableInternal
+  components:
+  - type: StatusEffectContainer
+  - type: CollateralWoundTarget
+  - type: UniqueWoundOnDamage
+    wounds: []
 
 - type: entity
   abstract: true
@@ -276,8 +295,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseEyes
   components:
+  - type: CollateralWoundTarget
+    weight: 1
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -286,8 +308,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseTongue
   components:
+  - type: CollateralWoundTarget
+    weight: 1
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -296,8 +321,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseAppendix
   components:
+  - type: CollateralWoundTarget
+    weight: 0.5
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -306,8 +334,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseEars
   components:
+  - type: CollateralWoundTarget
+    weight: 1
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -316,8 +347,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseStomach
   components:
+  - type: CollateralWoundTarget
+    weight: 2
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -326,8 +360,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseLiver
   components:
+  - type: CollateralWoundTarget
+    weight: 2
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0
@@ -336,8 +373,11 @@
   abstract: true
   parent:
   - OrganBaseChildInternal
+  - OffbrandOrganWoundableInternal
   id: OffbrandOrganBaseKidneys
   components:
+  - type: CollateralWoundTarget
+    weight: 1
   - type: DamageableOrgan
     maxDamage: 100
     damage: 0

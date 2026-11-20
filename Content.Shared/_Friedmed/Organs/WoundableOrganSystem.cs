@@ -16,9 +16,6 @@ public sealed partial class WoundableOrganSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        SubscribeLocalEvent<WoundableOrganComponent, ExaminedEvent>(OnBeingExamined);
-        SubscribeLocalEvent<WoundableOrganComponent, BodyRelayedEvent<WoundableOrganWeightsEvent>>(OnGetWeights);
         SubscribeLocalEvent<WoundableOrganComponent, BodyRelayedEvent<GetWoundsWithSpaceEvent>>(UnwrapRelay);
         SubscribeLocalEvent<WoundableOrganComponent, BodyRelayedEvent<GetPainEvent>>(UnwrapRelay);
         SubscribeLocalEvent<WoundableOrganComponent, BodyRelayedEvent<HealWoundsEvent>>(UnwrapRelay);
@@ -27,14 +24,15 @@ public sealed partial class WoundableOrganSystem : EntitySystem
         SubscribeLocalEvent<WoundableOrganComponent, BodyRelayedEvent<BeforeEquippingHandEvent>>(UnwrapRelay);
     }
 
-    private void OnGetWeights(Entity<WoundableOrganComponent> ent, ref BodyRelayedEvent<WoundableOrganWeightsEvent> args)
+    [SubscribeLocalEvent]
+    private void OnGetWeights(Entity<WoundTargetComponent> ent, ref BodyRelayedEvent<WoundTargetWeightsEvent> args)
     {
         args.Args.Weights[ent] = ent.Comp.Weight;
     }
 
-    public Dictionary<Entity<WoundableOrganComponent>, float> GetWoundableOrgans(EntityUid body)
+    public Dictionary<Entity<WoundTargetComponent>, float> GetWoundTargets(EntityUid body)
     {
-        var organs = new WoundableOrganWeightsEvent(new());
+        var organs = new WoundTargetWeightsEvent(new());
         RaiseLocalEvent(body, ref organs);
         return organs.Weights;
     }
@@ -50,6 +48,7 @@ public sealed partial class WoundableOrganSystem : EntitySystem
     private static readonly LocId WoundCountModifierExterior = "wound-count-modifier-exterior";
     private static readonly LocId WoundCountNone = "wound-count-none";
 
+    [SubscribeLocalEvent]
     private void OnBeingExamined(Entity<WoundableOrganComponent> organ, ref ExaminedEvent args)
     {
         if (!_statusEffects.TryEffectsWithComp<WoundDescriptionComponent>(organ, out var wounds))

@@ -256,7 +256,7 @@ public sealed partial class IVSystem : EntitySystem
 
     private void TryAddRipWound(Entity<IVTargetComponent> target)
     {
-        var organs = _woundableOrgan.GetWoundableOrgans(target);
+        var organs = _woundableOrgan.GetWoundTargets(target);
         if (organs.Count == 0)
             return;
 
