@@ -19,3 +19,13 @@
   - !type:ScaledBy
     stat: Consciousness
 
+- type: bodyStat
+  id: Breathing
+  name: body-stat-breathing-name
+  description: body-stat-breathing-desc
+
+- type: bodyStat
+  id: BloodFlow
+  name: body-stat-blood-flow-name
+  description: body-stat-blood-flow-desc
+

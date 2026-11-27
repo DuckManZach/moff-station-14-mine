@@ -252,7 +252,6 @@ public sealed partial class WoundableSystem : EntitySystem
 
         if (comp.Damage.Empty)
         {
-            // use PredictedQueueDel when https://github.com/space-wizards/RobustToolbox/issues/6153 is fixed
             if (_net.IsServer)
                 QueueDel(ent.Owner);
         }
